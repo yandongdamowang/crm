@@ -1,0 +1,11 @@
+cron4j=customerCron,taskCron
+customerCron.cron=*/5 * * * *
+customerCron.class=com.linksame.crm.erp.crm.cron.CrmCustomerCron
+customerCron.daemon=true
+customerCron.enable=true
+
+taskCron.cron=*/5 * * * *
+taskCron.class=com.linksame.crm.erp.work.cron.TaskCron
+taskCron.daemon=true
+taskCron.enable=true
+
