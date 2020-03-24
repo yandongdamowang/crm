@@ -9,7 +9,7 @@
 			tar、tar.gz 格式便于 linux 系统下解压运行
 	 -->
 	<formats>
-		<!--<format>dir</format>-->
+		<format>dir</format>
 		<format>zip</format>
 		<!--<format>tar.gz</format>-->
 	</formats>
