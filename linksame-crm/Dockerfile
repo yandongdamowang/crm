@@ -1,5 +1,5 @@
 FROM harbor.ls.com/library/maven:latest
-ADD ./target/*.zip  /
+COPY ./target/crm-release/crm  /crm
 WORKDIR /
 EXPOSE 80
-CMD java -Xverify:none -cp /crm9/config:/crm9/lib/* Application
+CMD java -Xverify:none -cp /crm/config:/crm/lib/* Application
