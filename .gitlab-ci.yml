@@ -10,7 +10,7 @@ variables:
   PRO_PATH: "linksame-crm"
   SON_URL: "http://sonarqube.ls.com"
   SON_LOGIN: "4e2f1c34bd0fe46df653806a0aa89deea4d92d5f"
-  PROJECTKEY: "operation-cmp:crm"
+  PROJECTKEY: "operation-pro-crm:crm"
  
   # 镜像：地址
 # 构建 Job
