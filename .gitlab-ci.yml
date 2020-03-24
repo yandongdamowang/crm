@@ -51,7 +51,7 @@ deploy:
   - docker login harbor.ls.com -u admin -p Harbor12345
   - docker push ${IMG}
   - echo "================执行部署================="
-  - cd ../ && chmod +x ./install.sh && sh ./install.sh ${IMG}
+  #- cd ../ && chmod +x ./install.sh && sh ./install.sh ${IMG}
  
 before_script:
   - export DATATIME=$(date +"%Y-%m-%d-%H%M%S")
