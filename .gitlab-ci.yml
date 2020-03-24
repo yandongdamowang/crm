@@ -47,7 +47,7 @@ deploy:
   - cd ${PRO_PATH} && ls -all
   - echo "======			执行docker 打包 ====="
   - docker build -t ${IMG} .
-  - docker images|grep ${PRO_PATH}
+  #- docker images|grep ${PRO_PATH}
   - docker login harbor.ls.com -u admin -p Harbor12345
   - docker push ${IMG}
   - echo "================执行部署================="
