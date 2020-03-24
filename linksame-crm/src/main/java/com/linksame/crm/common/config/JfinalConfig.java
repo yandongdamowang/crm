@@ -41,7 +41,7 @@ import java.util.Map;
  */
 public class JfinalConfig extends JFinalConfig {
 
-    public final static Prop prop = PropKit.use("config/crm9-config.txt");
+    public final static Prop prop = PropKit.use("config/crm-config.txt");
     /**
      * 配置常量
      */

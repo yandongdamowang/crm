@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.linksame</groupId>
     <artifactId>crm</artifactId>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <version>1.0.0</version>
     <name>crm-master</name>
 
@@ -29,17 +29,21 @@
     </repositories>
 
     <dependencies>
-        <!--<dependency>
+        <!--undertow部署方式-->
+        <dependency>
             <groupId>com.jfinal</groupId>
             <artifactId>jfinal-undertow</artifactId>
             <version>1.9</version>
-        </dependency>-->
-        <dependency>
+        </dependency>
+
+        <!--war部署方式-->
+        <!--<dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>4.0.1</version>
             <scope>provided</scope>
-        </dependency>
+        </dependency>-->
+
         <dependency>
             <groupId>com.jfinal</groupId>
             <artifactId>jfinal</artifactId>
@@ -132,7 +136,7 @@
     </dependencies>
 
     <build>
-        <finalName>ROOT</finalName>
+        <finalName>linksame-crm</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
