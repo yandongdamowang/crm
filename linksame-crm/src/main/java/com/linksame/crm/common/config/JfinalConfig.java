@@ -2,6 +2,7 @@ package com.linksame.crm.common.config;
 
 import cn.hutool.core.util.ClassLoaderUtil;
 import com.jfinal.aop.Aop;
+import com.jfinal.ext.proxy.CglibProxyFactory;
 import com.linksame.crm.common.config.cache.CaffeineCache;
 import com.linksame.crm.common.config.druid.DruidConfig;
 import com.linksame.crm.common.config.json.ErpJsonFactory;
@@ -57,6 +58,9 @@ public class JfinalConfig extends JFinalConfig {
         me.setJsonFactory(new ErpJsonFactory());
         //限制上传100M
         me.setMaxPostSize(104857600);
+        //jfinal Can not get javax.tools.JavaCompiler, check whether "tools.jar" is in the environment variable CLASSPATH
+        //添加注入Proxy动态代理配置(4.6之前配置方式)
+        me.setProxyFactory(new CglibProxyFactory());
     }
 
     /**
