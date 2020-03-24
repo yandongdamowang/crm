@@ -7,10 +7,10 @@ echo $1 # 第一个参数
 appkey='2379E9161CBB94C8C5A4:pc8ZPWHinAJmtYjm4ohRnyT25c4nCYRPCsxCh2a2'
 #images='"docker:hub.03in.com:5002/ranmufei/fitmgr-admin:latest"'
 images='"docker:'$1'"'   # 第一个参数 docker镜像地址  sh ./install.sh "hub.03in.com:5002/ranmufei/fitmgr-eureka:v1"
-appname='"fitmgr-template"'	 # 第二个参数 应用名称
-stackId='"1st10"'		 # 分组名称
-serviceid='1s118'		 #	微服务服务ID
-description='"介绍说明"'
+appname='"crm"'	 # 第二个参数 应用名称
+stackId='"1st65"'		 # 分组名称
+serviceid='1s545'		 #	微服务服务ID
+description='"crm"'
 
 
 
