@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 启动入口类，该脚本文件用于别的项目时要改这里
-MAIN_CLASS=Application
+MAIN_CLASS=com.linksame.crm.Application
 
 COMMAND="$1"
 

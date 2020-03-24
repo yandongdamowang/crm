@@ -35,7 +35,7 @@ public class AdminLoginController extends Controller{
     @Inject
     private AdminRoleService adminRoleService;
 
-    public final static Prop prop = PropKit.use("config/crm9-config.txt");
+    public final static Prop prop = PropKit.use("config/crm-config.txt");
 
     public void index(){
         redirect("/index.html");

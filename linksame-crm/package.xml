@@ -9,9 +9,9 @@
 			tar、tar.gz 格式便于 linux 系统下解压运行
 	 -->
 	<formats>
-		<format>dir</format>
+		<!--<format>dir</format>-->
 		<format>zip</format>
-		<!-- <format>tar.gz</format> -->
+		<!--<format>tar.gz</format>-->
 	</formats>
 	<!-- 打 zip 设置为 true 会在包在存在总目录，打 dir 时设置为 false 少层目录 -->
 	<includeBaseDirectory>true</includeBaseDirectory>
@@ -21,11 +21,12 @@
 			<directory>${basedir}/src/main/resources</directory>
 			<outputDirectory>config</outputDirectory>
 		</fileSet>
-		<!-- src/main/webapp 全部 copy 到 webapp 目录下 -->
+		<!-- src/main/webapp 全部 copy 到 webapp 目录下
 		<fileSet>
 			<directory>${basedir}/src/main/webapp</directory>
 			<outputDirectory>webapp</outputDirectory>
 		</fileSet>
+		-->
 		<!-- 项目根下面的脚本文件 copy 到根目录下 -->
 		<fileSet>
 			<directory>${basedir}</directory>
