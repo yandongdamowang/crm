@@ -21,7 +21,7 @@ build:
   - echo "=============== 环境变量输出 ==============="
   - echo "镜像：$IMAGES"
   - echo "代码质量检查"
-  - cd ${PRO_PATH} && sh ./sonar.sh
+  #- cd ${PRO_PATH} && sh ./sonar.sh
 # 打包
 package:
   image: ranmufei/maven:latest
