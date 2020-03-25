@@ -2,26 +2,9 @@ package com.linksame.crm.common.config;
 
 import cn.hutool.core.util.ClassLoaderUtil;
 import com.jfinal.aop.Aop;
-import com.jfinal.ext.proxy.CglibProxyFactory;
-import com.linksame.crm.common.config.cache.CaffeineCache;
-import com.linksame.crm.common.config.druid.DruidConfig;
-import com.linksame.crm.common.config.json.ErpJsonFactory;
-import com.linksame.crm.common.config.paragetter.BasePageRequest;
-import com.linksame.crm.common.config.paragetter.MapParaGetter;
-import com.linksame.crm.common.config.paragetter.PageParaGetter;
-import com.linksame.crm.common.config.redis.RedisPlugin;
-import com.linksame.crm.common.config.render.ErpRenderFactory;
-import com.linksame.crm.common.constant.BaseConstant;
-import com.linksame.crm.common.interceptor.AuthInterceptor;
-import com.linksame.crm.common.interceptor.ErpInterceptor;
-import com.linksame.crm.erp._MappingKit;
-import com.linksame.crm.erp.admin.common.AdminRouter;
-import com.linksame.crm.erp.bi.common.BiRouter;
-import com.linksame.crm.erp.crm.common.CrmRouter;
-import com.linksame.crm.erp.oa.common.OaRouter;
-import com.linksame.crm.erp.work.common.WorkRouter;
 import com.jfinal.config.*;
 import com.jfinal.core.paragetter.ParaProcessorBuilder;
+import com.jfinal.ext.proxy.CglibProxyFactory;
 import com.jfinal.kit.PathKit;
 import com.jfinal.kit.Prop;
 import com.jfinal.kit.PropKit;
@@ -32,6 +15,24 @@ import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.plugin.druid.DruidStatViewHandler;
 import com.jfinal.render.RenderManager;
 import com.jfinal.template.Engine;
+import com.linksame.crm.common.config.cache.CaffeineCache;
+import com.linksame.crm.common.config.druid.DruidConfig;
+import com.linksame.crm.common.config.json.ErpJsonFactory;
+import com.linksame.crm.common.config.paragetter.BasePageRequest;
+import com.linksame.crm.common.config.paragetter.MapParaGetter;
+import com.linksame.crm.common.config.paragetter.PageParaGetter;
+import com.linksame.crm.common.config.redis.RedisPlugin;
+import com.linksame.crm.common.config.render.ErpRenderFactory;
+import com.linksame.crm.common.config.search.ElasticSearchPlugin;
+import com.linksame.crm.common.constant.BaseConstant;
+import com.linksame.crm.common.interceptor.AuthInterceptor;
+import com.linksame.crm.common.interceptor.ErpInterceptor;
+import com.linksame.crm.erp._MappingKit;
+import com.linksame.crm.erp.admin.common.AdminRouter;
+import com.linksame.crm.erp.bi.common.BiRouter;
+import com.linksame.crm.erp.crm.common.CrmRouter;
+import com.linksame.crm.erp.oa.common.OaRouter;
+import com.linksame.crm.erp.work.common.WorkRouter;
 import com.linksame.crm.erp.work.service.WorkService;
 
 import java.io.File;
@@ -106,6 +107,9 @@ public class JfinalConfig extends JFinalConfig {
         me.add(arp);
         //扫描sql模板
         getSqlTemplate(PathKit.getRootClassPath() + "/template", arp);
+        //elasticSearch 插件
+        ElasticSearchPlugin elasticSearchPlugin = new ElasticSearchPlugin();
+        me.add(elasticSearchPlugin);
         //Redis以及缓存插件
         RedisPlugin redisPlugin=new RedisPlugin();
         me.add(redisPlugin);
