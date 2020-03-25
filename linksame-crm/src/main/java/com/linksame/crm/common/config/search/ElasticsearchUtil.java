@@ -72,13 +72,13 @@ public class ElasticsearchUtil {
      * 批量数据插入
      * 记录是否有操作失败的数据，请调用（BulkResponse.hasFailures）
      *
-     * @param ts 放入的对象集合
+     * @param tts 放入的对象集合
      * @return 响应信息，放入es的基本信息(index、type、id)
      */
-    public BulkResponse upsertAll(List<EsIndexTypeId> ts) {
+    public BulkResponse upsertAll(List<EsIndexTypeId> tts) {
         BulkRequest bulkRequest = new BulkRequest();
         IndexRequest request;
-        for (EsIndexTypeId t : ts) {
+        for (EsIndexTypeId t : tts) {
             if (checkIndexTypeId(t)) {
                 continue;
             }

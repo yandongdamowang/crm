@@ -21,6 +21,7 @@ public class ElasticSearchPlugin implements IPlugin {
     private String ip;
     private int port;
     private String clusterName;
+    int timout = 5*60*1000;
     private static RestHighLevelClient restHighLevelClient;
     public ElasticSearchPlugin(){
         Prop prop = PropKit.use("config/search.txt");
@@ -43,7 +44,7 @@ public class ElasticSearchPlugin implements IPlugin {
                 builder.setConnectionRequestTimeout(1000);
                 return builder;
             }
-        }).setMaxRetryTimeoutMillis(5*60*1000);
+        }).setMaxRetryTimeoutMillis(timout);
         restHighLevelClient = new RestHighLevelClient(builder);
         try {
             boolean ping = restHighLevelClient.ping(RequestOptions.DEFAULT);

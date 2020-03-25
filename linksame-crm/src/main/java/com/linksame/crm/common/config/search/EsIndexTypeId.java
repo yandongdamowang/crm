@@ -10,6 +10,7 @@ public interface EsIndexTypeId<T> {
 
         /**
          * 类型名，必须指定
+         * aaa
          * @return 该对象的索引
          */
         String index();

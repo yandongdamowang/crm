@@ -29,7 +29,6 @@ public class PageEsData<T> {
 
     /**
      * 获取记录开始行码
-     *
      * @param pageNum  当前页数，从1开始
      * @param pageSize 每页显示数
      * @return 记录开始行码

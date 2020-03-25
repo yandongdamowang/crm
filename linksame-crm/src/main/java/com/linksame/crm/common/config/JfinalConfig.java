@@ -108,8 +108,8 @@ public class JfinalConfig extends JFinalConfig {
         //扫描sql模板
         getSqlTemplate(PathKit.getRootClassPath() + "/template", arp);
         //elasticSearch 插件
-        ElasticSearchPlugin elasticSearchPlugin = new ElasticSearchPlugin();
-        me.add(elasticSearchPlugin);
+        ElasticSearchPlugin searchPlugin = new ElasticSearchPlugin();
+        me.add(searchPlugin);
         //Redis以及缓存插件
         RedisPlugin redisPlugin=new RedisPlugin();
         me.add(redisPlugin);
