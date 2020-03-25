@@ -99,11 +99,11 @@ public class ElasticsearchUtil {
     /**
      * 判断索引是否存在
      *
-     * @param t 与es存储对应的对象
+     * @param tt 与es存储对应的对象
      * @return true存在，false不存在
      */
-    public boolean existsIndex(EsIndexTypeId t) {
-        return existsIndex(t.index());
+    public boolean existsIndex(EsIndexTypeId tt) {
+        return existsIndex(tt.index());
     }
 
     /**
