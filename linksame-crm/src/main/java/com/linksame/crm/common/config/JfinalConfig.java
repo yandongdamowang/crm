@@ -32,6 +32,7 @@ import com.linksame.crm.erp.admin.common.AdminRouter;
 import com.linksame.crm.erp.bi.common.BiRouter;
 import com.linksame.crm.erp.crm.common.CrmRouter;
 import com.linksame.crm.erp.oa.common.OaRouter;
+import com.linksame.crm.erp.pmp.common.PmpRouter;
 import com.linksame.crm.erp.work.common.WorkRouter;
 import com.linksame.crm.erp.work.service.WorkService;
 
@@ -74,6 +75,7 @@ public class JfinalConfig extends JFinalConfig {
         me.add(new CrmRouter());
         me.add(new OaRouter());
         me.add(new WorkRouter());
+        me.add(new PmpRouter());
     }
 
     @Override

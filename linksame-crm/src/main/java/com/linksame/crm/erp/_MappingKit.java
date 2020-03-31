@@ -4,10 +4,9 @@ import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.linksame.crm.erp.admin.entity.*;
 import com.linksame.crm.erp.crm.entity.*;
 import com.linksame.crm.erp.oa.entity.*;
-import com.linksame.crm.erp.work.entity.*;
-import com.linksame.crm.erp.admin.entity.*;
-import com.linksame.crm.erp.crm.entity.*;
-import com.linksame.crm.erp.oa.entity.*;
+import com.linksame.crm.erp.pmp.entity.PmpAccessory;
+import com.linksame.crm.erp.pmp.entity.PmpContract;
+import com.linksame.crm.erp.pmp.entity.PmpContractPayment;
 import com.linksame.crm.erp.work.entity.*;
 
 public class _MappingKit {
@@ -74,6 +73,9 @@ public class _MappingKit {
 		arp.addMapping("work_task_log", "log_id", WorkTaskLog.class);
 		arp.addMapping("work_user", "id", WorkUser.class);
 		arp.addMapping("crm_business_change", "change_id", CrmBusinessChange.class);
+        arp.addMapping("pmp_contract", "contract_id", PmpContract.class);
+        arp.addMapping("pmp_contract_payment", "bill_id", PmpContractPayment.class);
+        arp.addMapping("pmp_accessory", "accessory_id", PmpAccessory.class);
 	}
 }
 
