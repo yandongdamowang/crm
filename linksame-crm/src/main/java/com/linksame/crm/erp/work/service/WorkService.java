@@ -1,5 +1,7 @@
 package com.linksame.crm.erp.work.service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import cn.hutool.core.collection.CollectionUtil;
@@ -18,6 +20,7 @@ import com.linksame.crm.erp.work.entity.Task;
 import com.linksame.crm.erp.work.entity.Work;
 import com.linksame.crm.erp.work.entity.WorkTaskClass;
 import com.linksame.crm.erp.work.entity.WorkUser;
+import com.linksame.crm.erp.work.util.TaskSortCompare;
 import com.linksame.crm.utils.AuthUtil;
 import com.linksame.crm.utils.BaseUtil;
 import com.linksame.crm.utils.R;
@@ -29,12 +32,14 @@ import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.linksame.crm.utils.TagUtil;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class WorkService{
 
     @Inject
@@ -181,6 +186,16 @@ public class WorkService{
         return R.ok().put("data", recordList);
     }
 
+    /**
+     * 根据项目id查询任务板
+     * @param jsonObject    项目编号----workId
+     * @return  返回任务列表及任务内无限层级的子任务
+     *
+     * ivan修改于 2020-03-31
+     * 修改原接口,新增时间轴任务板查询功能以及修改原里程碑任务板功能,修改内容如下:
+     * 1.根据任务大类直属任务节点的最靠后截止日期,作为任务时间轴横向大类所展示的截止日期,附带该日期对应的任务id,便于后续可直接对该任务进行修改
+     * 2.根据客户需求,递归查询任务的所有子任务,无限层级全部展示
+     */
     public R queryTaskByWorkId(JSONObject jsonObject){
         Integer workId = jsonObject.getInteger("workId");
         List<Record> classList = Db.find("select class_id as classId, name as className from `work_task_class` where work_id = ? order by order_num", workId);
@@ -190,7 +205,9 @@ public class WorkService{
         item.set("classId", - 1);
         linkedList.addFirst(item);
         List<Record> finalClassList = new CopyOnWriteArrayList<>(linkedList);
+
         finalClassList.forEach(workClass -> {
+            //查询条件设置(项目id,截止时间状态,负责人id,标签id,任务分类id)
             List<Record> recordList = Db.find(Db.getSqlPara("work.queryTaskByWorkId", Kv.by("workId", workId).set("stopTimeType", jsonObject.getInteger("stopTimeType")).set("userIds", jsonObject.getJSONArray("mainUserId")).set("labelIds", jsonObject.getJSONArray("labelId")).set("classId", workClass.getInt("classId"))));
             workClass.set("count", recordList.size());
             if(recordList.size() == 0){
@@ -202,12 +219,57 @@ public class WorkService{
             }else{
                 workbenchService.taskListTransfer(recordList);
                 recordList.sort(Comparator.comparingInt(a -> a.getInt("order_num")));
+                System.out.println("recordList===>" + recordList);
+                List<Task> taskList = new ArrayList<>();
+                //数据处理
+                recordList.forEach(task -> {
+                    //递归遍历子任务
+                    task = assData(task);
+                    //组装时间集合
+                    Date stopTime = task.getDate("stop_time");
+                    int taskId = task.getInt("task_id");
+                    if (stopTime != null) {
+                        Task task1 = new Task();
+                        task1.setTaskId(taskId);
+                        task1.setStopTime(stopTime);
+                        taskList.add(task1);
+                    }
+                });
+                //遍历排序--->截止时间
+                TaskSortCompare sort = new TaskSortCompare();
+                Collections.sort(taskList,sort);
+                if(CollectionUtil.isNotEmpty(taskList)){
+                    workClass.set("stopTime", taskList.get(0).getStopTime());
+                    workClass.set("taskId", taskList.get(0).getTaskId());
+                }
                 workClass.set("list", recordList);
             }
         });
         return R.ok().put("data", finalClassList);
     }
 
+    //处理子任务
+    private Record assData(Record record){
+        List<Record> itemList = Db.find("select * from task where pid = ?", record.getInt("task_id"));
+        if(CollectionUtil.isNotEmpty(itemList)){
+            recData(itemList);
+        }
+        record.set("list", itemList);
+
+        return record;
+    }
+
+    //递归
+    private void recData(List<Record> itemList) {
+        for (Record mu : itemList) {
+            List<Record> childList = Db.find("select * from task where pid = ?", mu.getInt("task_id"));
+            //遍历出父id等于参数的id，add进子节点集合
+            if(CollectionUtil.isNotEmpty(childList)){
+                mu.set("list", childList);
+                recData(childList);
+            }
+        }
+    }
 
     public R queryTaskFileByWorkId(BasePageRequest<JSONObject> data){
         Page<Record> workFile = Db.paginate(data.getPage(), data.getLimit(), Db.getSqlPara("work.queryTaskFileByWorkId", Kv.by("workId", data.getData().getInteger("workId"))));
