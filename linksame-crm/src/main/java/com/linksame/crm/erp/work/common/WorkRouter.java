@@ -2,7 +2,6 @@ package com.linksame.crm.erp.work.common;
 
 import com.linksame.crm.erp.work.controller.*;
 import com.jfinal.config.Routes;
-import com.linksame.crm.erp.work.controller.*;
 
 public class WorkRouter extends Routes {
     @Override
@@ -14,5 +13,4 @@ public class WorkRouter extends Routes {
         add("/workbench", WorkbenchController.class);
         add("/workTrash", TrashController.class);
     }
-
 }
