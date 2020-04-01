@@ -1,50 +1,30 @@
 <template>
-  <flexbox
-    style="height:100%;"
-    direction="column"
-    align="stretch">
+  <flexbox style="height:100%;" direction="column" align="stretch">
     <div class="header">
       <div>应用管理</div>
     </div>
-    <div
-      v-loading="loading"
-      class="body">
-      <div
-        v-for="(bigItem, bigIndex) in allList"
-        :key="bigIndex"
-        class="section">
+    <div v-loading="loading" class="body">
+      <div v-for="(bigItem, bigIndex) in allList" :key="bigIndex" class="section">
         <flexbox class="section-header">
           {{ bigItem.name }}
         </flexbox>
-        <flexbox
-          wrap="wrap"
-          class="section-body">
-          <flexbox
-            v-for="(item, index) in bigItem.sublist"
-            :key="index"
-            class="section-item">
-            <img
-              :src="getModuleIcon(item.status, item.module)"
-              class="item-icon" >
+        <flexbox wrap="wrap" class="section-body">
+          <flexbox v-for="(item, index) in bigItem.sublist" :key="index" class="section-item">
+            <img :src="getModuleIcon(item.status, item.module)" class="item-icon">
             <span class="item-name">{{ item.name }}</span>
-            <el-dropdown
-              v-if="item.type == 1 && configSetAuth"
-              class="more-menu"
-              @command="handleMoreCommand($event, item)">
-              <i class="el-icon-more"/>
+            <el-dropdown v-if="item.type == 1 && configSetAuth" class="more-menu" @command="handleMoreCommand($event, item)">
+              <i class="el-icon-more" />
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item :command="item.status ? 'disable' : 'enable'">{{ item.status ? '停用' : '启用' }}</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-            <span
-              v-else-if="item.type == 2"
-              class="more-mark">即将发布</span>
+            <span v-else-if="item.type == 2" class="more-mark">即将发布</span>
           </flexbox>
         </flexbox>
       </div>
     </div>
 
-    <call-detail :visible.sync="showCallDetail"/>
+    <call-detail :visible.sync="showCallDetail" />
   </flexbox>
 </template>
 
@@ -78,12 +58,12 @@ export default {
           type: 1,
           status: 0,
           sublist: []
-        },
-        {
-          name: '敬请期待',
-          type: 2,
-          sublist: []
         }
+        // {
+        //   name: '敬请期待',
+        //   type: 2,
+        //   sublist: []
+        // }
       ],
       // 展示详情
       showCallDetail: false

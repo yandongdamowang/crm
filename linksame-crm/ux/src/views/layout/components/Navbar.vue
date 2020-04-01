@@ -1,28 +1,16 @@
 <template>
   <div class="navbar">
-    <img
-      :src="logo"
-      class="logo" >
+    <img :src="logo" class="logo">
     <div class="nav-items-container">
       <flexbox style="width: auto;">
-        <router-link
-          v-for="(item, index) in items"
-          :style="{ 'color' : item.type == navIndexChild ? '#3E84E9' : '#333333' }"
-          :to="item.path"
-          :key="index"
-          class="nav-item"
-          @click.native="navItemsClick(item.type)">
-          <i
-            :class="'wukong-' + item.icon"
-            :style="{ 'color': item.type == navIndexChild ? '#3E84E9' : '#333333'}"
-            class="wukong"
-            style="margin-right: 10px;"/>
+        <router-link v-for="(item, index) in items" :style="{ 'color' : item.type == navIndexChild ? '#3E84E9' : '#333333' }" :to="item.path" :key="index" class="nav-item" @click.native="navItemsClick(item.type)">
+          <i :class="'wukong-' + item.icon" :style="{ 'color': item.type == navIndexChild ? '#3E84E9' : '#333333'}" class="wukong" style="margin-right: 10px;" />
           <div class="nav-item-title">{{ item.title }}</div>
         </router-link>
       </flexbox>
     </div>
 
-    <el-popover
+    <!-- <el-popover
       :visible-arrow="false"
       placement="bottom"
       popper-class="no-padding-popover"
@@ -37,43 +25,20 @@
         slot="reference"
         type="text"
         class="auth-button">开通授权</button>
-    </el-popover>
+    </el-popover> -->
 
-    <el-popover
-      :visible-arrow="false"
-      placement="bottom"
-      popper-class="no-padding-popover"
-      width="200"
-      trigger="click">
+    <el-popover :visible-arrow="false" placement="bottom" popper-class="no-padding-popover" width="200" trigger="click">
       <div class="handel-items">
-        <div
-          class="handel-item"
-          @click="handleClick('person')"><i class="wukong wukong-personcenter"/>个人中心</div>
-        <div
-          class="handel-item"
-          @click="handleClick('goout')"><i class="wukong wukong-goout"/>退出登录</div>
-        <div
-          :style="{'margin-bottom': manage ? '15px' : '0'}"
-          class="handel-item hr-top"
-          style="pointer-events: none;"><i class="wukong wukong-versions"/>版本 V9.2.3.191220</div>
-        <div
-          v-if="manage"
-          class="handel-box">
-          <el-button
-            type="primary"
-            class="handel-button"
-            @click="enterSystemSet()">进入企业管理后台</el-button>
+        <div class="handel-item" @click="handleClick('person')"><i class="wukong wukong-personcenter" />个人中心</div>
+        <div class="handel-item" @click="handleClick('goout')"><i class="wukong wukong-goout" />退出登录</div>
+        <div :style="{'margin-bottom': manage ? '15px' : '0'}" class="handel-item hr-top" style="pointer-events: none;"><i class="wukong wukong-versions" />版本 V9.2.3.191220</div>
+        <div v-if="manage" class="handel-box">
+          <el-button type="primary" class="handel-button" @click="enterSystemSet()">进入企业管理后台</el-button>
         </div>
       </div>
-      <div
-        slot="reference"
-        class="user-container">
-        <div
-          v-photo="userInfo"
-          v-lazy:background-image="$options.filters.filterUserLazyImg(userInfo.img)"
-          :key="userInfo.img"
-          class="user-img div-photo"/>
-        <i class="el-icon-caret-bottom mark"/>
+      <div slot="reference" class="user-container">
+        <div v-photo="userInfo" v-lazy:background-image="$options.filters.filterUserLazyImg(userInfo.img)" :key="userInfo.img" class="user-img div-photo" />
+        <i class="el-icon-caret-bottom mark" />
       </div>
     </el-popover>
 
@@ -87,7 +52,7 @@ import { adminGroupsTypeListAPI } from '@/api/systemManagement/RoleAuthorization
 
 export default {
   filters: {
-    langName: function(value) {
+    langName: function (value) {
       if (value) {
         return { cn: '中文', en: 'English' }[value]
       } else {
@@ -162,9 +127,9 @@ export default {
       this.manage &&
       (!this.manage.system ||
         (this.manage.system && !this.manage.system.read)) &&
-        (!this.manage.configSet ||
+      (!this.manage.configSet ||
         (this.manage.configSet && !this.manage.configSet.read)) &&
-        (!this.manage.users ||
+      (!this.manage.users ||
         (this.manage.users && !this.manage.users.read))
     ) {
       this.getAuthPath()
@@ -203,7 +168,7 @@ export default {
                 loading.close()
               })
           })
-          .catch(() => {})
+          .catch(() => { })
       } else if (type === 'person') {
         this.$router.push({
           name: 'person'
@@ -224,7 +189,7 @@ export default {
             )}`
           }
         })
-        .catch(() => {})
+        .catch(() => { })
     }
   }
 }

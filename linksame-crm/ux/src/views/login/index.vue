@@ -1,57 +1,63 @@
 <template>
   <div class="wrapper">
-    <div class="left">
-      <div class="left-pic" />
-    </div>
-    <div class="right">
-      <el-form
-        ref="loginForm"
-        :model="loginForm"
-        :rules="loginRules"
-        class="login-form"
-        auto-complete="on"
-        label-position="left">
-        <div class="title">{{ name }}</div>
-        <el-form-item prop="username">
-          <el-input
-            ref="name"
-            v-model="loginForm.username"
-            autofocus="autofocus"
-            name="username"
-            type="text"
-            auto-complete="on"
-            placeholder="请输入用户名"
-            @keyup.enter.native="handleLogin" />
-        </el-form-item>
-        <el-form-item prop="password">
-          <el-input
-            v-model="loginForm.password"
-            type="password"
-            name="password"
-            auto-complete="on"
-            placeholder="请输入密码"
-            @keyup.enter.native="handleLogin" />
-        </el-form-item>
-        <el-form-item>
-          <el-button
-            :loading="loading"
-            class="submit-btn"
-            @click.native.prevent="handleLogin">
-            登录
-          </el-button>
-        </el-form-item>
-      </el-form>
-      <div class="copyright">
-        悟空CRM受国家计算机软件著作权保护，未经授权不得进行商业行为，违者必究。<br>
-        <a
-          target="_blank"
-          href="http://www.5kcrm.com">©2019 悟空CRM</a>
-      </div>
+    <div class="left-pic">
+      <!-- <div class="left-pic" /> -->
     </div>
 
-    <img
-      :src="logo"
-      class="logo" >
+    <div class="right">
+      <div class="title">{{ name }}</div>
+      <el-tabs v-model="activeName" class="table" @tab-click="handleClick">
+
+        <el-tab-pane label="账号密码登录" name="first">
+          <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
+
+            <el-form-item prop="username">
+
+              <div class="content">用户名</div>
+              <el-input ref="name" v-model="loginForm.username" autofocus="autofocus" name="username" type="text" auto-complete="on" placeholder="请输入用户名" @keyup.enter.native="handleLogin" />
+            </el-form-item>
+
+            <el-form-item prop="password">
+              <div class="content">密码</div>
+              <el-input v-model="loginForm.password" type="password" name="password" auto-complete="on" placeholder="请输入密码" @keyup.enter.native="handleLogin" />
+            </el-form-item>
+
+            <el-form-item>
+              <el-button :loading="loading" class="submit-btn" @click.native.prevent="handleLogin">
+                登录
+              </el-button>
+            </el-form-item>
+
+          </el-form>
+        </el-tab-pane>
+
+        <el-tab-pane label="手机号登录" name="second">
+          <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
+
+            <el-form-item prop="username">
+              <div class="content">手机号</div>
+              <el-input ref="name" v-model="loginForm.username" autofocus="autofocus" name="username" type="text" auto-complete="on" placeholder="请输入用户名" @keyup.enter.native="handleLogin" />
+            </el-form-item>
+
+            <el-form-item prop="password">
+              <div class="content">验证码</div>
+              <el-input v-model="loginForm.password" type="password" name="password" auto-complete="on" placeholder="请输入密码" @keyup.enter.native="handleLogin" />
+            </el-form-item>
+
+            <el-form-item>
+              <el-button :loading="loading" class="submit-btn" @click.native.prevent="handleLogin">
+                登录
+              </el-button>
+            </el-form-item>
+
+          </el-form>
+        </el-tab-pane>
+
+      </el-tabs>
+
+    </div>
+
+    <img :src="logo" class="logo">
   </div>
 </template>
 
@@ -76,6 +82,7 @@ export default {
       }
     }
     return {
+      activeName: 'first',
       loginForm: {
         username: '',
         password: ''
@@ -96,14 +103,17 @@ export default {
   },
   watch: {
     $route: {
-      handler: function(route) {
+      handler: function (route) {
         this.redirect = route.query && route.query.redirect
       },
       immediate: true
     }
   },
-  mounted() {},
+  mounted() { },
   methods: {
+    handleClick(tab, event) {
+      console.log(tab, event)
+    },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
@@ -151,88 +161,102 @@ $login_theme: #00aaee;
 /deep/ .el-form-item__error {
   left: 12px;
 }
+
+/deep/ .el-tabs__nav-wrap::after {
+  background-color: #fff;
+}
+
+/deep/ .el-tabs__nav-scroll {
+  margin-left: 90px;
+}
+
+.content {
+  font-size: 16px;
+  font-family: SourceHanSansCN;
+  font-weight: 700;
+  color: rgba(51, 51, 51, 1);
+}
+
 .wrapper {
   position: relative;
   width: 100%;
-  min-width: 1300px;
   display: flex;
-  .left {
-    width: 68%;
-    .left-pic {
-      width: 100%;
-      height: 100%;
-      background: url('../../assets/img/login/login.png') no-repeat center;
-      background-size: cover;
-    }
+  .left-pic {
+    width: 100%;
+    height: 100%;
+    background: url("../../assets/img/login/login.png") no-repeat center;
+    background-size: cover;
   }
   .right {
-    position: relative;
-    width: 32%;
+    position: absolute;
+    width: 486px;
     background-color: #fff;
     display: flex;
     align-items: center;
     flex-direction: column;
-    padding-top: 6%;
-    .el-form {
-      width: 70%;
-      .title {
-        font-size: 26px;
-        color: $light_gray;
-        margin: 0 auto 50px;
-        text-align: center;
-      }
-      .submit-btn {
-        width: 100%;
-        line-height: 2;
-        font-size: 16px;
-        color: white;
-        border-radius: 3px;
-        background-color: $login_theme;
-        display: block;
-      }
-      .el-button {
-        border: 0 none;
-      }
-      .action-control {
-        color: #999;
-        /deep/ .el-checkbox {
-          .el-checkbox__label {
-            color: #999;
-          }
-          .el-checkbox__input.is-checked .el-checkbox__inner {
-            background-color: $login_theme;
-            border-color: $login_theme;
-          }
-        }
-
-        .forget {
-          cursor: pointer;
-          float: right;
-        }
-      }
+    border-radius: 10px;
+    right: 165px;
+    top: 166px;
+    height: 716px;
+    .table {
+      width: 400px;
+      margin: 100px 0 0 0;
+      height: 300px;
+      font-size: 20px;
     }
-
-    .register {
-      width: 70%;
-      padding-top: 30px;
+    .title {
       color: $light_gray;
-      border-top: 1px solid #e6e6e6;
-      text-align: center;
-      margin-top: 28px;
-      .register-btn {
-        color: $login_theme;
+      margin: 30px 0 0 -120px;
+      font-size: 40px;
+      font-family: SourceHanSansCN;
+      font-weight: 500;
+      // text-align: center;
+    }
+    .el-form {
+      //   width: 70%;
+    }
+    .submit-btn {
+      width: 100%;
+      line-height: 2;
+      font-size: 16px;
+      color: white;
+      border-radius: 3px;
+      background-color: $login_theme;
+      display: block;
+      margin: 80px 0 0 0px;
+    }
+    .el-button {
+      border: 0 none;
+    }
+    .action-control {
+      color: #999;
+      /deep/ .el-checkbox {
+        .el-checkbox__label {
+          color: #999;
+        }
+        .el-checkbox__input.is-checked .el-checkbox__inner {
+          background-color: $login_theme;
+          border-color: $login_theme;
+        }
+      }
+
+      .forget {
         cursor: pointer;
+        float: right;
       }
     }
+  }
 
-    .copyright {
-      width: 92%;
-      position: absolute;
-      bottom: 2%;
-      color: #d0d0d0;
-      font-size: 12px;
-      text-align: center;
-      line-height: 1.5;
+  .register {
+    width: 70%;
+    padding-top: 30px;
+    color: $light_gray;
+    border-top: 1px solid #e6e6e6;
+    text-align: center;
+    margin-top: 28px;
+    .register-btn {
+      color: $login_theme;
+      cursor: pointer;
     }
   }
 
