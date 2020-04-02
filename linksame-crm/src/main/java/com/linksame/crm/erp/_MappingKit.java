@@ -76,6 +76,7 @@ public class _MappingKit {
         arp.addMapping("pmp_contract", "contract_id", PmpContract.class);
         arp.addMapping("pmp_contract_payment", "bill_id", PmpContractPayment.class);
         arp.addMapping("pmp_accessory", "accessory_id", PmpAccessory.class);
+		arp.addMapping("task_remind", "remind_id", TaskRemind.class);
 	}
 }
 

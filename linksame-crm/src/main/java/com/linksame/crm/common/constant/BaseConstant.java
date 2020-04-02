@@ -9,7 +9,7 @@ import java.io.Serializable;
  */
 public class BaseConstant implements Serializable {
 
-    public static final String NAME = "72CRM";
+    public static final String NAME = "CRM";
 
     public static final String VERSION = "1.4.0";
 
@@ -58,4 +58,10 @@ public class BaseConstant implements Serializable {
      * 每个项目编辑角色ID
      */
     public static  Integer SMALL_WORK_EDIT_ROLE_ID;
+
+    /**
+     * 生产/测试环境数据库连接配置文件路径
+     */
+    public final static String CRM_CONFIG = BaseUtil.isWindows() ? "config/crm-config-dev.txt" : "config/crm-config-pro.txt";
+
 }

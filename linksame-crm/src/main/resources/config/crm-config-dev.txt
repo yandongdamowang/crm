@@ -1,0 +1,4 @@
+mysql.jdbcUrl = jdbc:mysql://192.168.1.174:3302/crm9?characterEncoding=utf8&useSSL=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false
+mysql.user = root
+mysql.password = root
+jfinal.devMode = false

@@ -6,6 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import com.jfinal.config.Constants;
 import com.jfinal.kit.Prop;
 import com.jfinal.kit.PropKit;
+import com.linksame.crm.common.constant.BaseConstant;
 import com.linksame.crm.erp.admin.entity.AdminFile;
 import com.linksame.crm.utils.BaseUtil;
 import com.linksame.crm.utils.R;
@@ -21,7 +22,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class AdminFileService {
-    public final static Prop prop = PropKit.use("config/crm-config.txt");
+    //public final static Prop prop = PropKit.use("config/crm-config-dev.txt");
+    public final static Prop prop = PropKit.use(BaseConstant.CRM_CONFIG);
+
     /**
      * @param file    文件
      * @param batchId 批次ID
