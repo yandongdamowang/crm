@@ -40,11 +40,7 @@ import live.autu.plugin.jfinal.swagger.config.SwaggerPlugin;
 import live.autu.plugin.jfinal.swagger.config.routes.SwaggerRoutes;
 import live.autu.plugin.jfinal.swagger.model.SwaggerApiInfo;
 import live.autu.plugin.jfinal.swagger.model.SwaggerDoc;
-import lombok.extern.log4j.Log4j2;
-
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Map;
 
 /**
@@ -86,7 +82,6 @@ public class JfinalConfig extends JFinalConfig {
         me.add(new WorkRouter());
         me.add(new PmpRouter());
 
-        //me.add(new SwaggerRoute());
         me.add(new SwaggerRoutes());
     }
 
