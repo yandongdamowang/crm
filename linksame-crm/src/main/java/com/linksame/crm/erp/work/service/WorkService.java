@@ -1,9 +1,6 @@
 package com.linksame.crm.erp.work.service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
@@ -15,12 +12,11 @@ import com.linksame.crm.erp.admin.entity.AdminMenu;
 import com.linksame.crm.erp.admin.entity.AdminUser;
 import com.linksame.crm.erp.admin.service.AdminFileService;
 import com.linksame.crm.erp.admin.service.AdminMenuService;
-import com.linksame.crm.erp.work.entity.*;
+import com.linksame.crm.erp.work.common.TaskSortCompare;
 import com.linksame.crm.erp.work.entity.Task;
 import com.linksame.crm.erp.work.entity.Work;
 import com.linksame.crm.erp.work.entity.WorkTaskClass;
 import com.linksame.crm.erp.work.entity.WorkUser;
-import com.linksame.crm.erp.work.util.TaskSortCompare;
 import com.linksame.crm.utils.AuthUtil;
 import com.linksame.crm.utils.BaseUtil;
 import com.linksame.crm.utils.R;
@@ -32,22 +28,17 @@ import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.linksame.crm.utils.TagUtil;
-import lombok.extern.slf4j.Slf4j;
-
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
-@Slf4j
 public class WorkService{
 
     @Inject
     private AdminFileService adminFileService;
-
     @Inject
     private WorkbenchService workbenchService;
-
     @Inject
     private AdminMenuService adminMenuService;
 
@@ -191,7 +182,7 @@ public class WorkService{
      * @param jsonObject    项目编号----workId
      * @return  返回任务列表及任务内无限层级的子任务
      *
-     * ivan修改于 2020-03-31
+     * Ivan修改于 2020-03-31
      * 修改原接口,新增时间轴任务板查询功能以及修改原里程碑任务板功能,修改内容如下:
      * 1.根据任务大类直属任务节点的最靠后截止日期,作为任务时间轴横向大类所展示的截止日期,附带该日期对应的任务id,便于后续可直接对该任务进行修改
      * 2.根据客户需求,递归查询任务的所有子任务,无限层级全部展示
