@@ -22,8 +22,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class AdminFileService {
-    //public final static Prop prop = PropKit.use("config/crm-config-dev.txt");
-    public final static Prop prop = PropKit.use(BaseConstant.CRM_CONFIG);
+    public final static Prop prop = PropKit.use("config/crm-config.txt");
 
     /**
      * @param file    文件
