@@ -5,6 +5,7 @@ import com.jfinal.aop.Aop;
 import com.jfinal.config.*;
 import com.jfinal.core.paragetter.ParaProcessorBuilder;
 import com.jfinal.ext.proxy.CglibProxyFactory;
+import com.jfinal.kit.LogKit;
 import com.jfinal.kit.PathKit;
 import com.jfinal.kit.Prop;
 import com.jfinal.kit.PropKit;
@@ -35,7 +36,15 @@ import com.linksame.crm.erp.oa.common.OaRouter;
 import com.linksame.crm.erp.pmp.common.PmpRouter;
 import com.linksame.crm.erp.work.common.WorkRouter;
 import com.linksame.crm.erp.work.service.WorkService;
+import live.autu.plugin.jfinal.swagger.config.SwaggerPlugin;
+import live.autu.plugin.jfinal.swagger.config.routes.SwaggerRoutes;
+import live.autu.plugin.jfinal.swagger.model.SwaggerApiInfo;
+import live.autu.plugin.jfinal.swagger.model.SwaggerDoc;
+import lombok.extern.log4j.Log4j2;
+
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -44,6 +53,7 @@ import java.util.Map;
 public class JfinalConfig extends JFinalConfig {
 
     public final static Prop prop = PropKit.use("config/crm-config.txt");
+
     /**
      * 配置常量
      */
@@ -75,11 +85,14 @@ public class JfinalConfig extends JFinalConfig {
         me.add(new OaRouter());
         me.add(new WorkRouter());
         me.add(new PmpRouter());
+
+        //me.add(new SwaggerRoute());
+        me.add(new SwaggerRoutes());
     }
 
     @Override
     public void configEngine(Engine me) {
-
+        me.setDevMode(true);
     }
 
     /**
@@ -116,6 +129,9 @@ public class JfinalConfig extends JFinalConfig {
         me.add(redisPlugin);
         //cron定时器
         me.add(new Cron4jPlugin(PropKit.use("config/cron4j.txt")));
+        //swagger配置
+        me.add(new SwaggerPlugin(new SwaggerDoc().setBasePath("/").setHost("127.0.0.1:8080").setSwagger("2.0")
+                .setInfo(new SwaggerApiInfo("全宇宙最牛逼的Jfinal集成Swagger接口文档系统", "1.0", "邻盛CRM Swagger Api", ""))));
 
         //model映射
         _MappingKit.mapping(arp);
@@ -150,11 +166,14 @@ public class JfinalConfig extends JFinalConfig {
     public void onStart() {
         WorkService workService= Aop.get(WorkService.class);
         workService.initialization();
+
+        LogKit.info("数据库连接地址: " + prop.get("mysql.jdbcUrl"));
+        LogKit.info("服务启动完成！");
     }
 
     @Override
     public void onStop() {
-
+        LogKit.info("服务即将停止！");
     }
 
     private void getSqlTemplate(String path, ActiveRecordPlugin arp) {

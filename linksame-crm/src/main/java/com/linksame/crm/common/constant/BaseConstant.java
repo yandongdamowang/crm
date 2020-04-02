@@ -59,9 +59,4 @@ public class BaseConstant implements Serializable {
      */
     public static  Integer SMALL_WORK_EDIT_ROLE_ID;
 
-    /**
-     * 生产/测试环境数据库连接配置文件路径
-     */
-    public final static String CRM_CONFIG = BaseUtil.isWindows() ? "config/crm-config-dev.txt" : "config/crm-config-pro.txt";
-
 }
