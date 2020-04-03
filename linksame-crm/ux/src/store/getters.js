@@ -18,6 +18,7 @@ const getters = {
   // 权限
   allAuth: state => state.user.allAuth,
   crm: state => state.user.crm,
+  contract: state => state.user.contract,
   bi: state => state.user.bi,
   manage: state => state.user.manage,
   oa: state => state.user.oa,
@@ -26,6 +27,7 @@ const getters = {
   addRouters: state => state.permission.addRouters,
   oaRouters: state => state.permission.oaRouters,
   crmRouters: state => state.permission.crmRouters,
+  contractRouters: state => state.permission.contractRouters,
   biRouters: state => state.permission.biRouters,
   manageRouters: state => state.permission.manageRouters,
   // 客户管理信息

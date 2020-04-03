@@ -1,84 +1,65 @@
 <template>
   <div class="container">
-    <div
-      :style="{ 'padding-top': createButtonTitle != '' ? '40px' : '25px', 'background-color':backgroundColor }"
-      class="create-button-container">
-      <el-popover
-        v-if="createButtonTitle != ''"
-        :offset="addOffset"
-        :visible-arrow="false"
-        placement="right"
-        popper-class="no-padding-popover"
-        trigger="hover">
-        <slot name="add"/>
-        <div
-          slot="reference"
-          :style="{ 'background-color': createButtonBackgroundColor }"
-          class="create-button"
-          @click="quicklyCreate">
-          <div
-            v-show="!buttonNameCollapse"
-            class="button-name">{{ createButtonTitle }}</div>
-          <div
-            v-show="!buttonNameCollapse"
-            class="button-line"/>
-          <i
-            :class="createButtonIcon"
-            class="button-mark"/>
-        </div>
-      </el-popover>
-    </div>
+
     <el-menu
       :default-active="activeIndex"
-      :style="{'border-right-color': backgroundColor, 'padding-top': createButtonTitle != '' ? '90px' : '40px'}"
       :text-color="textColor"
-      :background-color="backgroundColor"
       :active-text-color="activeTextColor"
       :collapse="collapse"
+      background-color="#001529"
       class="el-menu-vertical"
-      unique-opened>
-      <template
-        v-for="(item, index) in getShowMenu(items)">
+      unique-opened
+    >
+      <template v-for="(item, index) in getShowMenu(items)">
         <router-link
           v-if="!item.children"
           :key="index"
-          :to="getFullPath(item.path)">
+          :to="getFullPath(item.path)"
+        >
           <el-menu-item
             :index="getFullPath(item.path)"
             :class="{'menu-item-select': activeIndex == getFullPath(item.path)}"
-            class="menu-item-defalt">
+            class="menu-item-defalt"
+          >
             <i
               :class="'wukong-' + item.meta.icon"
               :style="{ 'color': activeIndex == getFullPath(item.path) ? activeTextColor : textColor, fontSize: item.meta.fontSize || '16px'}"
-              class="wukong"/>
+              class="wukong"
+            />
             <span slot="title">{{ item.meta.title }}</span>
             <el-badge
               v-if="item.meta.num && item.meta.num > 0"
               :max="99"
-              :value="item.meta.num"/>
+              :value="item.meta.num"
+            />
           </el-menu-item>
         </router-link>
         <el-submenu
           v-else
           :key="index"
-          :index="getFullPath(item.path)">
+          :index="getFullPath(item.path)"
+        >
           <template
             v-if="!item.hidden"
-            slot="title">
+            slot="title"
+          >
             <i
               :class="'wukong-' + item.meta.icon"
               :style="{fontSize: item.meta.fontSize || '16px'}"
-              class="wukong"/>
+              class="wukong"
+            />
             <span slot="title">{{ item.meta.title }}</span>
           </template>
           <router-link
             v-for="(subitem, subindex) in getShowMenu(item.children)"
             :key="subindex"
-            :to="getFullPath(subitem.path)">
+            :to="getFullPath(subitem.path)"
+          >
             <el-menu-item
               :index="getFullPath(subitem.path)"
               :class="{'menu-item-select': activeIndex == getFullPath(subitem.path) }"
-              class="menu-item-defalt">
+              class="menu-item-defalt"
+            >
               {{ subitem.meta.title }}
             </el-menu-item>
           </router-link>
@@ -86,15 +67,17 @@
       </template>
     </el-menu>
     <div
-      :style="{ 'background-color':backgroundColor }"
-      class="sidebar-bottom">
+      style="{ 'background-color':'rgb(0,21,41)' }"
+      class="sidebar-bottom"
+    >
+
       <div class="sidebar-container">
         <img
-          :style="{ 'right': buttonNameCollapse ? '3px' : '0' }"
           class="collapse-button"
           src="@/assets/img/collapse_white.png"
           alt=""
-          @click="toggleSideBarClick">
+          @click="toggleSideBarClick"
+        >
       </div>
     </div>
   </div>
@@ -123,7 +106,7 @@ export default {
     },
     backgroundColor: {
       type: String,
-      default: '#2D3037'
+      default: 'rgb(0,21,41)'
     },
     activeTextColor: {
       type: String,
@@ -246,7 +229,7 @@ export default {
 
 .menu-item-select {
   border-left: 2px solid #3e84e9;
-  background-color: #454e57 !important;
+  background-color: #3e84e9 !important;
 }
 
 .create-button-container {
@@ -294,7 +277,7 @@ export default {
   bottom: 0;
   left: 0;
   right: 0;
-  background: #eee;
+  background: red;
 }
 
 .sidebar-bottom {

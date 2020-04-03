@@ -8,6 +8,7 @@ Vue.use(Router)
 
 import workbenchRouter from './modules/workbench'
 import customerRouter from './modules/customer'
+import contractRouter from './modules/contract'
 import projectRouter from './modules/project/index'
 import { managerRouter } from './modules/manager'
 import personRouter from './modules/person'
@@ -25,23 +26,24 @@ import { biRouter } from './modules/business'
     icon: 'svg-name'             the icon show in the sidebar,
   }
 **/
-export const constantRouterMap = [{
-  path: '/login',
-  component: () => import('@/views/login/index'),
-  hidden: true
-},
-{
-  path: '/404',
-  component: () => import('@/views/404'),
-  hidden: true
-},
-projectRouter,
-personRouter,
-{
-  path: '*',
-  redirect: '/404',
-  hidden: true
-}
+export const constantRouterMap = [
+  {
+    path: '/login',
+    component: () => import('@/views/login/index'),
+    hidden: true
+  },
+  {
+    path: '/404',
+    component: () => import('@/views/404'),
+    hidden: true
+  },
+  projectRouter,
+  personRouter,
+  {
+    path: '*',
+    redirect: '/404',
+    hidden: true
+  }
 ]
 
 export default new Router({
@@ -55,6 +57,7 @@ export default new Router({
 export const asyncRouterMap = [
   workbenchRouter,
   customerRouter,
-  biRouter,
-  managerRouter
+  //   biRouter,
+  managerRouter,
+  contractRouter
 ]

@@ -1,6 +1,4 @@
-import {
-  asyncRouterMap
-} from '@/router'
+import { asyncRouterMap } from '@/router'
 import Vue from 'vue'
 
 /**
@@ -67,6 +65,10 @@ const permission = {
       name: 'crm',
       children: []
     },
+    contractRouters: {
+      name: 'contract',
+      children: []
+    },
     biRouters: {
       name: 'bi',
       children: []
@@ -89,6 +91,8 @@ const permission = {
           state.oaRouters = element
         } else if (element.name == 'crm') {
           state.crmRouters = element
+        } else if (element.name == 'contract') {
+          state.contractRouters = element
         } else if (element.name == 'bi') {
           state.biRouters = element
         } else if (element.name == 'manager') {
@@ -107,12 +111,11 @@ const permission = {
     }
   },
   actions: {
-    GenerateRoutes({
-      commit
-    }, data) {
+    GenerateRoutes({ commit }, data) {
       return new Promise(resolve => {
         const accessedRouters = filterAsyncRouter(asyncRouterMap, data)
         let redirect = ''
+        // console.log(4567, accessedRouters)
         for (let index = 0; index < accessedRouters.length; index++) {
           const element = accessedRouters[index]
           if (element.children && element.children.length > 0) {
