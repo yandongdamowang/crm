@@ -125,7 +125,7 @@ public class JfinalConfig extends JFinalConfig {
         //cron定时器
         me.add(new Cron4jPlugin(PropKit.use("config/cron4j.txt")));
         //swagger配置
-        me.add(new SwaggerPlugin(new SwaggerDoc().setBasePath("/").setHost("127.0.0.1:8080").setSwagger("2.0")
+        me.add(new SwaggerPlugin(new SwaggerDoc().setBasePath("/").setHost("127.0.0.1").setSwagger("2.0")
                 .setInfo(new SwaggerApiInfo("全宇宙最牛逼的Jfinal集成Swagger接口文档系统", "1.0", "邻盛CRM Swagger Api", ""))));
 
         //model映射
