@@ -2,6 +2,7 @@ package com.linksame.crm.erp.admin.controller;
 
 import com.jfinal.core.Controller;
 import com.jfinal.core.paragetter.Para;
+import com.jfinal.plugin.activerecord.Db;
 import com.linksame.crm.erp.admin.entity.AdminFile;
 import com.linksame.crm.erp.admin.entity.AdminMessage;
 import com.linksame.crm.erp.crm.common.CrmExcelUtil;
@@ -15,6 +16,20 @@ import java.io.File;
  * @author zhangzhiwei
  */
 public class AdminMessageController extends Controller {
+
+    /**
+     * 根据用户id查询消息提醒
+     */
+    public void queryMessagesByUser(@Para("userId") Long userId){
+        renderJson(R.ok().put("data",Db.find(Db.getSql("admin.message.queryMessagesByUser"), userId)));
+    }
+
+    /**
+     * 修改消息状态 ---- 设置已读
+     */
+    public void changeMessageRead(@Para("messageId") Long messageId){
+        renderJson(R.ok().put("data",Db.update("update admin_message set is_read=1, read_time=NOW() where message_id=?", messageId) > 0));
+    }
 
     /**
      * 查询当前导入数量

@@ -7,7 +7,7 @@ import com.linksame.crm.common.constant.BaseConstant;
 
 public class Application {
     public static void main(String[] args) {
-        UndertowConfig config=new UndertowConfig(JfinalConfig.class,"crm-config.txt");
+        UndertowConfig config = new UndertowConfig(JfinalConfig.class);
         config.setResourcePath("src/main/webapp,"+ BaseConstant.UPLOAD_PATH);
         config.setServerName(BaseConstant.NAME);
         UndertowServer.create(config).start();
