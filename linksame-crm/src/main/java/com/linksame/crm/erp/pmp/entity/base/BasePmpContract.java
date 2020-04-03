@@ -84,43 +84,43 @@ public abstract class BasePmpContract<M extends BasePmpContract<M>> extends Mode
         return getLong("project_id");
     }
 
-    public void setRequiredSigningTime(java.util.Date requiredSigningTime) {
+    public void setRequiredSigningTime(java.time.LocalDate requiredSigningTime) {
         set("required_signing_time", requiredSigningTime);
     }
 
-    public java.util.Date getRequiredSigningTime() {
+    public java.time.LocalDate getRequiredSigningTime() {
         return get("required_signing_time");
     }
 
-    public void setActualSigningTime(java.util.Date actualSigningTime) {
+    public void setActualSigningTime(java.time.LocalDate actualSigningTime) {
         set("actual_signing_time", actualSigningTime);
     }
 
-    public java.util.Date getActualSigningTime() {
+    public java.time.LocalDate getActualSigningTime() {
         return get("actual_signing_time");
     }
 
-    public void setPurchaseTime(java.util.Date purchaseTime) {
+    public void setPurchaseTime(java.time.LocalDate purchaseTime) {
         set("purchase_time", purchaseTime);
     }
 
-    public java.util.Date getPurchaseTime() {
+    public java.time.LocalDate getPurchaseTime() {
         return get("purchase_time");
     }
 
-    public void setBeginTime(java.util.Date beginTime) {
+    public void setBeginTime(java.time.LocalDate beginTime) {
         set("begin_time", beginTime);
     }
 
-    public java.util.Date getBeginTime() {
+    public java.time.LocalDate getBeginTime() {
         return get("begin_time");
     }
 
-    public void setEndTime(java.util.Date endTime) {
+    public void setEndTime(java.time.LocalDate endTime) {
         set("end_time", endTime);
     }
 
-    public java.util.Date getEndTime() {
+    public java.time.LocalDate getEndTime() {
         return get("end_time");
     }
 
@@ -132,19 +132,19 @@ public abstract class BasePmpContract<M extends BasePmpContract<M>> extends Mode
         return getLong("agent");
     }
 
-    public void setCreationTime(java.util.Date creationTime) {
+    public void setCreationTime(java.time.LocalDateTime creationTime) {
         set("creation_time", creationTime);
     }
 
-    public java.util.Date getCreationTime() {
+    public java.time.LocalDateTime getCreationTime() {
         return get("creation_time");
     }
 
-    public void setUpdateTime(java.util.Date updateTime) {
+    public void setUpdateTime(java.time.LocalDateTime updateTime) {
         set("update_time", updateTime);
     }
 
-    public java.util.Date getUpdateTime() {
+    public java.time.LocalDateTime getUpdateTime() {
         return get("update_time");
     }
 

@@ -116,4 +116,12 @@ public abstract class BasePmpAccessory<M extends BasePmpAccessory<M>> extends Mo
         return getDouble("accessory_size");
     }
 
+    public void setSuffix(java.lang.String suffix) {
+        set("suffix", suffix);
+    }
+
+    public java.lang.String getSuffix() {
+        return get("suffix");
+    }
+
 }
