@@ -51,6 +51,7 @@ public class WorkController extends Controller {
     public void queryWorkNameList(){
         renderJson(workService.queryWorkNameList());
     }
+
     /**
      * @author hmb
      * 根据项目id查询任务板

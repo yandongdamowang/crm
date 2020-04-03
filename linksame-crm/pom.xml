@@ -45,6 +45,12 @@
         </dependency>-->
 
         <dependency>
+            <groupId>live.autu</groupId>
+            <artifactId>jfinal-swagger</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.jfinal</groupId>
             <artifactId>jfinal</artifactId>
             <version>4.5</version>
