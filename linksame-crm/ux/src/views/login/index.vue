@@ -12,7 +12,6 @@
           <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
             <el-form-item prop="username">
-
               <div class="content">用户名</div>
               <el-input ref="name" v-model="loginForm.username" autofocus="autofocus" name="username" type="text" auto-complete="on" placeholder="请输入用户名" @keyup.enter.native="handleLogin" />
             </el-form-item>
@@ -36,12 +35,19 @@
 
             <el-form-item prop="username">
               <div class="content">手机号</div>
-              <el-input ref="name" v-model="loginForm.username" autofocus="autofocus" name="username" type="text" auto-complete="on" placeholder="请输入用户名" @keyup.enter.native="handleLogin" />
+              <el-input ref="name" v-model="loginForm.username" autofocus="autofocus" name="username" type="text" auto-complete="on" placeholder="请输入手机号" @keyup.enter.native="handleLogin" />
             </el-form-item>
 
             <el-form-item prop="password">
               <div class="content">验证码</div>
-              <el-input v-model="loginForm.password" type="password" name="password" auto-complete="on" placeholder="请输入密码" @keyup.enter.native="handleLogin" />
+
+              <div class="code">
+                <el-input v-model="loginForm.password" type="password" name="password" auto-complete="on" placeholder="请输入验证码" @keyup.enter.native="handleLogin" />
+
+                <el-button v-show="sendAuthCode" plain @click="getAuthCode">获取验证码</el-button>
+                <el-button v-show="!sendAuthCode" plain>重新发送 {{ auth_time }} 秒</el-button>
+              </div>
+
             </el-form-item>
 
             <el-form-item>
@@ -83,14 +89,17 @@ export default {
     }
     return {
       activeName: 'first',
+      sendAuthCode: true,
+      // 倒计时
+      auth_time: 0,
       loginForm: {
         username: '',
-        password: ''
+        password: '',
+        telephone: '',
+        code: ''
       },
       loginRules: {
-        username: [
-          { required: true, trigger: 'blur', validator: validateUsername }
-        ],
+        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
         password: [{ required: true, trigger: 'blur', validator: validatePass }]
       },
       loading: false,
@@ -103,7 +112,7 @@ export default {
   },
   watch: {
     $route: {
-      handler: function (route) {
+      handler: function(route) {
         this.redirect = route.query && route.query.redirect
       },
       immediate: true
@@ -111,6 +120,31 @@ export default {
   },
   mounted() { },
   methods: {
+    getAuthCode: function() {
+      //   const verification = this.loginForm.telephone
+
+      //   const url = ' '
+      //   console.log('url', url)
+      //   this.$http.get(url).then(
+      //     function (response) {
+      //       console.log('请求成功', response)
+      //     },
+      //     function (error) {
+      //       console.log('请求失败', error)
+      //     }
+      //   )
+      this.sendAuthCode = false
+      // 设置倒计时秒
+      this.auth_time = 30
+      var auth_timetimer = setInterval(() => {
+        this.auth_time--
+        if (this.auth_time <= 0) {
+          this.sendAuthCode = true
+          clearInterval(auth_timetimer)
+        }
+      }, 1000)
+    },
+
     handleClick(tab, event) {
       console.log(tab, event)
     },
@@ -175,6 +209,10 @@ $login_theme: #00aaee;
   font-family: SourceHanSansCN;
   font-weight: 700;
   color: rgba(51, 51, 51, 1);
+}
+.code {
+  display: flex;
+  //   background: red;
 }
 
 .wrapper {

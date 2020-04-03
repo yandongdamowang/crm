@@ -2,12 +2,8 @@ import router from './router'
 import store from './store'
 import NProgress from 'nprogress' // Progress 进度条
 import 'nprogress/nprogress.css' // Progress 进度条样式
-import {
-  Message
-} from 'element-ui'
-import {
-  getAuth
-} from '@/utils/auth' // 验权
+import { Message } from 'element-ui'
+import { getAuth } from '@/utils/auth' // 验权
 
 let loadAsyncRouter = false
 const whiteList = ['/login'] // 不重定向白名单
@@ -22,10 +18,12 @@ router.beforeEach((to, from, next) => {
       })
       NProgress.done()
     } else {
-      if (!loadAsyncRouter) { // 判断当前用户是否获取权限
+      if (!loadAsyncRouter) {
+        // 判断当前用户是否获取权限
         loadAsyncRouter = true
         if (store.getters.allAuth) {
-          store.dispatch('GenerateRoutes', store.getters.allAuth).then(() => { // 根据auths权限生成可访问的路由表
+          store.dispatch('GenerateRoutes', store.getters.allAuth).then(() => {
+            // 根据auths权限生成可访问的路由表
             router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
             if (to.path === '/404') {
               next({
@@ -40,30 +38,36 @@ router.beforeEach((to, from, next) => {
             }
           })
         } else {
-          store.dispatch('getAuth').then(auths => { // 拉取user_info
-            store.dispatch('GenerateRoutes', auths).then(() => { // 根据auths权限生成可访问的路由表
-              router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
-              if (to.path === '/404') {
-                next({
-                  path: to.redirectedFrom || '/',
-                  replace: true
-                })
-              } else {
-                next({
-                  ...to,
-                  replace: true
-                })
-              }
-            })
-          }).catch((err) => {
-            loadAsyncRouter = false
-            store.dispatch('LogOut').then(() => {
-              Message.error(err.msg || '获取用户信息失败')
-              next({
-                path: '/'
+          store
+            .dispatch('getAuth')
+            .then(auths => {
+              // 拉取user_info
+              console.log(12345, auths)
+              store.dispatch('GenerateRoutes', auths).then(() => {
+                // 根据auths权限生成可访问的路由表
+                router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
+                if (to.path === '/404') {
+                  next({
+                    path: to.redirectedFrom || '/',
+                    replace: true
+                  })
+                } else {
+                  next({
+                    ...to,
+                    replace: true
+                  })
+                }
               })
             })
-          })
+            .catch(err => {
+              loadAsyncRouter = false
+              store.dispatch('LogOut').then(() => {
+                Message.error(err.msg || '获取用户信息失败')
+                next({
+                  path: '/'
+                })
+              })
+            })
         }
       } else {
         next()
@@ -83,7 +87,7 @@ router.afterEach(() => {
   NProgress.done() // 结束Progress
 })
 
-router.onError((error) => {
+router.onError(error => {
   const pattern = /Loading chunk (\d)+ failed/g
   const isChunkLoadFailed = error.message.match(pattern)
   const targetPath = router.history.pending.fullPath

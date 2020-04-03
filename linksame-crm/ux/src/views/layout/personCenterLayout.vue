@@ -3,13 +3,15 @@
     <el-header class="nav-container">
       <navbar
         :nav-index="navActiveIndex"
-        @nav-items-click="navClick"/>
+        @nav-items-click="navClick"
+      />
     </el-header>
     <el-container>
       <el-main
         id="crm-main-container"
-        style="padding:15px;">
-        <app-main/>
+        style="padding:15px;"
+      >
+        <app-main />
       </el-main>
     </el-container>
   </el-container>

@@ -1,19 +1,14 @@
 <template>
   <el-container>
     <el-header class="nav-container">
-      <manager-navbar/>
+      <manager-navbar />
     </el-header>
     <el-container>
-      <el-aside
-        width="auto"
-        class="aside-container">
-        <sidebar
-          :items="routerItems"
-          create-button-title=""
-          main-router="manager"/>
+      <el-aside width="auto" class="aside-container">
+        <sidebar :items="routerItems" create-button-title="" main-router="manager" />
       </el-aside>
       <el-main id="manager-main-container">
-        <app-main/>
+        <app-main />
       </el-main>
     </el-container>
   </el-container>
@@ -97,7 +92,7 @@ export default {
       return true
     },
 
-    navClick(index) {},
+    navClick(index) { },
 
     getAuthMenu() {
       adminGroupsTypeListAPI()
@@ -117,7 +112,7 @@ export default {
             }
           }
         })
-        .catch(() => {})
+        .catch(() => { })
     }
   }
 }
