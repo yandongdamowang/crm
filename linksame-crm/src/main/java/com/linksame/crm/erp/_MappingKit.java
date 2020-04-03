@@ -7,6 +7,7 @@ import com.linksame.crm.erp.oa.entity.*;
 import com.linksame.crm.erp.pmp.entity.PmpAccessory;
 import com.linksame.crm.erp.pmp.entity.PmpContract;
 import com.linksame.crm.erp.pmp.entity.PmpContractPayment;
+import com.linksame.crm.erp.pmp.entity.PmpContractPaymentRecord;
 import com.linksame.crm.erp.work.entity.*;
 
 public class _MappingKit {
@@ -76,7 +77,7 @@ public class _MappingKit {
         arp.addMapping("pmp_contract", "contract_id", PmpContract.class);
         arp.addMapping("pmp_contract_payment", "bill_id", PmpContractPayment.class);
         arp.addMapping("pmp_accessory", "accessory_id", PmpAccessory.class);
-		arp.addMapping("task_remind", "remind_id", TaskRemind.class);
-	}
+        arp.addMapping("pmp_contract_payment_record", "payment_record_id", PmpContractPaymentRecord.class);
+    }
 }
 

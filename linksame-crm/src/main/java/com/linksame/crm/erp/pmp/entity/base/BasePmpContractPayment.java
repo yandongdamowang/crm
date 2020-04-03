@@ -3,6 +3,9 @@ package com.linksame.crm.erp.pmp.entity.base;
 import com.jfinal.plugin.activerecord.IBean;
 import com.jfinal.plugin.activerecord.Model;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 /**
  * @author ZhangJie
  * @ClassName BasePmpContractPayment
@@ -52,12 +55,12 @@ public abstract class BasePmpContractPayment<M extends BasePmpContractPayment<M>
         return getStr("payment_clause");
     }
 
-    public void setCostPercentage(java.lang.String costPercentage) {
+    public void setCostPercentage(java.lang.Long costPercentage) {
         set("cost_percentage", costPercentage);
     }
 
-    public java.lang.String getCostPercentage() {
-        return getStr("cost_percentage");
+    public java.lang.Long getCostPercentage() {
+        return getLong("cost_percentage");
     }
 
     public void setMoney(java.math.BigDecimal money) {
@@ -76,27 +79,27 @@ public abstract class BasePmpContractPayment<M extends BasePmpContractPayment<M>
         return getInt("payment_stage");
     }
 
-    public void setPaymentNode(java.util.Date paymentNode) {
+    public void setPaymentNode(Date paymentNode) {
         set("payment_node", paymentNode);
     }
 
-    public java.util.Date getPaymentNode() {
+    public Date getPaymentNode() {
         return get("payment_node");
     }
 
-    public void setCreationTime(java.util.Date creationTime) {
+    public void setCreationTime(LocalDateTime creationTime) {
         set("creation_time", creationTime);
     }
 
-    public java.util.Date getCreationTime() {
+    public LocalDateTime getCreationTime() {
         return get("creation_time");
     }
 
-    public void setUpdateTime(java.util.Date updateTime) {
+    public void setUpdateTime(LocalDateTime updateTime) {
         set("update_time", updateTime);
     }
 
-    public java.util.Date getUpdateTime() {
+    public LocalDateTime getUpdateTime() {
         return get("update_time");
     }
 
