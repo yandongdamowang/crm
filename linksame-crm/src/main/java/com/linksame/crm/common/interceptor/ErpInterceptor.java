@@ -16,7 +16,6 @@ import com.linksame.crm.common.config.redis.RedisManager;
 import com.linksame.crm.erp.admin.entity.AdminUser;
 import com.linksame.crm.utils.BaseUtil;
 import com.linksame.crm.utils.R;
-
 import java.lang.reflect.Parameter;
 import java.util.Date;
 
@@ -25,28 +24,36 @@ public class ErpInterceptor implements Interceptor {
     public void intercept(Invocation invocation) {
         try {
             Controller controller = invocation.getController();
-            String token = BaseUtil.getToken(controller.getRequest());
-            AdminUser adminUser = RedisManager.getRedis().get(token);
-            if (adminUser==null) {
-                controller.renderJson(R.error(302, "请先登录！"));
-                return;
+            //截取swagger请求前缀
+            String url = controller.getRequest().getRequestURI();
+            String[] prefix = url.split("/");
+            //swagger放行
+            if(!("swagger").equals(prefix[1])){
+                String token = BaseUtil.getToken(controller.getRequest());
+                AdminUser adminUser = RedisManager.getRedis().get(token);
+                if (adminUser==null) {
+                    controller.renderJson(R.error(302, "请先登录！"));
+                    return;
+                }
+                BaseUtil.setUser(adminUser);
+                //数据非空验证
+                if(!this.notNullValidate(invocation)){
+                    return;
+                }
+                this.modelToJson(invocation);
+                BaseUtil.userExpire(token);
+                invocation.invoke();
+            } else {
+                //数据转换json的处理
+                this.modelToJson(invocation);
+                invocation.invoke();
             }
-            BaseUtil.setUser(adminUser);
-            //数据非空验证
-            if(!this.notNullValidate(invocation)){
-                return;
-            }
-            //数据转换json的处理
-            this.modelToJson(invocation);
-            BaseUtil.userExpire(token);
-            invocation.invoke();
         } catch (Exception e) {
             invocation.getController().renderJson(R.error("服务器响应异常"));
             Log.getLog(invocation.getController().getClass()).error("响应错误", e);
         } finally {
             BaseUtil.removeThreadLocal();
         }
-
     }
 
     /**
