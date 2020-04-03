@@ -4,10 +4,7 @@ import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.linksame.crm.erp.admin.entity.*;
 import com.linksame.crm.erp.crm.entity.*;
 import com.linksame.crm.erp.oa.entity.*;
-import com.linksame.crm.erp.pmp.entity.PmpAccessory;
-import com.linksame.crm.erp.pmp.entity.PmpContract;
-import com.linksame.crm.erp.pmp.entity.PmpContractPayment;
-import com.linksame.crm.erp.pmp.entity.PmpContractPaymentRecord;
+import com.linksame.crm.erp.pmp.entity.*;
 import com.linksame.crm.erp.work.entity.*;
 
 public class _MappingKit {
