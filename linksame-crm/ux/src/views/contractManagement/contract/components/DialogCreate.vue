@@ -1,6 +1,6 @@
 <template>
 
-  <div style="boder:1px soild black">
+  <div>
     <el-divider content-position="left">基本信息</el-divider>
     <el-form
       ref="form"
