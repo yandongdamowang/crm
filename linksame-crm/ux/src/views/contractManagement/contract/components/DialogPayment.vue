@@ -32,8 +32,7 @@
         <span>2,000,000.00</span>
       </el-form-item>
 
-      <el-form-item label="调整金额：">
-        <span>合同支付金额：</span>
+      <el-form-item label="合同支付金额：">
 
         <el-table
           :data="tableData"
@@ -41,17 +40,25 @@
         >
           <el-table-column
             prop="date"
-            label="日期"
+            label="合同名称"
             width="180"
           />
           <el-table-column
             prop="name"
-            label="姓名"
+            label="支付金额"
             width="180"
           />
           <el-table-column
             prop="address"
-            label="地址"
+            label="支付比例"
+          />
+          <el-table-column
+            prop="address"
+            label="调整后支付金额"
+          />
+          <el-table-column
+            prop="address"
+            label="调整后支付比例"
           />
         </el-table>
       </el-form-item>

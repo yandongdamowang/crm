@@ -13,10 +13,21 @@
       </el-form-item>
 
       <el-form-item label="合同名称">
-        <el-input v-model="form.name" />
+        <div class="block">
+
+          <el-cascader
+            :options="options"
+            :clearable="true"
+            placeholder="搜索"
+            filterable
+          />
+        </div>
       </el-form-item>
       <el-form-item label="合同编号">
-        <el-input v-model="form.name" />
+        <el-input
+          v-model="form.name"
+          placeholder="请输入合同编号"
+        />
       </el-form-item>
 
       <el-form-item label="合同采购时间">
@@ -35,10 +46,16 @@
         <el-input v-model="form.name" />
       </el-form-item>
       <el-form-item label="DRP采购单号">
-        <el-input v-model="form.name" />
+        <el-input
+          v-model="form.name"
+          placeholder="请输入单号"
+        />
       </el-form-item>
       <el-form-item label="合同金额">
-        <el-input v-model="form.name" />
+        <el-input
+          v-model="form.name"
+          placeholder="请输入金额"
+        />
       </el-form-item>
     </el-form>
 
@@ -89,11 +106,19 @@
     <el-dialog
       :visible.sync="dialogVisible"
       :before-close="handleClose"
-      title="提示"
+      title="关联业务"
+      data
       width="30%"
       append-to-body
     >
-      <span>这是一段信息</span>
+
+      <el-input
+        v-model="form.b"
+        placeholder="请输入内容"
+      />
+
+      <el-button type="primary">查询</el-button>
+
       <span
         slot="footer"
         class="dialog-footer"
@@ -153,6 +178,45 @@
         label=""
       />
     </el-table>
+
+    <el-cascader
+      :options="options"
+      :clearable="true"
+      placeholder="选择里程碑节点"
+      filterable
+    />
+
+    <el-button
+      type="text"
+      @click="dialogVisibleMilestone = true"
+    >+</el-button>
+
+    <el-dialog
+      :visible.sync="dialogVisibleMilestone"
+      :before-close="handleClose"
+      title="新建里程碑节点"
+      data
+      width="300px"
+      append-to-body
+    >
+
+      <el-input
+        v-model="form.b"
+        placeholder="请输入节点名称"
+      />
+
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
+
+        <el-button
+          type="primary"
+          @click="dialogVisible = false"
+        >创 建</el-button>
+      </span>
+    </el-dialog>
+
   </div>
 
 </template>
@@ -177,9 +241,24 @@ export default {
         date: '2016-05-03',
         address: '设计清单'
       }],
-
+      options: [{
+        value: 'zhinan',
+        label: 'DP设计类',
+        children: [{
+          value: 'shejiyuanze',
+          label: '建筑设计'
+        }, {
+          value: 'daohang',
+          label: '精装修设计'
+        },
+        {
+          value: 'daohang',
+          label: '燃气设计'
+        }]
+      }],
 
       dialogVisible: false,
+      dialogVisibleMilestone: false,
 
       form: {
         name: '',

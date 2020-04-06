@@ -57,11 +57,24 @@
       border
       style="width: 100%"
     >
+
       <el-table-column
-        prop="date"
+        type="selection"
+        width="55"
+      />
+      <el-table-column
+        prop="id"
         label="合同编号"
         width="150"
-      />
+      >
+        <template slot-scope="scope">
+          <el-button
+            type="text"
+            size="small"
+            @click="operationDetail( scope.row)"
+          >{{ scope.row.id }}</el-button>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="name"
         label="合同名称"
@@ -97,23 +110,7 @@
         label="经办人"
         width="120"
       />
-      <el-table-column
-        fixed="right"
-        label="操作"
-        width="100"
-      >
-        <template slot-scope="scope">
-          <el-button
-            type="text"
-            size="small"
-            @click="handleClick(scope.row)"
-          >查看</el-button>
-          <el-button
-            type="text"
-            size="small"
-          >编辑</el-button>
-        </template>
-      </el-table-column>
+
     </el-table>
 
     <!-- 弹框 -->
@@ -151,7 +148,10 @@ export default {
       dialogComponents: '',
       dialogTitle: '',
       dialogVisible: false,
-      tableData: [],
+      tableData: [{
+        id: 100,
+        name: '测试'
+      }],
       formData: {
         a: '',
         b: '',
@@ -173,13 +173,16 @@ export default {
       this.dialogVisible = true
       this.dialogTitle = '新建合同'
       this.dialogComponents = 'DialogCreate'
+    },
+    operationDetail(row) {
+      // console.log(row)
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-@import "../styles/table.scss";
+// @import "../styles/table.scss";
 .box {
   height: 100%;
   width: 100%;
