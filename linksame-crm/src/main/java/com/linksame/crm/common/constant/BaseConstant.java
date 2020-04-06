@@ -59,4 +59,19 @@ public class BaseConstant implements Serializable {
      */
     public static  Integer SMALL_WORK_EDIT_ROLE_ID;
 
+    /**
+     * Minio连接地址
+     */
+    public static String MINIO_URL = "http://192.168.1.174:9001";
+
+    /**
+     * Minio 连接账号/密码
+     */
+    public static String MINIO_KEY = "linksame";
+
+    /**
+     * Minio文件存储----Bucket_Name
+     */
+    public static String BUCKET_NAME = "crm";
+
 }

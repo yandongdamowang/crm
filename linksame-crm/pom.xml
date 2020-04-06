@@ -44,10 +44,18 @@
             <scope>provided</scope>
         </dependency>-->
 
+        <!--Swagger-->
         <dependency>
             <groupId>live.autu</groupId>
             <artifactId>jfinal-swagger</artifactId>
             <version>1.0.0</version>
+        </dependency>
+
+        <!--Minio文件存储-->
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+            <version>3.0.10</version>
         </dependency>
 
         <dependency>
