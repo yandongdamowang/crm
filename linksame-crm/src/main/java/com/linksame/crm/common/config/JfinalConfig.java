@@ -28,6 +28,7 @@ import com.linksame.crm.common.config.search.ElasticSearchPlugin;
 import com.linksame.crm.common.constant.BaseConstant;
 import com.linksame.crm.common.interceptor.AuthInterceptor;
 import com.linksame.crm.common.interceptor.ErpInterceptor;
+import com.linksame.crm.common.minio.route.MinioRouter;
 import com.linksame.crm.erp._MappingKit;
 import com.linksame.crm.erp.admin.common.AdminRouter;
 import com.linksame.crm.erp.bi.common.BiRouter;
@@ -82,6 +83,7 @@ public class JfinalConfig extends JFinalConfig {
         me.add(new WorkRouter());
         me.add(new PmpRouter());
 
+        me.add(new MinioRouter());
         me.add(new SwaggerRoutes());
     }
 

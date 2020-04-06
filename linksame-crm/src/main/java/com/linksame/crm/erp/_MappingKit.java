@@ -73,6 +73,7 @@ public class _MappingKit {
 		arp.addMapping("work_task_label", "label_id", WorkTaskLabel.class);
 		arp.addMapping("work_task_log", "log_id", WorkTaskLog.class);
 		arp.addMapping("work_user", "id", WorkUser.class);
+		arp.addMapping("task_remind", "remind_id", TaskRemind.class);
 		arp.addMapping("crm_business_change", "change_id", CrmBusinessChange.class);
         arp.addMapping("pmp_contract", "contract_id", PmpContract.class);
         arp.addMapping("pmp_contract_payment", "bill_id", PmpContractPayment.class);
