@@ -16,7 +16,7 @@ import live.autu.plugin.jfinal.swagger.config.RequestMethod;
  * @date 2020/4/1 12:47
  * @Description 任务提醒控制层
  */
-@Api(description="任务提醒服务")
+@Api(description="任务提醒接口管理")
 public class RemindController extends Controller {
     @Inject
     private RemindService remindService;
