@@ -1,7 +1,7 @@
 <template>
   <div class="box">
-
-    <el-form
+    待审批合同
+    <!-- <el-form
       ref="form"
       :model="formData"
       :inline="true"
@@ -36,7 +36,7 @@
         <el-button
           type="primary"
           @click="dialogCreate"
-        > + 新建</el-button>
+        >新建</el-button>
       </span>
       <span>
         <el-button>批量操作</el-button>
@@ -55,7 +55,7 @@
     <el-table
       :data="tableData"
       border
-      style="width: 100%; margin:20px 0 0 0"
+      style="width: 100%"
     >
 
       <el-table-column
@@ -71,53 +71,53 @@
           <el-button
             type="text"
             size="small"
-            @click="drawerDetail( scope.row)"
+            @click="dialogDetail( scope.row)"
           >{{ scope.row.id }}</el-button>
         </template>
       </el-table-column>
       <el-table-column
-        prop="b"
+        prop="name"
         label="合同名称"
         width="120"
       />
       <el-table-column
-        prop="c"
+        prop="province"
         label="客户/承包商"
         width="120"
       />
       <el-table-column
-        prop="d"
+        prop="city"
         label="合同总金额"
         width="120"
       />
       <el-table-column
-        prop="e"
+        prop="address"
         label="要求签署时间"
-        width="120"
+        width="300"
       />
       <el-table-column
-        prop="f"
+        prop="zip"
         label="实际签署时间"
         width="120"
       />
       <el-table-column
-        prop="g"
+        prop="zip"
         label="DRP采购单号"
         width="120"
       />
       <el-table-column
-        prop="h"
+        prop="zip"
         label="经办人"
         width="120"
       />
 
     </el-table>
 
-    <!-- 弹框 -->
     <el-dialog
       :visible.sync="dialogVisible"
       :title="dialogTitle"
-      :width="dialogwidth"
+      :fullscreen="true"
+      width="30%"
     >
       <component :is="dialogComponents" />
 
@@ -136,7 +136,7 @@
       size="70%"
     >
       <component :is="drawerComponents" />
-    </el-drawer>
+    </el-drawer> -->
 
   </div>
 </template>
@@ -155,20 +155,13 @@ export default {
     return {
       dialogComponents: '',
       dialogTitle: '',
-      dialogwidth: '',
       dialogVisible: false,
       drawerComponents: '',
       drawer: false,
       drawerTitle: '',
       tableData: [{
         id: 100,
-        b: '测试合同',
-        c: '上海测试公司',
-        d: '50.000.00',
-        e: '2017-10-01',
-        f: '2017-10-01',
-        g: '191111-REC-工程-S1-珠海一键-智能化改造',
-        h: '胡彦斌'
+        name: '测试'
       }],
       formData: {
         a: '',
@@ -186,15 +179,13 @@ export default {
       this.dialogVisible = true
       this.dialogTitle = '支付比例调整'
       this.dialogComponents = 'DialogPayment'
-      this.dialogwidth = '50%'
     },
     dialogCreate() {
       this.dialogVisible = true
       this.dialogTitle = '新建合同'
       this.dialogComponents = 'DialogCreate'
-      this.dialogwidth = '90%'
     },
-    drawerDetail(row) {
+    dialogDetail(row) {
       // console.log(row)
       this.drawer = true
       this.drawerTitle = '详情'
@@ -205,21 +196,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// @import "../styles/table.scss";
 .box {
   height: 100%;
   width: 100%;
   background-color: #fff;
-  padding: 20px 30px;
+  padding: 10px;
   //   margin: 20px;
-}
-
-/deep/ .el-dialog__body {
-  border: 1px solid rgb(233, 233, 233);
-  padding: 30px 50px 30px 50px;
-}
-
-/deep/ .el-drawer__body {
-  border: 1px solid rgb(233, 233, 233);
-  padding: 20px 30px 20px 30px;
 }
 </style>

@@ -1,36 +1,6 @@
 <template>
   <div class="box">
 
-    <el-form
-      ref="form"
-      :model="formData"
-      :inline="true"
-    >
-
-      <el-form-item label="合同编号：">
-        <el-input
-          v-model="formData.a"
-          placeholder="请输入内容"
-        />
-      </el-form-item>
-
-      <el-form-item label="客户/承包商：">
-        <el-input
-          v-model="formData.b"
-          placeholder="请输入内容"
-        />
-      </el-form-item>
-
-      <el-form-item>
-        <span>
-          <el-button type="primary">查询</el-button>
-        </span>
-        <span>
-          <el-button>重置</el-button>
-        </span>
-      </el-form-item>
-    </el-form>
-
     <div>
       <span>
         <el-button
@@ -41,15 +11,7 @@
       <span>
         <el-button>批量操作</el-button>
       </span>
-      <span>
-        <el-button>导出</el-button>
-      </span>
-      <span>
-        <el-button
-          type="primary"
-          @click="dialogPayment"
-        >批量修改支付比例</el-button>
-      </span>
+
     </div>
 
     <el-table
@@ -113,7 +75,6 @@
 
     </el-table>
 
-    <!-- 弹框 -->
     <el-dialog
       :visible.sync="dialogVisible"
       :title="dialogTitle"
@@ -130,14 +91,15 @@
       </span>
     </el-dialog>
 
-    <el-drawer
+    <!-- <el-drawer
       :visible.sync="drawer"
       :title="drawerTitle"
       size="70%"
     >
       <component :is="drawerComponents" />
-    </el-drawer>
+    </el-drawer>  -->
 
+    <!-- </el-form> -->
   </div>
 </template>
 
@@ -146,7 +108,6 @@
 export default {
   name: 'ContractIndex',
   components: {
-    DialogPayment: () => import('./components/DialogPayment'),
     DialogCreate: () => import('./components/DialogCreate'),
     DrawerDetail: () => import('./components/DrawerDetail')
   },
@@ -182,15 +143,9 @@ export default {
   },
   mounted() {},
   methods: {
-    dialogPayment() {
-      this.dialogVisible = true
-      this.dialogTitle = '支付比例调整'
-      this.dialogComponents = 'DialogPayment'
-      this.dialogwidth = '50%'
-    },
     dialogCreate() {
       this.dialogVisible = true
-      this.dialogTitle = '新建合同'
+      this.dialogTitle = '新建合同模板'
       this.dialogComponents = 'DialogCreate'
       this.dialogwidth = '90%'
     },
@@ -216,10 +171,5 @@ export default {
 /deep/ .el-dialog__body {
   border: 1px solid rgb(233, 233, 233);
   padding: 30px 50px 30px 50px;
-}
-
-/deep/ .el-drawer__body {
-  border: 1px solid rgb(233, 233, 233);
-  padding: 20px 30px 20px 30px;
 }
 </style>

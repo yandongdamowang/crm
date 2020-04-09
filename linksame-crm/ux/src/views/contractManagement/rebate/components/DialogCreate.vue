@@ -1,6 +1,6 @@
 <template>
 
-  <div class="dialog-create">
+  <div>
     <el-divider content-position="left">基本信息</el-divider>
     <el-form
       ref="form"
@@ -284,9 +284,5 @@ export default {
   width: 100%;
   background-color: #fff;
   padding: 10px;
-}
-
-.dialog-create {
-  border: 1px soild red;
 }
 </style>

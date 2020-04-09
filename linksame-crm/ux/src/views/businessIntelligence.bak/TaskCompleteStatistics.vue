@@ -1,7 +1,8 @@
 <template>
   <div
     v-loading="loading"
-    class="main-container">
+    class="main-container"
+  >
     <div class="handle-bar">
       <el-date-picker
         v-model="dateSelect"
@@ -9,43 +10,51 @@
         :picker-options="pickerOptions"
         type="year"
         value-format="yyyy"
-        placeholder="选择年"/>
+        placeholder="选择年"
+      />
       <el-select
         v-model="typeSelect"
-        placeholder="请选择">
+        placeholder="请选择"
+      >
         <el-option
           v-for="item in [{label:'合同金额', value:1},{label:'回款金额', value:2}]"
           :key="item.value"
           :label="item.label"
-          :value="item.value"/>
+          :value="item.value"
+        />
       </el-select>
       <el-select
         v-model="structuresSelectValue"
         placeholder="选择部门"
-        @change="structuresValueChange">
+        @change="structuresValueChange"
+      >
         <el-option
           v-for="item in deptList"
           :key="item.id"
           :label="item.name"
-          :value="item.id"/>
+          :value="item.id"
+        />
       </el-select>
       <el-select
         v-model="userSelectValue"
         :clearable="true"
-        placeholder="选择员工">
+        placeholder="选择员工"
+      >
         <el-option
           v-for="item in userOptions"
           :key="item.userId"
           :label="item.realname"
-          :value="item.userId"/>
+          :value="item.userId"
+        />
       </el-select>
       <el-button
         type="primary"
-        @click.native="handleClick('search')">搜索</el-button>
+        @click.native="handleClick('search')"
+      >搜索</el-button>
     </div>
     <div class="content">
       <div class="axis-content">
-        <div id="axismain"/>
+        <div id="axismain" />
       </div>
       <div class="table-content">
         <el-table
@@ -53,7 +62,8 @@
           stripe
           border
           height="400"
-          highlight-current-row>
+          highlight-current-row
+        >
           <el-table-column
             v-for="(item, index) in fieldList"
             :key="index"
@@ -61,7 +71,8 @@
             :label="item.name"
             align="center"
             header-align="center"
-            show-overflow-tooltip/>
+            show-overflow-tooltip
+          />
         </el-table>
       </div>
     </div>
@@ -339,7 +350,7 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-@import './styles/detail.scss';
+@import "./styles/detail.scss";
 .handle-bar {
   background-color: white;
   padding: 15px 20px 5px 20px;

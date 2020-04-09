@@ -4,6 +4,7 @@
       :src="logo"
       class="logo"
     >
+
     <div class="nav-items-container">
       <flexbox style="width: auto;">
         <router-link
@@ -63,8 +64,10 @@
           :key="userInfo.img"
           class="user-img div-photo"
         />
+        <div>{{ userInfo.username }}</div>
         <i class="el-icon-caret-bottom mark" />
       </div>
+
     </el-popover>
 
   </div>
@@ -105,7 +108,7 @@ export default {
       'logo',
       'crm',
       'contract',
-      'bi',
+      //   'bi',
       'manage',
       'oa',
       'project'
@@ -114,7 +117,7 @@ export default {
       var tempsItems = []
       if (this.oa) {
         tempsItems.push({
-          title: '办公',
+          title: '工作',
           type: 0,
           path: '/workbench',
           icon: 'workbench'
@@ -128,14 +131,7 @@ export default {
           icon: 'customer'
         })
       }
-      if (this.bi) {
-        tempsItems.push({
-          title: '商业智能',
-          type: 5,
-          path: '/bi',
-          icon: 'statistics'
-        })
-      }
+
       if (this.project) {
         tempsItems.push({
           title: '项目管理',
@@ -152,6 +148,19 @@ export default {
           icon: 'contract'
         })
       }
+      //   tempsItems.push({
+      //     title: '账单管理',
+      //     type: 4,
+      //     path: '/contract',
+      //     icon: 'contract'
+      //   },
+      //   {
+      //     title: '附件管理',
+      //     type: 5,
+      //     path: '/contract',
+      //     icon: 'contract'
+      //   },
+      //   )
       return tempsItems
     }
   },

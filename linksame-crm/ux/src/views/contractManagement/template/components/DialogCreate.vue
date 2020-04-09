@@ -1,6 +1,6 @@
 <template>
 
-  <div class="dialog-create">
+  <div>
     <el-divider content-position="left">基本信息</el-divider>
     <el-form
       ref="form"
@@ -133,52 +133,6 @@
 
     <el-divider content-position="left">选择任务模板</el-divider>
 
-    <el-table
-      ref="multipleTable"
-      :data="tableData"
-      tooltip-effect="dark"
-      style="width: 100%"
-      @selection-change="handleSelectionChange"
-    >
-      <el-table-column
-        type="selection"
-        width="55"
-      />
-
-      <el-table-column
-        prop="address"
-        label="合同采购"
-      />
-
-      <el-table-column
-        prop="date"
-        label=""
-      />
-    </el-table>
-
-    <el-table
-      ref="multipleTable"
-      :data="tableData"
-      tooltip-effect="dark"
-      style="width: 100%"
-      @selection-change="handleSelectionChange"
-    >
-      <el-table-column
-        type="selection"
-        width="55"
-      />
-
-      <el-table-column
-        prop="address"
-        label="设计阶段"
-      />
-
-      <el-table-column
-        prop="date"
-        label=""
-      />
-    </el-table>
-
     <el-cascader
       :options="options"
       :clearable="true"
@@ -284,9 +238,5 @@ export default {
   width: 100%;
   background-color: #fff;
   padding: 10px;
-}
-
-.dialog-create {
-  border: 1px soild red;
 }
 </style>

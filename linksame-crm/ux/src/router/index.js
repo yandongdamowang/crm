@@ -12,7 +12,7 @@ import contractRouter from './modules/contract'
 import projectRouter from './modules/project/index'
 import { managerRouter } from './modules/manager'
 import personRouter from './modules/person'
-import { biRouter } from './modules/business'
+// import { biRouter } from './modules/business'
 
 /**
 * hidden: true                   if `hidden:true` will not show in the sidebar(default is false)

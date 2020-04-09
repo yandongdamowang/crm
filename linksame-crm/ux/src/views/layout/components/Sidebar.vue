@@ -8,7 +8,6 @@
       :collapse="collapse"
       background-color="#001529"
       class="el-menu-vertical"
-      unique-opened
     >
       <template v-for="(item, index) in getShowMenu(items)">
         <router-link

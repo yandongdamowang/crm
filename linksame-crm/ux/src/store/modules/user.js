@@ -15,7 +15,7 @@ const user = {
     bi: {}, // 商业智能
     manage: {}, // 管理后台
     oa: {}, // 办公
-    project: {} // 项目管理
+    project: {}, // 项目管理
   },
 
   mutations: {
@@ -42,7 +42,7 @@ const user = {
     },
     SET_PROJECT: (state, project) => {
       state.project = project
-    }
+    },
   },
 
   actions: {
@@ -62,17 +62,19 @@ const user = {
                 update: true,
                 index: true,
                 excelimport: true,
-                delete: true
+                delete: true,
               },
-              dev: {
+              rebate: {
+                discard: true,
                 read: true,
+                transfer: true,
                 excelexport: true,
                 save: true,
                 update: true,
                 index: true,
                 excelimport: true,
-                status: true
-              }
+                delete: true,
+              },
             }
             console.log(123, data)
             Lockr.set('Admin-Token', data['Admin-Token'])
@@ -106,7 +108,7 @@ const user = {
         adminIndexAuthList()
           .then(response => {
             response.data.contract = {
-              contacts: {
+              contact: {
                 discard: true,
                 read: true,
                 transfer: true,
@@ -115,17 +117,19 @@ const user = {
                 update: true,
                 index: true,
                 excelimport: true,
-                delete: true
+                delete: true,
               },
-              dev: {
+              rebate: {
+                discard: true,
                 read: true,
+                transfer: true,
                 excelexport: true,
                 save: true,
                 update: true,
                 index: true,
                 excelimport: true,
-                status: true
-              }
+                delete: true,
+              },
             }
             const data = response.data
             Lockr.set('authList', data)
@@ -171,8 +175,8 @@ const user = {
             reject(error)
           })
       })
-    }
-  }
+    },
+  },
 }
 
 export default user
