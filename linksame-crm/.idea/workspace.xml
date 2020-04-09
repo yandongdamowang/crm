@@ -1,0 +1,501 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="8c35b251-7014-4512-ba39-ae2ffefdf9b4" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/linksame/crm/erp/work/controller/RemindController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/linksame/crm/erp/work/controller/RemindController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/linksame/crm/erp/work/controller/WorkController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/linksame/crm/erp/work/controller/WorkController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/config/crm-config.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config/crm-config.txt" afterDir="false" />
+    </list>
+    <list id="fed4f418-c6c4-4dec-8931-ab1c66a86fdf" name="No Commit" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="localRepository" value="D:\Repositories" />
+        <option name="mavenHome" value="D:/apache-maven-3.3.9" />
+        <option name="userSettingsFile" value="D:\apache-maven-3.3.9\conf\settings.xml" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="1XHopeojlabktqTkEv4t9oHDZcx" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/webapp/static" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="preferences.fileTypes" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.linksame.crm.common.minio.route" />
+      <recent name="com.linksame.crm.erp.work.common" />
+      <recent name="com.linksame.crm.common.swagger" />
+      <recent name="com.linksame.crm.erp.work.controller" />
+      <recent name="com.linksame.crm.erp.work.entity.base" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\idea_workspace\crm\linksame-crm\src\main\webapp\static" />
+      <recent name="D:\idea_workspace\crm\linksame-crm\src\main\resources\template\admin" />
+      <recent name="D:\idea_workspace\crm\linksame-crm\src\main\webapp\WEB-INF\view\swagger" />
+      <recent name="D:\idea_workspace\crm\linksame-crm\src\main\webapp\WEB-INF" />
+      <recent name="D:\idea_workspace\crm\linksame-crm\src\main\resources\template\work" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.Application">
+    <configuration name="Application" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.linksame.crm.Application" />
+      <module name="linksame-crm" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.linksame.crm.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MinioTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.linksame.crm.test.MinioTest" />
+      <module name="linksame-crm" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.linksame.crm.test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Application" />
+        <item itemvalue="Application.MinioTest" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="8c35b251-7014-4512-ba39-ae2ffefdf9b4" name="Default Changelist" comment="" />
+      <changelist id="fed4f418-c6c4-4dec-8931-ab1c66a86fdf" name="No Commit" comment="" />
+      <created>1580712564322</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1580712564322</updated>
+      <workItem from="1580712570150" duration="2478000" />
+      <workItem from="1580781808620" duration="4393000" />
+      <workItem from="1580815131709" duration="273000" />
+      <workItem from="1580964188555" duration="39000" />
+      <workItem from="1583200510066" duration="1655000" />
+      <workItem from="1584407843844" duration="2265000" />
+      <workItem from="1584411510243" duration="3101000" />
+      <workItem from="1584428489420" duration="2210000" />
+      <workItem from="1584496309844" duration="2390000" />
+      <workItem from="1584498971025" duration="1606000" />
+      <workItem from="1584500940665" duration="2548000" />
+      <workItem from="1584527358307" duration="14000" />
+      <workItem from="1584594227853" duration="1210000" />
+      <workItem from="1584666944218" duration="17000" />
+      <workItem from="1584754242800" duration="1228000" />
+      <workItem from="1584782639256" duration="3456000" />
+      <workItem from="1584790700280" duration="516000" />
+      <workItem from="1584928624595" duration="2318000" />
+      <workItem from="1584930986620" duration="5702000" />
+      <workItem from="1584946277301" duration="7230000" />
+      <workItem from="1584956468140" duration="2441000" />
+      <workItem from="1585035877818" duration="1042000" />
+      <workItem from="1585038412373" duration="226000" />
+      <workItem from="1585038767581" duration="709000" />
+      <workItem from="1585042869620" duration="7498000" />
+      <workItem from="1585098157920" duration="935000" />
+      <workItem from="1585115181919" duration="1652000" />
+      <workItem from="1585189634698" duration="3902000" />
+      <workItem from="1585283502327" duration="9000" />
+      <workItem from="1585365565399" duration="75000" />
+      <workItem from="1585366199309" duration="1325000" />
+      <workItem from="1585560588329" duration="3103000" />
+      <workItem from="1585620517466" duration="13041000" />
+      <workItem from="1585640380245" duration="18323000" />
+      <workItem from="1585663922101" duration="3852000" />
+      <workItem from="1585705555801" duration="32903000" />
+      <workItem from="1585790207712" duration="11000" />
+      <workItem from="1585793124883" duration="1295000" />
+      <workItem from="1585796330282" duration="12079000" />
+      <workItem from="1585816751760" duration="4330000" />
+      <workItem from="1585881062838" duration="70000" />
+      <workItem from="1585883394375" duration="898000" />
+      <workItem from="1585888645166" duration="1614000" />
+      <workItem from="1585890841306" duration="634000" />
+      <workItem from="1585894321991" duration="8000" />
+      <workItem from="1585902838080" duration="4764000" />
+      <workItem from="1585908173530" duration="933000" />
+      <workItem from="1585921552885" duration="257000" />
+      <workItem from="1586137279930" duration="5065000" />
+      <workItem from="1586142632568" duration="25436000" />
+      <workItem from="1586247790132" duration="71000" />
+      <workItem from="1586309017064" duration="8923000" />
+      <workItem from="1586411015361" duration="1549000" />
+    </task>
+    <task id="LOCAL-00001" summary="修改部署配置参数">
+      <created>1585050621664</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1585050621664</updated>
+    </task>
+    <task id="LOCAL-00002" summary="添加注入Proxy动态代理配置">
+      <created>1585054784220</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1585054784220</updated>
+    </task>
+    <task id="LOCAL-00003" summary="修改打包配置----恢复原简化前端打包代码">
+      <created>1585098408265</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1585098408265</updated>
+    </task>
+    <task id="LOCAL-00004" summary="项目管理-时间轴任务板-查询接口&#10;1. 根据子类设置大类截止时间&#10;2. 无限层级读取组装子任务数据">
+      <created>1585656493361</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1585656493361</updated>
+    </task>
+    <task id="LOCAL-00005" summary="1. 自动识别并切换测试/生产环境数据库连接&#10;2. 新增任务提醒模块业务代码&#10;3. 新增任务提醒定时任务">
+      <created>1585817144030</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1585817144030</updated>
+    </task>
+    <task id="LOCAL-00006" summary="修复部署异常">
+      <created>1585817540966</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1585817540966</updated>
+    </task>
+    <task id="LOCAL-00007" summary="修改启动类引用配置">
+      <created>1585818282115</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1585818282115</updated>
+    </task>
+    <task id="LOCAL-00008" summary="取消自动识别测试/生产环境配置, 可能由于部署环境关系, 暂时无法自动识别">
+      <created>1585819254192</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1585819254192</updated>
+    </task>
+    <task id="LOCAL-00009" summary="pom 依赖更新">
+      <created>1585819795868</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1585819795868</updated>
+    </task>
+    <task id="LOCAL-00010" summary="1. 任务提醒功能对接系统消息编码&#10;2. 系统消息所需接口编码（提供指定用户消息提示数据，消息已读状态更改等）">
+      <created>1585905207587</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1585905207587</updated>
+    </task>
+    <task id="LOCAL-00011" summary="undertow配置处理">
+      <created>1585907417838</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1585907417838</updated>
+    </task>
+    <task id="LOCAL-00012" summary="数据库连接配置修改">
+      <created>1585907482307</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1585907482308</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Minio文件存储服务集成">
+      <created>1586161298005</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1586161298005</updated>
+    </task>
+    <task id="LOCAL-00014" summary="swagger 集成">
+      <created>1586311465284</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1586311465284</updated>
+    </task>
+    <task id="LOCAL-00015" summary="添加swagger ui文件">
+      <created>1586313968335</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1586313968335</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="修改部署配置参数" />
+    <MESSAGE value="添加注入Proxy动态代理配置" />
+    <MESSAGE value="修改打包配置----恢复原简化前端打包代码" />
+    <MESSAGE value="项目管理-时间轴任务板-查询接口&#10;1. 根据子类设置大类截止时间&#10;2. 无限层级读取组装子任务数据" />
+    <MESSAGE value="1. 自动识别并切换测试/生产环境数据库连接&#10;2. 新增任务提醒模块业务代码&#10;3. 新增任务提醒定时任务" />
+    <MESSAGE value="修复部署异常" />
+    <MESSAGE value="修改启动类引用配置" />
+    <MESSAGE value="取消自动识别测试/生产环境配置, 可能由于部署环境关系, 暂时无法自动识别" />
+    <MESSAGE value="pom 依赖更新" />
+    <MESSAGE value="1. 任务提醒功能对接系统消息编码&#10;2. 系统消息所需接口编码（提供指定用户消息提示数据，消息已读状态更改等）" />
+    <MESSAGE value="undertow配置处理" />
+    <MESSAGE value="数据库连接配置修改" />
+    <MESSAGE value="Minio文件存储服务集成" />
+    <MESSAGE value="swagger 集成" />
+    <MESSAGE value="添加swagger ui文件" />
+    <option name="LAST_COMMIT_MESSAGE" value="添加swagger ui文件" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="275" y="26" key="#Project_Structure" timestamp="1586143291347">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="275" y="26" key="#Project_Structure/0.0.1366.728@0.0.1366.728" timestamp="1586143291347" />
+    <state x="137" y="22" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1586142011595">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="137" y="22" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1586142011595" />
+    <state x="488" y="73" key="#com.intellij.ide.util.MemberChooser" timestamp="1586141034844">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="488" y="73" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1586141034844" />
+    <state x="413" y="144" key="#com.intellij.ide.util.PackageChooserDialog" timestamp="1584499248905">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="413" y="144" key="#com.intellij.ide.util.PackageChooserDialog/0.0.1366.728@0.0.1366.728" timestamp="1584499248905" />
+    <state x="649" y="242" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1584499223785">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="649" y="242" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1366.728@0.0.1366.728" timestamp="1584499223785" />
+    <state x="467" y="254" width="431" height="226" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1585370023255">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="467" y="254" width="431" height="226" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes/0.0.1366.728@0.0.1366.728" timestamp="1585370023255" />
+    <state x="413" y="114" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1585819090755">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="413" y="114" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1366.728@0.0.1366.728" timestamp="1585819090755" />
+    <state x="413" y="114" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog" timestamp="1585628039236">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="413" y="114" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1366.728@0.0.1366.728" timestamp="1585628039236" />
+    <state x="261" y="0" key="CommitChangelistDialog2" timestamp="1586313965632">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="261" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1586313965632" />
+    <state width="888" height="466" key="DebuggerActiveHint" timestamp="1586168649570">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="888" height="466" key="DebuggerActiveHint/0.0.1366.728@0.0.1366.728" timestamp="1586168649570" />
+    <state x="129" y="61" width="1092" height="608" key="DiffContextDialog" timestamp="1586161262480">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="129" y="61" width="1092" height="608" key="DiffContextDialog/0.0.1366.728@0.0.1366.728" timestamp="1586161262480" />
+    <state x="463" y="122" key="FileChooserDialogImpl" timestamp="1585721848032">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="463" y="122" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1585721848032" />
+    <state width="1323" height="204" key="GridCell.Tab.0.bottom" timestamp="1586340841507">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="204" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1586340841507" />
+    <state width="1323" height="204" key="GridCell.Tab.0.center" timestamp="1586340841507">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="204" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1586340841507" />
+    <state width="1323" height="204" key="GridCell.Tab.0.left" timestamp="1586340841506">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="204" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1586340841506" />
+    <state width="1323" height="204" key="GridCell.Tab.0.right" timestamp="1586340841507">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="204" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1586340841507" />
+    <state width="1323" height="204" key="GridCell.Tab.1.bottom" timestamp="1586340841507">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="204" key="GridCell.Tab.1.bottom/0.0.1366.728@0.0.1366.728" timestamp="1586340841507" />
+    <state width="1323" height="204" key="GridCell.Tab.1.center" timestamp="1586340841507">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="204" key="GridCell.Tab.1.center/0.0.1366.728@0.0.1366.728" timestamp="1586340841507" />
+    <state width="1323" height="204" key="GridCell.Tab.1.left" timestamp="1586340841507">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="204" key="GridCell.Tab.1.left/0.0.1366.728@0.0.1366.728" timestamp="1586340841507" />
+    <state width="1323" height="204" key="GridCell.Tab.1.right" timestamp="1586340841507">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="204" key="GridCell.Tab.1.right/0.0.1366.728@0.0.1366.728" timestamp="1586340841507" />
+    <state x="186" y="0" key="SettingsEditor" timestamp="1585884016207">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="186" y="0" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1585884016207" />
+    <state x="513" y="236" key="VCS.EditChangelistDialog" timestamp="1585883736810">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="513" y="236" key="VCS.EditChangelistDialog/0.0.1366.728@0.0.1366.728" timestamp="1585883736810" />
+    <state x="275" y="100" key="Vcs.Push.Dialog.v2" timestamp="1586313987623">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="275" y="100" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1586313987623" />
+    <state width="691" height="372" key="XDebugger.FullValuePopup" timestamp="1585724540552">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="691" height="372" key="XDebugger.FullValuePopup/0.0.1366.728@0.0.1366.728" timestamp="1585724540552" />
+    <state x="237" y="103" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2" timestamp="1585714726511">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="237" y="103" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/0.0.1366.728@0.0.1366.728" timestamp="1585714726511" />
+    <state x="413" y="124" key="extract.method.dialog" timestamp="1586168441940">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="413" y="124" key="extract.method.dialog/0.0.1366.728@0.0.1366.728" timestamp="1586168441940" />
+    <state x="326" y="180" width="759" height="548" key="find.popup" timestamp="1586166394097">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="326" y="180" width="759" height="548" key="find.popup/0.0.1366.728@0.0.1366.728" timestamp="1586166394097" />
+    <state x="353" y="166" key="git4idea.merge.GitPullDialog" timestamp="1586313833103">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="353" y="166" key="git4idea.merge.GitPullDialog/0.0.1366.728@0.0.1366.728" timestamp="1586313833103" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1586139566106">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1586139566106" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/linksame/crm/common/swagger/controller/SwaggerController.java</url>
+          <line>53</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/linksame/crm/common/swagger/controller/SwaggerController.java</url>
+          <line>43</line>
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/linksame/crm/common/swagger/config/SwaggerConfig.java</url>
+          <line>38</line>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/linksame/crm/common/swagger/config/SwaggerConfig.java</url>
+          <line>66</line>
+          <option name="timeStamp" value="16" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/linksame/crm/common/swagger/config/SwaggerConfig.java</url>
+          <line>86</line>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/linksame/crm/common/swagger/config/SwaggerConfig.java</url>
+          <line>107</line>
+          <option name="timeStamp" value="18" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://D:/Repositories/com/fitmgr/fitmgr-common-minio/1.0-SNAPSHOT/fitmgr-common-minio-1.0-SNAPSHOT.jar!/com/fitmgr/common/minio/service/MinioTemplate.class</url>
+          <line>47</line>
+          <option name="timeStamp" value="28" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

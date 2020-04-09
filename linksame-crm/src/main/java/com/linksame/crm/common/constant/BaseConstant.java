@@ -60,18 +60,38 @@ public class BaseConstant implements Serializable {
     public static  Integer SMALL_WORK_EDIT_ROLE_ID;
 
     /**
+     * Swagger请求地址
+     */
+    public static final String SWAGGER_PATH = BaseUtil.isWindows() ? "127.0.0.1" : "192.168.1.174";
+
+    /**
+     * Swagger标题
+     */
+    public final static String SWAGGER_TITLE = "邻盛CRM Swagger Api";
+
+    /**
+     * Swagger描述
+     */
+    public static final String SWAGGER_DESCRIPTION = "全宇宙最牛逼的Jfinal集成Swagger接口文档系统";
+
+    /**
      * Minio连接地址
      */
-    public static String MINIO_URL = "http://192.168.1.174:9001";
+    public static final String MINIO_URL = "http://192.168.1.174:9001";
 
     /**
      * Minio 连接账号/密码
      */
-    public static String MINIO_KEY = "linksame";
+    public static final String MINIO_KEY = "linksame";
 
     /**
      * Minio文件存储----Bucket_Name
      */
-    public static String BUCKET_NAME = "crm";
+    public static final String BUCKET_NAME = "crm";
+
+    /**
+     * Minio文件----超时时间
+     */
+    public static final Integer FILE_OUT_TIME = 3600;
 
 }
