@@ -1,4 +1,4 @@
- //to reset element-ui default css
+//to reset element-ui default css
 // .el-upload {
 //   input[type="file"] {
 //     display: none !important;
@@ -38,6 +38,10 @@
 //   color: #333333;
 // }
 
+.el-main {
+  padding: 0px !important;
+}
+
 .el-input .el-input__inner {
   padding: 0 8px;
 }
@@ -54,10 +58,10 @@
   padding-left: 8px;
 }
 
-body .el-table th.gutter{
-  display: table-cell!important;
+body .el-table th.gutter {
+  display: table-cell !important;
 }
 
-body .el-table colgroup.gutter{
-  display: table-cell!important;
+body .el-table colgroup.gutter {
+  display: table-cell !important;
 }

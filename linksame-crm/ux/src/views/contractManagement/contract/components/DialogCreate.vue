@@ -1,6 +1,6 @@
 <template>
 
-  <div class="dialog-create">
+  <div>
     <el-divider content-position="left">基本信息</el-divider>
     <el-form
       ref="form"
@@ -9,7 +9,19 @@
       label-width="120px"
     >
       <el-form-item label="所属合同类型">
-        <el-input v-model="form.name" />
+        <el-select
+          v-model="form.a"
+          placeholder="请选合同类型"
+        >
+          <el-option
+            label="类型一"
+            value="shanghai"
+          />
+          <el-option
+            label="类型二"
+            value="beijing"
+          />
+        </el-select>
       </el-form-item>
 
       <el-form-item label="合同名称">
@@ -25,35 +37,73 @@
       </el-form-item>
       <el-form-item label="合同编号">
         <el-input
-          v-model="form.name"
+          v-model="form.b"
           placeholder="请输入合同编号"
         />
       </el-form-item>
 
       <el-form-item label="合同采购时间">
-        <el-input v-model="form.name" />
+        <el-input v-model="form.c" />
       </el-form-item>
       <el-form-item label="合同开始日期">
-        <el-input v-model="form.name" />
+        <el-date-picker
+          v-model="form.d"
+          :picker-options="pickerOptions"
+          type="datetime"
+          placeholder="选择日期时间"
+          align="right"
+        />
       </el-form-item>
       <el-form-item label="合同结束日期">
-        <el-input v-model="form.name" />
+        <el-date-picker
+          v-model="form.e"
+          :picker-options="pickerOptions"
+          type="datetime"
+          placeholder="选择日期时间"
+          align="right"
+        />
       </el-form-item>
       <el-form-item label="承包商">
-        <el-input v-model="form.name" />
+
+        <el-select
+          v-model="form.f"
+          placeholder="请选合同承包商"
+        >
+          <el-option
+            label="承包商一"
+            value="shanghai"
+          />
+          <el-option
+            label="承包商二"
+            value="beijing"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="经办人">
-        <el-input v-model="form.name" />
+
+        <el-select
+          v-model="form.g"
+          placeholder="请选合同经办人"
+        >
+          <el-option
+            label="经办人一"
+            value="shanghai"
+          />
+          <el-option
+            label="经办人二"
+            value="beijing"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="DRP采购单号">
         <el-input
-          v-model="form.name"
+          v-model="form.h"
           placeholder="请输入单号"
         />
       </el-form-item>
       <el-form-item label="合同金额">
         <el-input
-          v-model="form.name"
+          v-model="form.i"
           placeholder="请输入金额"
         />
       </el-form-item>
@@ -68,30 +118,30 @@
     >
       <el-form-item label="">
         <el-input
-          v-model="form.name"
+          v-model="form.j"
           placeholder="款项"
         />
       </el-form-item>
 
       <el-form-item label="--">
         <el-input
-          v-model="form.name"
+          v-model="form.k"
           placeholder="支付比例"
         />
       </el-form-item>
 
       <el-form-item label="--">
         <el-input
-          v-model="form.name"
+          v-model="form.l"
           placeholder="支付金额"
         />
       </el-form-item>
 
       <el-form-item label="--">
-        <el-input v-model="form.name" />
+        <el-input v-model="form.m" />
       </el-form-item>
       <el-form-item label="--">
-        <el-input v-model="form.name" />
+        <el-input v-model="form.n" />
       </el-form-item>
     </el-form>
 
@@ -113,7 +163,7 @@
     >
 
       <el-input
-        v-model="form.b"
+        v-model="form.o"
         placeholder="请输入内容"
       />
 
@@ -201,7 +251,7 @@
     >
 
       <el-input
-        v-model="form.b"
+        v-model="form.p"
         placeholder="请输入节点名称"
       />
 
@@ -261,9 +311,23 @@ export default {
       dialogVisibleMilestone: false,
 
       form: {
-        name: '',
+        a: '',
         b: '',
-        c: ''
+        c: '',
+        d: '',
+        e: '',
+        f: '',
+        g: '',
+        h: '',
+        i: '',
+        j: '',
+        k: '',
+        l: '',
+        n: '',
+        o: '',
+        p: '',
+        q: '',
+        r: ''
       }
     }
   },
@@ -284,9 +348,5 @@ export default {
   width: 100%;
   background-color: #fff;
   padding: 10px;
-}
-
-.dialog-create {
-  border: 1px soild red;
 }
 </style>

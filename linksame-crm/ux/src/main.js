@@ -9,6 +9,9 @@ import 'element-ui/lib/theme-chalk/index.css'
 
 import '@/styles/index.scss' // global css
 
+import './assets/iconfont/iconfont.js'
+import './assets/iconfont/iconfont.css'
+
 import App from './App'
 import router from './router'
 import store from './store'
@@ -24,10 +27,7 @@ import VueBus from 'vue-bus'
 Vue.use(VueBus)
 
 /** 常用flex组件 */
-import {
-  Flexbox,
-  FlexboxItem
-} from '@/components/flexbox'
+import { Flexbox, FlexboxItem } from '@/components/flexbox'
 Vue.component('flexbox', Flexbox)
 Vue.component('flexbox-item', FlexboxItem)
 
@@ -60,9 +60,7 @@ import photo from './directives/photo'
 Vue.use(photo)
 
 // 表情
-import {
-  emoji
-} from './utils/emoji'
+import { emoji } from './utils/emoji'
 Vue.prototype.emoji = emoji
 
 Vue.config.productionTip = false

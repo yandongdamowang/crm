@@ -6,21 +6,22 @@ const workbenchRouter = {
     icon: 'workbench',
     title: '工作台'
   },
-  children: [{
-    name: 'my-task',
-    path: 'my-task',
-    component: () => import('@/views/projectManagement/task/index'),
-    meta: {
-      title: '我的任务'
+  children: [
+    {
+      name: 'my-task',
+      path: 'my-task',
+      component: () => import('@/views/projectManagement/task/index'),
+      meta: {
+        title: '我的任务'
+      }
+    },
+    {
+      path: 'task-calendars',
+      component: () => import('@/views/projectManagement/calendars/index'),
+      meta: {
+        title: '任务日历'
+      }
     }
-  },
-  {
-    path: 'task-calendars',
-    component: () => import('@/views/projectManagement/calendars/index'),
-    meta: {
-      title: '任务日历'
-    }
-  }
   ]
 }
 
@@ -82,17 +83,33 @@ const otherRouter = {
   meta: {
     title: '项目管理'
   },
-  children: [{
-    path: 'tag/:id',
-    component: () => import('@/views/projectManagement/tag/index')
-  },
-  {
-    name: 'project-list',
-    path: 'list/:id',
-    component: () => import('@/views/projectManagement/project/index')
-  }
+  children: [
+    {
+      path: 'tag/:id',
+      component: () => import('@/views/projectManagement/tag/index')
+    },
+    {
+      name: 'project-list',
+      path: 'list/:id',
+      component: () => import('@/views/projectManagement/project/index')
+    }
   ]
 }
 
-export const children = [...workbenchRouter.children, ...projectRouter.children, statisticsRouter, archiveRouter, ...tagRouter.children, recycleRouter, ...otherRouter.children]
-export const childrenMenu = [workbenchRouter, projectRouter, statisticsRouter, archiveRouter, tagRouter, recycleRouter]
+export const children = [
+  ...workbenchRouter.children,
+  ...projectRouter.children,
+  statisticsRouter,
+  archiveRouter,
+  ...tagRouter.children,
+  recycleRouter,
+  ...otherRouter.children
+]
+export const childrenMenu = [
+  workbenchRouter,
+  projectRouter,
+  statisticsRouter,
+  archiveRouter,
+  tagRouter,
+  recycleRouter
+]

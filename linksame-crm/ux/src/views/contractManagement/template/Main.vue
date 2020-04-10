@@ -161,11 +161,11 @@ export default {
 
 <style lang="scss" scoped>
 .box {
-  height: 100%;
-  width: 100%;
+  height: calc(100% - 20px);
+  width: calc(100% - 20px);
   background-color: #fff;
   padding: 20px 30px;
-  //   margin: 20px;
+  margin: 10px;
 }
 
 /deep/ .el-dialog__body {

@@ -3,16 +3,19 @@
     <div class="recycle-header">
       回收站
     </div>
+
     <div
       v-loading="loading"
-      class="content">
+      class="content"
+    >
       <task-cell
         v-for="(item, index) in list"
         :key="index"
         :data="item"
         :data-index="index"
         class="item-list"
-        @on-handle="taskCellHandle"/>
+        @on-handle="taskCellHandle"
+      />
     </div>
 
     <!-- 详情 -->
@@ -22,7 +25,8 @@
       :id="taskID"
       :detail-index="detailIndex"
       @on-handle="detailHandle"
-      @close="closeBtn"/>
+      @close="closeBtn"
+    />
   </div>
 </template>
 

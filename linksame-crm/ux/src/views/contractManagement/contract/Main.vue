@@ -71,7 +71,7 @@
           <el-button
             type="text"
             size="small"
-            @click="drawerDetail( scope.row)"
+            @click="drawerDetail(scope.row)"
           >{{ scope.row.id }}</el-button>
         </template>
       </el-table-column>
@@ -134,8 +134,12 @@
       :visible.sync="drawer"
       :title="drawerTitle"
       size="70%"
+      @open="drawerDetail()"
     >
-      <component :is="drawerComponents" />
+      <component
+        :is="drawerComponents"
+        :drawer-data="drawerData"
+      />
     </el-drawer>
 
   </div>
@@ -160,6 +164,7 @@ export default {
       drawerComponents: '',
       drawer: false,
       drawerTitle: '',
+      drawerData: '123',
       tableData: [{
         id: 100,
         b: '测试合同',
@@ -195,22 +200,23 @@ export default {
       this.dialogwidth = '90%'
     },
     drawerDetail(row) {
-      // console.log(row)
       this.drawer = true
-      this.drawerTitle = '详情'
+      this.drawerTitle = ''
       this.drawerComponents = 'DrawerDetail'
+      this.drawerData = row.g
     }
+
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .box {
-  height: 100%;
-  width: 100%;
+  height: calc(100% - 20px);
+  width: calc(100% - 20px);
   background-color: #fff;
   padding: 20px 30px;
-  //   margin: 20px;
+  margin: 10px;
 }
 
 /deep/ .el-dialog__body {
@@ -220,6 +226,6 @@ export default {
 
 /deep/ .el-drawer__body {
   border: 1px solid rgb(233, 233, 233);
-  padding: 20px 30px 20px 30px;
+  padding: 20px 50px 20px 50px;
 }
 </style>

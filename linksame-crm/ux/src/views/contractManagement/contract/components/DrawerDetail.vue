@@ -1,6 +1,17 @@
 <template>
 
   <div>
+
+    <div class="title">
+      <div class="logo">
+        <i
+          class="wukong wukong-contract"
+          style="font-size: 30px;color: white;"
+        />
+      </div>
+      {{ drawerData }}
+    </div>
+
     <div class="button">
       <el-button type="primary">转 移</el-button>
       <el-button type="primary">编 辑</el-button>
@@ -35,6 +46,7 @@
       ref="form"
       :model="form"
       label-width="120px"
+      label-position="left"
     >
       <el-row>
         <el-col :span="12">
@@ -86,106 +98,102 @@
         </el-col>
       </el-row>
 
-      <el-form-item label="">
-
-        <el-tabs
-          v-model="activeName"
-          @tab-click="handleClick"
+      <el-tabs
+        v-model="activeName"
+        @tab-click="handleClick"
+      >
+        <el-tab-pane
+          label="付款明细"
+          name="first"
         >
-          <el-tab-pane
-            label="付款明细"
-            name="first"
+          <el-table
+            :data="tableData"
+            style="width: 100%"
           >
-            <el-table
-              :data="tableData"
-              style="width: 100%"
+            <el-table-column
+              prop="a"
+              label="预计付款时间"
+              width="180"
+            />
+            <el-table-column
+              prop="b"
+              label="款项"
+              width="180"
+            />
+            <el-table-column
+              prop="c"
+              label="比例"
+            />
+            <el-table-column
+              prop="d"
+              label="金额"
+            />
+            <el-table-column
+              prop="e"
+              label="实际支付比例"
+            />
+            <el-table-column
+              prop="f"
+              label="实际支付金额"
+            />
+            <el-table-column
+              prop="g"
+              label="关联项目任务"
+            />
+            <el-table-column
+              prop="h"
+              label="状态"
+            />
+            <el-table-column
+              prop="i"
+              label="备注"
+            />
+          </el-table>
+        </el-tab-pane>
+        <el-tab-pane
+          label="附件"
+          name="second"
+        >
+          <div>附件</div>
+        </el-tab-pane>
+        <el-tab-pane
+          label="回款信息"
+          name="third"
+        >
+          <div>回款信息</div>
+        </el-tab-pane>
+        <el-tab-pane
+          label="操作记录"
+          name="fourth"
+        >
+          <div>操作记录</div>
+        </el-tab-pane>
+        <el-tab-pane
+          label="审批记录"
+          name="fifth"
+        >
+          <div style="height: 300px;">
+            <el-steps
+              :active="1"
+              direction="vertical"
             >
-              <el-table-column
-                prop="a"
-                label="预计付款时间"
-                width="180"
-              />
-              <el-table-column
-                prop="b"
-                label="款项"
-                width="180"
-              />
-              <el-table-column
-                prop="c"
-                label="比例"
-              />
-              <el-table-column
-                prop="d"
-                label="金额"
-              />
-              <el-table-column
-                prop="e"
-                label="实际支付比例"
-              />
-              <el-table-column
-                prop="f"
-                label="实际支付金额"
-              />
-              <el-table-column
-                prop="g"
-                label="关联项目任务"
-              />
-              <el-table-column
-                prop="h"
-                label="状态"
-              />
-              <el-table-column
-                prop="i"
-                label="备注"
-              />
-            </el-table>
-          </el-tab-pane>
-          <el-tab-pane
-            label="附件"
-            name="second"
-          >
-            <div>附件</div>
-          </el-tab-pane>
-          <el-tab-pane
-            label="回款信息"
-            name="third"
-          >
-            <div>回款信息</div>
-          </el-tab-pane>
-          <el-tab-pane
-            label="操作记录"
-            name="fourth"
-          >
-            <div>操作记录</div>
-          </el-tab-pane>
-          <el-tab-pane
-            label="审批记录"
-            name="fifth"
-          >
-            <div style="height: 300px;">
-              <el-steps
-                :active="1"
-                direction="vertical"
-              >
-                <el-step title="发起审批" />
-                <el-step title="审批节点1" />
-                <el-step
-                  title="审批节点2"
-                  description="
+              <el-step title="发起审批" />
+              <el-step title="审批节点1" />
+              <el-step
+                title="审批节点2"
+                description="
                   创建人：王某某
                   审批类型：付款申请"
-                />
-                <el-step
-                  title="审批节点3"
-                  description="
+              />
+              <el-step
+                title="审批节点3"
+                description="
                 待处理"
-                />
-              </el-steps>
-            </div>
-          </el-tab-pane>
-        </el-tabs>
-
-      </el-form-item>
+              />
+            </el-steps>
+          </div>
+        </el-tab-pane>
+      </el-tabs>
 
     </el-form>
   </div>
@@ -199,15 +207,15 @@ export default {
   components: {
   },
   props: {
-    status: {
-      type: Boolean,
+    drawerData: {
+      type: String,
       default: undefined
     }
   },
 
   data() {
     return {
-    //   dialogVisiblePayment: false,
+      activeName: 'first',
       gridData: [{
         date: '2016-05-02',
         name: '王小虎',
@@ -222,8 +230,15 @@ export default {
   },
   computed: {
   },
-  mounted() {
 
+  //   watch: {
+  //     drawerData() {
+  //       console.log(123, this.drawerData)
+  //     }
+  //   },
+
+  mounted() {
+    console.log(111, this.drawerData)
   },
   methods: {
   }
@@ -231,14 +246,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.box {
-  height: 100%;
-  width: 100%;
-  background-color: #fff;
-  padding: 10px;
-}
 .button {
-  //   background: red;
   text-align: right;
+}
+.logo {
+  display: inline-block;
+  height: 60px;
+  width: 60px;
+  border-radius: 3px;
+  background: rgb(131, 131, 243);
+  text-align: center;
+}
+.title {
+  font-size: 20px;
+  line-height: 60px;
 }
 </style>

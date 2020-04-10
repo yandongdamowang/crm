@@ -46,7 +46,7 @@ const filterAsyncRouter = function(routers, authInfo) {
   const res = []
   routers.forEach(router => {
     const tmp = {
-      ...router,
+      ...router
     }
     if (checkAuth(tmp, authInfo)) {
       if (tmp.children) {
@@ -63,24 +63,24 @@ const permission = {
     addRouters: [],
     crmRouters: {
       name: 'crm',
-      children: [],
+      children: []
     },
     contractRouters: {
       name: 'contract',
-      children: [],
+      children: []
     },
     biRouters: {
       name: 'bi',
-      children: [],
+      children: []
     },
     manageRouters: {
       name: 'manager',
-      children: [],
+      children: []
     },
     oaRouters: {
       name: 'oa',
-      children: [],
-    },
+      children: []
+    }
   },
   mutations: {
     SET_ROUTERS: (state, routers) => {
@@ -108,7 +108,7 @@ const permission = {
       const messageItem = state.crmRouters.children[1]
       messageItem.meta.num = num
       Vue.set(state.crmRouters.children, 1, messageItem)
-    },
+    }
   },
   actions: {
     GenerateRoutes({ commit }, data) {
@@ -131,14 +131,14 @@ const permission = {
           accessedRouters.push({
             path: '/',
             redirect: redirect,
-            hidden: true,
+            hidden: true
           })
         }
         commit('SET_ROUTERS', accessedRouters)
         resolve()
       })
-    },
-  },
+    }
+  }
 }
 
 export default permission

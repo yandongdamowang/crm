@@ -28,19 +28,7 @@
       </el-aside>
       <!-- <el-main id="crm-main-container"> -->
       <el-main>
-        <div class="breadcrumb">
-          <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item
-              v-for="item in levelList"
-              :key="item.path"
-              :to="item.path"
-            >{{ item.meta.title }}</el-breadcrumb-item>
-          </el-breadcrumb>
-        </div>
-
-        <app-main class="appmain" />
-
+        <app-main />
       </el-main>
     </el-container>
     <c-r-m-create-view
@@ -104,16 +92,9 @@ export default {
   },
 
 
-  watch: {
-    $route() {
-      this.getBreadcrumb()
-    }
-  },
-
   created() {
     this.getcrmMessagNum()
     this.getcrmSettingConfig()
-    this.getBreadcrumb()
   },
 
   mounted() {},
@@ -147,16 +128,6 @@ export default {
      */
     getcrmSettingConfig() {
       this.$store.dispatch('CRMSettingConfig')
-    },
-
-    getBreadcrumb() {
-    //   const matched = this.$route.matched.filter(item => item.name)
-      console.log(this.$route.matched)
-      //   const first = matched[0]
-      //   if (first && first.name.trim().toLocaleLowerCase() !== 'Dashboard'.toLocaleLowerCase()) {
-      //     matched = [{ path: '/dashboard', meta: { title: 'dashboard' }}].concat(matched)
-      //   }
-      this.levelList = this.$route.matched
     },
 
 
@@ -202,25 +173,8 @@ export default {
   min-width: 1200px;
 }
 
-.el-main {
-  padding: 0px;
-}
-
-.appmain {
-  padding: 10px;
-  height: calc(100% - 50px);
-}
-
-.breadcrumb {
-  height: 50px;
-  //   position: relative; /*脱离文档流*/
-  //   top: 50%; /*偏移*/
-  width: 100%;
-  background-color: #fff;
-  .el-breadcrumb {
-    font-size: 14px;
-    line-height: 50px;
-    margin: 0 0 0 20px;
-  }
-}
+// .appmain {
+//   padding: 10px;
+//   height: calc(100% - 50px);
+// }
 </style>
