@@ -1,19 +1,32 @@
 <template>
 
   <div style="height: calc(100% - 50px);">
-    <div class="breadcrumb">
-      <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item
-          v-for="item in levelList"
+    <div class="tabs">
+
+      <el-tabs
+        v-model="editableTabsValue"
+        type="card"
+        closable
+        @tab-remove="removeTab"
+        @tab-click="clickTab"
+      >
+        <el-tab-pane
+          v-for="(item) in tableList"
           :key="item.path"
-          :to="item.path"
-        >{{ item.meta.title }}</el-breadcrumb-item>
-      </el-breadcrumb>
+          :label="item.meta.title"
+          :name="item.meta.title"
+        >
+
+          <!-- <router-link :to="item.path">
+          </router-link> -->
+
+        </el-tab-pane>
+      </el-tabs>
+
     </div>
-
-    <router-view />
-
+    <keep-alive>
+      <router-view />
+    </keep-alive>
   </div>
 
 </template>
@@ -21,37 +34,81 @@
 <script>
 export default {
   name: 'AppMain',
+  data() {
+    return {
+      tableList: [],
+      tableListTemp: [],
+
+      editableTabsValue: ''
+
+    //   tabIndex: ''
+    }
+  },
   computed: {},
 
   watch: {
     $route() {
-      this.getBreadcrumb()
+      this.addTab()
     }
   },
   created() {
-    this.getBreadcrumb()
+    this.addTab()
   },
   methods: {
-    getBreadcrumb() {
-      console.log(this.$route.matched)
+    unique(arr) {
+      return Array.from(new Set(arr))
+    },
+    addTab() {
+      this.tableListTemp.push(this.$route.matched[1])
+      this.tableList = this.unique(this.tableListTemp)
+      this.editableTabsValue = this.$route.matched[1].meta.title
 
-      this.levelList = this.$route.matched
+      //   console.log(this.tableListTemp)
+      //   const list = this.tableListTemp.filter((item, index) => {
+      //     return item.meta.title != this.$route.matched[1].meta.title
+      //   })
+
+    //   console.log(this.unique(this.tableListTemp))
+
+
+      //   console.log(this.$route.matched)
+      //   this.tableList.filter((item, index) => {
+      // if (this.$route.matched[1] != item) {
+      //   console.log(this.$route.matched)
+      //   this.tableList.push(this.$route.matched[1])
+      //   this.editableTabsValue = this.$route.matched[1].meta.title
+      // }
+
+      // } else {
+      //   this.tableList.push(this.$route.matched[1])
+      //   this.editableTabsValue = this.$route.matched[1].meta.title
+      // }
+      //   })
+    //   console.log(this.tableList)
+    },
+    removeTab(targetName) {
+      this.tableList.forEach((item, index) => {
+        if (item.meta.title === targetName) {
+          this.tableList.splice(index, 1)
+        }
+      })
+      console.log(this.tableList)
+    },
+    clickTab(tab) {
+      console.log(tab)
+      this.tableList.forEach((item, index) => {
+        if (item.meta.title === tab.paneName) {
+          this.$router.push({ path: item.path })
+        }
+      })
+      //   this.editableTabsValue = this.$route.matched[1].meta.title
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.breadcrumb {
-  height: 50px;
-  //   position: relative; /*脱离文档流*/
-  //   top: 50%; /*偏移*/
-  width: 100%;
-  background-color: #fff;
-  .el-breadcrumb {
-    font-size: 14px;
-    line-height: 50px;
-    margin: 0 0 0 20px;
-  }
+.tabs {
+  background: white;
 }
 </style>
