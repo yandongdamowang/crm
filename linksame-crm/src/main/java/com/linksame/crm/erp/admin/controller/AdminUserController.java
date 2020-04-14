@@ -114,8 +114,8 @@ public class AdminUserController extends Controller {
 
     public void updateImg(){
         String prefix= BaseUtil.getDate();
-        UploadFile uploadFile=getFile("file",prefix);
-        R r=adminFileService.upload(uploadFile,null,"file","/"+prefix,getRequest());
+        UploadFile uploadFile=getFile("file");
+        R r=adminFileService.upload(uploadFile,null);
         if(r.isSuccess()){
             String url= (String) r.get("url");
             if(adminUserService.updateImg(url,getParaToLong("userId"))){

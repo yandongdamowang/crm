@@ -17,6 +17,11 @@ import com.linksame.crm.utils.AuthUtil;
 import com.linksame.crm.utils.BaseUtil;
 import com.linksame.crm.utils.R;
 import com.linksame.crm.utils.TagUtil;
+import live.autu.plugin.jfinal.swagger.annotation.Api;
+import live.autu.plugin.jfinal.swagger.annotation.ApiImplicitParam;
+import live.autu.plugin.jfinal.swagger.annotation.ApiImplicitParams;
+import live.autu.plugin.jfinal.swagger.annotation.ApiOperation;
+import live.autu.plugin.jfinal.swagger.config.RequestMethod;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +29,7 @@ import java.util.List;
 /**
  * @author hmb
  */
+@Api(description="任务接口管理")
 public class TaskController extends Controller{
 
     @Inject
@@ -32,10 +38,14 @@ public class TaskController extends Controller{
     private AdminUserService userService;
 
     /**
-     * @param taskClass 任务类别对象
+     * @param taskClass 设置任务分类
      * @author hmb
      * 设置任务类别
      */
+    @ApiOperation(methods= RequestMethod.POST, description="设置任务分类")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="taskClass", description="任务分类对象")
+    })
     public void setTaskClass(@Para("") WorkTaskClass taskClass){
         renderJson(taskService.setTaskClass(taskClass));
     }
@@ -44,6 +54,11 @@ public class TaskController extends Controller{
      * @author hmb
      * 交换任务列表排序
      */
+    @ApiOperation(methods= RequestMethod.POST, description="交换任务列表排序")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="originalClassId", description="原始分类id"),
+            @ApiImplicitParam(name="targetClassId", description="目标分类id")
+    })
     public void changeOrderTaskClass(){
         String originalClassId = getPara("originalClassId");
         String targetClassId = getPara("targetClassId");
@@ -52,10 +67,18 @@ public class TaskController extends Controller{
     }
 
     /**
-     * @param task 任务对象
+     * @param task 设置任务
      * @author hmb
      * 设置oa任务
      */
+    @ApiOperation(methods= RequestMethod.POST, description="设置任务")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="task", description="任务对象"),
+            @ApiImplicitParam(name="customerIds", description="客户编号(逗号分隔)"),
+            @ApiImplicitParam(name="contactsIds", description="联系人编号(逗号分隔)"),
+            @ApiImplicitParam(name="businessIds", description="商机编号(逗号分隔)"),
+            @ApiImplicitParam(name="contractIds", description="合同编号(逗号分隔)")
+    })
     public void setTask(@Para("") Task task){
         boolean oaAuth = false;
         boolean workAuth = false;
@@ -99,6 +122,11 @@ public class TaskController extends Controller{
      * @author hmb
      * 查询任务列表
      */
+    @ApiOperation(methods= RequestMethod.POST, description="查询任务列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="labelId", description="标签编号"),
+            @ApiImplicitParam(name="ishidden", description="删除状态(0未删除 1删除)")
+    })
     public void getTaskList(BasePageRequest basePageRequest){
         String labelId = getPara("labelId");
         String ishidden = getPara("ishidden");
@@ -110,6 +138,10 @@ public class TaskController extends Controller{
      * @author hmb
      * 查询oa任务信息
      */
+    @ApiOperation(methods= RequestMethod.POST, description="查询oa任务信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="taskId", description="任务编号")
+    })
     public void queryTaskInfo(){
         String taskId = getPara("taskId");
         boolean oaAuth = AuthUtil.isOaAuth(OaEnum.TASK_TYPE_KEY.getTypes(), Integer.valueOf(taskId));
@@ -123,6 +155,7 @@ public class TaskController extends Controller{
     /**
      * 查询任务列表 oa
      */
+    @ApiOperation(methods= RequestMethod.POST, description="查询oa任务列表")
     public void queryTaskList(BasePageRequest<Task> basePageRequest){
         Integer type = getParaToInt("type");
         Integer status = getParaToInt("status");
@@ -152,6 +185,10 @@ public class TaskController extends Controller{
      * 根据任务id查询活动日志 oa
      * taskId 任务id
      */
+    @ApiOperation(methods= RequestMethod.POST, description="根据任务id查询oa活动日志")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="taskId", description="任务编号")
+    })
     public void queryWorkTaskLog(){
         Integer taskId = getParaToInt("taskId");
         boolean oaAuth = AuthUtil.isOaAuth(OaEnum.TASK_TYPE_KEY.getTypes(), taskId);
@@ -166,6 +203,10 @@ public class TaskController extends Controller{
      * @author zxy
      * 添加任务与业务关联
      */
+    @ApiOperation(methods= RequestMethod.POST, description="添加任务与业务关联")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="taskRelation", description="任务关联对象")
+    })
     public void saveTaskRelation(@Para("") TaskRelation taskRelation){
         renderJson(taskService.saveTaskRelation(taskRelation, BaseUtil.getUser().getUserId()));
     }
@@ -175,6 +216,10 @@ public class TaskController extends Controller{
      * 删除任务
      * taskId 任务id
      */
+    @ApiOperation(methods= RequestMethod.POST, description="删除任务")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="taskId", description="任务编号")
+    })
     public void deleteTask(){
         Integer taskId = getParaToInt("taskId");
         renderJson(taskService.deleteTask(taskId));
@@ -184,6 +229,7 @@ public class TaskController extends Controller{
      * @author wyq
      * crm查询关联任务
      */
+    @ApiOperation(methods= RequestMethod.POST, description="查询关联任务列表")
     public void queryTaskRelation(@Para("") BasePageRequest<TaskRelation> basePageRequest){
         renderJson(taskService.queryTaskRelation(basePageRequest));
     }
@@ -194,6 +240,10 @@ public class TaskController extends Controller{
      *
      * @param taskId 任务ID
      */
+    @ApiOperation(methods= RequestMethod.POST, description="根据任务id归档任务")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="taskId", description="任务编号")
+    })
     public void archiveByTaskId(@Para("taskId") Integer taskId){
         renderJson(taskService.archiveByTaskId(taskId));
     }

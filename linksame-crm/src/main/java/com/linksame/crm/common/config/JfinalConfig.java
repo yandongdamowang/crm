@@ -1,6 +1,5 @@
 package com.linksame.crm.common.config;
 
-import cn.hutool.core.util.ClassLoaderUtil;
 import com.jfinal.aop.Aop;
 import com.jfinal.config.*;
 import com.jfinal.core.paragetter.ParaProcessorBuilder;
@@ -59,10 +58,10 @@ public class JfinalConfig extends JFinalConfig {
         me.setDevMode(prop.getBoolean("jfinal.devMode", true));
         me.setInjectDependency(true);
         //设置上传文件到哪个目录
-        if(ClassLoaderUtil.isPresent("com.jfinal.server.undertow.UndertowServer")){
+        /*if(ClassLoaderUtil.isPresent("com.jfinal.server.undertow.UndertowServer")){
             me.setBaseUploadPath(BaseConstant.UPLOAD_PATH);
             me.setBaseDownloadPath(BaseConstant.UPLOAD_PATH);
-        }
+        }*/
         me.setJsonFactory(new ErpJsonFactory());
         //限制上传100M
         me.setMaxPostSize(104857600);

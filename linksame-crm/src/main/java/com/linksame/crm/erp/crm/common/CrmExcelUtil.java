@@ -251,6 +251,7 @@ public class CrmExcelUtil {
             adminMessage.setTitle(String.valueOf(num-2));
             adminMessage.setContent(String.valueOf(errorList.size()-2));
             if(errorList.size()>2){
+                //TODO 导入excel此行代码暂无法理解其业务,后续待调整
                 File file=new File(BaseConstant.UPLOAD_PATH+"excel/"+BaseUtil.getDate()+"/"+ IdUtil.simpleUUID()+".xlsx");
                 BigExcelWriter writer= ExcelUtil.getBigWriter(file);
                 CellStyle textStyle = writer.getWorkbook().createCellStyle();
@@ -276,10 +277,10 @@ public class CrmExcelUtil {
                 // 关闭writer，释放内存
                 writer.close();
                 AdminFile adminFile=new AdminFile();
-                adminFile.setName("EXCEL导入");
+                adminFile.setFileName("EXCEL导入");
                 adminFile.setCreateUserId(adminUser.getUserId());
                 adminFile.setPath(file.getAbsolutePath());
-                adminFile.setFilePath("/file/downFile?fileId="+IdUtil.simpleUUID());
+                adminFile.setPath("/file/downFile?fileId="+IdUtil.simpleUUID());
                 adminFile.setCreateTime(new Date());
                 adminFile.setSize(file.length());
                 adminFile.save();
