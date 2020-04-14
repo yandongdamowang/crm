@@ -9,6 +9,9 @@ import com.linksame.crm.common.config.paragetter.BasePageRequest;
 import com.linksame.crm.erp.pmp.entity.PmpContract;
 import com.linksame.crm.erp.pmp.service.PmpContractService;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 /**
  * @author ZhangJie
  * @ClassName PmpContractController
@@ -30,8 +33,19 @@ public class PmpContractController extends Controller {
     }
 
     /**
-     * @author wyq
-     * 新增或更新线索
+     *
+     * 合同仪表盘
+     */
+    public void contractDashboard(){
+        String startTime = getPara("startTime");
+        String endTime = getPara("endTime");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        renderJson(pmpContractService.contractDashboard(LocalDate.parse(startTime,dateTimeFormatter),LocalDate.parse(endTime,dateTimeFormatter)));
+    }
+
+    /**
+     *
+     * 更新线索合同
      */
     public void update(){
         JSONObject object= JSON.parseObject(getRawData());

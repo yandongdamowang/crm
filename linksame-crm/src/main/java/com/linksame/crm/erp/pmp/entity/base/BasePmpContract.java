@@ -60,6 +60,14 @@ public abstract class BasePmpContract<M extends BasePmpContract<M>> extends Mode
         return getStr("contract_name");
     }
 
+    public void setDrpNumber(java.lang.String drpNumber) {
+        set("drp_number", drpNumber);
+    }
+
+    public java.lang.String getDrpNumber() {
+        return getStr("drp_number");
+    }
+
     public void setStatus(java.lang.Integer status) {
         set("status", status);
     }

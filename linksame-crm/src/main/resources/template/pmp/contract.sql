@@ -35,11 +35,39 @@
             #if(supplierId)
                 and pc.supplier_id = #para(supplierId)
             #end
-            #if(orderBy =="1")
+            #if(orderBy =='1')
                order by pc.required_signing_time DESC,pc.actual_signing_time DESC
-            #else {
+            #else
                 order by pc.actual_signing_time DESC,pc.required_signing_time DESC
-            }
             #end
+    #end
+    #sql("contractDashboard")
+        select
+            pc.contract_id,
+            pc.contract_number,
+            pc.file_number,
+            pc.purchase_order_number,
+            pc.milestone_nodes,
+            pc.contract_name,
+            pc.status,
+            pc.supplier_id,
+            pc.project_id,
+            pc.required_signing_time,
+            pc.actual_signing_time,
+            pc.purchase_time,
+            pc.begin_time,
+            pc.end_time,
+            pc.agent,
+            pc.creation_time,
+            pc.update_time,
+            pc.money,
+            pc.contract_purchase_start_time,
+            pc.contract_purchase_end_time
+         from pmp_contract AS pc
+         where pc.is_deleted = '0' and pc.status = '1' and
+         pc.begin_time between DATE_FORMAT(#para(startTime), '%Y-%m-%d') and DATE_FORMAT(#para(endTime), '%Y-%m-%d')
+         and
+         pc.end_time between DATE_FORMAT(#para(startTime), '%Y-%m-%d') and DATE_FORMAT(#para(endTime), '%Y-%m-%d')
+
     #end
 #end
