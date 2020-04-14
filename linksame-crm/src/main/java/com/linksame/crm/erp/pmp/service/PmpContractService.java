@@ -74,7 +74,7 @@ public class PmpContractService {
         pmpContract.setSupplierName("此处添加供应商名称");
         pmpContract.setAgentName("此处添加供应参与人名称");
         pmpContract.remove("status","is_deleted");
-        List<PmpContractPayment> contractPayment = pmpContractPaymentService.findByContractId(contractId);
+        List<PmpContractPayment> contractPayment = pmpContractPaymentService.findByContractId(contractId,null);
         List<PmpAccessory> pmpAccessories = pmpAccessoryService.findByContractId(contractId);
         return R.ok().put("pmpContract",pmpContract).put("pmpContractPayment",contractPayment).put("pmpAccessories",pmpAccessories);
     }
@@ -85,10 +85,9 @@ public class PmpContractService {
     private final String CUMULATIVEPAYMENT = "cumulativepayment";
     public R queryList(BasePageRequest basePageRequest) {
         JSONObject jsonObject = basePageRequest.getJsonObject();
-        String orderBy = jsonObject.getString("orderBy");
         Kv kv= Kv.by("contractNumber", jsonObject.getString("contractNumber"))
                 .set("supplierId", jsonObject.getLong("supplierId"))
-                .set("orderBy", orderBy);
+                .set("orderBy", jsonObject.get("orderBy"));
         if (basePageRequest.getPageType() == 0){
             List<Record> records = Db.find(Db.getSqlPara("pmp.contract.queryList", kv));
             billLoading(records);
@@ -107,7 +106,7 @@ public class PmpContractService {
     private void billLoading(List<Record> records){
         records.forEach(record -> {
             List<Map<String,Map<String,Object>>> billList = new ArrayList<>();
-            List<PmpContractPayment> contractPayments = pmpContractPaymentService.findByContractId(record.getLong("contract_id"));
+            List<PmpContractPayment> contractPayments = pmpContractPaymentService.findByContractId(record.getLong("contract_id"),null);
             contractPayments.forEach(contractPayment -> {
                 LocalDate paymentNode = contractPayment.getPaymentNode().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                 Map<String,Map<String,Object>> billDetails = new HashMap();
@@ -143,5 +142,29 @@ public class PmpContractService {
         PmpContract pmpContract = object.getObject("entity", PmpContract.class);
         pmpContract.setUpdateTime(LocalDateTime.now());
         return pmpContract.update() ? R.ok():R.error();
+    }
+
+    public R contractDashboard(LocalDate startTime, LocalDate endTime) {
+        Kv kv= Kv.by("startTime", startTime)
+                .set("endTime", endTime);
+        List<Record> records = Db.find(Db.getSqlPara("pmp.contract.contractDashboard", kv));
+        //总支付累计付款金额
+        BigDecimal okBigDecimal = new BigDecimal(0);
+        //代付款金额
+        BigDecimal awaitBigDecimal = new BigDecimal(0);
+        for (Record record : records) {
+            List<PmpContractPayment> pmpContractPayments = pmpContractPaymentService.findByContractId(record.getLong("contract_id"), null);
+            for (PmpContractPayment contractPayment : pmpContractPayments) {
+                BigDecimal money = contractPayment.getMoney();
+                if (PmpInterface.contractPayment.trade.stats.OK.equals(contractPayment.getTradeStatus())) {
+                    okBigDecimal = okBigDecimal.add(money);
+                }
+                if (PmpInterface.contractPayment.trade.stats.TRADING.equals(contractPayment.getTradeStatus())) {
+                    awaitBigDecimal = awaitBigDecimal.add(money);
+                }
+            }
+        }
+        return R.ok().put("contractCount", records.size()).put("waitPayment",awaitBigDecimal).put("cumulativePayment",okBigDecimal);
+
     }
 }

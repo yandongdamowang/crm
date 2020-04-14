@@ -10,7 +10,7 @@ import com.linksame.crm.erp.pmp.service.PmpContractPaymentRecordService;
  * @author ZhangJie
  * @ClassName PmpContractPaymentRecordController
  * @date2020/4/2 12:17
- * @Description 付款
+ * @Description 付款记录
  **/
 public class PmpContractPaymentRecordController extends Controller {
 
@@ -20,7 +20,7 @@ public class PmpContractPaymentRecordController extends Controller {
 
     /**
      *
-     * @param basePageRequest 根据付款ID 查询详情
+     * @param basePageRequest 付款记录分页
      */
     public void queryList(BasePageRequest<PmpContractPaymentRecord> basePageRequest){
         renderJson(contractPaymentRecordService.queryList(basePageRequest));
