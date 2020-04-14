@@ -42,10 +42,10 @@ public class AdminSysConfigController extends Controller {
     @Before(Tx.class)
     public void setSysConfig(){
         String prefix= BaseUtil.getDate();
-        UploadFile file = getFile("file", prefix);
+        UploadFile file = getFile("file");
         Kv kv = getKv();
         if(file!=null){
-            R r=adminFileService.upload(file,null,"file","/"+prefix,getRequest());
+            R r=adminFileService.upload(file,null);
             kv.set("logo",r.get("url"));
         }
         Db.deleteById("admin_config","name",SYS_CONFIG_KEY);

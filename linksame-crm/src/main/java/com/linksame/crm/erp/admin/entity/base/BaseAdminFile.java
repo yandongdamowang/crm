@@ -17,12 +17,28 @@ public abstract class BaseAdminFile<M extends BaseAdminFile<M>> extends Model<M>
 		return getInt("file_id");
 	}
 
-	public void setName(java.lang.String name) {
-		set("name", name);
+	public void setBucketName(java.lang.String bucketName) {
+		set("bucket_name", bucketName);
+	}
+
+	public java.lang.String getBucketName() {
+		return getStr("bucket_name");
+	}
+
+	public void setFileName(java.lang.String fileName) {
+		set("file_name", fileName);
 	}
 	
-	public java.lang.String getName() {
-		return getStr("name");
+	public java.lang.String getFileName() {
+		return getStr("file_name");
+	}
+
+	public void setOldName(java.lang.String oldName) {
+		set("old_name", oldName);
+	}
+
+	public java.lang.String getOldName() {
+		return getStr("old_name");
 	}
 
 	public void setSize(java.lang.Long size) {
@@ -55,14 +71,6 @@ public abstract class BaseAdminFile<M extends BaseAdminFile<M>> extends Model<M>
 	
 	public java.lang.String getPath() {
 		return getStr("path");
-	}
-
-	public void setFilePath(java.lang.String filePath) {
-		set("file_path", filePath);
-	}
-	
-	public java.lang.String getFilePath() {
-		return getStr("file_path");
 	}
 
 	public void setFileType(java.lang.String fileType) {

@@ -89,9 +89,4 @@ public class BaseConstant implements Serializable {
      */
     public static final String BUCKET_NAME = "crm";
 
-    /**
-     * Minio文件----超时时间
-     */
-    public static final Integer FILE_OUT_TIME = 3600;
-
 }

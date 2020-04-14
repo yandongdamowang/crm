@@ -90,9 +90,10 @@ public class MinioServicce {
     /**
      * 获取图片文件请求地址
      * @param fileName    文件名
+     * @param suffix      后缀名
      * @return            图片文件请求地址
      */
-    public static String getImgUrl(String suffix, String fileName){
+    public static String getImgUrl(String fileName, String suffix){
         String urlString = "";
 
         //处理图片类型
@@ -101,12 +102,20 @@ public class MinioServicce {
             throw new RuntimeException("只能处理gif/png/jpg/jpeg格式图片");
         }
         try{
-            urlString = MinioFactory.getMinioClient().presignedGetObject(BaseConstant.BUCKET_NAME, fileName, BaseConstant.FILE_OUT_TIME);
+            urlString = MinioFactory.getMinioClient().presignedGetObject(BaseConstant.BUCKET_NAME, fileName);
             LogKit.info("访问地址: " + urlString);
         }catch (Exception e){
             LogKit.error("获取图片url异常: ", e);
         }
         return urlString;
+    }
+
+    /**
+     * 删除文件
+     * @param fileName  文件名
+     */
+    public static void removeFile(String fileName) throws Exception {
+        MinioFactory.getMinioClient().removeObject(BaseConstant.BUCKET_NAME, fileName);
     }
 
 

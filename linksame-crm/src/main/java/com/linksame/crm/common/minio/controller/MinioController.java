@@ -10,9 +10,7 @@ import live.autu.plugin.jfinal.swagger.annotation.ApiImplicitParam;
 import live.autu.plugin.jfinal.swagger.annotation.ApiImplicitParams;
 import live.autu.plugin.jfinal.swagger.annotation.ApiOperation;
 import live.autu.plugin.jfinal.swagger.config.RequestMethod;
-
 import javax.servlet.http.HttpServletResponse;
-import java.io.FileNotFoundException;
 import java.util.Map;
 
 /**
@@ -30,7 +28,7 @@ public class MinioController extends Controller {
     @ApiImplicitParams({
             @ApiImplicitParam(name="file", description="文件")
     })
-    public void uploadFile() throws FileNotFoundException {
+    public void uploadFile() {
         UploadFile file = getFile("file");
         Map<String, String> map = MinioServicce.uploadFile(file);
 
@@ -44,7 +42,7 @@ public class MinioController extends Controller {
     @ApiImplicitParams({
             @ApiImplicitParam(name="fileName", description="文件名")
     })
-    public void downloadFile() throws Exception {
+    public void downloadFile() {
         String fileName = get("fileName");
         HttpServletResponse response = getResponse();
         MinioServicce.downloadFile(fileName, response);
@@ -66,7 +64,7 @@ public class MinioController extends Controller {
         LogKit.info("文件后缀: " + suffix);
         String url = MinioServicce.getImgUrl(suffix, fileName);
 
-        renderJson(url);
+        renderJson(url.trim());
     }
 
 
