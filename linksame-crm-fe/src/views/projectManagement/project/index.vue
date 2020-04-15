@@ -1,28 +1,33 @@
 <template>
   <div
     class="project-list"
-    direction="column">
+    direction="column"
+  >
     <div class="nav-box">
       <div class="title">
         <flexbox class="title-left lt">
           <i
             :style="{color : projectColor ? projectColor : '#4AB8B8'}"
-            class="wukong wukong-subproject"/>
+            class="wukong wukong-subproject"
+          />
           <span>{{ projectName }}</span>
           <el-popover
             v-model="projectHandleShow"
             placement="bottom-start"
             popper-class="project-settings-182"
-            width="182">
+            width="182"
+          >
             <div class="project-list-popover-btn-list">
               <members-dep
                 :user-checked-data="membersList"
                 :close-dep="true"
-                @popoverSubmit="userSelectChange">
+                @popoverSubmit="userSelectChange"
+              >
                 <p
                   v-if="canUpdateWork && projectData.isOpen != 1"
                   slot="membersDep"
-                  @click="projectHandleShow = false">添加项目成员</p>
+                  @click="projectHandleShow = false"
+                >添加项目成员</p>
               </members-dep>
 
               <project-settings
@@ -35,19 +40,26 @@
                 @close="projectHandleShow = false"
                 @submite="setSubmite"
                 @handle="projectSettingsHandle"
-                @click="projectHandleShow = false"/>
+                @click="projectHandleShow = false"
+              />
               <p
                 v-if="canUpdateWork"
-                @click="archiveProject">归档项目</p>
+                @click="archiveProject"
+              >归档项目</p>
               <p
                 v-if="canUpdateWork"
-                @click="deleteProject">删除项目</p>
-              <p v-if="projectData.isOpen == 0" @click="exitProject">退出项目</p>
+                @click="deleteProject"
+              >删除项目</p>
+              <p
+                v-if="projectData.isOpen == 0"
+                @click="exitProject"
+              >退出项目</p>
             </div>
             <img
               slot="reference"
               src="@/assets/img/project/t_set.png"
-              class="img-right">
+              class="img-right"
+            >
           </el-popover>
         </flexbox>
         <div class="title-right rt">
@@ -55,31 +67,43 @@
           <img
             src="@/assets/img/project/task_circle.png"
             alt=""
-            @click="membersShow = true">
+            @click="membersShow = true"
+          >
           <!-- 筛选 -->
           <img
             v-show="screeningButtonShow"
             src="@/assets/img/project/project_filtrate.png"
             alt=""
-            @click="screeningShow = true">
+            @click="screeningShow = true"
+          >
         </div>
       </div>
       <div class="nav">
         <el-tabs
           v-model="activeName"
-          @tab-click="tabClick">
+          @tab-click="tabClick"
+        >
           <el-tab-pane
-            label="任务板"
-            name="task-board"/>
+            label="里程碑看板"
+            name="task-board"
+          />
+          <el-tab-pane
+            label="时间轴看板"
+            name="time-board"
+          />
+
           <el-tab-pane
             label="附件"
-            name="attachment"/>
+            name="attachment"
+          />
           <el-tab-pane
             label="任务统计"
-            name="task-statistical"/>
+            name="task-statistical"
+          />
           <el-tab-pane
             label="归档任务"
-            name="archiving-task"/>
+            name="archiving-task"
+          />
         </el-tabs>
       </div>
     </div>
@@ -88,7 +112,8 @@
         <component
           :is="activeName"
           :work-id="workId"
-          :permission="permission"/>
+          :permission="permission"
+        />
       </keep-alive>
     </div>
 
@@ -96,7 +121,8 @@
     <task-screening
       v-if="screeningShow"
       :work-id="workId"
-      @close="screeningShow = false"/>
+      @close="screeningShow = false"
+    />
 
     <!-- 人员列表 -->
     <members
@@ -105,12 +131,14 @@
       :is-open="projectData.isOpen"
       :permission="permission"
       :visible.sync="membersShow"
-      @handle="membersHandle"/>
+      @handle="membersHandle"
+    />
   </div>
 </template>
 
 <script>
 import TaskBoard from './components/taskBoard'
+import TimeBoard from './components/timeBoard'
 import Attachment from './components/attachment'
 import TaskStatistical from './components/taskStatistical'
 import ArchivingTask from './components/archivingTask'
@@ -130,6 +158,7 @@ import {
 export default {
   components: {
     TaskBoard,
+    TimeBoard,
     Attachment,
     TaskStatistical,
     ArchivingTask,

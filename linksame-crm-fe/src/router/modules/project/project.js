@@ -86,12 +86,22 @@ const otherRouter = {
   children: [
     {
       path: 'tag/:id',
-      component: () => import('@/views/projectManagement/tag/index')
+      component: () => import('@/views/projectManagement/tag/index'),
+      meta: {
+        title: 'tag/:id'
+      }
     },
     {
       name: 'project-list',
       path: 'list/:id',
       component: () => import('@/views/projectManagement/project/index')
+      //   beforeEnter: (to, from, next) => {
+      //     next(vm=>{
+      //         switch(id){
+      //         }
+      //         console.log(123)
+      //     });
+      // }
     }
   ]
 }
