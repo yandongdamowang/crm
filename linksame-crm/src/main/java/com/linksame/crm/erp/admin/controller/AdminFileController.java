@@ -1,10 +1,9 @@
 package com.linksame.crm.erp.admin.controller;
 
-import com.jfinal.core.paragetter.Para;
+import com.linksame.crm.common.config.paragetter.BasePageRequest;
 import com.linksame.crm.common.minio.service.MinioServicce;
 import com.linksame.crm.erp.admin.entity.AdminFile;
 import com.linksame.crm.erp.admin.service.AdminFileService;
-import com.linksame.crm.utils.R;
 import com.jfinal.aop.Inject;
 import com.jfinal.core.Controller;
 import live.autu.plugin.jfinal.swagger.annotation.Api;
@@ -22,6 +21,22 @@ public class AdminFileController extends Controller {
     /*public void index(){
         renderJson(R.ok());
     }*/
+
+    /**
+     * 附件分页列表
+     * @param basePageRequest   分页对象
+     */
+    @ApiOperation(methods= RequestMethod.POST, description="附件分页列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="basePageRequest", description="分页对象"),
+            @ApiImplicitParam(name="batchId", description="批次ID"),
+            @ApiImplicitParam(name="oldName", description="文件原始名称")
+    })
+    public void getFilePage(BasePageRequest basePageRequest){
+        String batchId = getPara("batchId");
+        String oldName = getPara("oldName");
+        renderJson(adminFileService.getFilePage(basePageRequest, batchId, oldName));
+    }
 
     /**
      * 上传附件
@@ -43,7 +58,7 @@ public class AdminFileController extends Controller {
             @ApiImplicitParam(name="batchId", description="批次ID")
     })
     public void queryByBatchId(){
-        renderJson(R.ok().put("data", adminFileService.queryByBatchId(getPara("batchId"))));
+        renderJson(adminFileService.queryByBatchId(getPara("batchId")));
     }
 
     /**
@@ -76,8 +91,7 @@ public class AdminFileController extends Controller {
             @ApiImplicitParam(name="batchId", description="批次ID")
     })
     public void removeByBatchId(){
-        adminFileService.removeByBatchId(getPara("batchId"));
-        renderJson(R.ok());
+        renderJson(adminFileService.removeByBatchId(getPara("batchId")));
     }
 
     /**
@@ -92,7 +106,7 @@ public class AdminFileController extends Controller {
         AdminFile file=new AdminFile();
         file.setFileId(getInt("fileId"));
         file.setFileName(getPara("fileName"));
-        renderJson(adminFileService.renameFileById(file)?R.ok():R.error());
+        renderJson(adminFileService.renameFileById(file));
     }
 
     /**
@@ -102,11 +116,33 @@ public class AdminFileController extends Controller {
     @ApiImplicitParams({
             @ApiImplicitParam(name="fileId", description="附件ID")
     })
-    public void downFile(@Para("fileId") String fileId) {
-        AdminFile adminFile = AdminFile.dao.findFirst("SELECT * FROM `admin_file` where file_id = ? LIMIT 0,1", fileId);
+    public void downFile() {
+        AdminFile adminFile = AdminFile.dao.findFirst("SELECT * FROM `admin_file` where file_id = ?", getInt("fileId"));
         if (adminFile != null) {
             MinioServicce.downloadFile(adminFile.getFileName(),getResponse());
         }
         renderNull();
+    }
+
+    /**
+     * 查询用户网盘附件(通过用户编号查询附件)
+     */
+    @ApiOperation(methods= RequestMethod.POST, description="查询用户网盘附件(通过用户编号查询附件)")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="createUserId", description="创建用户ID")
+    })
+    public void queryByUserId(){
+        renderJson(adminFileService.queryByUserId(getInt("createUserId")));
+    }
+
+    /**
+     * 网盘上传
+     */
+    @ApiOperation(methods= RequestMethod.POST, description="网盘上传")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="fileIds", description="附件ID数组")
+    })
+    public void netdiskUpload(){
+        renderJson(adminFileService.netdiskUpload(getPara("fileIds"), getPara("batchId")));
     }
 }
