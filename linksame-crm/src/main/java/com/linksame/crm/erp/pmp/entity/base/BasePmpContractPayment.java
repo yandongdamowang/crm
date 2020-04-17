@@ -79,6 +79,14 @@ public abstract class BasePmpContractPayment<M extends BasePmpContractPayment<M>
         return getInt("payment_stage");
     }
 
+    public void setPriority(java.lang.String priority) {
+        set("priority", priority);
+    }
+
+    public java.lang.String getPriority() {
+        return getStr("priority");
+    }
+
     public void setPaymentNode(Date paymentNode) {
         set("payment_node", paymentNode);
     }

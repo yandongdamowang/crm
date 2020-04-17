@@ -44,26 +44,28 @@ public class PmpContractService {
             //保存 合同
             pmpContract.save();
             //保存付款单
-            pmpContract.getPmpContractPayment().forEach(contractPayment -> {
-                money1.add(contractPayment.getMoney());
+            for (PmpContractPayment contractPayment : pmpContract.getPmpContractPayment()) {
+                money1 = money1.add(contractPayment.getMoney());
                 contractPayment.setContractId(pmpContract.getLong("contract_id"));
                 contractPayment.setProjectId(pmpContract.getLong("project_id"));
                 contractPayment.setTradeForm(PmpInterface.contractPayment.trade.form.EXPENF);
                 contractPayment.setTradeStatus(PmpInterface.contractPayment.trade.stats.OK);
                 contractPayment.save();
-            });
+            }
             if (money.compareTo(money1) != 0){
                 return false;
             }
             //保存 附件
             String realname = BaseUtil.getUser().getRealname();
-            pmpContract.getPmpAccessories().forEach(pmpAccessory -> {
-                pmpAccessory.setContractId(pmpContract.getLong("contract_id"));
-                pmpAccessory.setProjectId(pmpContract.getLong("project_id"));
-                pmpAccessory.setMilestoneNodes(pmpContract.getLong("milestone_nodes"));
-                pmpAccessory.setCreationName(realname);
-                pmpAccessory.save();
-            });
+            if (pmpContract.getPmpAccessories() != null) {
+                pmpContract.getPmpAccessories().forEach(pmpAccessory -> {
+                    pmpAccessory.setContractId(pmpContract.getLong("contract_id"));
+                    pmpAccessory.setProjectId(pmpContract.getLong("project_id"));
+                    pmpAccessory.setMilestoneNodes(pmpContract.getLong("milestone_nodes"));
+                    pmpAccessory.setCreationName(realname);
+                    pmpAccessory.save();
+                });
+            }
             return true;
         }) ? R.ok() : R.error();
     }
@@ -166,5 +168,19 @@ public class PmpContractService {
         }
         return R.ok().put("contractCount", records.size()).put("waitPayment",awaitBigDecimal).put("cumulativePayment",okBigDecimal);
 
+    }
+
+    public R delete(String contractIds) {
+        String[] ids = contractIds.split(",");
+        List<Record> idsList = new ArrayList<>();
+        for (String id : ids) {
+            Record record = new Record();
+            idsList.add(record.set("contract_id", Integer.valueOf(id)));
+        }
+        return Db.tx(()->{
+            Db.batch(Db.getSql("pmp.contract.deleteByIds"), "contract_id", idsList, 100);
+            Db.batch("delete from pmp_contract_payment where contract_id = ?", "batch_id", idsList, 100);
+            return true;
+        }) ? R.ok() : R.error();
     }
 }
