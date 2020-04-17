@@ -54,8 +54,7 @@
                                   when 6 then  a.stop_time < now()
                                   when 7 then  date_format(a.update_time,'%Y-%m-%d') = date_format(now(),'%Y-%m-%d') end
       #end
-
-      order by b.order_num
+      #(order)
   #end
   #sql("workStatistics")
     select count(*) as allCount,

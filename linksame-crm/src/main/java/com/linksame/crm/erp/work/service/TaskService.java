@@ -97,6 +97,7 @@ public class TaskService{
             task.setUpdateTime(new Date());
             bol = getWorkTaskLog(task, user.getUserId());
         }
+        //设置任务关联业务
         if(taskRelation.getBusinessIds() != null || taskRelation.getContactsIds() != null || taskRelation.getContractIds() != null || taskRelation.getCustomerIds() != null){
             Db.deleteById("task_relation", "task_id", task.getTaskId());
             taskRelation.setCreateTime(DateUtil.date());
@@ -217,12 +218,24 @@ public class TaskService{
                 task.set("contractList", contractList);
             }
         }
-        task.set("customerList", customerList);
-        task.set("contactsList", contactsList);
-        task.set("businessList", businessList);
-        task.set("contractList", contractList);
+        //组装前置任务数据
+        List<Record> preList = Db.find("select b.* from task_rely as a inner join task as b on a.pre_task_id = b.task_id where a.task_id = ?", taskId);
+        //组装后置任务数据
+        List<Record> rearList = Db.find("select b.* from task_rely as a inner join task as b on a.task_id = b.task_id where a.pre_task_id = ?", taskId);
+        //组装通用标签数据
+        List<Record> commonLabelList = Db.find("select label_id,name as labelName,color from work_task_label where is_common = 1");
 
-        return task.set("labelList", labelList).set("ownerUserList", ownerUserList);
+        task.set("customerList", customerList)
+                .set("contactsList", contactsList)
+                .set("businessList", businessList)
+                .set("contractList", contractList)
+                .set("preTaskList", preList)
+                .set("rearTaskList", rearList)
+                .set("commonLabelList", commonLabelList)
+                .set("labelList", labelList)
+                .set("ownerUserList", ownerUserList);
+
+        return task;
     }
 
 
@@ -539,5 +552,15 @@ public class TaskService{
     public R archiveByTaskId(Integer taskId){
         int update = Db.update("update  `task` set is_archive = 1,archive_time = now() where task_id = ?", taskId);
         return update > 0 ? R.ok() : R.error();
+    }
+
+    /**
+     * 根据任务名称模糊搜索任务列表
+     * @param basePageRequest  任务名关键字
+     * @return
+     */
+    public R queryTaskByName(BasePageRequest basePageRequest){
+        Page<Record> recordList = Db.paginate(basePageRequest.getPage(), basePageRequest.getLimit(), Db.getSqlPara("work.task.queryTaskByName", Kv.by("taskName", basePageRequest.getJsonObject().getString("taskName"))));
+        return R.ok().put("data", recordList);
     }
 }

@@ -2,6 +2,7 @@ package com.linksame.crm.erp.admin.service;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.utils.StringUtils;
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Page;
@@ -28,13 +29,15 @@ public class AdminFileService {
 
     /**
      * 附件分页列表
-     * @param basePageRequest   分页对象
-     * @param batchId           批次ID
-     * @param oldName           附件原始名称
-     * @return                  分页列表
+     * @param basePageRequest  条件构造对象
      */
-    public R getFilePage(BasePageRequest basePageRequest, String batchId, String oldName){
-        Page<Record> recordList = Db.paginate(basePageRequest.getPage(), basePageRequest.getLimit(), Db.getSqlPara("admin.file.queryPageList", Kv.by("createUserId", BaseUtil.getUser().getUserId()).set("batchId", batchId).set("oldName", oldName)));
+    public R getFileList(BasePageRequest basePageRequest){
+        JSONObject jo = basePageRequest.getJsonObject();
+        Kv kv= Kv.by("batchId", jo.getString("batchId"))
+                .set("oldName", jo.getString("oldName"))
+                .set("folderId", jo.getInteger("folderId"))
+                .set("createUserId", BaseUtil.getUser().getUserId());
+        Page<Record> recordList = Db.paginate(basePageRequest.getPage(), basePageRequest.getLimit(), Db.getSqlPara("admin.file.queryPageList", kv));
         return R.ok().put("data", recordList);
     }
 
@@ -47,26 +50,23 @@ public class AdminFileService {
     public R upload(UploadFile file, String batchId) {
         try{
             //上传文件至minio服务器
-            Map<String, String> map = MinioServicce.uploadFile(file);
-            String bucketName = map.get("bucketName");
-            String newfileName = map.get("newfileName");
-            String oldfileName = map.get("oldfileName");
+            AdminFile resultFile = MinioServicce.uploadFile(file);
             //插入数据到文件表中
             AdminFile adminFile = new AdminFile();
-            adminFile.setBucketName(bucketName);
-            adminFile.setOldName(oldfileName);
+            adminFile.setBucketName(resultFile.getBucketName());
+            adminFile.setOldName(resultFile.getOldName());
             adminFile.setBatchId(batchId);
             adminFile.setCreateTime(new Date());
             adminFile.setCreateUserId(BaseUtil.getUser().getUserId());
             //如果是图片类型,通过文件名请求minio,获取访问路径
-            String suffix = FileUtil.extName(newfileName);
+            String suffix = FileUtil.extName(resultFile.getFileName());
             if(suffix.equalsIgnoreCase("gif") || suffix.equalsIgnoreCase("png")
                     || suffix.equalsIgnoreCase("jpg") || suffix.equalsIgnoreCase("jpeg")) {
-                String path = MinioServicce.getImgUrl(newfileName, suffix);
+                String path = MinioServicce.getImgUrl(resultFile.getFileName(), suffix);
                 adminFile.setPath(path);
                 adminFile.setFileType("img");
             }
-            adminFile.setFileName(newfileName);
+            adminFile.setFileName(resultFile.getFileName());
             adminFile.setSize(file.getFile().length());
             return adminFile.save() ? R.ok().put("batchId", batchId).put("fileName",adminFile.getFileName()).put("oldName",adminFile.getOldName()).put("path", adminFile.getPath()).put("size",file.getFile().length()/1000+"KB").put("fileId",adminFile.getFileId()) : R.error();
         } catch (RuntimeException e) {
@@ -75,10 +75,10 @@ public class AdminFileService {
     }
 
     /**
-     * 通过批次ID查询(暂未使用)
+     * 通过批次ID查询
      * @param batchId 批次ID
      */
-    public void queryByBatchId(String batchId,Record record) {
+    public void queryByBatchId(String batchId, Record record) {
         if (batchId == null || "".equals(batchId)) {
             record.set("img",new ArrayList<>()).set("file",new ArrayList<>());
             return;
@@ -103,7 +103,7 @@ public class AdminFileService {
         if (batchId == null) {
             return R.error("batchId参数为空");
         }
-        return R.ok().put("data",AdminFile.dao.find(Db.getSql("admin.file.queryByBatchId"), batchId));
+        return R.ok().put("data", Db.find(Db.getSqlPara("admin.file.queryPageList", Kv.by("batchId", batchId))));
     }
 
     /**
@@ -146,7 +146,7 @@ public class AdminFileService {
             return R.error("batchId参数为空");
         }
         //查询该批次的所有文件的文件名称
-        List<String> fileNames = Db.query(Db.getSql("admin.file.queryPathByBatchId"), batchId);
+        List<String> fileNames = Db.query(Db.getSql("admin.file.queryFileNameByBatchId"), batchId);
         //数据库根据批次ID删除文件数据
         Db.deleteById("admin_file", "batch_id", batchId);
         //Minio服务器根据文件名称删除文件数据
@@ -172,8 +172,9 @@ public class AdminFileService {
      * @param createUserId  创建用户ID
      * @return  附件集合
      */
-    public R queryByUserId(Integer createUserId){
-        return R.ok().put("data", AdminFile.dao.find("select * from admin_file where create_user_id = ?", createUserId));
+    public R queryByUserId(){
+        Kv kv = Kv.by("createUserId", BaseUtil.getUser().getUserId());
+        return R.ok().put("data", AdminFile.dao.find(Db.getSqlPara("admin.file.queryByBatchId",kv)));
     }
 
     /**

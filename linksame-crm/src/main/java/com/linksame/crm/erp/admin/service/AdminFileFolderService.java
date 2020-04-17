@@ -1,12 +1,12 @@
 package com.linksame.crm.erp.admin.service;
 
 import cn.hutool.core.collection.CollectionUtil;
+import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.linksame.crm.erp.admin.entity.AdminFileFolder;
 import com.linksame.crm.utils.BaseUtil;
 import com.linksame.crm.utils.R;
-
 import java.util.Date;
 import java.util.List;
 
@@ -34,7 +34,9 @@ public class AdminFileFolderService {
      * @return          文件夹列表
      */
     public R queryFolder(String batchId){
-        List<Record> folders = Db.find("select * from admin_file_folder where batch_id = ?", batchId);
+        Kv kv = Kv.by("createUserId", BaseUtil.getUser().getUserId())
+                .set("batchId", batchId);
+        List<Record> folders = Db.find(Db.getSqlPara("admin.folder.queryFolderList", kv));
         folders.forEach(ivan->{
             ivan = assData(ivan);
         });
@@ -44,7 +46,8 @@ public class AdminFileFolderService {
 
     //处理子任务
     private Record assData(Record record){
-        List<Record> itemList = Db.find("select * from admin_file_folder where folder_pid = ?", record.getInt("folder_id"));
+        Kv kv = Kv.by("folderId", record.getInt("folder_id"));
+        List<Record> itemList = Db.find(Db.getSqlPara("admin.folder.queryFolderByPid", kv));
         if(CollectionUtil.isNotEmpty(itemList)){
             recData(itemList);
         }
@@ -56,7 +59,8 @@ public class AdminFileFolderService {
     //递归
     private void recData(List<Record> itemList){
         for (Record mu : itemList) {
-            List<Record> childList = Db.find("select * from admin_file_folder where folder_pid = ?", mu.getInt("folder_id"));
+            Kv kv = Kv.by("folderId", mu.getInt("folder_id"));
+            List<Record> childList = Db.find(Db.getSqlPara("admin.folder.queryFolderByPid", kv));
             //遍历出父id等于参数的id，add进子节点集合
             if(CollectionUtil.isNotEmpty(childList)){
                 mu.set("list", childList);

@@ -5,6 +5,8 @@ import com.jfinal.core.Controller;
 import com.jfinal.kit.LogKit;
 import com.jfinal.upload.UploadFile;
 import com.linksame.crm.common.minio.service.MinioServicce;
+import com.linksame.crm.erp.admin.entity.AdminFile;
+import com.linksame.crm.utils.R;
 import live.autu.plugin.jfinal.swagger.annotation.Api;
 import live.autu.plugin.jfinal.swagger.annotation.ApiImplicitParam;
 import live.autu.plugin.jfinal.swagger.annotation.ApiImplicitParams;
@@ -30,9 +32,9 @@ public class MinioController extends Controller {
     })
     public void uploadFile() {
         UploadFile file = getFile("file");
-        Map<String, String> map = MinioServicce.uploadFile(file);
+        AdminFile adminFile = MinioServicce.uploadFile(file);
 
-        renderJson(map);
+        renderJson(R.ok().put("data", adminFile));
     }
 
     /**

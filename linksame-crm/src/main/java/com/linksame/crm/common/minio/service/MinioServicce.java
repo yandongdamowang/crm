@@ -8,6 +8,8 @@ import com.jfinal.kit.LogKit;
 import com.jfinal.upload.UploadFile;
 import com.linksame.crm.common.constant.BaseConstant;
 import com.linksame.crm.common.minio.factory.MinioFactory;
+import com.linksame.crm.erp.admin.entity.AdminFile;
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
@@ -47,8 +49,8 @@ public class MinioServicce {
      * @param file  文件
      * @return      Map<String, String> 桶名, 新文件名, 旧文件名
      */
-    public static Map<String, String> uploadFile(UploadFile file) {
-        Map<String, String> resultMap = new HashMap<>();
+    public static AdminFile uploadFile(UploadFile file) {
+        AdminFile adminFile = new AdminFile();
         try {
             FileInputStream inputStream = new FileInputStream(file.getFile());
             //重新命名文件名，采用uuid,避免文件名中带有‘-’导致解析出错
@@ -56,14 +58,14 @@ public class MinioServicce {
             //将文件上传到minio-oss服务器中
             MinioFactory.getMinioClient().putObject(BaseConstant.BUCKET_NAME, newFileName, inputStream, file.getContentType());
             //返回桶名、新文件名，旧文件名
-            resultMap.put("bucketName", BaseConstant.BUCKET_NAME);
-            resultMap.put("newfileName", newFileName);
-            resultMap.put("oldfileName", file.getOriginalFileName());
+            adminFile.setBucketName(BaseConstant.BUCKET_NAME);
+            adminFile.setFileName(newFileName);
+            adminFile.setOldName(file.getOriginalFileName());
             LogKit.info("上传成功,文件名: " + newFileName);
         } catch (Exception e) {
             LogKit.error("上传文件失败!");
         }
-        return resultMap;
+        return adminFile;
     }
 
     /**

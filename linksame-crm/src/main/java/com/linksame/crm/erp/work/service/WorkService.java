@@ -12,7 +12,6 @@ import com.linksame.crm.erp.admin.entity.AdminMenu;
 import com.linksame.crm.erp.admin.entity.AdminUser;
 import com.linksame.crm.erp.admin.service.AdminFileService;
 import com.linksame.crm.erp.admin.service.AdminMenuService;
-import com.linksame.crm.erp.work.common.TaskSortCompare;
 import com.linksame.crm.erp.work.entity.Task;
 import com.linksame.crm.erp.work.entity.Work;
 import com.linksame.crm.erp.work.entity.WorkTaskClass;
@@ -199,7 +198,53 @@ public class WorkService{
 
         finalClassList.forEach(workClass -> {
             //查询条件设置(项目id,截止时间状态,负责人id,标签id,任务分类id)
-            List<Record> recordList = Db.find(Db.getSqlPara("work.queryTaskByWorkId", Kv.by("workId", workId).set("stopTimeType", jsonObject.getInteger("stopTimeType")).set("userIds", jsonObject.getJSONArray("mainUserId")).set("labelIds", jsonObject.getJSONArray("labelId")).set("classId", workClass.getInt("classId"))));
+            Kv kv = Kv.by("workId", workId).set("stopTimeType", jsonObject.getInteger("stopTimeType"))
+                    .set("userIds", jsonObject.getJSONArray("mainUserId"))
+                    .set("labelIds", jsonObject.getJSONArray("labelId"))
+                    .set("classId", workClass.getInt("classId"));
+            //设置排序规则
+            Integer orderType = jsonObject.getInteger("orderType");
+            switch (orderType) {
+                case 1:
+                    kv.set("order","order by b.order_num , a.order_num");
+                    break;
+                case 2:
+                    kv.set("order","order by b.order_num , a.order_num desc");
+                    break;
+                case 3:
+                    kv.set("order","order by b.order_num , a.priority desc");
+                    break;
+                case 4:
+                    kv.set("order","order by b.order_num , a.priority");
+                    break;
+                case 5:
+                    kv.set("order","order by b.order_num , a.stop_time");
+                    break;
+                case 6:
+                    kv.set("order","order by b.order_num , a.stop_time desc");
+                    break;
+                case 7:
+                    kv.set("order","order by b.order_num , a.start_time");
+                    break;
+                case 8:
+                    kv.set("order","order by b.order_num , a.start_time desc");
+                    break;
+                case 9:
+                    kv.set("order","order by b.order_num , a.create_time");
+                    break;
+                case 10:
+                    kv.set("order","order by b.order_num , a.create_time desc");
+                    break;
+                case 11:
+                    kv.set("order","order by b.order_num , a.update_time");
+                    break;
+                case 12:
+                    kv.set("order","order by b.order_num , a.update_time desc");
+                    break;
+                default:
+                    kv.set("order","order by b.order_num");
+            }
+            List<Record> recordList = Db.find(Db.getSqlPara("work.queryTaskByWorkId", kv));
             workClass.set("count", recordList.size());
             if(recordList.size() == 0){
                 if(workClass.getInt("classId") != - 1){
@@ -208,31 +253,15 @@ public class WorkService{
                     finalClassList.remove(workClass);
                 }
             }else{
+                //设置截止时间最靠后的任务数据
+                Record stopTask = Db.findFirst("select task_id as stopTaskId,max(stop_time) as stopTime from task where class_id = ? group by task_id order by stop_time desc limit 1", workClass.getInt("classId"));
+                workClass.set("stopTaskId", stopTask.get("stopTaskId"));
+                workClass.set("stopTime", stopTask.get("stopTime"));
                 workbenchService.taskListTransfer(recordList);
-                recordList.sort(Comparator.comparingInt(a -> a.getInt("order_num")));
-                System.out.println("recordList===>" + recordList);
-                List<Task> taskList = new ArrayList<>();
-                //数据处理
+                //递归遍历子任务
                 recordList.forEach(task -> {
-                    //递归遍历子任务
                     task = assData(task);
-                    //组装时间集合
-                    Date stopTime = task.getDate("stop_time");
-                    int taskId = task.getInt("task_id");
-                    if (stopTime != null) {
-                        Task task1 = new Task();
-                        task1.setTaskId(taskId);
-                        task1.setStopTime(stopTime);
-                        taskList.add(task1);
-                    }
                 });
-                //遍历排序--->截止时间
-                TaskSortCompare sort = new TaskSortCompare();
-                Collections.sort(taskList,sort);
-                if(CollectionUtil.isNotEmpty(taskList)){
-                    workClass.set("stopTime", taskList.get(0).getStopTime());
-                    workClass.set("taskId", taskList.get(0).getTaskId());
-                }
                 workClass.set("list", recordList);
             }
         });
