@@ -15,12 +15,7 @@
           :key="item.path"
           :label="item.meta.title"
           :name="item.meta.title"
-        >
-
-          <!-- <router-link :to="item.path">
-          </router-link> -->
-
-        </el-tab-pane>
+        />
       </el-tabs>
 
     </div>
@@ -32,13 +27,15 @@
 </template>
 
 <script>
+import { workWorkReadAPI } from '@/api/projectManagement/project'
+
 export default {
   name: 'AppMain',
   data() {
     return {
       tableList: [],
       tableListTemp: [],
-
+      workIdData: undefined,
       editableTabsValue: ''
 
     //   tabIndex: ''
@@ -51,51 +48,49 @@ export default {
       this.addTab()
     }
   },
-  created() {
+  //   created() {
+  //     this.addTab()
+  //   },
+  mounted() {
     this.addTab()
   },
   methods: {
     unique(arr) {
       return Array.from(new Set(arr))
     },
-    addTab() {
+
+
+    async addTab() {
+      if (this.$route.params.id != undefined) {
+        await workWorkReadAPI({ workId: this.$route.params.id }).then(res => {
+          this.workIdData = res.data
+        })
+
+        // console.log(123, this.workIdData)
+        this.$route.matched[1].path = `/project/list/${this.$route.params.id}`
+        this.$route.matched[1].meta.title = this.workIdData.name
+        // console.log(this.workIdData.name)
+      }
       this.tableListTemp.push(this.$route.matched[1])
       this.tableList = this.unique(this.tableListTemp)
       this.editableTabsValue = this.$route.matched[1].meta.title
-
-      //   console.log(this.tableListTemp)
-      //   const list = this.tableListTemp.filter((item, index) => {
-      //     return item.meta.title != this.$route.matched[1].meta.title
-      //   })
-
-    //   console.log(this.unique(this.tableListTemp))
-
-
-      //   console.log(this.$route.matched)
-      //   this.tableList.filter((item, index) => {
-      // if (this.$route.matched[1] != item) {
-      //   console.log(this.$route.matched)
-      //   this.tableList.push(this.$route.matched[1])
-      //   this.editableTabsValue = this.$route.matched[1].meta.title
-      // }
-
-      // } else {
-      //   this.tableList.push(this.$route.matched[1])
-      //   this.editableTabsValue = this.$route.matched[1].meta.title
-      // }
-      //   })
-    //   console.log(this.tableList)
+    //   console.log(111, this.tableList)
+    //   console.log(222, this.tableListTemp)
     },
     removeTab(targetName) {
       this.tableList.forEach((item, index) => {
         if (item.meta.title === targetName) {
           this.tableList.splice(index, 1)
+          this.tableListTemp = this.tableList
+          this.$router.push({ path: this.tableList[index - 1].path })
+        //   this.editableTabsValue = this.tableList[index - 1].meta.title
+        //   this.$router.push({ path: item.path })
         }
       })
-      console.log(this.tableList)
     },
     clickTab(tab) {
       console.log(tab)
+      //   this.$router.push('/project/archive-project')
       this.tableList.forEach((item, index) => {
         if (item.meta.title === tab.paneName) {
           this.$router.push({ path: item.path })

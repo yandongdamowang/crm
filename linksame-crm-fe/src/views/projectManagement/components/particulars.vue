@@ -3,32 +3,37 @@
     <el-card
       v-loading="loading"
       :style="{ 'z-index': zIndex }"
-      class="particulars-common">
+      class="particulars-common"
+    >
       <!-- 头部信息 -->
       <div
         v-if="taskData"
         slot="header"
-        class="clear-fix">
+        class="clear-fix"
+      >
         <div
           v-if="taskData && taskData.workName"
-          class="work-name">{{ taskData.workName }}</div>
+          class="work-name"
+        >{{ taskData.workName }}</div>
         <div class="img-box-grop">
           <div>
             <el-popover
               v-model="priorityVisible"
               placement="bottom-start"
               width="200"
-              trigger="click">
+              trigger="click"
+            >
               <div class="particulars-priority-box">
                 <p
                   v-for="(item, index) in particularsList"
                   :key="index"
-                  @click="priorityBtn(item, taskData.priority)">
+                  @click="priorityBtn(item, taskData.priority)"
+                >
                   <span :style="{'border-color': item.color, 'background': item.id == taskData.priority ? item.color: 'transparent', 'color': item.id == taskData.priority ? '#fff': item.color}">{{ item.label }}</span>
                 </p>
               </div>
               <span slot="reference">
-                <i class="wukong wukong-lightning"/>
+                <i class="wukong wukong-lightning" />
                 <span>优先级</span>
               </span>
             </el-popover>
@@ -36,42 +41,98 @@
           <div>
             <tag-index
               :placement="'bottom'"
-              :task-data="taskData">
+              :task-data="taskData"
+            >
               <div slot="editIndex">
-                <i class="wukong wukong-label"/>
+                <i class="wukong wukong-label" />
                 <span>标签</span>
               </div>
             </tag-index>
           </div>
           <div
             v-if="taskData.pid == 0"
-            @click="addSubtasksBtn">
-            <i class="wukong wukong-sub-task"/>
+            @click="addSubtasksBtn"
+          >
+            <i class="wukong wukong-sub-task" />
             <span>子任务</span>
           </div>
           <div>
-            <el-upload
-              :http-request="httpRequest"
-              class="upload-demo"
-              action="https://jsonplaceholder.typicode.com/posts/"
-              multiple
-              list-type="picture">
-              <i class="wukong wukong-file"/>
-              <span>附件</span>
-            </el-upload>
+
+            <el-dropdown>
+              <span class="el-dropdown-link">
+                <i class="wukong wukong-file" />
+                <span>附件</span>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+
+                <el-upload
+                  :http-request="httpRequest"
+                  class="upload-demo"
+                  action="https://jsonplaceholder.typicode.com/posts/"
+                  multiple
+                  list-type="picture"
+                >
+
+                  <span>本地上传</span>
+
+                </el-upload>
+              </el-dropdown-menu>
+
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item>
+                  <el-upload
+                    :http-request="httpRequest"
+                    class="upload-demo"
+                    action="http://192.168.1.174:28080/minio/uploadFilec"
+                    multiple
+                    list-type="picture"
+                  >
+                    <span>本地上传</span>
+                  </el-upload>
+                </el-dropdown-item>
+
+                <el-dropdown-item>
+                  <el-upload
+                    :http-request="httpRequest"
+                    class="upload-demo"
+                    action="https://jsonplaceholder.typicode.com/posts/"
+                    multiple
+                    list-type="picture"
+                  >
+                    <span>网盘上传</span>
+                  </el-upload>
+                </el-dropdown-item>
+
+              </el-dropdown-menu>
+
+            </el-dropdown>
+
           </div>
           <div v-if="taskData.ishidden != 1">
             <el-popover
               placement="bottom"
               width="80"
-              trigger="click">
+              trigger="click"
+            >
               <div class="more-btn-group">
+
+                <p>设置任务提醒</p>
+                <p>设置重复提醒</p>
+                <p>设置前置任务</p>
+                <p>设置后置任务</p>
+                <p>共享任务</p>
+                <p>从网盘选取附件</p>
+                <p>移动任务</p>
+                <p>拷贝任务</p>
                 <p
                   v-if="taskData.isArchive != 1 && taskData.ishidden != 1"
-                  @click="moreArchive">归 档</p>
+                  @click="moreArchive"
+                >归 档</p>
                 <p
                   v-if="taskData.ishidden != 1"
-                  @click="moreDelete">删 除</p>
+                  @click="moreDelete"
+                >删 除</p>
+                <p>打印</p>
               </div>
               <span slot="reference">
                 <img src="@/assets/img/task_ellipsis.png">
@@ -81,66 +142,82 @@
           <div class="task-close-img">
             <img
               src="@/assets/img/task_close.png"
-              @click="closeBtn">
+              @click="closeBtn"
+            >
           </div>
         </div>
       </div>
       <div
         v-if="taskData"
-        class="body-content">
+        class="body-content"
+      >
         <!-- 归档 -->
         <div
           v-if="taskData.isArchive == 1 && taskData.ishidden != 1"
-          class="particulars-extraContent">
+          class="particulars-extraContent"
+        >
           <span class="text">该任务已于 {{ taskData.archiveTime }} 被归档。</span>
           <el-button
             type="primary"
             class="border-radius"
             size="mini"
-            @click="activateTask">激活</el-button>
+            @click="activateTask"
+          >激活</el-button>
         </div>
         <!-- 回收站 -->
         <div
           v-if="taskData.ishidden == 1"
-          class="particulars-extraContent">
+          class="particulars-extraContent"
+        >
           <span class="text">该任务已于 {{ taskData.hiddenTime }} 被放入回收站。</span>
           <el-button
             type="primary"
             class="border-radius"
             size="mini"
-            @click="recoverTask">恢 复</el-button>
+            @click="recoverTask"
+          >恢 复</el-button>
           <el-button
             type="text"
-            @click="thoroughDeleteTask">彻底删除</el-button>
+            @click="thoroughDeleteTask"
+          >彻底删除</el-button>
         </div>
         <div class="card-content-box">
           <div class="card-content">
             <div class="card-content-row margin-bottom-15">
               <el-checkbox
                 v-model="taskData.checked"
-                @change="titleCheckbox"/>
+                @change="titleCheckbox"
+              />
               <div class="priority-data-name">
                 <div
                   v-show="!nameVinput"
                   :style="{'text-decoration': taskData.checked ? 'line-through' : 'none'}"
-                  class="title-text">{{ taskData.name }}<span
+                  class="title-text"
+                >{{ taskData.name }}
+                  <span
                     class="el-icon-edit-outline"
-                    @click="nameVinput = true, taskDataName = taskData.name"/></div>
+                    @click="nameVinput = true, taskDataName = taskData.name"
+                  />
+                </div>
                 <div
                   v-show="nameVinput"
-                  class="show-input">
+                  class="show-input"
+                >
                   <el-input
                     v-model="taskDataName"
                     :maxlength="50"
-                    size="medium"/>
+                    size="medium"
+                  />
                   <div class="btn-box">
                     <el-button
                       type="primary"
                       size="mini"
-                      @click="nameVShow(taskDataName)">保 存</el-button>
+                      @click="nameVShow(taskDataName)"
+                    >保 存</el-button>
                     <el-button
                       size="mini"
-                      @click="nameVinput = false">取 消</el-button>
+                      @click="nameVinput = false"
+                    >取 消</el-button>
                   </div>
                 </div>
               </div>
@@ -149,11 +226,13 @@
                   <div class="color-label user-name-label"> 负责人： </div>
                   <div
                     v-if="taskData.mainUser"
-                    class="bg-position">
+                    class="bg-position"
+                  >
                     <el-tooltip
                       placement="bottom"
                       effect="light"
-                      popper-class="tooltip-change-border">
+                      popper-class="tooltip-change-border"
+                    >
                       <div slot="content">
                         <span>{{ taskData.mainUser.realname }}</span>
                       </div>
@@ -161,28 +240,33 @@
                         v-photo="taskData.mainUser"
                         v-lazy:background-image="$options.filters.filterUserLazyImg(taskData.mainUser.img)"
                         :key="taskData.main_user_img"
-                        class="div-photo main-user-name"/>
+                        class="div-photo main-user-name"
+                      />
                     </el-tooltip>
                     <img
                       src="@/assets/img/delete_task.png"
                       class="el-icon-close"
                       alt=""
-                      @click="editMainUser('')">
+                      @click="editMainUser('')"
+                    >
                   </div>
                   <template v-else>
                     <el-popover
                       placement="bottom"
                       width="280"
-                      trigger="click">
+                      trigger="click"
+                    >
                       <xh-user
                         ref="xhuser"
                         :info-request="ownerListRequest"
                         :info-params="{ workId: workId }"
                         radio
-                        @changeCheckout="editMainUser"/>
+                        @changeCheckout="editMainUser"
+                      />
                       <i
                         slot="reference"
-                        class="wukong wukong-addition-task"/>
+                        class="wukong wukong-addition-task"
+                      />
                     </el-popover>
                   </template>
                 </flexbox>
@@ -190,23 +274,26 @@
             </div>
             <div
               v-if="taskData.labelList"
-              class="card-content-row  margin-bottom-25">
+              class="card-content-row  margin-bottom-25"
+            >
               <div class="particulars-priority-copy">
                 <template v-show="taskData.labelList.length != 0">
                   <span
                     v-for="(item, index) in taskData.labelList"
                     :style="{'background': item.color ? item.color : '#ccc'}"
                     :key="index"
-                    class="item-color">
+                    class="item-color"
+                  >
                     {{ item.labelName }}
                   </span>
                 </template>
                 <div class="add-tag">
                   <tag-index
                     :placement="'right'"
-                    :task-data="taskData">
+                    :task-data="taskData"
+                  >
                     <div slot="editIndex">
-                      <span class="el-icon-plus"/>
+                      <span class="el-icon-plus" />
                       <span class="label">标签</span>
                     </div>
                   </tag-index>
@@ -214,7 +301,7 @@
               </div>
               <div class="card-row-right">
                 <div class="text-right">
-                  <span class="color-label"> 截止日期： </span>
+                  <span class="color-label">开始日期 - 截止日期 </span>
                   <div class="time-top">
                     <el-date-picker
                       ref="endTime"
@@ -225,13 +312,15 @@
                       format="yyyy-MM-dd"
                       value-format="yyyy-MM-dd"
                       placeholder=""
-                      @change="endTimeChange"/>
+                      @change="endTimeChange"
+                    />
                     <img
                       v-if="taskData.stopTime"
                       src="@/assets/img/delete_task.png"
                       class="el-icon-close time-top-close"
                       alt=""
-                      @click.stop="deleteTimeTop(taskData.stopTime)">
+                      @click.stop="deleteTimeTop(taskData.stopTime)"
+                    >
                   </div>
                 </div>
               </div>
@@ -241,15 +330,18 @@
                 <div
                   v-if="taskData.description"
                   class="description-content"
-                  @click="addDescriptionShow = true; addDescriptionTextarea = taskData.description">{{ taskData.description }}</div>
+                  @click="addDescriptionShow = true; addDescriptionTextarea = taskData.description"
+                >{{ taskData.description }}</div>
                 <div
                   v-else
-                  class="no-description">
+                  class="no-description"
+                >
                   <span class="color-label">暂无描述</span>
                   <el-button
                     type="text"
                     icon="el-icon-plus"
-                    @click="addDescriptionShow = true">添加描述</el-button>
+                    @click="addDescriptionShow = true"
+                  >添加描述</el-button>
                 </div>
               </div>
               <div v-show="addDescriptionShow">
@@ -257,36 +349,42 @@
                   :autosize="{ minRows: 2}"
                   v-model="addDescriptionTextarea"
                   type="textarea"
-                  placeholder="请输入内容"/>
+                  placeholder="请输入内容"
+                />
                 <div class="btn-box">
                   <el-button
                     type="primary"
                     size="mini"
-                    @click="addDescriptionSubmit">保 存</el-button>
+                    @click="addDescriptionSubmit"
+                  >保 存</el-button>
                   <el-button
                     type="text"
                     size="mini"
-                    @click="addDescriptionShow = false">取 消</el-button>
+                    @click="addDescriptionShow = false"
+                  >取 消</el-button>
                 </div>
               </div>
             </div>
             <div class="card-content-row card-content-row-column">
               <flexbox>
                 <div class="color-label participant">
-                  <i class="wukong wukong-user"/>
+                  <i class="wukong wukong-user" />
                   <span>参与人： </span>
                 </div>
                 <div
                   v-if="taskData.ownerUserList"
-                  class="participant-class">
+                  class="participant-class"
+                >
                   <span
                     v-for="(item, index) in taskData.ownerUserList"
                     :key="index"
-                    class="owner-list">
+                    class="owner-list"
+                  >
                     <el-tooltip
                       placement="bottom"
                       effect="light"
-                      popper-class="tooltip-change-border">
+                      popper-class="tooltip-change-border"
+                    >
                       <div slot="content">
                         <span>{{ item.realname }}</span>
                       </div>
@@ -294,12 +392,14 @@
                         v-photo="item"
                         v-lazy:background-image="$options.filters.filterUserLazyImg(item.img)"
                         :key="item.img"
-                        class="div-photo item-img"/>
+                        class="div-photo item-img"
+                      />
                     </el-tooltip>
                     <img
                       src="@/assets/img/delete_task.png"
                       class="el-icon-close"
-                      @click="deleteOwnerList(item, index)">
+                      @click="deleteOwnerList(item, index)"
+                    >
                   </span>
                 </div>
                 <members-dep
@@ -308,16 +408,18 @@
                   :user-checked-data="taskData.ownerUserList"
                   :user-request="ownerListRequest"
                   :user-params="{ workId: workId }"
-                  @popoverSubmit="editOwnerList">
+                  @popoverSubmit="editOwnerList"
+                >
                   <i
                     slot="membersDep"
-                    class="wukong wukong-addition-task"/>
+                    class="wukong wukong-addition-task"
+                  />
                 </members-dep>
               </flexbox>
             </div>
             <div class="card-content-row card-content-row-column margin-bottom-30">
               <span class="color-label participant">
-                <i class="wukong wukong-relevance"/>
+                <i class="wukong wukong-relevance" />
                 <span>关联业务</span>
               </span>
               <!-- 关联业务 -->
@@ -327,65 +429,77 @@
                 :all-data="allData"
                 :task-id="taskData.taskId"
                 @checkRelatedDetail="checkRelatedDetail"
-                @checkInfos="checkInfos"/>
+                @checkInfos="checkInfos"
+              />
             </div>
             <div
               v-if="taskData.pid == 0"
-              class="card-content-row card-content-row-column">
+              class="card-content-row card-content-row-column"
+            >
               <div class="display-flex sub-task margin-bottom-7">
                 <span class="color-label participant">
-                  <i class="wukong wukong-sub-task"/>
+                  <i class="wukong wukong-sub-task" />
                   <span>子任务</span>
                 </span>
                 <template v-if="taskData.childTask.length != 0">
                   <span class="color-label sub-task-progress"> ({{ subTaskProgress }}/{{ taskData.childTask.length }}) </span>
                   <el-progress
                     :percentage="subTaskProgress/taskData.childTask.length*100"
-                    :stroke-width="10"/>
+                    :stroke-width="10"
+                  />
                 </template>
                 <template v-else>
                   <span class="color-label sub-task-progress"> ({{ subTaskProgress }}/{{ taskData.childTask.length }}) </span>
-                  <el-progress :percentage="0"/>
+                  <el-progress :percentage="0" />
                 </template>
               </div>
               <template v-if="taskData.childTask.length != 0">
                 <div
                   v-for="(item, index) in taskData.childTask"
                   :key="index"
-                  class="card-related-matters subtasks-box">
+                  class="card-related-matters subtasks-box"
+                >
                   <div
                     v-if="!item.showEdit"
-                    class="show-edit">
+                    class="show-edit"
+                  >
                     <div
                       style="display: inline-block;"
-                      @click.stop>
+                      @click.stop
+                    >
                       <el-checkbox
                         v-model="item.checked"
-                        @change="subtasksCheckbox(item, $event)"/>
+                        @change="subtasksCheckbox(item, $event)"
+                      />
                     </div>
                     <span
                       :style="{'text-decoration': item.checked ? 'line-through' : 'none'}"
-                      class="item-name">{{ item.name }}</span>
+                      class="item-name"
+                    >{{ item.name }}</span>
                     <!-- 编辑和删除 -->
                     <div class="edit-del-box">
                       <i
                         class="wukong wukong-edit-task"
-                        @click="editSubTask(item)"/>
+                        @click="editSubTask(item)"
+                      />
                       <i
                         class="wukong wukong-delete-task"
-                        @click="deleteSubTask(item)"/>
+                        @click="deleteSubTask(item)"
+                      />
                     </div>
                     <div class="rt">
                       <flexbox class="rt-box">
                         <div
                           v-if="item.stopTime"
-                          class="bg-color task-bg-color">{{ item.stopTime | moment("MM-DD") }} 截止</div>
+                          class="bg-color task-bg-color"
+                        >{{ item.stopTime | moment("MM-DD") }} 截止</div>
                         <div
                           v-photo="item.mainUser"
                           v-lazy:background-image="$options.filters.filterUserLazyImg(item.mainUser.img)"
                           v-if="item.mainUser"
                           :key="item.mainUser.img"
-                          class="div-photo"/>
+                          class="div-photo"
+                        />
                       </flexbox>
                     </div>
                   </div>
@@ -398,27 +512,31 @@
                     :task-id="subTaskID"
                     :checkbox-data="item.checked"
                     :task-data="taskData"
-                    @on-handle="handleSubTasksBlock($event, item)"/>
+                    @on-handle="handleSubTasksBlock($event, item)"
+                  />
                 </div>
               </template>
               <div
                 v-if="addSubtasks"
                 class="add-subtasks"
-                @click="addSubtasks = false">
-                <span class="el-icon-plus"/>
+                @click="addSubtasks = false"
+              >
+                <span class="el-icon-plus" />
                 <span>添加子任务</span>
               </div>
               <sub-task
                 v-else
                 :sub-task-com="'new'"
                 :task-data="taskData"
-                @on-handle="handleSubTasksBlock"/>
+                @on-handle="handleSubTasksBlock"
+              />
             </div>
             <div
               v-if="fileList.length != 0"
-              class="card-content-row card-content-row-column">
+              class="card-content-row card-content-row-column"
+            >
               <span class="color-label participant class-file">
-                <i class="wukong wukong-file"/>
+                <i class="wukong wukong-file" />
                 <span>附件</span>
               </span>
               <div class="accessory-box">
@@ -429,12 +547,13 @@
                   :cell-index="fileIndex"
                   :module-id="id"
                   :show-delete="true"
-                  @delete="accessoryDeleteFun"/>
+                  @delete="accessoryDeleteFun"
+                />
               </div>
             </div>
           </div>
         </div>
-        <div class="border"/>
+        <div class="border" />
         <!-- 底部内容 -->
         <div class="card-footers">
           <div class="footer-title">
@@ -442,93 +561,111 @@
               <i
                 v-if="isComment"
                 class="wukong wukong-comment-task"
-                style="color: #3E84E9;"/>
+                style="color: #3E84E9;"
+              />
               <i
                 v-else
-                class="wukong wukong-comment-task"/>
+                class="wukong wukong-comment-task"
+              />
               <span
                 :style="{'color': isComment ? '#3E84E9' : '#666'}"
-                class="cursor-pointer">评论</span>
+                class="cursor-pointer"
+              >评论</span>
             </span>
-            <span class="title-border"/>
+            <span class="title-border" />
             <span @click="footerTitle(1)">
               <i
                 v-if="isComment"
                 class="wukong wukong-activity-task"
-                style="font-size: 18px;"/>
+                style="font-size: 18px;"
+              />
               <i
                 v-else
                 class="wukong wukong-activity-task"
-                style="color: #3E84E9; font-size: 18px;"/>
+                style="color: #3E84E9; font-size: 18px;"
+              />
               <span
                 :style="{'color': isComment ? '#666' : '#3E84E9'}"
                 class="cursor-pointer"
-                @click="footerTitle(isComment)">活动</span>
+                @click="footerTitle(isComment)"
+              >活动</span>
             </span>
           </div>
           <div
             v-loading="commentsLoading"
-            class="footer-content-box">
+            class="footer-content-box"
+          >
             <div class="footer-content">
               <div
                 v-if="commentsActivities"
-                class="add-comments">
+                class="add-comments"
+              >
                 <div class="footer-img">
                   <div
                     v-photo="userInfo"
                     v-lazy:background-image="$options.filters.filterUserLazyImg(userInfo.img)"
                     :key="userInfo.img"
-                    class="div-photo"/>
+                    class="div-photo"
+                  />
                 </div>
                 <div class="comments-con">
                   <div
                     v-clickoutside="commentsSubmit"
                     v-if="addComments"
-                    class="comments-box">
+                    class="comments-box"
+                  >
                     <el-input
                       ref="commentsTextareaRef"
                       :rows="4"
                       v-model="commentsTextarea"
                       type="textarea"
                       placeholder="添加评论"
-                      @blur="blurFun"/>
+                      @blur="blurFun"
+                    />
                     <div class="btn-group">
                       <el-popover
                         v-model="commentsPopover"
                         placement="top"
                         width="400"
-                        trigger="click">
+                        trigger="click"
+                      >
                         <!-- 表情 -->
-                        <emoji @select="selectEmoji"/>
+                        <emoji @select="selectEmoji" />
                         <img
                           slot="reference"
                           src="@/assets/img/smiling_face.png"
-                          class="smiling-img">
+                          class="smiling-img"
+                        >
                       </el-popover>
                       <el-button
                         type="primary"
                         class="rt"
-                        @click="commentsSub">发布</el-button>
+                        @click="commentsSub"
+                      >发布</el-button>
                     </div>
                   </div>
                   <div
                     v-else
                     class="footer-bg"
-                    @click="addCommentsClick">添加评论</div>
+                    @click="addCommentsClick"
+                  >添加评论</div>
 
                   <!-- 评论 -->
                   <div
                     v-if="replyList && replyList.length != 0"
-                    class="discuss">
+                    class="discuss"
+                  >
                     <div
                       v-for="(discussItem, k) in replyList"
                       :key="k"
-                      class="discuss-list">
+                      class="discuss-list"
+                    >
                       <div
                         v-photo="discussItem.user"
                         v-lazy:background-image="$options.filters.filterUserLazyImg(discussItem.user.img)"
                         :key="discussItem.user.img"
-                        class="div-photo head-img header-circle"/>
+                        class="div-photo head-img header-circle"
+                      />
                       <span class="name">{{ discussItem.user.realname }}</span>
                       <span class="time">{{ discussItem.createTime }}</span>
                       <div class="rt">
@@ -537,7 +674,7 @@
                       </div>
 
                       <p class="reply-title">
-                        <span v-html="emoji(discussItem.content)"/>
+                        <span v-html="emoji(discussItem.content)" />
                       </p>
 
                       <!-- <p class="discuss-content"
@@ -545,16 +682,19 @@
 
                       <div
                         v-if="discussItem.childCommentList && discussItem.childCommentList.length > 0"
-                        class="children-reply">
+                        class="children-reply"
+                      >
                         <div
                           v-for="(childDiscussItem, k) in discussItem.childCommentList"
                           :key="k"
-                          class="discuss-list">
+                          class="discuss-list"
+                        >
                           <div
                             v-photo="childDiscussItem.user"
                             v-lazy:background-image="$options.filters.filterUserLazyImg(childDiscussItem.user.img)"
                             :key="childDiscussItem.user.img"
-                            class="div-photo head-img header-circle"/>
+                            class="div-photo head-img header-circle"
+                          />
                           <span class="name">{{ childDiscussItem.user.realname }}</span>
                           <span class="time">{{ childDiscussItem.createTime }}</span>
                           <div class="rt">
@@ -566,9 +706,10 @@
                               <span>回复</span>
                               <span
                                 v-if="childDiscussItem.replyUser"
-                                class="reply">@{{ childDiscussItem.replyUser.realname }}：</span>
+                                class="reply"
+                              >@{{ childDiscussItem.replyUser.realname }}：</span>
                             </template>
-                            <span v-html="emoji(childDiscussItem.content)"/>
+                            <span v-html="emoji(childDiscussItem.content)" />
                           </p>
                         </div>
                       </div>
@@ -576,32 +717,37 @@
                       <!-- 评论 -- 回复  -->
                       <div
                         v-if="discussItem.show"
-                        class="comment-box">
+                        class="comment-box"
+                      >
                         <el-input
                           ref="childCommentsTextareaRef"
                           :rows="2"
                           v-model="childCommentsTextarea"
                           type="textarea"
                           placeholder="请输入内容"
-                          @blur="blurFun"/>
+                          @blur="blurFun"
+                        />
                         <div class="btn-group">
                           <el-popover
                             v-model="childCommentsPopover"
                             placement="top"
                             width="400"
-                            trigger="click">
+                            trigger="click"
+                          >
                             <!-- 表情 -->
-                            <emoji @select="selectEmojiChild"/>
+                            <emoji @select="selectEmojiChild" />
                             <img
                               slot="reference"
                               src="@/assets/img/smiling_face.png"
-                              class="smiling-img">
+                              class="smiling-img"
+                            >
                           </el-popover>
                           <div class="btn-box">
                             <el-button
                               :loading="contentLoading"
                               type="primary"
-                              @click="childCommentSubmit()">回复</el-button>
+                              @click="childCommentSubmit()"
+                            >回复</el-button>
                             <el-button @click="discussItem.show= false">取消</el-button>
                           </div>
                         </div>
@@ -612,18 +758,21 @@
               </div>
               <div
                 v-else
-                class="activity-box">
+                class="activity-box"
+              >
                 <template v-if="activityList.length != 0">
                   <flexbox
                     v-for="(item, index) in activityList"
                     :key="index"
                     align="stretch"
-                    class="activity-list">
+                    class="activity-list"
+                  >
                     <div
                       v-photo="item"
                       v-lazy:background-image="$options.filters.filterUserLazyImg(item.img)"
                       :key="item.img"
-                      class="div-photo"/>
+                      class="div-photo"
+                    />
                     <div class="activity-name">{{ item.realname }}</div>
                     <div class="activity-content">{{ item.content }}</div>
                     <div class="activity-time">{{ item.createTime }}</div>
@@ -633,18 +782,20 @@
             </div>
           </div>
         </div>
-        <slot/>
+        <slot />
       </div>
       <div
         v-if="taskData && taskData.createUser"
-        class="tip">
+        class="tip"
+      >
         <span>{{ taskData.createUser.realname }} 创建于 {{ taskData.createTime }}</span>
       </div>
 
       <c-r-m-full-screen-detail
         :visible.sync="showRelatedDetail"
         :crm-type="relatedCRMType"
-        :id="relatedID"/>
+        :id="relatedID"
+      />
     </el-card>
   </transition>
 </template>

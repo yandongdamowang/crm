@@ -14,9 +14,11 @@
   "dependencies": {
     "axios": "0.18.0",
     "babel-polyfill": "^6.26.0",
+    "dhtmlx-gantt": "^7.0.0",
     "echarts": "^4.2.0-rc.2",
     "element-ui": "2.13.0",
     "file-saver": "^2.0.1",
+    "frappe-gantt": "^0.3.0",
     "fullcalendar": "^3.9.0",
     "id-validator": "^1.3.0",
     "jquery": "^3.3.1",
