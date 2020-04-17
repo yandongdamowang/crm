@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8c35b251-7014-4512-ba39-ae2ffefdf9b4" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/linksame/crm/erp/work/controller/RemindController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/linksame/crm/erp/work/controller/RemindController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/linksame/crm/erp/work/controller/WorkController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/linksame/crm/erp/work/controller/WorkController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/config/crm-config.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config/crm-config.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/upload/邻盛CRM-项目管理设计文档v1.2.doc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/config/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/config/index.js" afterDir="false" />
     </list>
     <list id="fed4f418-c6c4-4dec-8931-ab1c66a86fdf" name="No Commit" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -57,7 +56,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/webapp/static" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/template/admin" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -68,22 +67,22 @@
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="preferences.fileTypes" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.tabs" />
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.linksame.crm.erp.work.entity.base" />
+      <recent name="com.linksame.crm.erp.work.entity" />
+      <recent name="com.linksame.crm.erp.admin.entity" />
       <recent name="com.linksame.crm.common.minio.route" />
       <recent name="com.linksame.crm.erp.work.common" />
-      <recent name="com.linksame.crm.common.swagger" />
-      <recent name="com.linksame.crm.erp.work.controller" />
-      <recent name="com.linksame.crm.erp.work.entity.base" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\idea_workspace\crm\linksame-crm\src\main\webapp\static" />
       <recent name="D:\idea_workspace\crm\linksame-crm\src\main\resources\template\admin" />
+      <recent name="D:\idea_workspace\crm\linksame-crm" />
+      <recent name="D:\idea_workspace\crm\linksame-crm\src\main\webapp" />
+      <recent name="D:\idea_workspace\crm\linksame-crm\src\main\webapp\static" />
       <recent name="D:\idea_workspace\crm\linksame-crm\src\main\webapp\WEB-INF\view\swagger" />
-      <recent name="D:\idea_workspace\crm\linksame-crm\src\main\webapp\WEB-INF" />
-      <recent name="D:\idea_workspace\crm\linksame-crm\src\main\resources\template\work" />
     </key>
   </component>
   <component name="RunManager" selected="Application.Application">
@@ -195,7 +194,19 @@
       <workItem from="1586142632568" duration="25436000" />
       <workItem from="1586247790132" duration="71000" />
       <workItem from="1586309017064" duration="8923000" />
-      <workItem from="1586411015361" duration="1549000" />
+      <workItem from="1586411015361" duration="4478000" />
+      <workItem from="1586486241258" duration="7238000" />
+      <workItem from="1586570497205" duration="6067000" />
+      <workItem from="1586582890091" duration="6630000" />
+      <workItem from="1586596221537" duration="1349000" />
+      <workItem from="1586740687477" duration="11696000" />
+      <workItem from="1586836878006" duration="1459000" />
+      <workItem from="1586869656501" duration="2203000" />
+      <workItem from="1586916858039" duration="5643000" />
+      <workItem from="1587005633368" duration="9142000" />
+      <workItem from="1587024529179" duration="1147000" />
+      <workItem from="1587025867363" duration="9794000" />
+      <workItem from="1587087793235" duration="25190000" />
     </task>
     <task id="LOCAL-00001" summary="修改部署配置参数">
       <created>1585050621664</created>
@@ -302,7 +313,35 @@
       <option name="project" value="LOCAL" />
       <updated>1586313968335</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="附件业务整体修改">
+      <created>1586871658732</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1586871658732</updated>
+    </task>
+    <task id="LOCAL-00017" summary="附件网盘上传相关接口(后续根据需求会有部分调整)">
+      <created>1587024691745</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1587024691745</updated>
+    </task>
+    <task id="LOCAL-00018" summary="附件网盘文件夹业务">
+      <created>1587025164728</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1587025164728</updated>
+    </task>
+    <task id="LOCAL-00019" summary="1.任务依赖业务建模及功能编码&#10;2.通用标签功能设计及实现&#10;3.部分功能完善">
+      <created>1587117800551</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1587117800552</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -337,9 +376,17 @@
     <MESSAGE value="Minio文件存储服务集成" />
     <MESSAGE value="swagger 集成" />
     <MESSAGE value="添加swagger ui文件" />
-    <option name="LAST_COMMIT_MESSAGE" value="添加swagger ui文件" />
+    <MESSAGE value="附件业务整体修改" />
+    <MESSAGE value="附件网盘上传相关接口(后续根据需求会有部分调整)" />
+    <MESSAGE value="附件网盘文件夹业务" />
+    <MESSAGE value="1.任务依赖业务建模及功能编码&#10;2.通用标签功能设计及实现&#10;3.部分功能完善" />
+    <option name="LAST_COMMIT_MESSAGE" value="1.任务依赖业务建模及功能编码&#10;2.通用标签功能设计及实现&#10;3.部分功能完善" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="275" y="26" key="#Notifications" timestamp="1587117846681">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="275" y="26" key="#Notifications/0.0.1366.728@0.0.1366.728" timestamp="1587117846681" />
     <state x="275" y="26" key="#Project_Structure" timestamp="1586143291347">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -372,70 +419,74 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="413" y="114" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1366.728@0.0.1366.728" timestamp="1585628039236" />
-    <state x="261" y="0" key="CommitChangelistDialog2" timestamp="1586313965632">
+    <state x="261" y="0" key="CommitChangelistDialog2" timestamp="1587117798431">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="261" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1586313965632" />
-    <state width="888" height="466" key="DebuggerActiveHint" timestamp="1586168649570">
+    <state x="261" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1587117798431" />
+    <state width="888" height="466" key="DebuggerActiveHint" timestamp="1587116060053">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="888" height="466" key="DebuggerActiveHint/0.0.1366.728@0.0.1366.728" timestamp="1586168649570" />
-    <state x="129" y="61" width="1092" height="608" key="DiffContextDialog" timestamp="1586161262480">
+    <state width="888" height="466" key="DebuggerActiveHint/0.0.1366.728@0.0.1366.728" timestamp="1587116060053" />
+    <state x="129" y="61" width="1092" height="608" key="DiffContextDialog" timestamp="1586871632294">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="129" y="61" width="1092" height="608" key="DiffContextDialog/0.0.1366.728@0.0.1366.728" timestamp="1586161262480" />
-    <state x="463" y="122" key="FileChooserDialogImpl" timestamp="1585721848032">
+    <state x="129" y="61" width="1092" height="608" key="DiffContextDialog/0.0.1366.728@0.0.1366.728" timestamp="1586871632294" />
+    <state x="463" y="122" key="FileChooserDialogImpl" timestamp="1586595832625">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="463" y="122" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1585721848032" />
-    <state width="1323" height="204" key="GridCell.Tab.0.bottom" timestamp="1586340841507">
+    <state x="463" y="122" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1586595832625" />
+    <state width="1323" height="187" key="GridCell.Tab.0.bottom" timestamp="1587117604415">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="204" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1586340841507" />
-    <state width="1323" height="204" key="GridCell.Tab.0.center" timestamp="1586340841507">
+    <state width="1323" height="187" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1587117604415" />
+    <state width="1323" height="187" key="GridCell.Tab.0.center" timestamp="1587117604415">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="204" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1586340841507" />
-    <state width="1323" height="204" key="GridCell.Tab.0.left" timestamp="1586340841506">
+    <state width="1323" height="187" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1587117604415" />
+    <state width="1323" height="187" key="GridCell.Tab.0.left" timestamp="1587117604414">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="204" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1586340841506" />
-    <state width="1323" height="204" key="GridCell.Tab.0.right" timestamp="1586340841507">
+    <state width="1323" height="187" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1587117604414" />
+    <state width="1323" height="187" key="GridCell.Tab.0.right" timestamp="1587117604415">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="204" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1586340841507" />
-    <state width="1323" height="204" key="GridCell.Tab.1.bottom" timestamp="1586340841507">
+    <state width="1323" height="187" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1587117604415" />
+    <state width="1323" height="187" key="GridCell.Tab.1.bottom" timestamp="1587117604282">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="204" key="GridCell.Tab.1.bottom/0.0.1366.728@0.0.1366.728" timestamp="1586340841507" />
-    <state width="1323" height="204" key="GridCell.Tab.1.center" timestamp="1586340841507">
+    <state width="1323" height="187" key="GridCell.Tab.1.bottom/0.0.1366.728@0.0.1366.728" timestamp="1587117604282" />
+    <state width="1323" height="187" key="GridCell.Tab.1.center" timestamp="1587117604282">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="204" key="GridCell.Tab.1.center/0.0.1366.728@0.0.1366.728" timestamp="1586340841507" />
-    <state width="1323" height="204" key="GridCell.Tab.1.left" timestamp="1586340841507">
+    <state width="1323" height="187" key="GridCell.Tab.1.center/0.0.1366.728@0.0.1366.728" timestamp="1587117604282" />
+    <state width="1323" height="187" key="GridCell.Tab.1.left" timestamp="1587117604282">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="204" key="GridCell.Tab.1.left/0.0.1366.728@0.0.1366.728" timestamp="1586340841507" />
-    <state width="1323" height="204" key="GridCell.Tab.1.right" timestamp="1586340841507">
+    <state width="1323" height="187" key="GridCell.Tab.1.left/0.0.1366.728@0.0.1366.728" timestamp="1587117604282" />
+    <state width="1323" height="187" key="GridCell.Tab.1.right" timestamp="1587117604282">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="204" key="GridCell.Tab.1.right/0.0.1366.728@0.0.1366.728" timestamp="1586340841507" />
-    <state x="186" y="0" key="SettingsEditor" timestamp="1585884016207">
+    <state width="1323" height="187" key="GridCell.Tab.1.right/0.0.1366.728@0.0.1366.728" timestamp="1587117604282" />
+    <state x="451" y="77" key="RollbackChangesDialog" timestamp="1586584073734">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="186" y="0" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1585884016207" />
+    <state x="451" y="77" key="RollbackChangesDialog/0.0.1366.728@0.0.1366.728" timestamp="1586584073734" />
+    <state x="186" y="0" key="SettingsEditor" timestamp="1586838753267">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="186" y="0" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1586838753267" />
     <state x="513" y="236" key="VCS.EditChangelistDialog" timestamp="1585883736810">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="513" y="236" key="VCS.EditChangelistDialog/0.0.1366.728@0.0.1366.728" timestamp="1585883736810" />
-    <state x="275" y="100" key="Vcs.Push.Dialog.v2" timestamp="1586313987623">
+    <state x="275" y="100" key="Vcs.Push.Dialog.v2" timestamp="1587025170704">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="275" y="100" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1586313987623" />
-    <state width="691" height="372" key="XDebugger.FullValuePopup" timestamp="1585724540552">
+    <state x="275" y="100" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1587025170704" />
+    <state width="691" height="372" key="XDebugger.FullValuePopup" timestamp="1587098939458">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="691" height="372" key="XDebugger.FullValuePopup/0.0.1366.728@0.0.1366.728" timestamp="1585724540552" />
+    <state width="691" height="372" key="XDebugger.FullValuePopup/0.0.1366.728@0.0.1366.728" timestamp="1587098939458" />
     <state x="237" y="103" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2" timestamp="1585714726511">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -444,18 +495,18 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="413" y="124" key="extract.method.dialog/0.0.1366.728@0.0.1366.728" timestamp="1586168441940" />
-    <state x="326" y="180" width="759" height="548" key="find.popup" timestamp="1586166394097">
+    <state x="284" y="180" width="759" height="548" key="find.popup" timestamp="1587117158679">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="326" y="180" width="759" height="548" key="find.popup/0.0.1366.728@0.0.1366.728" timestamp="1586166394097" />
-    <state x="353" y="166" key="git4idea.merge.GitPullDialog" timestamp="1586313833103">
+    <state x="284" y="180" width="759" height="548" key="find.popup/0.0.1366.728@0.0.1366.728" timestamp="1587117158679" />
+    <state x="353" y="166" key="git4idea.merge.GitPullDialog" timestamp="1587117804874">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="353" y="166" key="git4idea.merge.GitPullDialog/0.0.1366.728@0.0.1366.728" timestamp="1586313833103" />
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1586139566106">
+    <state x="353" y="166" key="git4idea.merge.GitPullDialog/0.0.1366.728@0.0.1366.728" timestamp="1587117804874" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1587093102572">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1586139566106" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1587093102572" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
