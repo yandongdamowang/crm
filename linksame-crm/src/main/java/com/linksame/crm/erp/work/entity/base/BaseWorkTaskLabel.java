@@ -57,4 +57,11 @@ public abstract class BaseWorkTaskLabel<M extends BaseWorkTaskLabel<M>> extends 
 		return getStr("color");
 	}
 
+	public void setIsCommon(java.lang.Integer isCommon) {
+		set("is_common", isCommon);
+	}
+
+	public java.lang.Integer getIsCommon() {
+		return getInt("is_common");
+	}
 }

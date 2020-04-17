@@ -1,10 +1,176 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8c35b251-7014-4512-ba39-ae2ffefdf9b4" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/linksame/crm/erp/work/controller/RemindController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/linksame/crm/erp/work/controller/RemindController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/linksame/crm/erp/work/controller/WorkController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/linksame/crm/erp/work/controller/WorkController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/config/crm-config.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config/crm-config.txt" afterDir="false" />
+    <list default="true" id="8c35b251-7014-4512-ba39-ae2ffefdf9b4" name="Default Changelist" comment="1.任务依赖业务建模及功能编码&#10;2.通用标签功能设计及实现&#10;3.部分功能完善">
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/config/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/config/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/favicon.ico" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/favicon.ico" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/app.e69497e2.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/app.c5d7f776.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-0616.af4310d8.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-bbe6.4e51d1a3.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-0b41.bb32ceeb.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-5606.bb32ceeb.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-0cab.38b0b4ae.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-0dab.2bcd6ee9.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-7d8e.45decdc8.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-0de9.840de9bd.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-11a2.a85edb33.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-17ee.f9d37289.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-1273.ca1b6b90.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-1277.15113c3d.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-1492.9154baa3.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-e5b0.9154baa3.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-153d.4d49a3c8.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-1846.27fa334a.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-06c4.369c159d.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-1a3d.214aa6c8.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-e28e.19a23503.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-1a95.6637c9c6.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-2c67.031f34cf.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-1df0.741f4e7f.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-178f.741f4e7f.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-1e7f.7b8f0b66.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-2fa4.f79b1663.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-1f4c.0e514629.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-eaff.5a08e5bf.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-1fd0.8742ac94.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-204f.c6d61124.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-4fd0.a80adba3.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-2534.8b923914.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-2690.a27c71a3.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-28c7.0d5103b1.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-29df.4ed4ad2b.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-0a34.4ed4ad2b.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-2ba9.be11ac7b.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-6e07.ff9ac887.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-2c66.981b5a3d.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-95ee.5d3fd3d8.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-2e67.69a2b760.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-4024.69a2b760.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-2eff.df59b66e.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-1537.aad358d9.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-3043.33daf011.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-41da.a8653a94.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-3264.442ae64d.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-341c.f583c20b.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-326b.4eb8fae3.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-1f40.357874ce.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-3335.593e9f7f.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-3345.9a519c3c.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-5cac.53f261fb.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-39d8.6a59b902.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-d5d4.f8b431dd.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-3c07.20b91574.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-742b.341274b9.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-41ae.e2acb680.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-31b9.9422dcfe.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-47be.2de077d7.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-36a9.2de077d7.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-485b.7a2b6771.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-4c96.258a1086.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-582a.0b162727.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-4e00.a6fa9a6a.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-a961.d1c26804.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-50c8.53da97fa.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-1312.bfcded5b.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-530f.17ba3c6b.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-1d1d.8f77d9c4.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-5581.08bba248.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-e37e.96aacc87.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-5d08.2b2687a1.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-1c6c.2b2687a1.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-6964.3258fc6d.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-7dd1.51c992aa.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-6c9f.f7534008.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-dc4a.f7534008.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-6dc9.a250e126.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-6eaa.a2784ca0.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-6e42.b7c8a9a3.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-7127.a11fe5c4.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-09fa.ca6f9714.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-7525.8b6131b2.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-7fee.3ef48785.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-3a8a.3ef48785.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-7feee.3ef48785.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-3a8ac.3ef48785.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-7feee2.3ef48785.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-3a8ace.3ef48785.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-820d.1fe00a52.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-6c1d.cd0cced3.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-8341.0927fa45.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-1cdc.3cfda21d.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-85ae.7a038b60.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-3ada.2b1fd699.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-89fc.7ccd5053.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-6132.ee81a00f.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-8a74.eaa25ef4.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-4dd5.c50d1940.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-9ae4.ea9a634d.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-ab51.91972bc8.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-9f80.823981a5.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-8e26.2f27f126.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-a9d6.9b017f78.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-6374.9b017f78.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-ab9b.8248b552.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-d691.893f8493.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-ad3e.60d5f300.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-6db5.edcd608f.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-b03b.fa1f3471.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-13cf.a5a92cc5.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-c86c.60b0c119.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-6da3.eba7dc4d.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-c8b3.01b9c9b9.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-be4d.1b80c23e.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-cdf4.e9f69ced.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-f4ce.9224ebe9.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-d202.502c6ef0.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-7e97.eaf0b971.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-dc9c.4d1f1f77.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-dd48.f9bed6c2.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-4494.83a441da.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-dfa3.d718ac02.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-38ec.1d1e4855.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-ea75.b45581ff.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-f605.7cbc03c9.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-f97a.6f797622.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-fdfe.fcdf8a2e.css" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-0692.0f0ebf76.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/css/chunk-libs.9f4fab99.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/TJmh.f65f221e.js" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/fnnb.2a9e9de9.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/app.a5972b27.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-0616.bf32c70d.js" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-bbe6.6b5ef081.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-0b41.2aa39d96.js" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-5606.71bea445.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-0cab.7d48e62f.js" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-01cf.14a7aee2.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-0dab.a63b16ff.js" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-7d8e.bf546841.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-0de9.f095ab21.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-11a2.54a09241.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-1273.90152b40.js" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-67f4.9e39a2eb.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-1277.51719d08.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-1492.63fac3b4.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-153d.a8911a49.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-1846.a8d7a297.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-1a3d.7dd87f92.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-1a95.64d6e49e.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-1df0.b23b7a7a.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-1e7f.fd1c9d1c.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-1f4c.e3f75060.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-1fd0.936322b5.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-204f.d8e6e5ff.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-2534.2ec64407.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-2690.d6e60468.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-28c7.94605197.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-29df.a71f555a.js" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-0a34.b41ca1d7.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-2ba9.ca63cf8e.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-2c66.e6f9ff94.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-2e67.f1d903d3.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-2eff.625d5062.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-3043.b08dbfc9.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-3264.620d21fc.js" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-341c.b91f67e6.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-326b.1381b0a4.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-3335.416aba11.js" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-281c.037fa9e9.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-3345.4a683a05.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-39d8.a6f9ce60.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-3c07.63339e4c.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-41ae.626e8d48.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-47be.723cf19e.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-485b.7d75b96a.js" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-1779.313cb187.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-4c96.c3712a3c.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-4e00.5712ecef.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-50c8.f6fac757.js" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-1312.1dab8279.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-530f.f2afa7c5.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-5581.b146a31b.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-5d08.2b83c2ba.js" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-1c6c.4901b9f3.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-6964.7349ceec.js" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-7dd1.2d19f00f.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-6c9f.caa5ff7d.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-6dc9.8810c10b.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-6eaa.e9a6922e.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-7127.15f5ed76.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-7525.7d49fc38.js" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-7c7d.bee539e2.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-7fee.260f3a71.js" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-3a8a.c4d9dd9b.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-7feee.8c70d87c.js" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-3a8ac.cd486b18.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-7feee2.b2034f69.js" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-3a8ace.f7b623f6.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-820d.fc9c76a2.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-8341.fa28c7ea.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-85ae.afc9c7a1.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-89fc.d334fff2.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-8a74.d825600e.js" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-4dd5.06d53745.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-9ae4.d2c57bc7.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-9f80.35077498.js" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-8e26.248fc1fd.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-a9d6.a455a53e.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-ab9b.ee0c0fec.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-ad3e.b568c485.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-b03b.1fabd9ea.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-b9e8.8b48eda8.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-c86c.2eadc185.js" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-6da3.55b9bb00.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-c8b3.ca293d0e.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-cdf4.6e14972e.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-d19b.2c9184f2.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-d202.55c497ef.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-d8f4.88a397da.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-dc9c.82ecbc14.js" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-5c97.081179b8.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-dd48.e6396079.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-dfa3.fb0c050e.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-e93e.cf244957.js" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-d1ba.3ac79d25.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-ea75.c9562bf0.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-f97a.4da4a87d.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-fbe8.b972630b.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-fdfe.3f6c6052.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/dist/static/js/chunk-libs.069cc0d7.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/src/views/projectManagement/components/particulars.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/src/views/projectManagement/components/particulars.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/src/views/projectManagement/project/components/timeBoard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/src/views/projectManagement/project/components/timeBoard.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../linksame-crm-fe/src/views/projectManagement/task/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../linksame-crm-fe/src/views/projectManagement/task/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/linksame/crm/erp/pmp/controller/PmpContractController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/linksame/crm/erp/pmp/controller/PmpContractController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/linksame/crm/erp/pmp/controller/PmpContractPaymentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/linksame/crm/erp/pmp/controller/PmpContractPaymentController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/linksame/crm/erp/pmp/entity/base/BasePmpContract.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/linksame/crm/erp/pmp/entity/base/BasePmpContract.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/linksame/crm/erp/pmp/entity/base/BasePmpContractPayment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/linksame/crm/erp/pmp/entity/base/BasePmpContractPayment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/linksame/crm/erp/pmp/service/PmpContractPaymentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/linksame/crm/erp/pmp/service/PmpContractPaymentService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/linksame/crm/erp/pmp/service/PmpContractService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/linksame/crm/erp/pmp/service/PmpContractService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/template/pmp/contract.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/template/pmp/contract.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/template/pmp/contractPayment.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/template/pmp/contractPayment.sql" afterDir="false" />
     </list>
     <list id="fed4f418-c6c4-4dec-8931-ab1c66a86fdf" name="No Commit" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -57,7 +223,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/webapp/static" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/template/admin" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -68,22 +234,22 @@
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="preferences.fileTypes" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.tabs" />
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.linksame.crm.erp.work.entity.base" />
+      <recent name="com.linksame.crm.erp.work.entity" />
+      <recent name="com.linksame.crm.erp.admin.entity" />
       <recent name="com.linksame.crm.common.minio.route" />
       <recent name="com.linksame.crm.erp.work.common" />
-      <recent name="com.linksame.crm.common.swagger" />
-      <recent name="com.linksame.crm.erp.work.controller" />
-      <recent name="com.linksame.crm.erp.work.entity.base" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\idea_workspace\crm\linksame-crm\src\main\webapp\static" />
       <recent name="D:\idea_workspace\crm\linksame-crm\src\main\resources\template\admin" />
+      <recent name="D:\idea_workspace\crm\linksame-crm" />
+      <recent name="D:\idea_workspace\crm\linksame-crm\src\main\webapp" />
+      <recent name="D:\idea_workspace\crm\linksame-crm\src\main\webapp\static" />
       <recent name="D:\idea_workspace\crm\linksame-crm\src\main\webapp\WEB-INF\view\swagger" />
-      <recent name="D:\idea_workspace\crm\linksame-crm\src\main\webapp\WEB-INF" />
-      <recent name="D:\idea_workspace\crm\linksame-crm\src\main\resources\template\work" />
     </key>
   </component>
   <component name="RunManager" selected="Application.Application">
@@ -195,7 +361,19 @@
       <workItem from="1586142632568" duration="25436000" />
       <workItem from="1586247790132" duration="71000" />
       <workItem from="1586309017064" duration="8923000" />
-      <workItem from="1586411015361" duration="1549000" />
+      <workItem from="1586411015361" duration="4478000" />
+      <workItem from="1586486241258" duration="7238000" />
+      <workItem from="1586570497205" duration="6067000" />
+      <workItem from="1586582890091" duration="6630000" />
+      <workItem from="1586596221537" duration="1349000" />
+      <workItem from="1586740687477" duration="11696000" />
+      <workItem from="1586836878006" duration="1459000" />
+      <workItem from="1586869656501" duration="2203000" />
+      <workItem from="1586916858039" duration="5643000" />
+      <workItem from="1587005633368" duration="9142000" />
+      <workItem from="1587024529179" duration="1147000" />
+      <workItem from="1587025867363" duration="9794000" />
+      <workItem from="1587087793235" duration="25720000" />
     </task>
     <task id="LOCAL-00001" summary="修改部署配置参数">
       <created>1585050621664</created>
@@ -302,7 +480,35 @@
       <option name="project" value="LOCAL" />
       <updated>1586313968335</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="附件业务整体修改">
+      <created>1586871658732</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1586871658732</updated>
+    </task>
+    <task id="LOCAL-00017" summary="附件网盘上传相关接口(后续根据需求会有部分调整)">
+      <created>1587024691745</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1587024691745</updated>
+    </task>
+    <task id="LOCAL-00018" summary="附件网盘文件夹业务">
+      <created>1587025164728</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1587025164728</updated>
+    </task>
+    <task id="LOCAL-00019" summary="1.任务依赖业务建模及功能编码&#10;2.通用标签功能设计及实现&#10;3.部分功能完善">
+      <created>1587117800551</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1587117800552</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -337,9 +543,17 @@
     <MESSAGE value="Minio文件存储服务集成" />
     <MESSAGE value="swagger 集成" />
     <MESSAGE value="添加swagger ui文件" />
-    <option name="LAST_COMMIT_MESSAGE" value="添加swagger ui文件" />
+    <MESSAGE value="附件业务整体修改" />
+    <MESSAGE value="附件网盘上传相关接口(后续根据需求会有部分调整)" />
+    <MESSAGE value="附件网盘文件夹业务" />
+    <MESSAGE value="1.任务依赖业务建模及功能编码&#10;2.通用标签功能设计及实现&#10;3.部分功能完善" />
+    <option name="LAST_COMMIT_MESSAGE" value="1.任务依赖业务建模及功能编码&#10;2.通用标签功能设计及实现&#10;3.部分功能完善" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="275" y="26" key="#Notifications" timestamp="1587117846681">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="275" y="26" key="#Notifications/0.0.1366.728@0.0.1366.728" timestamp="1587117846681" />
     <state x="275" y="26" key="#Project_Structure" timestamp="1586143291347">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -372,70 +586,74 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="413" y="114" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1366.728@0.0.1366.728" timestamp="1585628039236" />
-    <state x="261" y="0" key="CommitChangelistDialog2" timestamp="1586313965632">
+    <state x="261" y="0" key="CommitChangelistDialog2" timestamp="1587117886908">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="261" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1586313965632" />
-    <state width="888" height="466" key="DebuggerActiveHint" timestamp="1586168649570">
+    <state x="261" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1587117886908" />
+    <state width="888" height="466" key="DebuggerActiveHint" timestamp="1587116060053">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="888" height="466" key="DebuggerActiveHint/0.0.1366.728@0.0.1366.728" timestamp="1586168649570" />
-    <state x="129" y="61" width="1092" height="608" key="DiffContextDialog" timestamp="1586161262480">
+    <state width="888" height="466" key="DebuggerActiveHint/0.0.1366.728@0.0.1366.728" timestamp="1587116060053" />
+    <state x="129" y="61" width="1092" height="608" key="DiffContextDialog" timestamp="1586871632294">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="129" y="61" width="1092" height="608" key="DiffContextDialog/0.0.1366.728@0.0.1366.728" timestamp="1586161262480" />
-    <state x="463" y="122" key="FileChooserDialogImpl" timestamp="1585721848032">
+    <state x="129" y="61" width="1092" height="608" key="DiffContextDialog/0.0.1366.728@0.0.1366.728" timestamp="1586871632294" />
+    <state x="463" y="122" key="FileChooserDialogImpl" timestamp="1586595832625">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="463" y="122" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1585721848032" />
-    <state width="1323" height="204" key="GridCell.Tab.0.bottom" timestamp="1586340841507">
+    <state x="463" y="122" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1586595832625" />
+    <state width="1323" height="181" key="GridCell.Tab.0.bottom" timestamp="1587118250337">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="204" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1586340841507" />
-    <state width="1323" height="204" key="GridCell.Tab.0.center" timestamp="1586340841507">
+    <state width="1323" height="181" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1587118250337" />
+    <state width="1323" height="181" key="GridCell.Tab.0.center" timestamp="1587118250337">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="204" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1586340841507" />
-    <state width="1323" height="204" key="GridCell.Tab.0.left" timestamp="1586340841506">
+    <state width="1323" height="181" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1587118250337" />
+    <state width="1323" height="181" key="GridCell.Tab.0.left" timestamp="1587118250337">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="204" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1586340841506" />
-    <state width="1323" height="204" key="GridCell.Tab.0.right" timestamp="1586340841507">
+    <state width="1323" height="181" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1587118250337" />
+    <state width="1323" height="181" key="GridCell.Tab.0.right" timestamp="1587118250337">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="204" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1586340841507" />
-    <state width="1323" height="204" key="GridCell.Tab.1.bottom" timestamp="1586340841507">
+    <state width="1323" height="181" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1587118250337" />
+    <state width="1323" height="181" key="GridCell.Tab.1.bottom" timestamp="1587118250338">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="204" key="GridCell.Tab.1.bottom/0.0.1366.728@0.0.1366.728" timestamp="1586340841507" />
-    <state width="1323" height="204" key="GridCell.Tab.1.center" timestamp="1586340841507">
+    <state width="1323" height="181" key="GridCell.Tab.1.bottom/0.0.1366.728@0.0.1366.728" timestamp="1587118250338" />
+    <state width="1323" height="181" key="GridCell.Tab.1.center" timestamp="1587118250337">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="204" key="GridCell.Tab.1.center/0.0.1366.728@0.0.1366.728" timestamp="1586340841507" />
-    <state width="1323" height="204" key="GridCell.Tab.1.left" timestamp="1586340841507">
+    <state width="1323" height="181" key="GridCell.Tab.1.center/0.0.1366.728@0.0.1366.728" timestamp="1587118250337" />
+    <state width="1323" height="181" key="GridCell.Tab.1.left" timestamp="1587118250337">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="204" key="GridCell.Tab.1.left/0.0.1366.728@0.0.1366.728" timestamp="1586340841507" />
-    <state width="1323" height="204" key="GridCell.Tab.1.right" timestamp="1586340841507">
+    <state width="1323" height="181" key="GridCell.Tab.1.left/0.0.1366.728@0.0.1366.728" timestamp="1587118250337" />
+    <state width="1323" height="181" key="GridCell.Tab.1.right" timestamp="1587118250337">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="204" key="GridCell.Tab.1.right/0.0.1366.728@0.0.1366.728" timestamp="1586340841507" />
-    <state x="186" y="0" key="SettingsEditor" timestamp="1585884016207">
+    <state width="1323" height="181" key="GridCell.Tab.1.right/0.0.1366.728@0.0.1366.728" timestamp="1587118250337" />
+    <state x="451" y="77" key="RollbackChangesDialog" timestamp="1586584073734">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="186" y="0" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1585884016207" />
+    <state x="451" y="77" key="RollbackChangesDialog/0.0.1366.728@0.0.1366.728" timestamp="1586584073734" />
+    <state x="186" y="0" key="SettingsEditor" timestamp="1586838753267">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="186" y="0" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1586838753267" />
     <state x="513" y="236" key="VCS.EditChangelistDialog" timestamp="1585883736810">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="513" y="236" key="VCS.EditChangelistDialog/0.0.1366.728@0.0.1366.728" timestamp="1585883736810" />
-    <state x="275" y="100" key="Vcs.Push.Dialog.v2" timestamp="1586313987623">
+    <state x="275" y="100" key="Vcs.Push.Dialog.v2" timestamp="1587025170704">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="275" y="100" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1586313987623" />
-    <state width="691" height="372" key="XDebugger.FullValuePopup" timestamp="1585724540552">
+    <state x="275" y="100" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1587025170704" />
+    <state width="691" height="372" key="XDebugger.FullValuePopup" timestamp="1587098939458">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="691" height="372" key="XDebugger.FullValuePopup/0.0.1366.728@0.0.1366.728" timestamp="1585724540552" />
+    <state width="691" height="372" key="XDebugger.FullValuePopup/0.0.1366.728@0.0.1366.728" timestamp="1587098939458" />
     <state x="237" y="103" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2" timestamp="1585714726511">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -444,18 +662,18 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="413" y="124" key="extract.method.dialog/0.0.1366.728@0.0.1366.728" timestamp="1586168441940" />
-    <state x="326" y="180" width="759" height="548" key="find.popup" timestamp="1586166394097">
+    <state x="284" y="180" width="759" height="548" key="find.popup" timestamp="1587117158679">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="326" y="180" width="759" height="548" key="find.popup/0.0.1366.728@0.0.1366.728" timestamp="1586166394097" />
-    <state x="353" y="166" key="git4idea.merge.GitPullDialog" timestamp="1586313833103">
+    <state x="284" y="180" width="759" height="548" key="find.popup/0.0.1366.728@0.0.1366.728" timestamp="1587117158679" />
+    <state x="353" y="166" key="git4idea.merge.GitPullDialog" timestamp="1587118604644">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="353" y="166" key="git4idea.merge.GitPullDialog/0.0.1366.728@0.0.1366.728" timestamp="1586313833103" />
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1586139566106">
+    <state x="353" y="166" key="git4idea.merge.GitPullDialog/0.0.1366.728@0.0.1366.728" timestamp="1587118604644" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1587093102572">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1586139566106" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1587093102572" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -100,4 +100,7 @@
       #end
       order by a.create_time desc
   #end
+  #sql("queryTaskByName")
+    select * from task where name like concat('%', #para(taskName),'%') and ishidden = 0
+  #end
 #end

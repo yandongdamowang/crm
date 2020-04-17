@@ -18,24 +18,16 @@ public class AdminFileController extends Controller {
     @Inject
     private AdminFileService adminFileService;
 
-    /*public void index(){
-        renderJson(R.ok());
-    }*/
-
     /**
      * 附件分页列表
      * @param basePageRequest   分页对象
      */
     @ApiOperation(methods= RequestMethod.POST, description="附件分页列表")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="basePageRequest", description="分页对象"),
-            @ApiImplicitParam(name="batchId", description="批次ID"),
-            @ApiImplicitParam(name="oldName", description="文件原始名称")
+            @ApiImplicitParam(name="basePageRequest", description="条件构造对象")
     })
-    public void getFilePage(BasePageRequest basePageRequest){
-        String batchId = getPara("batchId");
-        String oldName = getPara("oldName");
-        renderJson(adminFileService.getFilePage(basePageRequest, batchId, oldName));
+    public void getFileList(BasePageRequest<AdminFile> basePageRequest){
+        renderJson(adminFileService.getFileList(basePageRequest));
     }
 
     /**
@@ -127,12 +119,9 @@ public class AdminFileController extends Controller {
     /**
      * 查询用户网盘附件(通过用户编号查询附件)
      */
-    @ApiOperation(methods= RequestMethod.POST, description="查询用户网盘附件(通过用户编号查询附件)")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name="createUserId", description="创建用户ID")
-    })
+    @ApiOperation(methods= RequestMethod.POST, description="查询用户网盘附件(当前用户)")
     public void queryByUserId(){
-        renderJson(adminFileService.queryByUserId(getInt("createUserId")));
+        renderJson(adminFileService.queryByUserId());
     }
 
     /**

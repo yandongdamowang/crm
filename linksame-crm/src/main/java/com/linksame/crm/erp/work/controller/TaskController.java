@@ -4,6 +4,8 @@ import cn.hutool.core.util.StrUtil;
 import com.jfinal.aop.Inject;
 import com.jfinal.core.Controller;
 import com.jfinal.core.paragetter.Para;
+import com.jfinal.kit.Kv;
+import com.jfinal.plugin.activerecord.Db;
 import com.linksame.crm.common.config.paragetter.BasePageRequest;
 import com.linksame.crm.common.constant.BaseConstant;
 import com.linksame.crm.erp.admin.service.AdminUserService;
@@ -22,12 +24,13 @@ import live.autu.plugin.jfinal.swagger.annotation.ApiImplicitParam;
 import live.autu.plugin.jfinal.swagger.annotation.ApiImplicitParams;
 import live.autu.plugin.jfinal.swagger.annotation.ApiOperation;
 import live.autu.plugin.jfinal.swagger.config.RequestMethod;
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author hmb
+ * @author Ivan
+ * @date 2020/4/12 14:32
+ * @Description 任务控制层
  */
 @Api(description="任务接口管理")
 public class TaskController extends Controller{
@@ -39,8 +42,6 @@ public class TaskController extends Controller{
 
     /**
      * @param taskClass 设置任务分类
-     * @author hmb
-     * 设置任务类别
      */
     @ApiOperation(methods= RequestMethod.POST, description="设置任务分类")
     @ApiImplicitParams({
@@ -51,7 +52,6 @@ public class TaskController extends Controller{
     }
 
     /**
-     * @author hmb
      * 交换任务列表排序
      */
     @ApiOperation(methods= RequestMethod.POST, description="交换任务列表排序")
@@ -68,8 +68,6 @@ public class TaskController extends Controller{
 
     /**
      * @param task 设置任务
-     * @author hmb
-     * 设置oa任务
      */
     @ApiOperation(methods= RequestMethod.POST, description="设置任务")
     @ApiImplicitParams({
@@ -119,7 +117,6 @@ public class TaskController extends Controller{
 
 
     /**
-     * @author hmb
      * 查询任务列表
      */
     @ApiOperation(methods= RequestMethod.POST, description="查询任务列表")
@@ -135,7 +132,6 @@ public class TaskController extends Controller{
 
 
     /**
-     * @author hmb
      * 查询oa任务信息
      */
     @ApiOperation(methods= RequestMethod.POST, description="查询oa任务信息")
@@ -181,7 +177,6 @@ public class TaskController extends Controller{
     }
 
     /**
-     * @author zxy
      * 根据任务id查询活动日志 oa
      * taskId 任务id
      */
@@ -200,7 +195,6 @@ public class TaskController extends Controller{
     }
 
     /**
-     * @author zxy
      * 添加任务与业务关联
      */
     @ApiOperation(methods= RequestMethod.POST, description="添加任务与业务关联")
@@ -212,7 +206,6 @@ public class TaskController extends Controller{
     }
 
     /**
-     * @author hmb
      * 删除任务
      * taskId 任务id
      */
@@ -226,7 +219,6 @@ public class TaskController extends Controller{
     }
 
     /**
-     * @author wyq
      * crm查询关联任务
      */
     @ApiOperation(methods= RequestMethod.POST, description="查询关联任务列表")
@@ -235,9 +227,7 @@ public class TaskController extends Controller{
     }
 
     /**
-     * @author hmb
      * 根据任务id归档任务
-     *
      * @param taskId 任务ID
      */
     @ApiOperation(methods= RequestMethod.POST, description="根据任务id归档任务")
@@ -246,5 +236,16 @@ public class TaskController extends Controller{
     })
     public void archiveByTaskId(@Para("taskId") Integer taskId){
         renderJson(taskService.archiveByTaskId(taskId));
+    }
+
+    /**
+     * 根据任务名称模糊搜索任务列表
+     */
+    @ApiOperation(methods= RequestMethod.POST, description="根据任务名称模糊搜索任务列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="basePageRequest", description="请求对象")
+    })
+    public void queryTaskByName(BasePageRequest basePageRequest){
+        renderJson(taskService.queryTaskByName(basePageRequest));
     }
 }

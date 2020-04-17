@@ -12,6 +12,7 @@ public class WorkRouter extends Routes {
         add("/taskLabel", LabelController.class);
         add("/workbench", WorkbenchController.class);
         add("/workTrash", TrashController.class);
-        add("/workRemind", RemindController.class);
+        add("/taskRemind", RemindController.class);
+        add("/taskRely", RelyController.class);
     }
 }
