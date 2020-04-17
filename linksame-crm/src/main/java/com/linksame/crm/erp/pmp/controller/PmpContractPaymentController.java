@@ -13,7 +13,7 @@ import java.util.List;
  * @author ZhangJie
  * @ClassName PmpContractPaymentController
  * @date2020/3/28 18:46
- * @Description TODO
+ * @Description 预付款
  **/
 public class PmpContractPaymentController extends Controller {
     @Inject
@@ -23,7 +23,7 @@ public class PmpContractPaymentController extends Controller {
     /**
      * 更新账单
      */
-    public void update(){
+    public void updates(){
         String[] billIds = getParaValues("billId");
         List<PmpContractPayment> pmpContractPayments = new ArrayList<>();
         for (int i = 0 ; i <billIds.length ; i++){

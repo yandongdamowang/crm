@@ -89,7 +89,7 @@ public class PmpContractPaymentService {
         }) ? R.ok(): R.error();
     }
 
-    public R queryAdvanceList(BasePageRequest<PmpContractPayment> basePageRequest) {
+    public R queryAdvanceList(BasePageRequest basePageRequest) {
         JSONObject jsonObject = basePageRequest.getJsonObject();
         Kv kv = Kv.by("paymentNumber", jsonObject.getString("contractNumber"))
                 .set("supplierId", jsonObject.getLong("supplierId"))
@@ -98,7 +98,7 @@ public class PmpContractPaymentService {
             List<Record> records = Db.find(Db.getSqlPara("pmp.contractPayment.queryAdvanceList", kv));
             return R.ok().put("data",records);
         }else {
-            Page<Record> paginate = Db.paginate(basePageRequest.getPage(), basePageRequest.getLimit(), Db.getSqlPara("pmp.contract.queryAdvanceList", kv));
+            Page<Record> paginate = Db.paginate(basePageRequest.getPage(), basePageRequest.getLimit(), Db.getSqlPara("pmp.contractPayment.queryAdvanceList", kv));
             return R.ok().put("data", paginate);
         }
     }
