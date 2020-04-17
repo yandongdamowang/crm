@@ -76,7 +76,11 @@ public class PmpContractPaymentService {
                                 "and pcp.status = '1' " +
                                 "and pcp.trade_form = "+PmpInterface.contractPayment.trade.form.EXPENF+" " +
                                 "and pcp.trade_status = "+PmpInterface.contractPayment.trade.stats.TRADING, contractPayment.getContractId()).forEach(contractPayment1 -> {
-                    if (contractPayment.getPaymentStage().equals(contractPayment1.getPaymentStage()) || (contractPayment.getPaymentStage()+1) == contractPayment1.getPaymentStage()){
+                    Integer paymentStage1 = contractPayment.getPaymentStage();
+                    Integer paymentStage = contractPayment1.getPaymentStage();
+                    boolean equals = paymentStage1.equals(paymentStage);
+                    boolean b = (paymentStage1 + 1) == paymentStage;
+                    if (equals || b){
                         //修改后的
                         contractPayment1.setCostPercentage(contractPayment.getCostPercentage());
                         contractPayment1.setMoney(contractPayment.getMoney());
@@ -103,9 +107,17 @@ public class PmpContractPaymentService {
         }
     }
 
-    public R queryAdvanceBybillId(String billId) {
+    public R queryAdvanceBybillId(Long billId) {
         Kv kv = Kv.by("billId", billId);
         Record first = Db.findFirst(Db.getSqlPara("pmp.contractPayment.queryAdvanceList", kv));
         return R.ok().put("data", first);
+    }
+
+    public R setPriority(long billId, String priority) {
+        PmpContractPayment contractPayment = new PmpContractPayment();
+        contractPayment.setBillId(billId);
+        contractPayment.setPriority(priority);
+        boolean update = contractPayment.update();
+        return update? R.ok() : R.error();
     }
 }

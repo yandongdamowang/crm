@@ -3,6 +3,8 @@ package com.linksame.crm.erp.pmp.entity.base;
 import com.jfinal.plugin.activerecord.IBean;
 import com.jfinal.plugin.activerecord.Model;
 
+import java.time.LocalDate;
+
 /**
  * @author ZhangJie
  * @ClassName BasePmpContract
@@ -172,19 +174,19 @@ public abstract class BasePmpContract<M extends BasePmpContract<M>> extends Mode
         return get("money");
     }
 
-    public void setContractPurchaseStartTime(java.util.Date contractPurchaseStartTime) {
+    public void setContractPurchaseStartTime(LocalDate contractPurchaseStartTime) {
         set("contract_purchase_start_time", contractPurchaseStartTime);
     }
 
-    public java.util.Date getContractPurchaseStartTime() {
+    public LocalDate getContractPurchaseStartTime() {
         return get("contract_purchase_start_time");
     }
 
-    public void setContractPurchaseEndTime(java.util.Date contractPurchaseEndTime) {
+    public void setContractPurchaseEndTime(LocalDate contractPurchaseEndTime) {
         set("contract_purchase_end_time", contractPurchaseEndTime);
     }
 
-    public java.util.Date getContractPurchaseEndTime() {
+    public LocalDate getContractPurchaseEndTime() {
         return get("contract_purchase_end_time");
     }
 
