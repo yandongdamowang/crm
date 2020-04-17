@@ -7,10 +7,13 @@ import com.jfinal.core.Controller;
 import com.jfinal.core.paragetter.Para;
 import com.linksame.crm.common.config.paragetter.BasePageRequest;
 import com.linksame.crm.erp.pmp.entity.PmpContract;
+import com.linksame.crm.erp.pmp.entity.PmpContractPayment;
 import com.linksame.crm.erp.pmp.service.PmpContractService;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author ZhangJie
@@ -26,10 +29,27 @@ public class PmpContractController extends Controller {
 
     /**
      *
-     * @param pmpContract 新增合同
+     *  新增合同
      */
-    public void add(@Para("") PmpContract pmpContract){
+    public void add(){
+        String data = getRawData();
+        PmpContract pmpContract = JSON.parseObject(data,PmpContract.class);
+        JSONObject jsonObject1 = JSON.parseObject(data);
+        List<PmpContractPayment> pmpContractPayments = new ArrayList<>();
+        List pmpContractPayments1 = jsonObject1.getObject("pmpContractPayments", List.class);
+        for (Object o : pmpContractPayments1) {
+            pmpContractPayments.add(JSON.parseObject(o.toString(),PmpContractPayment.class));
+        }
+        pmpContract.setPmpContractPayment(pmpContractPayments);
         renderJson(pmpContractService.add(pmpContract));
+    }
+
+    /**
+     *
+     * @param contractIds 合同IDs
+     */
+    public void delete(@Para("contractIds")String contractIds){
+        renderJson(pmpContractService.delete(contractIds));
     }
 
     /**

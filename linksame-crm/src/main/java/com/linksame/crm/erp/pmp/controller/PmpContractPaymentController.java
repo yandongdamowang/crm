@@ -1,7 +1,10 @@
 package com.linksame.crm.erp.pmp.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.jfinal.aop.Inject;
 import com.jfinal.core.Controller;
+import com.jfinal.core.paragetter.Para;
 import com.linksame.crm.common.config.paragetter.BasePageRequest;
 import com.linksame.crm.erp.pmp.entity.PmpContractPayment;
 import com.linksame.crm.erp.pmp.service.PmpContractPaymentService;
@@ -13,7 +16,7 @@ import java.util.List;
  * @author ZhangJie
  * @ClassName PmpContractPaymentController
  * @date2020/3/28 18:46
- * @Description TODO
+ * @Description 预付款
  **/
 public class PmpContractPaymentController extends Controller {
     @Inject
@@ -23,12 +26,13 @@ public class PmpContractPaymentController extends Controller {
     /**
      * 更新账单
      */
-    public void update(){
-        String[] billIds = getParaValues("billId");
+    public void updates(){
+        String data = getRawData();
+        JSONObject jsonObject1 = JSON.parseObject(data);
+        List bills = jsonObject1.getObject("pmpContractPayments", List.class);
         List<PmpContractPayment> pmpContractPayments = new ArrayList<>();
-        for (int i = 0 ; i <billIds.length ; i++){
-            PmpContractPayment model = getModel(PmpContractPayment.class, "PmpContractPayment[" + i + "]");
-            pmpContractPayments.add(model);
+        for (int i = 0 ; i <bills.size() ; i++){
+            pmpContractPayments.add(JSON.parseObject(bills.get(i).toString(),PmpContractPayment.class));
         }
         renderJson(pmpContractPaymentService.updatePaymentBill(pmpContractPayments));
 
@@ -70,8 +74,14 @@ public class PmpContractPaymentController extends Controller {
      *
      *  根据ID查询预付款详情
      */
-    public void queryAdvanceBybillId(){
-        String billId = getPara("billId");
+    public void queryAdvanceBybillId(@Para("billId")Long billId){
         renderJson(pmpContractPaymentService.queryAdvanceBybillId(billId));
+    }
+    /**
+     *
+     *  设置优先级
+     */
+    public void setPriority(@Para("billId")Long billId, @Para("priority")String priority){
+        renderJson(pmpContractPaymentService.setPriority(billId,priority));
     }
 }

@@ -7,15 +7,18 @@
       <div
         v-loading="loading"
         v-scrollx="{ ignoreClass :['ignoreClass']}"
-        class="content-box">
+        class="content-box"
+      >
         <div
           v-for="(item, index) in taskList"
           :key="index"
-          class="board-column">
+          class="board-column"
+        >
           <flexbox
             orient="vertical"
             align="stretch"
-            class="board-column-wrapper ignoreClass">
+            class="board-column-wrapper ignoreClass"
+          >
             <div class="board-column-header">
               <div>
                 <span class="text"> {{ item.title }} </span>
@@ -23,29 +26,35 @@
               </div>
               <el-progress
                 v-if="item.checkedNum == 0"
-                :percentage="0"/>
+                :percentage="0"
+              />
               <el-progress
                 v-else
-                :percentage="item.checkedNum / item.list.length * 100"/>
+                :percentage="item.checkedNum / item.list.length * 100"
+              />
             </div>
             <draggable
               :list="item.list"
               :options="{ group: 'mission', forceFallback: false, dragClass: 'sortable-drag' }"
               :id="index"
               class="board-column-content"
-              @end="moveEndTask">
+              @end="moveEndTask"
+            >
+
               <div
                 v-for="(element, i) in item.list"
                 ref="taskRow"
                 :key="i"
                 :class="element.checked ? 'board-item board-item-active' : 'board-item'"
                 :style="{'border-color': element.priority == 1 ? '#8bb5f0' : element.priority == 2 ? '#FF9668' : element.priority == 3 ? '#ED6363' : ''}"
-                @click="showDetailView(element, index, i)">
+                @click="showDetailView(element, index, i)"
+              >
                 <flexbox align="stretch">
                   <div @click.stop>
                     <el-checkbox
                       v-model="element.checked"
-                      @change="checkboxChange(element, item)"/>
+                      @change="checkboxChange(element, item)"
+                    />
                   </div>
                   <div class="element-label">{{ element.name }}<span v-if="element.workName">（{{ element.workName }}）</span></div>
                   <div
@@ -53,33 +62,39 @@
                     v-lazy:background-image="$options.filters.filterUserLazyImg(element.mainUser.img)"
                     v-if="element.mainUser"
                     :key="element.mainUser.img"
-                    class="head-png div-photo"/>
+                    class="head-png div-photo"
+                  />
                 </flexbox>
                 <div class="img-group">
                   <div
                     v-if="element.stopTime"
-                    class="img-box">
+                    class="img-box"
+                  >
                     <i
                       :style="{'color': element.isEnd == 1 && !element.checked ? 'red': '#999'}"
-                      class="wukong wukong-time-task"/>
+                      class="wukong wukong-time-task"
+                    />
                     <span :style="{'color': element.isEnd == 1 && !element.checked ? 'red': '#999'}">{{ new Date(element.stopTime).getTime() | filterTimestampToFormatTime('MM-DD') }} 截止</span>
                   </div>
                   <div
                     v-if="element.childAllCount > 0"
-                    class="img-box">
-                    <i class="wukong wukong-sub-task"/>
+                    class="img-box"
+                  >
+                    <i class="wukong wukong-sub-task" />
                     <span>{{ element.childWCCount }}/{{ element.childAllCount }}</span>
                   </div>
                   <div
                     v-if="element.fileCount"
-                    class="img-box">
-                    <i class="wukong wukong-file"/>
+                    class="img-box"
+                  >
+                    <i class="wukong wukong-file" />
                     <span>{{ element.fileCount }}</span>
                   </div>
                   <div
                     v-if="element.commentCount"
-                    class="img-box">
-                    <i class="wukong wukong-comment-task"/>
+                    class="img-box"
+                  >
+                    <i class="wukong wukong-comment-task" />
                     <span>{{ element.commentCount }}</span>
                   </div>
 
@@ -88,33 +103,40 @@
                       v-for="(k, j) in element.labelList"
                       :key="j"
                       :style="{'background': k.color}"
-                      class="item-label">
+                      class="item-label"
+                    >
                       {{ k.labelName }}
                     </div>
                   </template>
                   <template v-else>
                     <div
                       :style="{'background': element.labelList[0].color}"
-                      class="item-label">{{ element.labelList[0].labelName }}</div>
+                      class="item-label"
+                    >{{ element.labelList[0].labelName }}</div>
                     <div
                       :style="{'background': element.labelList[1].color}"
-                      class="item-label">{{ element.labelList[1].labelName }}</div>
+                      class="item-label"
+                    >{{ element.labelList[1].labelName }}</div>
                     <el-tooltip
                       placement="top"
                       effect="light"
-                      popper-class="tooltip-change-border task-tooltip">
+                      popper-class="tooltip-change-border task-tooltip"
+                    >
                       <div
                         slot="content"
-                        style="margin: 10px 10px 10px 0;">
+                        style="margin: 10px 10px 10px 0;"
+                      >
                         <div
                           v-for="(k, j) in element.labelList"
                           :key="j"
-                          style="display: inline-block; margin-right: 10px;">
+                          style="display: inline-block; margin-right: 10px;"
+                        >
                           <span
                             v-if="j >= 2"
                             :style="{'background': k.color ? k.color: '#ccc'}"
                             class="k-name"
-                            style="border-radius: 3px; color: #FFF; padding: 3px 10px;">{{ k.labelName }}</span>
+                            style="border-radius: 3px; color: #FFF; padding: 3px 10px;"
+                          >{{ k.labelName }}</span>
                         </div>
                       </div>
                       <div class="color-label-more">
@@ -128,8 +150,9 @@
             </draggable>
             <div
               class="new-task"
-              @click="createTaskByTop(item.isTop)">
-              <span class="el-icon-plus"/>
+              @click="createTaskByTop(item.isTop)"
+            >
+              <span class="el-icon-plus" />
               <span>新建任务</span>
             </div>
           </flexbox>
@@ -141,7 +164,8 @@
       :visible="taskCreateShow"
       :params="{isTop: topId}"
       @handleClose="handleClose"
-      @submit="getList"/>
+      @submit="getList"
+    />
     <!-- 详情 -->
     <particulars
       v-if="taskDetailShow"
@@ -150,7 +174,8 @@
       :detail-index="detailIndex"
       :detail-section="detailSection"
       @on-handle="detailHandle"
-      @close="closeBtn"/>
+      @close="closeBtn"
+    />
   </div>
 </template>
 <script>
@@ -277,8 +302,8 @@ export default {
           }
         }
         workTaskUpdateTopAPI(params)
-          .then(res => {})
-          .catch(() => {})
+          .then(res => { })
+          .catch(() => { })
       }
     },
 
@@ -305,7 +330,7 @@ export default {
         taskId: element.taskId,
         status: element.checked ? 5 : 1
       })
-        .then(res => {})
+        .then(res => { })
         .catch(() => {
           if (element.checked) {
             value.checkedNum--

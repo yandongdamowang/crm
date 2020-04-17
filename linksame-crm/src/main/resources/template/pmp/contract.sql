@@ -70,4 +70,8 @@
          pc.end_time between DATE_FORMAT(#para(startTime), '%Y-%m-%d') and DATE_FORMAT(#para(endTime), '%Y-%m-%d')
 
     #end
+
+    #sql("deleteByIds")
+      delete from pmp_contract where contract_id = ?
+    #end
 #end

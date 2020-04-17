@@ -12,7 +12,7 @@
     #end
 
     #sql("queryList")
-        select pcp.*,pc.contract_id,pc.contract_name,pc.contract_name
+        select pcp.*,pc.contract_id,pc.contract_name,pc.contract_name,pc.money as contractMoney
         from pmp_contract_payment as pcp left join pmp_contract as pc on pcp.contract_id = pc.contract_id
         where pcp.is_deleted = '0'
         and pcp.status = '1'
@@ -31,7 +31,7 @@
     #end
 
     #sql("queryAdvanceList")
-        select pcp.*,pc.contract_number,pc.supplier_id
+        select pcp.*,pc.contract_number,pc.supplier_id,pc.money as contractMoney
         from pmp_contract_payment AS pcp left join pmp_contract as pc on pcp.contract_id = pc.contract_id
         where pcp.is_deleted = '0'
             and pcp.trade_status <> '1'
