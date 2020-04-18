@@ -1,13 +1,18 @@
 package com.linksame.crm.erp.admin.service;
 
 import cn.hutool.core.collection.CollectionUtil;
+import com.jfinal.aop.Before;
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
+import com.jfinal.plugin.activerecord.tx.Tx;
 import com.linksame.crm.erp.admin.entity.AdminFileFolder;
 import com.linksame.crm.utils.BaseUtil;
 import com.linksame.crm.utils.R;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -16,6 +21,8 @@ import java.util.List;
  * @Description 附件文件夹业务层
  */
 public class AdminFileFolderService {
+
+    private List<Record> recDataList = new ArrayList<>();
 
     /**
      * 创建文件夹
@@ -36,35 +43,49 @@ public class AdminFileFolderService {
     public R queryFolder(String batchId){
         Kv kv = Kv.by("createUserId", BaseUtil.getUser().getUserId())
                 .set("batchId", batchId);
-        List<Record> folders = Db.find(Db.getSqlPara("admin.folder.queryFolderList", kv));
-        folders.forEach(ivan->{
-            ivan = assData(ivan);
-        });
-
-        return R.ok().put("data", folders);
-    }
-
-    //处理子任务
-    private Record assData(Record record){
-        Kv kv = Kv.by("folderId", record.getInt("folder_id"));
-        List<Record> itemList = Db.find(Db.getSqlPara("admin.folder.queryFolderByPid", kv));
-        if(CollectionUtil.isNotEmpty(itemList)){
-            recData(itemList);
+        List<Record> folderList = Db.find(Db.getSqlPara("admin.folder.queryFolderList", kv));
+        //有父元素的数据需要从原list中抹除
+        Iterator<Record> it = folderList.iterator();
+        while(it.hasNext()){
+            Record x = it.next();
+            if(x.getInt("folder_pid") != 0) it.remove();
         }
-        record.set("list", itemList);
+        recData(folderList);
 
-        return record;
+        return R.ok().put("data", folderList);
     }
-
     //递归
     private void recData(List<Record> itemList){
+        //遍历出父id等于参数的id，add进子节点集合
         for (Record mu : itemList) {
             Kv kv = Kv.by("folderId", mu.getInt("folder_id"));
             List<Record> childList = Db.find(Db.getSqlPara("admin.folder.queryFolderByPid", kv));
-            //遍历出父id等于参数的id，add进子节点集合
             if(CollectionUtil.isNotEmpty(childList)){
                 mu.set("list", childList);
                 recData(childList);
+            }
+        }
+    }
+
+    /**
+     * 删除文件夹
+     * @param folderId  文件夹ID
+     */
+    @Before(Tx.class)
+    public void deleteFolder(Integer folderId){
+        AdminFileFolder.dao.deleteById(folderId);
+        recDeleteData(folderId);
+    }
+
+    //递归删除子文件夹
+    private void recDeleteData(Integer folderId){
+        List<Record> childList = Db.find(Db.getSqlPara("admin.folder.queryFolderByPid", Kv.by("folderId", folderId)));
+        for (Record child : childList) {
+            Integer childFolderId = child.getInt("folder_id");
+            Integer childFolderPid = child.getInt("folder_pid");
+            Db.delete("delete from admin_file_folder where folder_id = ?", childFolderId);
+            if(childFolderPid != 0){
+                recDeleteData(childFolderId);
             }
         }
     }

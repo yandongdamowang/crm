@@ -64,8 +64,9 @@ public class AdminFileFolderController extends Controller {
     @ApiImplicitParams({
             @ApiImplicitParam(name="adminFileFolder", description="文件夹对象")
     })
-    public void deleteFolder(@Para("") AdminFileFolder adminFileFolder){
-        renderJson(adminFileFolder.delete() ? R.ok() : R.error());
+    public void deleteFolder(){
+        adminFileFolderService.deleteFolder(getInt("folderId"));
+        renderJson(R.ok());
     }
 
 }

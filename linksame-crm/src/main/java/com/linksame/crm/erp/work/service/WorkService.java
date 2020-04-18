@@ -206,39 +206,51 @@ public class WorkService{
             Integer orderType = jsonObject.getInteger("orderType");
             switch (orderType) {
                 case 1:
+                    //根据排序字段升序
                     kv.set("order","order by b.order_num , a.order_num");
                     break;
                 case 2:
+                    //根据排序字段倒序
                     kv.set("order","order by b.order_num , a.order_num desc");
                     break;
                 case 3:
+                    //优先级最高
                     kv.set("order","order by b.order_num , a.priority desc");
                     break;
                 case 4:
+                    //优先级最低
                     kv.set("order","order by b.order_num , a.priority");
                     break;
                 case 5:
+                    //截止时间最早
                     kv.set("order","order by b.order_num , a.stop_time");
                     break;
                 case 6:
+                    //截止时间最晚
                     kv.set("order","order by b.order_num , a.stop_time desc");
                     break;
                 case 7:
+                    //开始时间最早
                     kv.set("order","order by b.order_num , a.start_time");
                     break;
                 case 8:
+                    //开始时间最晚
                     kv.set("order","order by b.order_num , a.start_time desc");
                     break;
                 case 9:
+                    //创建时间最早
                     kv.set("order","order by b.order_num , a.create_time");
                     break;
                 case 10:
+                    //创建时间最晚
                     kv.set("order","order by b.order_num , a.create_time desc");
                     break;
                 case 11:
+                    //更新时间最早
                     kv.set("order","order by b.order_num , a.update_time");
                     break;
                 case 12:
+                    //更新时间最晚
                     kv.set("order","order by b.order_num , a.update_time desc");
                     break;
                 default:
@@ -258,32 +270,24 @@ public class WorkService{
                 workClass.set("stopTaskId", stopTask.get("stopTaskId"));
                 workClass.set("stopTime", stopTask.get("stopTime"));
                 workbenchService.taskListTransfer(recordList);
-                //递归遍历子任务
-                recordList.forEach(task -> {
-                    task = assData(task);
-                });
+                //有父元素的数据需要从原list中抹除
+                Iterator<Record> it = recordList.iterator();
+                while(it.hasNext()){
+                    Record x = it.next();
+                    if(x.getInt("pid") != 0) it.remove();
+                }
+                //递归
+                recData(recordList);
                 workClass.set("list", recordList);
             }
         });
         return R.ok().put("data", finalClassList);
     }
-
-    //处理子任务
-    private Record assData(Record record){
-        List<Record> itemList = Db.find("select * from task where pid = ?", record.getInt("task_id"));
-        if(CollectionUtil.isNotEmpty(itemList)){
-            recData(itemList);
-        }
-        record.set("list", itemList);
-
-        return record;
-    }
-
     //递归
     private void recData(List<Record> itemList) {
+        //遍历出父id等于参数的id，add进子节点集合
         for (Record mu : itemList) {
             List<Record> childList = Db.find("select * from task where pid = ?", mu.getInt("task_id"));
-            //遍历出父id等于参数的id，add进子节点集合
             if(CollectionUtil.isNotEmpty(childList)){
                 mu.set("list", childList);
                 recData(childList);
