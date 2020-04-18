@@ -25,7 +25,7 @@ public class PmpContractPaymentRecordService {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate startTime = LocalDate.parse(jsonObject.getString("startTime"),dateTimeFormatter );
         LocalDate endTime = LocalDate.parse(jsonObject.getString("endTime"),dateTimeFormatter );
-        Kv kv = Kv.by("paymentNumber", jsonObject.getString("paymentNumber"))
+        Kv kv = Kv.by("contractNumber", jsonObject.getString("contractNumber"))
                 .set("supplierId", jsonObject.getLong("supplierId"))
                 .set("orderBy", jsonObject.get("orderBy"))
                 .set("startTime", startTime)

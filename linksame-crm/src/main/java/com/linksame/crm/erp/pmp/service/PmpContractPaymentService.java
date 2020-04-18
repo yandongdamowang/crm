@@ -124,9 +124,9 @@ public class PmpContractPaymentService {
         return update? R.ok() : R.error();
     }
 
-    public R queryPaymentDetail(Long billId) {
-        List<Record> records = Db.find("select * from pmp_contract_payment_record as pcpr where pcpr.contract_id = ? ", billId);
-        List<Record> records1 = Db.find("select * from pmp_contract_payment as pcp where pcp.contract_id = ? and pcp.trade_form =" + PmpInterface.contractPayment.trade.form.EXPENF + "pcp.status =" + PmpInterface.contractPayment.trade.stats.OK, billId);
+    public R queryPaymentDetail(Long contractId) {
+        List<Record> records = Db.find("select * from pmp_contract_payment_record as pcpr where pcpr.contract_id = ? ", contractId);
+        List<Record> records1 = Db.find("select * from pmp_contract_payment as pcp where pcp.contract_id = ? and pcp.trade_form =" + PmpInterface.contractPayment.trade.form.EXPENF + " and pcp.status =" + PmpInterface.contractPayment.trade.stats.OK, contractId);
         records.addAll(records1);
         return R.ok().put("paymentDetails",records);
     }

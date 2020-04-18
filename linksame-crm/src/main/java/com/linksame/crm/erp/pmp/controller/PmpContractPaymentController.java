@@ -86,9 +86,9 @@ public class PmpContractPaymentController extends Controller {
     }
     /**
      *
-     *  设置优先级
+     *  查询合同付款记录
      */
-    public void queryPaymentDetail(@Para("contractId")Long billId){
-        renderJson(pmpContractPaymentService.queryPaymentDetail(billId));
+    public void queryPaymentDetail(@Para("contractId")Long contractId){
+        renderJson(pmpContractPaymentService.queryPaymentDetail(contractId));
     }
 }
