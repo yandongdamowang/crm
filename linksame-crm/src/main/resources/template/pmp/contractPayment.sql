@@ -12,8 +12,8 @@
     #end
 
     #sql("queryList")
-        select pcp.*,pc.contract_id,pc.contract_name,pc.contract_name,pc.money as contractMoney
-        from pmp_contract_payment as pcp left join pmp_contract as pc on pcp.contract_id = pc.contract_id
+        select pcp.*,pc.contract_id,pc.contract_name,pc.contract_name,pc.money as contractMoney,pc.proprietor
+        from  pmp_contract as pc left join pmp_contract_payment as pcp on pcp.contract_id = pc.contract_id
         where pcp.is_deleted = '0'
         and pcp.status = '1'
             #if(tradeForm)
@@ -31,15 +31,15 @@
     #end
 
     #sql("queryAdvanceList")
-        select pcp.*,pc.contract_number,pc.supplier_id,pc.money as contractMoney
-        from pmp_contract_payment AS pcp left join pmp_contract as pc on pcp.contract_id = pc.contract_id
+        select pcp.*,pc.contract_number,pc.supplier_id,pc.money as contractMoney,pc.proprietor
+        from  pmp_contract as pc left join pmp_contract_payment AS pcp on pcp.contract_id = pc.contract_id
         where pcp.is_deleted = '0'
             and pcp.trade_status <> '1'
             #if(billId)
-                and pc.bill_id = #para(billId)
+                and pcp.bill_id = #para(billId)
             #end
-            #if(paymentNumber)
-                and pc.contract_number like concat('%', #para(paymentNumber), '%')
+            #if(contractNumber)
+                and pc.contract_number like concat('%', #para(contractNumber), '%')
             #end
             #if(supplierId)
                 and pc.supplier_id = #para(supplierId)

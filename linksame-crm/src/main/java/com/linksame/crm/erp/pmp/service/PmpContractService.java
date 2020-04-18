@@ -45,12 +45,20 @@ public class PmpContractService {
             pmpContract.save();
             //保存付款单
             for (PmpContractPayment contractPayment : pmpContract.getPmpContractPayment()) {
-                money1 = money1.add(contractPayment.getMoney());
-                contractPayment.setContractId(pmpContract.getLong("contract_id"));
-                contractPayment.setProjectId(pmpContract.getLong("project_id"));
-                contractPayment.setTradeForm(PmpInterface.contractPayment.trade.form.EXPENF);
-                contractPayment.setTradeStatus(PmpInterface.contractPayment.trade.stats.OK);
-                contractPayment.save();
+                if (contractPayment.getMoney() != null
+                        && contractPayment.getPaymentNode() != null
+                        && contractPayment.getPaymentName() != null
+                        && contractPayment.getCostPercentage() != null) {
+                    money1 = money1.add(contractPayment.getMoney());
+                    contractPayment.setContractId(pmpContract.getLong("contract_id"));
+                    contractPayment.setProjectId(pmpContract.getLong("project_id"));
+                    contractPayment.setTradeForm(PmpInterface.contractPayment.trade.form.EXPENF);
+                    contractPayment.setTradeStatus(PmpInterface.contractPayment.trade.stats.OK);
+                    contractPayment.setCreationTime(LocalDateTime.now());
+                    contractPayment.save();
+                }else {
+                    return false;
+                }
             }
             if (money.compareTo(money1) != 0){
                 return false;
@@ -74,7 +82,7 @@ public class PmpContractService {
         PmpContract pmpContract = PmpContract.dao.findFirst(Db.getSql("pmp.contract.queryById"), contractId);
         //供应商名称
         pmpContract.setSupplierName("此处添加供应商名称");
-        pmpContract.setAgentName("此处添加供应参与人名称");
+        pmpContract.setAgentName("参与人名称");
         pmpContract.remove("status","is_deleted");
         List<PmpContractPayment> contractPayment = pmpContractPaymentService.findByContractId(contractId,null);
         List<PmpAccessory> pmpAccessories = pmpAccessoryService.findByContractId(contractId);
@@ -108,11 +116,10 @@ public class PmpContractService {
     private void billLoading(List<Record> records){
         records.forEach(record -> {
             List<Map<String,Map<String,Object>>> billList = new ArrayList<>();
+            Map<String,Map<String,Object>> billDetails = new HashMap();
             List<PmpContractPayment> contractPayments = pmpContractPaymentService.findByContractId(record.getLong("contract_id"),null);
             contractPayments.forEach(contractPayment -> {
                 LocalDate paymentNode = contractPayment.getPaymentNode().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                Map<String,Map<String,Object>> billDetails = new HashMap();
-
                 int year = paymentNode.getYear();
                 int monthValue = paymentNode.getMonthValue();
                 if (billDetails.get(year+"年"+monthValue+"月")!=null){
