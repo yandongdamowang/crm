@@ -55,7 +55,7 @@ public class PmpContractPaymentService {
         for (Record record : records) {
             Long contractId = record.getLong("contract_id");
             if (contractMoney.get(contractId) != null) {
-                continue;
+                contractMoney.put(contractId, record.getBigDecimal("money").add(contractMoney.get(contractId)));
             } else {
                 contractMoney.put(contractId, record.getBigDecimal("money"));
             }
@@ -95,7 +95,7 @@ public class PmpContractPaymentService {
 
     public R queryAdvanceList(BasePageRequest basePageRequest) {
         JSONObject jsonObject = basePageRequest.getJsonObject();
-        Kv kv = Kv.by("paymentNumber", jsonObject.getString("contractNumber"))
+        Kv kv = Kv.by("contractNumber", jsonObject.getString("contractNumber"))
                 .set("supplierId", jsonObject.getLong("supplierId"))
                 .set("orderBy", jsonObject.get("orderBy"));
         if (basePageRequest.getPageType() == 0){
@@ -110,6 +110,9 @@ public class PmpContractPaymentService {
     public R queryAdvanceBybillId(Long billId) {
         Kv kv = Kv.by("billId", billId);
         Record first = Db.findFirst(Db.getSqlPara("pmp.contractPayment.queryAdvanceList", kv));
+        first.set("amountAdvanced",new BigDecimal(0));//预付金额
+        Long supplier_id = first.getLong("supplier_id");
+        first.set("supplierName","承包商"+supplier_id);
         return R.ok().put("data", first);
     }
 
@@ -119,5 +122,12 @@ public class PmpContractPaymentService {
         contractPayment.setPriority(priority);
         boolean update = contractPayment.update();
         return update? R.ok() : R.error();
+    }
+
+    public R queryPaymentDetail(Long billId) {
+        List<Record> records = Db.find("select * from pmp_contract_payment_record as pcpr where pcpr.contract_id = ? ", billId);
+        List<Record> records1 = Db.find("select * from pmp_contract_payment as pcp where pcp.contract_id = ? and pcp.trade_form =" + PmpInterface.contractPayment.trade.form.EXPENF + "pcp.status =" + PmpInterface.contractPayment.trade.stats.OK, billId);
+        records.addAll(records1);
+        return R.ok().put("paymentDetails",records);
     }
 }

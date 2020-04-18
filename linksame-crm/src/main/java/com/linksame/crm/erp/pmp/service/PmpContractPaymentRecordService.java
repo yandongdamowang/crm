@@ -27,6 +27,7 @@ public class PmpContractPaymentRecordService {
         LocalDate endTime = LocalDate.parse(jsonObject.getString("endTime"),dateTimeFormatter );
         Kv kv = Kv.by("paymentNumber", jsonObject.getString("paymentNumber"))
                 .set("supplierId", jsonObject.getLong("supplierId"))
+                .set("orderBy", jsonObject.get("orderBy"))
                 .set("startTime", startTime)
                 .set("endTime", endTime);
         if (basePageRequest.getPageType() == 0) {
@@ -36,5 +37,12 @@ public class PmpContractPaymentRecordService {
             Page<Record> paginate = Db.paginate(basePageRequest.getPage(), basePageRequest.getLimit(), Db.getSqlPara("pmp.contractPaymentRecord.queryList", kv));
             return R.ok().put("data", paginate);
         }
+    }
+
+    public R queryById(Long paymentRecordId) {
+        Kv kv = Kv.by("paymentRecordId", paymentRecordId);
+        Record first = Db.findFirst(Db.getSqlPara("pmp.contractPaymentRecord.queryById", kv));
+
+        return R.ok().put("paymentRecord",first);
     }
 }

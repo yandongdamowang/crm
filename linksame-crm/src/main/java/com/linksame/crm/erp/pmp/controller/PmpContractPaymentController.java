@@ -49,18 +49,18 @@ public class PmpContractPaymentController extends Controller {
         }
         renderJson(pmpContractPaymentService.queryPaymentByMonthly(month));
     }
-    /**
-     * 调整支付金额
-     */
-    public void updatePaymentAmount (){
-        //yyyy-mm
-        String month = getPara("month");
-        System.out.println(month.length());
-        if (month.length() < 8){
-            month = month +"-01";
-        }
-        renderJson(pmpContractPaymentService.queryPaymentByMonthly(month));
-    }
+//    /**
+//     * 调整支付金额
+//     */
+//    public void updatePaymentAmount (){
+//        //yyyy-mm
+//        String month = getPara("month");
+//        System.out.println(month.length());
+//        if (month.length() < 8){
+//            month = month +"-01";
+//        }
+//        renderJson(pmpContractPaymentService.queryPaymentByMonthly(month));
+//    }
 
 
     /**
@@ -83,5 +83,12 @@ public class PmpContractPaymentController extends Controller {
      */
     public void setPriority(@Para("billId")Long billId, @Para("priority")String priority){
         renderJson(pmpContractPaymentService.setPriority(billId,priority));
+    }
+    /**
+     *
+     *  设置优先级
+     */
+    public void queryPaymentDetail(@Para("contractId")Long billId){
+        renderJson(pmpContractPaymentService.queryPaymentDetail(billId));
     }
 }

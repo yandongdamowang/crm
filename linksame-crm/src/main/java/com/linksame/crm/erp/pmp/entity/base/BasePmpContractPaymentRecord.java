@@ -3,6 +3,8 @@ package com.linksame.crm.erp.pmp.entity.base;
 import com.jfinal.plugin.activerecord.IBean;
 import com.jfinal.plugin.activerecord.Model;
 
+import java.time.LocalDate;
+
 /**
  * @author ZhangJie
  * @ClassName BasePmpContractPaymentRecord
@@ -92,11 +94,11 @@ public abstract class BasePmpContractPaymentRecord<M extends BasePmpContractPaym
         return get("practica_advanced");
     }
 
-    public void setPaymentTime(java.util.Date paymentTime) {
+    public void setPaymentTime(LocalDate paymentTime) {
         set("payment_time", paymentTime);
     }
 
-    public java.util.Date getPaymentTime() {
+    public LocalDate getPaymentTime() {
         return get("payment_time");
     }
 
@@ -124,20 +126,35 @@ public abstract class BasePmpContractPaymentRecord<M extends BasePmpContractPaym
         return getStr("remark");
     }
 
-    public void setUpdateTime(java.util.Date updateTime) {
+    public void setUpdateTime(LocalDate updateTime) {
         set("update_time", updateTime);
     }
 
-    public java.util.Date getUpdateTime() {
+    public LocalDate getUpdateTime() {
         return get("update_time");
     }
 
-    public void setCreateTime(java.util.Date createTime) {
+    public void setCreateTime(LocalDate createTime) {
         set("create_time", createTime);
     }
 
-    public java.util.Date getCreateTime() {
+    public LocalDate getCreateTime() {
         return get("create_time");
     }
 
+    public void setPlannedPaymentTime(LocalDate plannedPaymentTime) {
+        set("planned_payment_time", plannedPaymentTime);
+    }
+
+    public LocalDate getPlannedPaymentTime() {
+        return get("planned_payment_time");
+    }
+
+    public void setDeduction(java.math.BigDecimal deduction) {
+        set("deduction", deduction);
+    }
+
+    public java.math.BigDecimal getDeduction() {
+        return get("deduction");
+    }
 }
