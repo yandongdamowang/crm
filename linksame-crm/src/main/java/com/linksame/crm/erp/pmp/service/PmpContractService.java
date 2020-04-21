@@ -21,6 +21,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author ZhangJie
@@ -89,10 +90,10 @@ public class PmpContractService {
         return R.ok().put("pmpContract",pmpContract).put("pmpContractPayment",contractPayment).put("pmpAccessories",pmpAccessories);
     }
 
-    private final String PAYMENTRATION = "paymentRatio";
-    private final String PAYMENTAMOUNT = "paymentAmount";
-    private final String CUMULATIVEPAYMENTRATION = "cumulativePaymentRatio";
-    private final String CUMULATIVEPAYMENT = "cumulativepayment";
+    private final String PAYMENTRATION = "paymentRatio"; //支付比例
+    private final String PAYMENTAMOUNT = "paymentAmount";//支付金额
+    private final String CUMULATIVEPAYMENTRATION = "cumulativePaymentRatio";//累计比例
+    private final String CUMULATIVEPAYMENT = "cumulativepayment";//累计金额
     public R queryList(BasePageRequest basePageRequest) {
         JSONObject jsonObject = basePageRequest.getJsonObject();
         Kv kv= Kv.by("contractNumber", jsonObject.getString("contractNumber"))
@@ -114,8 +115,8 @@ public class PmpContractService {
      * @param records 合同集合
      */
     private void billLoading(List<Record> records){
+        Set<String> set = new HashSet<>();
         records.forEach(record -> {
-            List<Map<String,Map<String,Object>>> billList = new ArrayList<>();
             Map<String,Map<String,Object>> billDetails = new HashMap();
             List<PmpContractPayment> contractPayments = pmpContractPaymentService.findByContractId(record.getLong("contract_id"),null);
             contractPayments.forEach(contractPayment -> {
@@ -138,12 +139,41 @@ public class PmpContractService {
                     bill.put(PAYMENTAMOUNT,contractPayment.getMoney());
                     bill.put(CUMULATIVEPAYMENTRATION,contractPayment.getCostPercentage());
                     bill.put(CUMULATIVEPAYMENT,contractPayment.getMoney());
-                    billDetails.put(year+"年"+monthValue+"月",bill);
-                    billList.add(billDetails);
+                    String s = year + "年" + monthValue + "月";
+                    set.add(s);
+                    billDetails.put(s,bill);
                 }
             });
-            record.set("billList",billList);
+            record.set("billList",billDetails);
         });
+        List<String> keys = new ArrayList<>(set);
+        Collections.sort(keys);
+        System.out.println(keys);
+        for (String key : keys) {
+            records.forEach(record -> {
+                Map<String,Map<String,Object>> billLists = record.get("billList");
+                Map<String, Object> stringObjectMap = billLists.get(key);
+                if (stringObjectMap != null){
+                    return;
+                }else {
+                    Map<String, Object> bill = new HashMap();
+                    bill.put(PAYMENTRATION,0);
+                    bill.put(PAYMENTAMOUNT,new BigDecimal(0));
+                    bill.put(CUMULATIVEPAYMENTRATION,0);
+                    bill.put(CUMULATIVEPAYMENT,new BigDecimal(0));
+                    billLists.put(key,bill);
+                }
+            });
+        }
+        records.forEach(record -> {
+            Map<String, Object> billList = record.get("billList");
+            Map<String, Object> collect = billList.entrySet().stream()
+                    .sorted(Map.Entry.comparingByKey())
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue
+                            , (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+            record.set("billList",collect);
+        });
+        System.out.println(records);
     }
 
     @Before(Tx.class)

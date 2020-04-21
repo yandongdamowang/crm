@@ -45,9 +45,9 @@
                 and pc.supplier_id = #para(supplierId)
             #end
             #if(orderBy =='1')
-               order by pcp.payment_stage asc
+               order by pcp.priority asc
             #else
-                order by pcp.payment_stage desc
+                order by pcp.priority desc
             #end
     #end
 #end
