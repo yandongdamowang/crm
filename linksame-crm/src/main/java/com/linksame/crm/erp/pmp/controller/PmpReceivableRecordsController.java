@@ -10,6 +10,9 @@ import com.linksame.crm.erp.pmp.entity.PmpContract;
 import com.linksame.crm.erp.pmp.entity.PmpReceivableRecords;
 import com.linksame.crm.erp.pmp.service.PmpReceivableRecordsServer;
 
+/**
+ * 回款记录
+ */
 public class PmpReceivableRecordsController extends Controller {
     @Inject
     private PmpReceivableRecordsServer pmpReceivableRecordsServer;

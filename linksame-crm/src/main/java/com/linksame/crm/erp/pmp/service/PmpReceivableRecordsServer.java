@@ -1,5 +1,6 @@
 package com.linksame.crm.erp.pmp.service;
 
+import cn.hutool.core.util.IdUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.aop.Before;
@@ -53,6 +54,7 @@ public class PmpReceivableRecordsServer {
             saveOrUpdate = pmpReceivableRecords.update();
         }else {
             pmpReceivableRecords.setCreatedTime(LocalDateTime.now());
+            pmpReceivableRecords.setBatchId(IdUtil.simpleUUID());
             saveOrUpdate = pmpReceivableRecords.save();
         }
         return saveOrUpdate ? R.ok() : R.error();

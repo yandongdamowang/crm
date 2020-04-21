@@ -157,4 +157,13 @@ public abstract class BasePmpContractPaymentRecord<M extends BasePmpContractPaym
     public java.math.BigDecimal getDeduction() {
         return get("deduction");
     }
+
+    public void setBatchId(java.lang.String batchId) {
+        set("batch_id", batchId);
+    }
+
+    public java.lang.String getBatchId() {
+        return getStr("batch_id");
+    }
+
 }
