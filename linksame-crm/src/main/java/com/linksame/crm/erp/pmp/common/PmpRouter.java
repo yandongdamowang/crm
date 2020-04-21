@@ -1,10 +1,7 @@
 package com.linksame.crm.erp.pmp.common;
 
 import com.jfinal.config.Routes;
-import com.linksame.crm.erp.pmp.controller.PmpAccessoryController;
-import com.linksame.crm.erp.pmp.controller.PmpContractController;
-import com.linksame.crm.erp.pmp.controller.PmpContractPaymentController;
-import com.linksame.crm.erp.pmp.controller.PmpContractPaymentRecordController;
+import com.linksame.crm.erp.pmp.controller.*;
 
 /**
  * @author ZhangJie
@@ -20,5 +17,6 @@ public class PmpRouter extends Routes {
         add("/pmpContractPayment", PmpContractPaymentController.class);
         add("/pmpAccessory", PmpAccessoryController.class);
         add("/pmpContractPaymentRecord", PmpContractPaymentRecordController.class);
+        add("/pmpReceivableRecords", PmpReceivableRecordsController.class);
     }
 }
