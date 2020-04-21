@@ -138,4 +138,13 @@ public abstract class BasePmpReceivableRecords<M extends BasePmpReceivableRecord
         return getInt("agent");
     }
 
+    public void setBatchId(java.lang.String batchId) {
+        set("batch_id", batchId);
+    }
+
+    public java.lang.String getBatchId() {
+        return getStr("batch_id");
+    }
+
+
 }

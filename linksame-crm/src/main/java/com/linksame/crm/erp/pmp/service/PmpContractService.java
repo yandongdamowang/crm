@@ -1,5 +1,6 @@
 package com.linksame.crm.erp.pmp.service;
 
+import cn.hutool.core.util.IdUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.aop.Before;
 import com.jfinal.aop.Inject;
@@ -43,6 +44,7 @@ public class PmpContractService {
             BigDecimal money = pmpContract.getMoney();
             BigDecimal money1 = new BigDecimal(0);
             //保存 合同
+            pmpContract.setBatchId(IdUtil.simpleUUID());
             pmpContract.save();
             //保存付款单
             for (PmpContractPayment contractPayment : pmpContract.getPmpContractPayment()) {
@@ -50,6 +52,7 @@ public class PmpContractService {
                         && contractPayment.getPaymentNode() != null
                         && contractPayment.getPaymentName() != null
                         && contractPayment.getCostPercentage() != null) {
+                    contractPayment.setBatchId(IdUtil.simpleUUID());
                     money1 = money1.add(contractPayment.getMoney());
                     contractPayment.setContractId(pmpContract.getLong("contract_id"));
                     contractPayment.setProjectId(pmpContract.getLong("project_id"));

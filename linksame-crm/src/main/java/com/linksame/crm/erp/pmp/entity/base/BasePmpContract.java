@@ -190,4 +190,12 @@ public abstract class BasePmpContract<M extends BasePmpContract<M>> extends Mode
         return get("contract_purchase_end_time");
     }
 
+    public void setBatchId(java.lang.String batchId) {
+        set("batch_id", batchId);
+    }
+
+    public java.lang.String getBatchId() {
+        return getStr("batch_id");
+    }
+
 }
