@@ -28,6 +28,7 @@
       </el-aside>
       <!-- <el-main id="crm-main-container"> -->
       <el-main>
+
         <app-main />
       </el-main>
     </el-container>
@@ -64,7 +65,8 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['contract', 'contractRouters']),
+
+    ...mapGetters(['contract', 'contractRouters', 'headerName']),
     // 快捷添加
     quickAddList() {
       var addItems = []
@@ -177,4 +179,9 @@ export default {
 //   padding: 10px;
 //   height: calc(100% - 50px);
 // }
+.ls-header {
+  height: 40px;
+  width: 100%;
+  background: white;
+}
 </style>

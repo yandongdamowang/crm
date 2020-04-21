@@ -21,7 +21,11 @@
             class="wukong"
             style="margin-right: 10px;"
           />
-          <div class="nav-item-title">{{ item.title }}</div>
+          <!-- 'height': item.type == navIndexChild ? '500px' : '' -->
+          <div
+            :style="{ 'border-bottom': item.type == navIndexChild ? '3px solid rgb(62, 132, 233)' : '','height':'60px' } "
+            class="nav-item-title"
+          >{{ item.title }}</div>
         </router-link>
       </flexbox>
     </div>
@@ -117,7 +121,7 @@ export default {
       var tempsItems = []
       if (this.oa) {
         tempsItems.push({
-          title: '工作',
+          title: '办公管理',
           type: 0,
           path: '/workbench',
           icon: 'workbench'
@@ -292,10 +296,12 @@ export default {
 }
 
 .nav-item {
-  padding: 0 30px;
+  padding: 0 35px;
   display: flex;
   align-items: center;
   cursor: pointer;
+  font-size: 17px;
+  font-weight: 500;
 }
 
 .nav-item-img {

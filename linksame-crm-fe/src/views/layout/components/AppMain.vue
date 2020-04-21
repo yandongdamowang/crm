@@ -1,6 +1,6 @@
 <template>
 
-  <div style="height: calc(100% - 50px);">
+  <div style="height: calc(100% - 100px);">
     <div class="tabs">
 
       <el-tabs
@@ -19,6 +19,7 @@
       </el-tabs>
 
     </div>
+    <!-- <div class="ls-header"> {{ headerName }}</div> -->
     <keep-alive>
       <router-view />
     </keep-alive>
@@ -28,7 +29,7 @@
 
 <script>
 import { workWorkReadAPI } from '@/api/projectManagement/project'
-
+// import { mapGetters } from 'vuex'
 export default {
   name: 'AppMain',
   data() {
@@ -36,21 +37,20 @@ export default {
       tableList: [],
       tableListTemp: [],
       workIdData: undefined,
-      editableTabsValue: ''
+      editableTabsValue: '',
+      headerName: ''
 
-    //   tabIndex: ''
     }
   },
-  computed: {},
+  //   computed: { ...mapGetters(['headerName']) },
+
 
   watch: {
     $route() {
       this.addTab()
     }
   },
-  //   created() {
-  //     this.addTab()
-  //   },
+
   mounted() {
     this.addTab()
   },
@@ -69,11 +69,14 @@ export default {
         // console.log(123, this.workIdData)
         this.$route.matched[1].path = `/project/list/${this.$route.params.id}`
         this.$route.matched[1].meta.title = this.workIdData.name
-        // console.log(this.workIdData.name)
+        this.$store.commit('SET_HEADERNAME', this.$route.matched[1].meta.title)
+        this.headerName = this.$store.state.app.headerName
       }
       this.tableListTemp.push(this.$route.matched[1])
       this.tableList = this.unique(this.tableListTemp)
       this.editableTabsValue = this.$route.matched[1].meta.title
+      this.$store.commit('SET_HEADERNAME', this.$route.matched[1].meta.title)
+      this.headerName = this.$store.state.app.headerName
     //   console.log(111, this.tableList)
     //   console.log(222, this.tableListTemp)
     },
@@ -89,14 +92,15 @@ export default {
       })
     },
     clickTab(tab) {
-      console.log(tab)
+    //   console.log(tab)
+      this.$store.commit('SET_HEADERNAME', tab.paneName)
+      this.headerName = this.$store.state.app.headerName
       //   this.$router.push('/project/archive-project')
       this.tableList.forEach((item, index) => {
         if (item.meta.title === tab.paneName) {
           this.$router.push({ path: item.path })
         }
       })
-      //   this.editableTabsValue = this.$route.matched[1].meta.title
     }
   }
 }

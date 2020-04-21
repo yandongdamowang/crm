@@ -65,3 +65,10 @@ body .el-table th.gutter {
 body .el-table colgroup.gutter {
   display: table-cell !important;
 }
+
+// 滚动条
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(144, 147, 153, 0.2) !important;
+  border-radius: 3.5px;
+}

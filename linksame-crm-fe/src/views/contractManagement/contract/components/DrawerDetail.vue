@@ -2,102 +2,142 @@
 
   <div>
 
-    <div class="title">
-      <div class="logo">
-        <i
-          class="wukong wukong-contract"
-          style="font-size: 30px;color: white;"
-        />
+    <div class="ls-drawertitle">
+      <div class="ls-drawertitle-l">{{ pmpContractData.contractNumber }}
       </div>
-      {{ drawerData }}
+      <div class="ls-drawertitle-r">
+        <span><i class="el-icon-edit" /></span>&nbsp;&nbsp;&nbsp;
+        <span><i class="el-icon-folder-opened" /></span>&nbsp;&nbsp;&nbsp;
+
+        <el-dropdown class="ls-drawertitle-dropdown">
+          <span><i class="el-icon-upload2" /></span>&nbsp;&nbsp;&nbsp;
+
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>
+
+              <el-upload
+                ref="upload"
+                :auto-upload="false"
+                :on-success="submitUploadSuccess"
+                :on-error="submitUploadError"
+                action="https://jsonplaceholder.typicode.com/posts/"
+              >
+                <div
+                  slot="trigger"
+                  size="small"
+                  type="primary"
+                >本地上传</div>
+
+              </el-upload>
+            </el-dropdown-item>
+
+            <el-dropdown-item>
+
+              <el-upload
+                ref="upload"
+                :auto-upload="false"
+                :on-success="submitUploadSuccess"
+                :on-error="submitUploadError"
+                action="https://jsonplaceholder.typicode.com/posts/"
+              >
+
+                <div
+                  size="small"
+                  type="primary"
+                  @click="submitUpload"
+                >网盘上传</div>
+
+              </el-upload>
+            </el-dropdown-item>
+
+          </el-dropdown-menu>
+        </el-dropdown>
+
+        <el-dropdown class="ls-drawertitle-dropdown">
+          <span><i class="el-icon-more" /></span>
+
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>转 移</el-dropdown-item>
+            <el-dropdown-item>
+              <span @click="deleteContract">删 除</span>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+
+        <span>丨</span>
+        <span @click="closeDrawer"><i class="el-icon-close" /></span>
+      </div>
     </div>
 
-    <div class="button">
-      <el-button type="primary">转 移</el-button>
-      <el-button type="primary">编 辑</el-button>
+    <div class="ls-drawerform">
 
-      <el-popover
-        placement="bottom"
-        width="400"
-        trigger="click"
+      <div class="ls-drawerform-header"><i class="el-icon-notebook-1" />&nbsp;&nbsp;&nbsp;基本信息</div>
+
+      <el-form
+        ref="form"
+        label-width="120px"
+        label-position="left"
       >
-        <el-table :data="gridData">
-          <el-table-column
-            width="150"
-            property="date"
-            label="日期"
-          />
-          <el-table-column
-            width="100"
-            property="name"
-            label="姓名"
-          />
-          <el-table-column
-            width="300"
-            property="address"
-            label="地址"
-          />
-        </el-table>
-        <el-button slot="reference">更 多</el-button>
-      </el-popover>
+        <el-row>
+          <el-col :span="8">
+
+            <el-form-item label="合同类型：">
+              <span> 1191111-REC-工程-S1-珠海一键</span>
+            </el-form-item>
+
+            <el-form-item label="合同采购时间：">
+              <span>{{ pmpContractData.contractPurchaseStartTime }} </span>
+            </el-form-item>
+            <caption />
+
+            <el-form-item label="合同编号：">
+              <span>{{ pmpContractData.contractNumber }} </span>
+            </el-form-item>
+
+            <el-form-item label="经办人：">
+              <span>{{ pmpContractData.agent }} </span>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="8">
+            <el-form-item label="合同名称：">
+              <span>{{ pmpContractData.contractName }} </span>
+            </el-form-item>
+
+            <el-form-item label="承包商：">
+              <span>{{ pmpContractData.supplierId }} </span>
+            </el-form-item>
+
+            <el-form-item label="DRP采购单号：">
+              <span>{{ pmpContractData.purchaseOrderNumber }} </span>
+            </el-form-item>
+
+            <el-form-item label="合同到期时间：">
+              <span>{{ pmpContractData.contractPurchaseEndTime }} </span>
+            </el-form-item>
+
+          </el-col>
+
+          <el-col :span="8">
+            <el-form-item label="签署时间：">
+              <span>{{ pmpContractData.actualSigningTime }} </span>
+            </el-form-item>
+
+            <el-form-item label="合同金额：">
+              <span>{{ pmpContractData.money }} </span>
+            </el-form-item>
+
+            <el-form-item label="合同开始时间：">
+              <span>{{ pmpContractData.contractPurchaseStartTime }} </span>
+
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+      </el-form>
+
     </div>
-
-    <el-form
-      ref="form"
-      :model="form"
-      label-width="120px"
-      label-position="left"
-    >
-      <el-row>
-        <el-col :span="12">
-          <el-form-item label="所属里程碑节点">
-            <span>设计阶段</span>
-          </el-form-item>
-
-          <el-form-item label="DRP采购单号">
-            <span>180913-REC-S2P5</span>
-          </el-form-item>
-
-          <el-form-item label="合同编号">
-            <span> 1191111-REC-工程-S1-珠海一键</span>
-          </el-form-item>
-
-          <el-form-item label="合同名称">
-            <span> 1191111-REC-工程-S1-珠海一键 </span>
-          </el-form-item>
-
-          <el-form-item label="承包商">
-            <span> 佛山市均林人防工程有限公司 </span>
-          </el-form-item>
-
-          <el-form-item label="合同采购时间">
-            <span> 2020-03-21-2020-03-29 </span>
-          </el-form-item>
-        </el-col>
-
-        <el-col :span="12">
-          <el-form-item label="签署时间">
-            <span> 2020-01-01 </span>
-          </el-form-item>
-
-          <el-form-item label="合同金额">
-            <span> 1161178.00 </span>
-          </el-form-item>
-
-          <el-form-item label="合同开始时间">
-            <span> 2020-01-01 </span>
-          </el-form-item>
-
-          <el-form-item label="合同到期时间">
-            <span> 2020-01-01 </span>
-          </el-form-item>
-
-          <el-form-item label="经办人">
-            <span> 王某某 </span>
-          </el-form-item>
-        </el-col>
-      </el-row>
-
+    <div class="ls-drawerbox">
       <el-tabs
         v-model="activeName"
         @tab-click="handleClick"
@@ -194,28 +234,33 @@
           </div>
         </el-tab-pane>
       </el-tabs>
-
-    </el-form>
+    </div>
   </div>
 
 </template>
 
-
 <script>
+import { contactDetail, contactDelete } from '@/api/contractManagement/contacts'
 export default {
   name: 'DialogPayment',
   components: {
   },
   props: {
     drawerData: {
-      type: String,
+      type: Object,
+      default: undefined
+    },
+    drawerStatus: {
+      type: Boolean,
       default: undefined
     }
   },
 
   data() {
     return {
+      pmpContractData: {},
       activeName: 'first',
+
       gridData: [{
         date: '2016-05-02',
         name: '王小虎',
@@ -238,9 +283,79 @@ export default {
   //   },
 
   mounted() {
-    console.log(111, this.drawerData)
+    // console.log(111, this.drawerData)
+    // console.log(222, this.drawerStatus)
+    this.retriveContactDetail()
   },
   methods: {
+    closeDrawer() {
+      this.$emit('drawerStatus', false)
+    },
+
+    submitUpload() {
+      this.$refs.upload.submit()
+    },
+    submitUploadSuccess() {
+      alert(123)
+    },
+    submitUploadError() {
+      alert(456)
+    },
+
+
+
+
+    deleteContract() {
+      this.$confirm('此操作将永久删除该合同, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        contactDelete({
+          contractIds: this.drawerData
+
+        })
+          .then(res => {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+            console.log(res)
+
+            this.$router.push('/contract/contract')
+            //   this.contactListData = res.data.list
+            //   this.contactListSubData = res.data.list
+          })
+          .catch(() => {
+
+          })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消操作'
+        })
+      })
+    },
+
+
+
+
+
+    retriveContactDetail() {
+      contactDetail({
+        contractId: this.drawerData
+      })
+        .then(res => {
+          console.log(res)
+          this.pmpContractData = res.pmpContract
+        //   this.contactListSubData = res.data.list
+        })
+        .catch(() => {
+
+        })
+    }
+
+
   }
 }
 </script>
@@ -256,9 +371,5 @@ export default {
   border-radius: 3px;
   background: rgb(131, 131, 243);
   text-align: center;
-}
-.title {
-  font-size: 20px;
-  line-height: 60px;
 }
 </style>

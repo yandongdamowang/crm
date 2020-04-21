@@ -3,20 +3,20 @@
   <div>
     <el-form
       ref="form"
-      :model="form"
+      :model="formData"
       label-width="120px"
     >
 
       <el-form-item label="选择时间">
         <el-date-picker
-          v-model="formData.b"
+          v-model="formData.time"
           type="month"
           placeholder="选择时间"
         />
       </el-form-item>
 
       <el-form-item label="合同金额：">
-        <div>8,000,000.00</div>
+        <div>{{ formData.money }}</div>
       </el-form-item>
 
       <el-form-item label="调整后金额：">
@@ -29,39 +29,44 @@
       </el-form-item>
 
       <el-form-item label="调整金额：">
-        <span>2,000,000.00</span>
+
+        <span v-if="formData.a"> ￥{{ formData.a-formData.money }}</span>
       </el-form-item>
 
-      <el-form-item label="合同支付金额：">
+      <!-- <el-form-item label=""> -->
+      <el-table
+        :data="paymentListData"
+        style="width: 100%"
+      >
+        <el-table-column
+          prop="contractName"
+          label="合同名称"
+          width="180"
+        />
+        <el-table-column
+          prop="money"
+          label="支付金额"
+          width="180"
+        />
+        <el-table-column
+          prop="costPercentage"
+          label="支付比例"
+        />
+        <el-table-column label="调整后支付金额">
+          <template slot-scope="scope">
+            <el-input
+              v-model="formData.b"
+              placeholder="请输入金额"
+            />
 
-        <el-table
-          :data="tableData"
-          style="width: 100%"
-        >
-          <el-table-column
-            prop="date"
-            label="合同名称"
-            width="180"
-          />
-          <el-table-column
-            prop="name"
-            label="支付金额"
-            width="180"
-          />
-          <el-table-column
-            prop="address"
-            label="支付比例"
-          />
-          <el-table-column
-            prop="address"
-            label="调整后支付金额"
-          />
-          <el-table-column
-            prop="address"
-            label="调整后支付比例"
-          />
-        </el-table>
-      </el-form-item>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="address"
+          label="调整后支付比例"
+        />
+      </el-table>
+      <!-- </el-form-item> -->
 
     </el-form>
   </div>
@@ -70,6 +75,7 @@
 
 
 <script>
+import { paymentList } from '@/api/contractManagement/contacts'
 export default {
   name: 'DialogPayment',
   components: {
@@ -84,7 +90,7 @@ export default {
   data() {
     return {
     //   dialogVisiblePayment: false,
-      tableData: [],
+      paymentListData: [],
       formData: {
         a: '',
         b: '',
@@ -96,9 +102,22 @@ export default {
   },
   mounted() {
     console.log(123)
-    console.log(this.status)
+    this.retrivePaymentList()
   },
   methods: {
+    retrivePaymentList() {
+      paymentList({
+        'month': '2020-04'
+      })
+        .then(res => {
+          console.log(res)
+          this.paymentListData = res.list
+          this.formData = res
+        })
+        .catch(() => {
+
+        })
+    }
   }
 }
 </script>

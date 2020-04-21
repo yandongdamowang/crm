@@ -184,6 +184,7 @@ export default {
 .container {
   position: relative;
   height: 100%;
+  //   padding: 20px 0 0 0;
 }
 
 .el-menu-vertical:not(.el-menu--collapse) {
@@ -228,7 +229,8 @@ export default {
 
 .menu-item-select {
   border-left: 2px solid #3e84e9;
-  background-color: #3e84e9 !important;
+  //   background-color: #3e84e9 !important;
+  background-color: rgba(46, 64, 80, 0.6) !important;
 }
 
 .create-button-container {

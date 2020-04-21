@@ -13,6 +13,7 @@ const getters = {
     }
     return '悟空CRM系统'
   },
+  //   headerName: state => state.app.headerName,
   activeIndex: state => state.app.sidebar.activeIndex,
   navActiveIndex: state => state.app.navbar.activeIndex,
   // 权限

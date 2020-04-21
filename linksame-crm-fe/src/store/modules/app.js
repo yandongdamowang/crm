@@ -1,9 +1,5 @@
-import {
-  adminSystemIndex
-} from '@/api/systemManagement/SystemConfig'
-import {
-  crmSettingConfigData
-} from '@/api/systemManagement/SystemCustomer'
+import { adminSystemIndex } from '@/api/systemManagement/SystemConfig'
+import { crmSettingConfigData } from '@/api/systemManagement/SystemCustomer'
 import Lockr from 'lockr'
 
 /** 记录 侧边索引 */
@@ -19,10 +15,14 @@ const app = {
       activeIndex: '' // 导航目前是第几个 个人中心需要
     },
     /** CRM配置信息 */
-    CRMConfig: {}
+    CRMConfig: {},
+    headerName: ''
   },
 
   mutations: {
+    SET_HEADERNAME: (state, headerName) => {
+      state.headerName = headerName
+    },
     SET_ACTIVEINDEX: (state, path) => {
       state.sidebar.activeIndex = path
     },
@@ -48,35 +48,35 @@ const app = {
 
   actions: {
     // 登录
-    SystemLogoAndName({
-      commit
-    }) {
+    SystemLogoAndName({ commit }) {
       return new Promise((resolve, reject) => {
-        adminSystemIndex().then(response => {
-          commit('SET_APPNAME', response.data.name)
-          commit('SET_APPLOGO', response.data.logo)
-          Lockr.set('systemLogo', response.data.logo)
-          Lockr.set('systemName', response.data.name)
-          resolve(response)
-        }).catch(error => {
-          reject(error)
-        })
+        adminSystemIndex()
+          .then(response => {
+            commit('SET_APPNAME', response.data.name)
+            commit('SET_APPLOGO', response.data.logo)
+            Lockr.set('systemLogo', response.data.logo)
+            Lockr.set('systemName', response.data.name)
+            resolve(response)
+          })
+          .catch(error => {
+            reject(error)
+          })
       })
     },
 
     /**
      * 获取客户管理配置
      */
-    CRMSettingConfig({
-      commit
-    }) {
+    CRMSettingConfig({ commit }) {
       return new Promise((resolve, reject) => {
-        crmSettingConfigData().then(response => {
-          commit('SET_CRMCONFIG', response.data)
-          resolve(response)
-        }).catch(error => {
-          reject(error)
-        })
+        crmSettingConfigData()
+          .then(response => {
+            commit('SET_CRMCONFIG', response.data)
+            resolve(response)
+          })
+          .catch(error => {
+            reject(error)
+          })
       })
     }
   }

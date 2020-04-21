@@ -130,10 +130,10 @@
           </el-form>
 
         </el-tab-pane>
-        <div class="regist">
+        <!-- <div class="regist">
           <el-button type="text">免费注册</el-button>
           <el-button type="text">忘记密码?</el-button>
-        </div>
+        </div> -->
       </el-tabs>
 
     </div>

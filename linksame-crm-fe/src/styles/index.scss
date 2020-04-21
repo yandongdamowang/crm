@@ -19,7 +19,7 @@ body {
 
 // 滚动条样式
 ::-webkit-scrollbar-track-piece {
-  background: #EFEFEF;
+  background: #efefef;
 }
 
 ::-webkit-scrollbar {
@@ -28,7 +28,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #C7D1DA;
+  background: #c7d1da;
   border-radius: 3.5px;
 }
 
@@ -72,7 +72,7 @@ a:hover {
     visibility: hidden;
     display: block;
     font-size: 0;
-    content: " ";
+    content: ' ';
     clear: both;
     height: 0;
   }
@@ -101,7 +101,6 @@ li {
   text-overflow: ellipsis;
 }
 
-
 /* 右浮动 */
 .rt {
   float: right;
@@ -116,7 +115,7 @@ li {
 
 // 控制svg颜色
 path {
-  fill: inherit !important
+  fill: inherit !important;
 }
 
 // 通过 popper-class 去除默认padding
@@ -134,7 +133,7 @@ path {
 }
 
 /** 懒加载样式*/
-img[lazy="loading"] {
+img[lazy='loading'] {
   display: inline-block;
   padding: 8px;
   // width: 20px !important;
@@ -142,7 +141,7 @@ img[lazy="loading"] {
   margin: 0 auto;
 }
 
-div[lazy=loading] {
+div[lazy='loading'] {
   display: inline-block;
   padding: 8px;
   // width: 20px !important;
@@ -212,4 +211,86 @@ div[lazy=loading] {
 // 去除焦点时的蓝色边框
 * :focus {
   outline: none;
+}
+
+.ls-header {
+  height: 60px;
+  line-height: 50px;
+  margin: 0 0 10px 0;
+  width: 100%;
+  background: white;
+
+  font-size: 24px;
+  font-family: Microsoft YaHei;
+  font-weight: 500;
+
+  color: rgba(35, 39, 42, 1);
+  //   letter-spacing: 4px;
+  padding: 0 0 0 30px;
+  //   border-bottom: 10px solid white;
+  .ls-header-r {
+    float: right;
+    margin: 0px 50px 0 0;
+  }
+}
+
+.ls-box {
+  height: 95%;
+  width: calc(100% - 20px);
+  background-color: #fff;
+  padding: 20px 30px;
+  margin: 10px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+}
+
+.ls-pagination {
+  width: 100%;
+  //   height: 300px;
+  //   background: red;
+  text-align: right;
+  margin: 30px 0 0 -20px;
+}
+
+.ls-drawertitle {
+  font-size: 26px;
+  line-height: 60px;
+  height: 80px;
+  border-bottom: 1px solid rgb(232, 232, 232);
+
+  .ls-drawertitle-l {
+    float: left;
+  }
+  .ls-drawertitle-r {
+    float: right;
+
+    color: rgba(192, 196, 204, 1);
+    opacity: 1;
+    .ls-drawertitle-dropdown {
+      font-size: 26px;
+      color: rgba(192, 196, 204, 1);
+    }
+  }
+}
+
+.ls-drawerform {
+  margin: 30px 0 30px 0;
+  .ls-drawerform-header {
+    // width: 56px;
+    // height: 19px;
+    font-size: 20px;
+    font-family: Microsoft YaHei;
+    font-weight: 400;
+    // line-height: 22px;
+    color: rgb(92, 109, 143);
+    opacity: 1;
+    margin: 30px 0 30px 0;
+  }
+
+  .el-form-item {
+    margin-bottom: 0px !important;
+  }
+}
+
+.ls-drawerbox {
+  margin: 30px 0 30px 0;
 }

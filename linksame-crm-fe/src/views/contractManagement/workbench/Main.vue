@@ -1,61 +1,97 @@
 <template>
-  <div>
+  <div style="height:100%">
+    <div class="ls-header"> 仪表盘
+      <div class="ls-header-r">
+        <el-date-picker
+          v-model="headerGrep.datetime"
+          type="daterange"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          value-format="yyyy-MM-dd"
+        />
+      </div>
 
-    <div class="box">
+      <div class="ls-header-r">
+        <el-radio-group v-model="headerGrep.type">
+          <el-radio-button label="今日">今日</el-radio-button>
+          <el-radio-button label="本周" />
+          <el-radio-button label="本月" />
+          <el-radio-button label="全年" />
+        </el-radio-group>
+
+      </div>
+      <!-- {{headerGrep.type}} -->
+
+      <div class="ls-header-r">
+        <el-select
+          v-model="headerGrep.project"
+          placeholder="选择项目"
+        >
+          <el-option
+            label="项目一"
+            value="shanghai"
+          />
+          <el-option
+            label="项目二"
+            value="beijing"
+          />
+        </el-select>
+      </div>
+
+    </div>
+
+    <div class="ls-box">
+
       <el-row :gutter="12">
-        <el-col :span="8">
+        <el-col :span="24">
           <el-card shadow="hover">
-            <div
-              class="logo"
-              style="background:rgb(164,204,100)"
-            >
-              <i class="el-icon-circle-check" />
+            <div class="ls-datashow">
+              <span style="font-size:28px">数据概览</span>
             </div>
-
             <div class="content">
-              <div> 合同数量 </div>
-              <span style="font-size:30px"> 1,236 </span>
+
+              <span
+                class="logo"
+                style="color:rgb(164,204,100)"
+              > <i class="el-icon-document-copy" /> </span>
+              <span style="font-size:26px"> {{ contractDashboardData.contractCount }} </span>
               <span> 个 </span>
-            </div>
-
-          </el-card>
-        </el-col>
-        <el-col :span="8">
-          <el-card shadow="hover">
-
-            <div
-              class="logo"
-              style="background:rgb(226,100,115)"
-            >
-              <i class="el-icon-alarm-clock" />
+              <span style="font-size:14px"> 总合同数 </span>
             </div>
 
             <div class="content">
-              <div> 预计付款金额 </div>
-              <span style="font-size:30px"> 1,236 </span>
-              <span> 万 </span>
-            </div>
-
-          </el-card>
-        </el-col>
-        <el-col :span="8">
-          <el-card shadow="hover">
-
-            <div
-              class="logo"
-              style="background:rgb(205,205,73)"
-            >
-              <i class="el-icon-document-add" />
+              <span
+                class="logo"
+                style="color:rgb(0,183,255)"
+              > <i class="el-icon-document-checked" /></span>
+              <span style="font-size:30px"> {{ contractDashboardData.contractCount }}</span>
+              <span> 个 </span>
+              <span style="font-size:14px"> 完成合同数 </span>
             </div>
 
             <div class="content">
-              <div> 总支付累计付款金额 </div>
-              <span style="font-size:30px"> 1,236 </span>
-              <span> 万 </span>
+              <span
+                class="logo"
+                style="color:rgb(226,100,115)"
+              > <i class="el-icon-money" /></span>
+              <span style="font-size:30px"> {{ contractDashboardData.waitPayment }} </span>
+              <span> 元 </span>
+              <span style="font-size:14px"> 预计付款金额 </span>
+            </div>
+
+            <div class="content">
+              <span
+                class="logo"
+                style="color:rgb(205,205,73)"
+              > <i class="el-icon-bank-card" /></span>
+              <span style="font-size:30px"> {{ contractDashboardData.cumulativePayment }}</span>
+              <span> 元 </span>
+              <span style="font-size:14px"> 总支付累计付款金额 </span>
             </div>
 
           </el-card>
         </el-col>
+
       </el-row>
 
       <div style="margin: 10px 0 0 0">
@@ -111,9 +147,8 @@
 <script>
 
 import echarts from 'echarts'
-
+import { contractDashboard } from '@/api/contractManagement/contacts'
 export default {
-
   name: 'Main',
   components: {
 
@@ -121,6 +156,13 @@ export default {
   filters: {},
   data() {
     return {
+      headerGrep: {
+        datetime: ['2020-01-01', '2020-05-29'],
+        project: '',
+        type: []
+      },
+
+      contractDashboardData: {},
       workbenchTableData: [{
         'a': '中核华兴工程有限公司',
         'b': '24',
@@ -141,10 +183,35 @@ export default {
   computed: {
 
   },
+
+  watch: {
+    datetime(val) {
+      this.retriveContractDashboard()
+    }
+  },
   mounted() {
+    this.$store.commit('SET_HEADERNAME', '仪表盘')
+    this.retriveContractDashboard()
     this.initAxis()
   },
   methods: {
+    retriveContractDashboard() {
+    //   console.log(123)
+      contractDashboard({
+        startTime: this.headerGrep.datetime[0],
+        endTime: this.headerGrep.datetime[1]
+      })
+        .then(res => {
+          console.log(res)
+          this.contractDashboardData = res
+        })
+        .catch(() => {
+
+        })
+    },
+
+
+
     initAxis() {
       var axisChart = echarts.init(document.getElementById('axismain'))
 
@@ -292,34 +359,36 @@ export default {
 
 <style lang="scss" scoped>
 .logo {
-  height: 80px;
-  width: 150px;
-  /* position: relative; */
-  display: inline-block;
-  font-size: 50px;
-  text-align: center;
-  line-height: 80px;
-  margin: 0 10px 0 0px;
-  border-radius: 2px;
-  color: white;
+  font-size: 26px;
 }
 .content {
-  display: inline-block;
-  left: 50%;
-  top: 20px;
-  //   float: left;
+  width: 25%;
+  margin: 30px 0px;
+  font-size: 26px;
+  float: left;
 }
-.box {
-  height: 100%;
-  width: 100%;
-  background-color: rgb(245, 246, 249);
-  padding: 10px;
-  //   margin: 20px;
-}
+
 .table-title {
   text-align: justify;
   font-weight: 600;
   font-size: 20px;
   // height: calc(100% - 50px);
+}
+.ls-box {
+  background-color: rgb(245, 246, 249) !important;
+  padding: 0px 0px;
+}
+.ls-datashow {
+  width: 100%;
+  height: 30px;
+  border-bottom: 1px solid rgba(220, 223, 230, 1);
+  padding: 0 0 50px 0px;
+
+  font-size: 18px;
+  font-family: Microsoft YaHei;
+  font-weight: 500;
+
+  color: rgba(48, 49, 51, 1);
+  //   letter-spacing: 4px;
 }
 </style>
