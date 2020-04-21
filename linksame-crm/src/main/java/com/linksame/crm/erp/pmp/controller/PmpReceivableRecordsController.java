@@ -35,6 +35,14 @@ public class PmpReceivableRecordsController extends Controller {
     }
 
     /**
+     *
+     * @param contractId 根据合同ID 查询回款信息
+     */
+    public void queryByContractId(@Para("contractId")Long contractId){
+        renderJson(pmpReceivableRecordsServer.queryByContractId(contractId));
+    }
+
+    /**
      * 新增 或者 修改
      */
     public void addOrUpdate(){

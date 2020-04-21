@@ -44,4 +44,12 @@
     #sql("deleteByIds")
       delete from pmp_receivable_records where receivable_records_id = ?
     #end
+
+
+    #sql("paymentDashboard")
+         select  a.collecting_time, SUM(a.receivable_amount) as receivableAmountMoney,
+            count(a.receivable_records_id) as ids
+        from pmp_contract b LEFT JOIN pmp_receivable_records a ON b.contract_id = a.contract_id WHERE 1=1 and a.collecting_time  between DATE_FORMAT(#para(startTime), '%Y-%m-%d') and DATE_FORMAT(#para(endTime), '%Y-%m-%d')
+        group by a.collecting_time
+    #end
 #end

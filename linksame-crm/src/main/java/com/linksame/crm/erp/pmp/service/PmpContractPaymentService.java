@@ -130,4 +130,44 @@ public class PmpContractPaymentService {
         records.addAll(records1);
         return R.ok().put("paymentDetails",records);
     }
+
+    /**
+     * 预付款报表
+     * @param parseObject 条件
+     * @return 报表
+     */
+    public R paymentReport(JSONObject parseObject) {
+        LocalDate startTime = LocalDate.parse(parseObject.getString("startTime"), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        LocalDate endTime = LocalDate.parse(parseObject.getString("endTime"), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        Kv kv = Kv.by("startTime", startTime)
+                .set("endTime", endTime)
+                .set("supplierId", parseObject.get("supplierId"))
+                .set("projectId", parseObject.get("projectId"));
+        //报表曲线图
+        List<Record> records = Db.find(Db.getSqlPara("pmp.contractPaymentRecord.paymentDashboard", kv));
+        int contractCount = 0;
+        for (Record record : records) {
+            contractCount = contractCount + record.getInt("ids");
+        }
+        //预付款金额
+        List<Record> contractRecords = Db.find(Db.getSqlPara("pmp.contractPayment.paymentDashboard", kv));
+        BigDecimal paymentCountMoney = new BigDecimal(0);
+        for (Record contractRecord : contractRecords) {
+            BigDecimal paymentCountMoney1 = contractRecord.getBigDecimal("countMoney");
+            if (paymentCountMoney1 != null) {
+                paymentCountMoney = paymentCountMoney.add(paymentCountMoney1);
+            }
+        }
+        //回款
+        List<Record>  agencyFund = Db.find(Db.getSqlPara("pmp.receivableRecords.paymentDashboard", kv));
+        BigDecimal receivableAmountMoney = new BigDecimal(0);
+        for (Record record : agencyFund) {
+            BigDecimal receivableAmountMoney1 = record.getBigDecimal("receivableAmountMoney");
+            if (receivableAmountMoney1 != null) {
+                receivableAmountMoney = receivableAmountMoney.add(receivableAmountMoney1);
+            }
+        }
+//        BigDecimal bigDecimal = new BigDecimal(0);
+        return R.ok().put("dashboard",records).put("contractCount",contractCount).put("paymentCountMoney",paymentCountMoney).put("receivableAmountMoney",receivableAmountMoney);
+    }
 }

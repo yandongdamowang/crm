@@ -77,4 +77,10 @@ public class PmpReceivableRecordsServer {
             })? R.ok() : R.error();
         }
     }
+
+    public R queryByContractId(Long contractId) {
+        Kv kv = Kv.by("customerId", contractId);
+        List<Record> records = Db.find(Db.getSqlPara("pmp.receivableRecords.queryList", kv));
+        return R.ok().put("data",records);
+    }
 }

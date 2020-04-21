@@ -146,5 +146,12 @@ public abstract class BasePmpReceivableRecords<M extends BasePmpReceivableRecord
         return getStr("batch_id");
     }
 
+    public void setStatus(java.lang.Integer status) {
+        set("status", status);
+    }
+
+    public java.lang.Integer getStatus() {
+        return getInt("status");
+    }
 
 }

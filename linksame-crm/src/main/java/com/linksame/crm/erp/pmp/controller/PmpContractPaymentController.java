@@ -91,4 +91,13 @@ public class PmpContractPaymentController extends Controller {
     public void queryPaymentDetail(@Para("contractId")Long contractId){
         renderJson(pmpContractPaymentService.queryPaymentDetail(contractId));
     }
+    /**
+     *
+     *  付款记录报表
+     */
+    public void paymentReport(){
+        String rawData = getRawData();
+        JSONObject jsonObject = JSON.parseObject(getRawData());
+        renderJson(pmpContractPaymentService.paymentReport(jsonObject));
+    }
 }
