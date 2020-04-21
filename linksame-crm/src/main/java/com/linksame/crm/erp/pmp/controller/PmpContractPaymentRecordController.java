@@ -1,5 +1,6 @@
 package com.linksame.crm.erp.pmp.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.jfinal.aop.Inject;
 import com.jfinal.core.Controller;
 import com.jfinal.core.paragetter.Para;
@@ -32,5 +33,12 @@ public class PmpContractPaymentRecordController extends Controller {
      */
     public void queryById(@Para("paymentRecordId")Long paymentRecordId){
         renderJson(contractPaymentRecordService.queryById(paymentRecordId));
+    }
+    /**
+     *
+     *  付款记录报表
+     */
+    public void paymentReport(){
+        renderJson(contractPaymentRecordService.paymentReport(JSON.parseObject(getRawData())));
     }
 }

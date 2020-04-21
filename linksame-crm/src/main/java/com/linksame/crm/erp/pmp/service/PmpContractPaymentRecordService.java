@@ -45,4 +45,16 @@ public class PmpContractPaymentRecordService {
 
         return R.ok().put("paymentRecord",first);
     }
+
+    /**
+     *  付款记录报表
+     * @param parseObject 条件
+     * @return 报表
+     */
+    public R paymentReport(JSONObject parseObject) {
+        Kv kv = Kv.by("contractNumber", parseObject.getString("contractNumber"))
+                .set("supplierId", parseObject.getLong("supplierId"))
+                .set("orderBy", parseObject.get("orderBy"));
+        return null;
+    }
 }
