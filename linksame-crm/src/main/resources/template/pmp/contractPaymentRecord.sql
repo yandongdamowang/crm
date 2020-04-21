@@ -1,9 +1,12 @@
 #namespace("pmp.contractPaymentRecord")
     #sql("queryList")
         select
-            pcpr.*
-        from pmp_contract_payment_record as pcpr
+            pcpr.* ,pc.contract_number
+        from pmp_contract_payment_record as pcpr left join pmp_contract as pc on pcpr.contract_id = pc.contract_id
             where 1 = 1 and
+            #if(contractNumber)
+                and pc.contract_number like concat('%', #para(contractNumber), '%')
+            #end
             #if(paymentNumber)
                 and pcpr.payment_number like concat('%', #para(paymentNumber), '%')
             #end

@@ -143,4 +143,12 @@ public abstract class BasePmpContractPayment<M extends BasePmpContractPayment<M>
         return getStr("trade_status");
     }
 
+    public void setBatchId(java.lang.String batchId) {
+        set("batch_id", batchId);
+    }
+
+    public java.lang.String getBatchId() {
+        return getStr("batch_id");
+    }
+
 }
