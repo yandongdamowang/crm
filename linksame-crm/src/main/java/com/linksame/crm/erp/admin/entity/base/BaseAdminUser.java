@@ -65,6 +65,22 @@ public abstract class BaseAdminUser<M extends BaseAdminUser<M>> extends Model<M>
 		return getStr("realname");
 	}
 
+	public void setCompanyName(java.lang.String companyName) {
+		set("company_name", companyName);
+	}
+
+	public java.lang.String getCompanyName() {
+		return getStr("company_name");
+	}
+
+	public void setCompanyCode(java.lang.String companyCode) {
+		set("company_code", companyCode);
+	}
+
+	public java.lang.String getCompanyCode() {
+		return getStr("company_code");
+	}
+
 	public void setNum(java.lang.String num) {
 		set("num", num);
 	}

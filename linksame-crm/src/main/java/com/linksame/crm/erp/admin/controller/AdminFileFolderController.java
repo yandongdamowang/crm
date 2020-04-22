@@ -51,9 +51,22 @@ public class AdminFileFolderController extends Controller {
      */
     @ApiOperation(methods= RequestMethod.POST, description="文件夹重命名")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="adminFileFolder", description="文件夹对象")
+            @ApiImplicitParam(name="folderId", description="文件夹编号"),
+            @ApiImplicitParam(name="folderName", description="文件夹名称")
     })
     public void renameFolder(@Para("") AdminFileFolder adminFileFolder){
+        renderJson(adminFileFolder.update() ? R.ok() : R.error());
+    }
+
+    /**
+     * 移动文件夹
+     */
+    @ApiOperation(methods= RequestMethod.POST, description="移动文件夹")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="folderId", description="文件夹编号"),
+            @ApiImplicitParam(name="folderPid", description="文件夹父编号")
+    })
+    public void mobileFolder(@Para("") AdminFileFolder adminFileFolder){
         renderJson(adminFileFolder.update() ? R.ok() : R.error());
     }
 

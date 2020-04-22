@@ -26,6 +26,14 @@ public abstract class BaseAdminFileFolder<M extends BaseAdminFileFolder<M>> exte
         return getStr("folder_name");
     }
 
+    public void setFolderCode(java.lang.String folderCode) {
+        set("folder_code", folderCode);
+    }
+
+    public java.lang.String getFolderCode() {
+        return getStr("folder_code");
+    }
+
     public void setFolderPid(java.lang.Integer folderPid) {
         set("folder_pid", folderPid);
     }
@@ -57,4 +65,5 @@ public abstract class BaseAdminFileFolder<M extends BaseAdminFileFolder<M>> exte
     public java.lang.String getBatchId() {
         return getStr("batch_id");
     }
+
 }

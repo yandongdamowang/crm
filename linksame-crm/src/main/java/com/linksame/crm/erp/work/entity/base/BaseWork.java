@@ -25,6 +25,14 @@ public abstract class BaseWork<M extends BaseWork<M>> extends Model<M> implement
 		return getStr("name");
 	}
 
+	public void setCode(java.lang.String code) {
+		set("code", code);
+	}
+
+	public java.lang.String getCode() {
+		return getStr("code");
+	}
+
 	public void setStatus(java.lang.Integer status) {
 		set("status", status);
 	}

@@ -389,6 +389,20 @@ public class TaskService{
                             if("main_user_id".equals(y.getKey())){
                                 newValue = Db.queryStr("select realname from `admin_user` where user_id = ?", newValue);
                             }
+                            //修改状态时显示具体信息,后续有需求时再放开注释
+                            /*if("status".equals(y.getKey())){
+                                if(Integer.parseInt(newValue.toString()) == 1){
+                                    workTaskLog.setContent("修改 完成状态 为: 正在进行");
+                                } else if(Integer.parseInt(newValue.toString()) == 2){
+                                    workTaskLog.setContent("修改 完成状态 为: 延期");
+                                } else if(Integer.parseInt(newValue.toString()) == 3){
+                                    workTaskLog.setContent("修改 完成状态 为: 归档");
+                                } else {
+                                    workTaskLog.setContent("修改 完成状态 为: 结束");
+                                }
+                            } else {
+                                workTaskLog.setContent("修改" + getTaileName(y.getKey()) + "为: " + newValue + "");
+                            }*/
                             workTaskLog.setContent("修改" + getTaileName(y.getKey()) + "为：" + newValue + "");
                         }
                         saveWorkTaskLog(workTaskLog);
