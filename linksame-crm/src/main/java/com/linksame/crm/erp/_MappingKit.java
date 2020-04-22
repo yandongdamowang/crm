@@ -24,7 +24,9 @@ public class _MappingKit {
 		arp.addMapping("admin_field_style", "id", AdminFieldStyle.class);
 		arp.addMapping("admin_fieldv", "id", AdminFieldv.class);
 		arp.addMapping("admin_file", "file_id", AdminFile.class);
+		arp.addMapping("admin_file_type", "type_id", AdminFileType.class);
 		arp.addMapping("admin_file_folder", "folder_id", AdminFileFolder.class);
+		arp.addMapping("admin_file_log", "log_id", AdminFileLog.class);
 		arp.addMapping("admin_menu", "menu_id", AdminMenu.class);
 		arp.addMapping("admin_message", "message_id", AdminMessage.class);
 		arp.addMapping("admin_record", "record_id", AdminRecord.class);

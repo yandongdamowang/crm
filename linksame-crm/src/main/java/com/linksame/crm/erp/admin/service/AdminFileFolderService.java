@@ -22,8 +22,6 @@ import java.util.List;
  */
 public class AdminFileFolderService {
 
-    private List<Record> recDataList = new ArrayList<>();
-
     /**
      * 创建文件夹
      * @param adminFileFolder   文件对象

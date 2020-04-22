@@ -52,4 +52,9 @@
             order by a.create_time desc
         #end
     #end
+    #sql("queryFile")
+        select a.*,b.realname as createName from admin_file a
+            inner join admin_user b on a.create_user_id = b.user_id
+            where a.file_id = #para(fileId)
+    #end
 #end
