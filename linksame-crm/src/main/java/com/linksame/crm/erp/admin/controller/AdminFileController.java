@@ -48,8 +48,13 @@ public class AdminFileController extends Controller {
     }
 
     /**
-     * 批量附件上传测试TODO
+     * 批量附件上传
      */
+    @ApiOperation(methods= RequestMethod.POST, description="批量附件上传")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="files", description="附件集合"),
+            @ApiImplicitParam(name="workId", description="项目ID")
+    })
     public void batchUpload(@Para("") AdminFile adminFile){
         renderJson(adminFileService.batchUpload(getFiles("files"),adminFile,getInt("workId")));
     }

@@ -2,6 +2,9 @@
     #sql("queryByUserName")
       select a.*,(SELECT name FROM admin_dept WHERE dept_id = a.dept_id) as deptName,(SELECT realname FROM admin_user WHERE user_id=a.parent_id) as parentName from admin_user as a where a.username = ?  limit 1
     #end
+    #sql("queryByMobile")
+      select a.*,(SELECT name FROM admin_dept WHERE dept_id = a.dept_id) as deptName,(SELECT realname FROM admin_user WHERE user_id=a.parent_id) as parentName from admin_user as a where a.mobile = ?  limit 1
+    #end
     #sql("queryUserList")
         select a.realname,a.username,a.user_id,a.sex,a.mobile,a.email,e.name as deptName,a.status,a.create_time,a.dept_id,
        a.post,a.parent_id,a.img,

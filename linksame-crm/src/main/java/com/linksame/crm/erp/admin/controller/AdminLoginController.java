@@ -3,6 +3,7 @@ package com.linksame.crm.erp.admin.controller;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.servlet.ServletUtil;
+import com.aliyuncs.utils.StringUtils;
 import com.jfinal.core.paragetter.Para;
 import com.jfinal.kit.Prop;
 import com.jfinal.kit.PropKit;
@@ -18,7 +19,6 @@ import com.jfinal.aop.Inject;
 import com.jfinal.core.Controller;
 import com.jfinal.log.Log;
 import com.jfinal.plugin.activerecord.Db;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
@@ -42,13 +42,11 @@ public class AdminLoginController extends Controller{
     }
 
     /**
-     * @param username 用户名
-     * @param password 密码
-     * @author zhangzhiwei
      * 用户登录
+     * @param adminUser 用户对象
      */
-    public void login(@Para("username") String username, @Para("password") String password){
-        String key = BaseConstant.USER_LOGIN_ERROR_KEY + username;
+    public void login(@Para("") AdminUser adminUser){
+        String key = BaseConstant.USER_LOGIN_ERROR_KEY + adminUser.getUsername();
         Redis redis= RedisManager.getRedis();
         long beforeTime = System.currentTimeMillis() - 60 * 5 * 1000;
         if(redis.exists(key)){
@@ -61,20 +59,20 @@ public class AdminLoginController extends Controller{
             }
         }
         redis.zadd(key, System.currentTimeMillis(), System.currentTimeMillis());
-        if(StrUtil.isEmpty(username) || StrUtil.isEmpty(password)){
-            renderJson(R.error("请输入用户名和密码！"));
-            return;
-        }
-        AdminUser user = AdminUser.dao.findFirst(Db.getSql("admin.user.queryByUserName"), username.trim());
+        AdminUser user = AdminUser.dao.findFirst(Db.getSql("admin.user.queryByUserName"), adminUser.getUsername().trim());
         if(user == null){
             renderJson(R.error("用户名或密码错误！"));
+            return;
+        }
+        if(StringUtils.isEmpty(adminUser.getUsername()) || StringUtils.isEmpty(adminUser.getPassword())){
+            renderJson(R.error("账号或者密码不能为空！"));
             return;
         }
         if(user.getStatus() == 0){
             renderJson(R.error("账户被禁用！"));
             return;
         }
-        if(BaseUtil.verify(username + password, user.getSalt(), user.getPassword())){
+        if(BaseUtil.verify(adminUser.getUsername() + adminUser.getPassword(), user.getSalt(), user.getPassword())){
             if(user.getStatus() == 2){
                 user.setStatus(1);
             }
@@ -92,9 +90,56 @@ public class AdminLoginController extends Controller{
         }else{
             Log.getLog(getClass()).warn("用户登录失败");
             renderJson(R.error("用户名或密码错误！"));
+            return;
         }
 
     }
+
+    /**
+     * 用户登录----手机验证码登录
+     * @author Ivan
+     * @param mobile    手机号
+     * @param captcha   验证码
+     */
+    public void phoneLogin(@Para("mobile") String mobile, @Para("captcha") String captcha){
+        AdminUser user = AdminUser.dao.findFirst(Db.getSql("admin.user.queryByMobile"), mobile.trim());
+        if (user == null) {
+            renderJson(R.error("该手机号码未注册！"));
+            return;
+        }
+        if (user.getStatus() == 0) {
+            renderJson(R.error("账户被禁用！"));
+            return;
+        }
+        Redis redis= RedisManager.getRedis();
+        String key = BaseConstant.PHONE_LOGIN_KEY + mobile;
+        if (redis.exists(key)) {
+            String redisRusult = redis.get(key);
+            if(!redisRusult.equals(captcha)){
+                renderJson(R.error("验证码输入错误！"));
+                return;
+            }
+        } else {
+            renderJson(R.error("验证码已失效！"));
+            return;
+        }
+        if (user.getStatus() == 2) {
+            user.setStatus(1);
+        }
+        //获取用户名缓存
+        String usernameKey = BaseConstant.USER_LOGIN_ERROR_KEY + user.getUsername();
+        redis.del(usernameKey);
+        String token = IdUtil.simpleUUID();
+        user.setLastLoginIp(ServletUtil.getClientIP(getRequest()));
+        user.setLastLoginTime(new Date());
+        user.update();
+        user.setRoles(adminRoleService.queryRoleIdsByUserId(user.getUserId()));
+        redis.setex(token, 3600, user);
+        Integer type = getParaToInt("type", 1);
+        BaseUtil.setToken(user.getUserId(), token, type);
+        renderJson(R.ok().put("Admin-Token", token).put("user", user).put("auth", adminRoleService.auth(user.getUserId())));
+    }
+
     /**
      * @author zhangzhiwei
      * 退出登录
