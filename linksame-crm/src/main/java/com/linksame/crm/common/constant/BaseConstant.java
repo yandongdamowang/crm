@@ -46,6 +46,11 @@ public class BaseConstant implements Serializable {
     public static final String USER_LOGIN_ERROR_KEY = "LOGIN_ERROR_USER_";
 
     /**
+     * 手机登录时验证码缓存key
+     */
+    public static final String PHONE_LOGIN_KEY = "LOGIN_PHONE_";
+
+    /**
      * 项目管理员角色ID
      */
     public  static  Integer WORK_ADMIN_ROLE_ID ;

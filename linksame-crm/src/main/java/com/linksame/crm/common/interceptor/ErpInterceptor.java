@@ -27,8 +27,8 @@ public class ErpInterceptor implements Interceptor {
             //截取swagger请求前缀
             String url = controller.getRequest().getRequestURI();
             String[] prefix = url.split("/");
-            //swagger放行
-            if(!("swagger").equals(prefix[1])){
+            //swagger服务及短信验证码接口放行
+            if(!(("swagger").equals(prefix[1])) && !(("sms").equals(prefix[1]))){
                 String token = BaseUtil.getToken(controller.getRequest());
                 AdminUser adminUser = RedisManager.getRedis().get(token);
                 if (adminUser==null) {
