@@ -47,6 +47,15 @@ public class PmpContractController extends Controller {
 
     /**
      *
+     *  查询审批记录
+     */
+    public void contractApprove(){
+        Integer examineRecordId = getInt("examineRecordId");
+
+        renderJson(pmpContractService.contractApprove(examineRecordId));
+    }
+    /**
+     *
      * @param contractIds 合同IDs
      */
     public void delete(@Para("contractIds")String contractIds){

@@ -198,4 +198,20 @@ public abstract class BasePmpContract<M extends BasePmpContract<M>> extends Mode
         return getStr("batch_id");
     }
 
+    public void setCheckStatus(java.lang.Integer checkStatus) {
+        set("check_status", checkStatus);
+    }
+
+    public java.lang.Integer getCheckStatus() {
+        return getInt("check_status");
+    }
+
+    public void setExamineRecordId(java.lang.Integer examineRecordId) {
+        set("examine_record_id", examineRecordId);
+    }
+
+    public java.lang.Integer getExamineRecordId() {
+        return getInt("examine_record_id");
+    }
+
 }

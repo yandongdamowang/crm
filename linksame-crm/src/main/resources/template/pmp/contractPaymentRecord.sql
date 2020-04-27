@@ -35,8 +35,10 @@
     #end
 
 
-    #sql("paymentDashboard")
-        select  a.payment_time, SUM(a.practica_advanced) as practicaAdvanced,
+    #sql("paymentDashboard1")
+        select
+            date_format(a.payment_time, '%Y-%m-%d') AS payment_time,
+	        SUM(a.practica_advanced) as practicaAdvanced,
             count(a.payment_record_id) as ids
         from pmp_contract b LEFT JOIN pmp_contract_payment_record a ON b.contract_id = a.contract_id WHERE 1=1 and a.payment_time between DATE_FORMAT(#para(startTime), '%Y-%m-%d') and DATE_FORMAT(#para(endTime), '%Y-%m-%d')
             #if(supplierId)
@@ -45,6 +47,20 @@
             #if(projectId)
                 and a.project_id = #para(projectId)
             #end
-        group by a.payment_time
+        group by date_format(a.payment_time, '%Y-%m-%d')
+    #end
+     #sql("paymentDashboard2")
+        select
+            date_format(a.payment_time, '%Y-%m') AS payment_time,
+	        SUM(a.practica_advanced) as practicaAdvanced,
+            count(a.payment_record_id) as ids
+        from pmp_contract b LEFT JOIN pmp_contract_payment_record a ON b.contract_id = a.contract_id WHERE 1=1 and a.payment_time between DATE_FORMAT(#para(startTime), '%Y-%m-%d') and DATE_FORMAT(#para(endTime), '%Y-%m-%d')
+            #if(supplierId)
+                and a.supplier_id = #para(supplierId)
+            #end
+            #if(projectId)
+                and a.project_id = #para(projectId)
+            #end
+        group by date_format(a.payment_time, '%Y-%m')
     #end
 #end
