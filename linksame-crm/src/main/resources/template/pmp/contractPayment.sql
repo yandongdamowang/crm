@@ -65,4 +65,35 @@
         group by a.payment_node
     #end
 
+    #sql("paymentDashboard1")
+        select
+            date_format(a.payment_node, '%Y-%m-%d') AS paymentNode,
+	        SUM(a.money) as money,
+            count(a.bill_id) as ids
+        from pmp_contract b LEFT JOIN pmp_contract_payment a ON b.contract_id = a.contract_id
+        WHERE 1=1 and a.payment_node between DATE_FORMAT(#para(startTime), '%Y-%m-%d') and DATE_FORMAT(#para(endTime), '%Y-%m-%d')
+            #if(supplierId)
+                and a.supplier_id = #para(supplierId)
+            #end
+            #if(projectId)
+                and a.project_id = #para(projectId)
+            #end
+        group by date_format(a.payment_node, '%Y-%m-%d')
+    #end
+
+     #sql("paymentDashboard2")
+            select
+            date_format(a.payment_node, '%Y-%m') AS paymentNode,
+	        SUM(a.money) as money,
+            count(a.bill_id) as ids
+        from pmp_contract b LEFT JOIN pmp_contract_payment a ON b.contract_id = a.contract_id
+        WHERE 1=1 and a.payment_node between DATE_FORMAT(#para(startTime), '%Y-%m-%d') and DATE_FORMAT(#para(endTime), '%Y-%m-%d')
+            #if(supplierId)
+                and a.supplier_id = #para(supplierId)
+            #end
+            #if(projectId)
+                and a.project_id = #para(projectId)
+            #end
+        group by date_format(a.payment_node, '%Y-%m')
+    #end
 #end

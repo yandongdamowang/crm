@@ -151,4 +151,12 @@ public abstract class BasePmpContractPayment<M extends BasePmpContractPayment<M>
         return getStr("batch_id");
     }
 
+    public void setSupplierId(java.lang.Long supplierId) {
+        set("supplier_id", supplierId);
+    }
+
+    public java.lang.Long getSupplierId() {
+        return getLong("supplier_id");
+    }
+
 }

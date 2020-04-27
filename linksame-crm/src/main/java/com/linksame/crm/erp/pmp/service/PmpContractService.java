@@ -223,4 +223,10 @@ public class PmpContractService {
             return true;
         }) ? R.ok() : R.error();
     }
+
+    public R contractApprove(Integer examineRecordId) {
+        List<Record> records = Db.find(Db.getSql("pmp.contract.contractApprove"), examineRecordId);
+
+        return R.ok().put("date",records);
+    }
 }

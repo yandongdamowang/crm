@@ -143,20 +143,16 @@ public class PmpContractPaymentService {
                 .set("endTime", endTime)
                 .set("supplierId", parseObject.get("supplierId"))
                 .set("projectId", parseObject.get("projectId"));
+        List<Record> records = null;
+        if (endTime.toEpochDay() - startTime.toEpochDay() > 300){
+            records = Db.find(Db.getSqlPara("pmp.contractPayment.paymentDashboard2", kv));
+        }else {
+            records = Db.find(Db.getSqlPara("pmp.contractPayment.paymentDashboard1", kv));
+        }
         //报表曲线图
-        List<Record> records = Db.find(Db.getSqlPara("pmp.contractPaymentRecord.paymentDashboard", kv));
         int contractCount = 0;
         for (Record record : records) {
             contractCount = contractCount + record.getInt("ids");
-        }
-        //预付款金额
-        List<Record> contractRecords = Db.find(Db.getSqlPara("pmp.contractPayment.paymentDashboard", kv));
-        BigDecimal paymentCountMoney = new BigDecimal(0);
-        for (Record contractRecord : contractRecords) {
-            BigDecimal paymentCountMoney1 = contractRecord.getBigDecimal("countMoney");
-            if (paymentCountMoney1 != null) {
-                paymentCountMoney = paymentCountMoney.add(paymentCountMoney1);
-            }
         }
         //回款
         List<Record>  agencyFund = Db.find(Db.getSqlPara("pmp.receivableRecords.paymentDashboard", kv));
@@ -168,6 +164,13 @@ public class PmpContractPaymentService {
             }
         }
 //        BigDecimal bigDecimal = new BigDecimal(0);
-        return R.ok().put("dashboard",records).put("contractCount",contractCount).put("paymentCountMoney",paymentCountMoney).put("receivableAmountMoney",receivableAmountMoney);
+        //dashboard 曲线数据
+            //practicaAdvanced 实际付款金额
+            //paymentTime 付款日期
+            //ids 支付笔数
+        //contractCount 合同总数
+        //paymentCountMoney 预付款金额
+        //receivableAmountMoney 预回款金额
+        return R.ok().put("dashboard",records).put("contractCount",contractCount).put("receivableAmountMoney",receivableAmountMoney);
     }
 }
