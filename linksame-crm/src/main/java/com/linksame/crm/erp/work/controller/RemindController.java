@@ -3,6 +3,7 @@ package com.linksame.crm.erp.work.controller;
 import com.jfinal.aop.Inject;
 import com.jfinal.core.Controller;
 import com.jfinal.core.paragetter.Para;
+import com.linksame.crm.common.annotation.Permissions;
 import com.linksame.crm.erp.work.entity.TaskRemind;
 import com.linksame.crm.erp.work.service.RemindService;
 import live.autu.plugin.jfinal.swagger.annotation.Api;
@@ -30,6 +31,7 @@ public class RemindController extends Controller {
     @ApiImplicitParams({
             @ApiImplicitParam(name="taskRemind", description="任务提醒对象")
     })
+    @Permissions({"project:taskManage:saveRemind"})
     public void setRemind(@Para("") TaskRemind taskRemind){
         renderJson(remindService.setRemind(taskRemind));
     }

@@ -6,6 +6,7 @@ import com.jfinal.core.Controller;
 import com.jfinal.core.paragetter.Para;
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
+import com.linksame.crm.common.annotation.Permissions;
 import com.linksame.crm.common.config.paragetter.BasePageRequest;
 import com.linksame.crm.common.constant.BaseConstant;
 import com.linksame.crm.erp.admin.service.AdminUserService;
@@ -47,6 +48,7 @@ public class TaskController extends Controller{
     @ApiImplicitParams({
             @ApiImplicitParam(name="taskClass", description="任务分类对象")
     })
+    @Permissions({"project:taskManage:saveClass"})
     public void setTaskClass(@Para("") WorkTaskClass taskClass){
         renderJson(taskService.setTaskClass(taskClass));
     }
@@ -77,6 +79,7 @@ public class TaskController extends Controller{
             @ApiImplicitParam(name="businessIds", description="商机编号(逗号分隔)"),
             @ApiImplicitParam(name="contractIds", description="合同编号(逗号分隔)")
     })
+    @Permissions({"project:taskManage:save"})
     public void setTask(@Para("") Task task){
         boolean oaAuth = false;
         boolean workAuth = false;

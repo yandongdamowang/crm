@@ -1,6 +1,7 @@
 package com.linksame.crm.erp.admin.controller;
 
 import com.jfinal.core.paragetter.Para;
+import com.linksame.crm.common.annotation.Permissions;
 import com.linksame.crm.common.config.paragetter.BasePageRequest;
 import com.linksame.crm.common.minio.service.MinioServicce;
 import com.linksame.crm.erp.admin.entity.AdminFile;
@@ -30,6 +31,7 @@ public class AdminFileController extends Controller {
     @ApiImplicitParams({
             @ApiImplicitParam(name="basePageRequest", description="条件构造对象")
     })
+    @Permissions({"file:fileManage:index"})
     public void getFileList(BasePageRequest<AdminFile> basePageRequest){
         renderJson(adminFileService.getFileList(basePageRequest));
     }
@@ -68,6 +70,7 @@ public class AdminFileController extends Controller {
             @ApiImplicitParam(name="adminFile", description="附件对象"),
             @ApiImplicitParam(name="workId", description="项目ID")
     })
+    @Permissions({"file:fileManage:changeVersion"})
     public void changeVersion(@Para("") AdminFile adminFile){
         renderJson(adminFileService.changeVersion(getFile("file"),adminFile,getInt("workId")));
     }
@@ -80,6 +83,7 @@ public class AdminFileController extends Controller {
     @ApiImplicitParams({
             @ApiImplicitParam(name="adminFile", description="附件对象")
     })
+    @Permissions({"file:fileManage:editVersion"})
     public void editVersionData(@Para("") AdminFile adminFile){
         AdminFile file = AdminFile.dao.findById(adminFile.getFileId());
         //保存日志
@@ -98,6 +102,7 @@ public class AdminFileController extends Controller {
     @ApiImplicitParams({
             @ApiImplicitParam(name="fileId", description="附件ID")
     })
+    @Permissions({"file:fileManage:toMain"})
     public void editVersionToMain(){
         renderJson(adminFileService.editVersionToMain(getInt("fileId")));
     }
@@ -109,6 +114,7 @@ public class AdminFileController extends Controller {
     @ApiImplicitParams({
             @ApiImplicitParam(name="fileId", description="附件ID")
     })
+    @Permissions({"file:fileManage:read"})
     public void queryFileInfo(){
         renderJson(adminFileService.queryFileInfo(getInt("fileId")));
     }
@@ -142,6 +148,7 @@ public class AdminFileController extends Controller {
     @ApiImplicitParams({
             @ApiImplicitParam(name="id", description="附件ID")
     })
+    @Permissions({"file:fileManage:delete"})
     public void removeById() throws Exception {
         renderJson(adminFileService.removeById(getPara("id")));
     }
@@ -165,6 +172,7 @@ public class AdminFileController extends Controller {
             @ApiImplicitParam(name="fileId", description="附件ID"),
             @ApiImplicitParam(name="compositionName", description="附件名称")
     })
+    @Permissions({"file:fileManage:rename"})
     public void renameFile(@Para("") AdminFile adminFile){
         renderJson(adminFileService.renameFileById(adminFile));
     }
@@ -176,6 +184,7 @@ public class AdminFileController extends Controller {
     @ApiImplicitParams({
             @ApiImplicitParam(name="fileId", description="附件ID")
     })
+    @Permissions({"file:fileManage:down"})
     public void downFile() {
         AdminFile adminFile = AdminFile.dao.findFirst("SELECT * FROM `admin_file` where file_id = ?", getInt("fileId"));
         if (adminFile != null) {
