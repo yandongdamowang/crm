@@ -18,7 +18,7 @@
             prr.collecting_time,
             prr.agent
         from pmp_receivable_records as prr
-            where 1 = 1 and
+            where 1 = 1
             #if(paymentMethod)
                 and prr.payment_method like concat('%', #para(paymentMethod), '%')
             #end
@@ -26,7 +26,7 @@
                 and prr.contract_id = #para(contractId)
             #end
             #if(collectingStarttime)
-                prr.collecting_time between DATE_FORMAT(#para(collectingStarttime), '%Y-%m-%d') and DATE_FORMAT(#para(collectingEndtime), '%Y-%m-%d')
+                and prr.collecting_time between DATE_FORMAT(#para(collectingStarttime), '%Y-%m-%d') and DATE_FORMAT(#para(collectingEndtime), '%Y-%m-%d')
             #end
             #if(orderBy =='1')
                order by prr.collecting_time asc
