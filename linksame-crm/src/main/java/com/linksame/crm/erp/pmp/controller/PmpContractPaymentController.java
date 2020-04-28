@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.jfinal.aop.Inject;
 import com.jfinal.core.Controller;
 import com.jfinal.core.paragetter.Para;
+import com.linksame.crm.common.annotation.Permissions;
 import com.linksame.crm.common.config.paragetter.BasePageRequest;
 import com.linksame.crm.erp.pmp.entity.PmpContractPayment;
 import com.linksame.crm.erp.pmp.service.PmpContractPaymentService;
@@ -26,6 +27,7 @@ public class PmpContractPaymentController extends Controller {
     /**
      * 更新账单
      */
+    @Permissions("pmp:advance:update")
     public void updates(){
         String data = getRawData();
         JSONObject jsonObject1 = JSON.parseObject(data);
@@ -40,6 +42,7 @@ public class PmpContractPaymentController extends Controller {
     /**
      * 月份查询账单
      */
+    @Permissions("pmp:advance:index")
     public void queryPaymentByMonthly(){
         //yyyy-mm
         String month = getPara("month");
@@ -67,6 +70,7 @@ public class PmpContractPaymentController extends Controller {
      *
      * @param basePageRequest 预付款列表
      */
+    @Permissions("pmp:advance:index")
     public void queryAdvanceList(BasePageRequest<PmpContractPayment> basePageRequest){
         renderJson(pmpContractPaymentService.queryAdvanceList(basePageRequest));
     }
@@ -74,6 +78,7 @@ public class PmpContractPaymentController extends Controller {
      *
      *  根据ID查询预付款详情
      */
+    @Permissions("pmp:advance:read")
     public void queryAdvanceBybillId(@Para("billId")Long billId){
         renderJson(pmpContractPaymentService.queryAdvanceBybillId(billId));
     }
@@ -81,6 +86,8 @@ public class PmpContractPaymentController extends Controller {
      *
      *  设置优先级
      */
+
+    @Permissions("pmp:advance:priority")
     public void setPriority(@Para("billId")Long billId, @Para("priority")String priority){
         renderJson(pmpContractPaymentService.setPriority(billId,priority));
     }
@@ -88,6 +95,7 @@ public class PmpContractPaymentController extends Controller {
      *
      *  查询合同付款记录
      */
+    @Permissions("pmp:advance:index")
     public void queryPaymentDetail(@Para("contractId")Long contractId){
         renderJson(pmpContractPaymentService.queryPaymentDetail(contractId));
     }
@@ -95,6 +103,7 @@ public class PmpContractPaymentController extends Controller {
      *
      *  付款记录报表
      */
+    @Permissions("pmp:advance:dashBoard")
     public void paymentReport(){
         String rawData = getRawData();
         JSONObject jsonObject = JSON.parseObject(getRawData());

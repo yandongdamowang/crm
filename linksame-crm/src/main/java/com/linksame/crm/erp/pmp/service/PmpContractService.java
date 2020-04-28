@@ -1,6 +1,7 @@
 package com.linksame.crm.erp.pmp.service;
 
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.aop.Before;
 import com.jfinal.aop.Inject;
@@ -10,8 +11,11 @@ import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.linksame.crm.common.config.paragetter.BasePageRequest;
+import com.linksame.crm.erp.admin.service.AdminExamineRecordService;
+import com.linksame.crm.erp.crm.common.CrmEnum;
+import com.linksame.crm.erp.crm.entity.CrmContract;
+import com.linksame.crm.erp.crm.service.CrmRecordService;
 import com.linksame.crm.erp.pmp.common.PmpInterface;
-import com.linksame.crm.erp.pmp.entity.PmpAccessory;
 import com.linksame.crm.erp.pmp.entity.PmpContract;
 import com.linksame.crm.erp.pmp.entity.PmpContractPayment;
 import com.linksame.crm.utils.BaseUtil;
@@ -33,9 +37,11 @@ import java.util.stream.Collectors;
 public class PmpContractService {
 
     @Inject
+    private CrmRecordService crmRecordService;
+    @Inject
     private PmpContractPaymentService pmpContractPaymentService;
     @Inject
-    private PmpAccessoryService pmpAccessoryService;
+    private AdminExamineRecordService examineRecordService;
 
     @Before(Tx.class)
     public R add(PmpContract pmpContract) {
@@ -44,7 +50,6 @@ public class PmpContractService {
             BigDecimal money = pmpContract.getMoney();
             BigDecimal money1 = new BigDecimal(0);
             //保存 合同
-            pmpContract.setBatchId(IdUtil.simpleUUID());
             pmpContract.save();
             //保存付款单
             for (PmpContractPayment contractPayment : pmpContract.getPmpContractPayment()) {
@@ -52,7 +57,6 @@ public class PmpContractService {
                         && contractPayment.getPaymentNode() != null
                         && contractPayment.getPaymentName() != null
                         && contractPayment.getCostPercentage() != null) {
-                    contractPayment.setBatchId(IdUtil.simpleUUID());
                     money1 = money1.add(contractPayment.getMoney());
                     contractPayment.setContractId(pmpContract.getLong("contract_id"));
                     contractPayment.setProjectId(pmpContract.getLong("project_id"));
@@ -68,16 +72,7 @@ public class PmpContractService {
                 return false;
             }
             //保存 附件
-            String realname = BaseUtil.getUser().getRealname();
-            if (pmpContract.getPmpAccessories() != null) {
-                pmpContract.getPmpAccessories().forEach(pmpAccessory -> {
-                    pmpAccessory.setContractId(pmpContract.getLong("contract_id"));
-                    pmpAccessory.setProjectId(pmpContract.getLong("project_id"));
-                    pmpAccessory.setMilestoneNodes(pmpContract.getLong("milestone_nodes"));
-                    pmpAccessory.setCreationName(realname);
-                    pmpAccessory.save();
-                });
-            }
+
             return true;
         }) ? R.ok() : R.error();
     }
@@ -89,8 +84,7 @@ public class PmpContractService {
         pmpContract.setAgentName("参与人名称");
         pmpContract.remove("status","is_deleted");
         List<PmpContractPayment> contractPayment = pmpContractPaymentService.findByContractId(contractId,null);
-        List<PmpAccessory> pmpAccessories = pmpAccessoryService.findByContractId(contractId);
-        return R.ok().put("pmpContract",pmpContract).put("pmpContractPayment",contractPayment).put("pmpAccessories",pmpAccessories);
+        return R.ok().put("pmpContract",pmpContract).put("pmpContractPayment",contractPayment);
     }
 
     private final String PAYMENTRATION = "paymentRatio"; //支付比例
@@ -194,7 +188,12 @@ public class PmpContractService {
         BigDecimal okBigDecimal = new BigDecimal(0);
         //代付款金额
         BigDecimal awaitBigDecimal = new BigDecimal(0);
+        int contractCountOk = 0;
         for (Record record : records) {
+            LocalDate end_time = record.get("end_time");
+            if(end_time.isBefore(LocalDate.now())){
+                contractCountOk = contractCountOk +1;
+            }
             List<PmpContractPayment> pmpContractPayments = pmpContractPaymentService.findByContractId(record.getLong("contract_id"), null);
             for (PmpContractPayment contractPayment : pmpContractPayments) {
                 BigDecimal money = contractPayment.getMoney();
@@ -206,7 +205,7 @@ public class PmpContractService {
                 }
             }
         }
-        return R.ok().put("contractCount", records.size()).put("waitPayment",awaitBigDecimal).put("cumulativePayment",okBigDecimal);
+        return R.ok().put("contractCount", records.size()).put("contractCountOk", contractCountOk).put("waitPayment",awaitBigDecimal).put("cumulativePayment",okBigDecimal);
 
     }
 

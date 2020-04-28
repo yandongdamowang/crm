@@ -15,7 +15,6 @@ public class PmpRouter extends Routes {
         addInterceptor(new PmpInterceptor());
         add("/pmpContract", PmpContractController.class);
         add("/pmpContractPayment", PmpContractPaymentController.class);
-        add("/pmpAccessory", PmpAccessoryController.class);
         add("/pmpContractPaymentRecord", PmpContractPaymentRecordController.class);
         add("/pmpReceivableRecords", PmpReceivableRecordsController.class);
     }

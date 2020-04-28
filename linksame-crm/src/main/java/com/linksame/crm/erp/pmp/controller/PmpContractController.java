@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.jfinal.aop.Inject;
 import com.jfinal.core.Controller;
 import com.jfinal.core.paragetter.Para;
+import com.linksame.crm.common.annotation.Permissions;
 import com.linksame.crm.common.config.paragetter.BasePageRequest;
 import com.linksame.crm.erp.pmp.entity.PmpContract;
 import com.linksame.crm.erp.pmp.entity.PmpContractPayment;
@@ -32,6 +33,7 @@ public class PmpContractController extends Controller {
      *
      *  新增合同
      */
+    @Permissions("pmp:contract:save")
     public void add(){
         String data = getRawData();
         PmpContract pmpContract = JSON.parseObject(data,PmpContract.class);
@@ -49,6 +51,7 @@ public class PmpContractController extends Controller {
      *
      *  查询审批记录
      */
+    @Permissions("pmp:contract:read")
     public void contractApprove(){
         Integer examineRecordId = getInt("examineRecordId");
 
@@ -58,6 +61,7 @@ public class PmpContractController extends Controller {
      *
      * @param contractIds 合同IDs
      */
+    @Permissions("pmp:contract:delete")
     public void delete(@Para("contractIds")String contractIds){
         renderJson(pmpContractService.delete(contractIds));
     }
@@ -66,6 +70,7 @@ public class PmpContractController extends Controller {
      *
      * 合同仪表盘
      */
+    @Permissions("pmp:contract:dashBoard")
     public void contractDashboard(){
         String startTime = getPara("startTime");
         String endTime = getPara("endTime");
@@ -77,6 +82,7 @@ public class PmpContractController extends Controller {
      *
      * 更新线索合同
      */
+    @Permissions("pmp:contract:update")
     public void update(){
         JSONObject object= JSON.parseObject(getRawData());
         renderJson(pmpContractService.update(object));
@@ -85,6 +91,7 @@ public class PmpContractController extends Controller {
      *
      * @param contractId 根据合同ID 查询详情
      */
+    @Permissions("pmp:contract:read")
     public void queryById(@Para("contractId")Long contractId){
         renderJson(pmpContractService.queryById(contractId));
     }
@@ -92,6 +99,7 @@ public class PmpContractController extends Controller {
      *
      * @param basePageRequest 根据合同ID 查询详情
      */
+    @Permissions("pmp:contract:index")
     public void queryList(BasePageRequest<PmpContract> basePageRequest){
         renderJson(pmpContractService.queryList(basePageRequest));
     }
