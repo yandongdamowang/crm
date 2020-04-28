@@ -16,18 +16,22 @@ import com.linksame.crm.erp.crm.entity.CrmBusinessProduct;
 import com.linksame.crm.erp.pmp.entity.PmpReceivableRecords;
 import com.linksame.crm.utils.R;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PmpReceivableRecordsServer {
     public R queryList(BasePageRequest<PmpReceivableRecords> basePageRequest) {
         JSONObject jsonObject = basePageRequest.getJsonObject();
+        LocalDate startTime = LocalDate.parse(jsonObject.getString("collectingStarttime"), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        LocalDate endTime = LocalDate.parse(jsonObject.getString("collectingEndtime"), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         //客户   支付方式   回款时间 开始结束
         Kv kv = Kv.by("customerId", jsonObject.getString("customerId"))
                 .set("paymentMethod", jsonObject.getLong("paymentMethod"))
-                .set("collectingStarttime", jsonObject.getLong("collectingStarttime"))
-                .set("collectingEndtime", jsonObject.getLong("collectingEndtime"))
+                .set("collectingStarttime", startTime)
+                .set("collectingEndtime", endTime)
                 .set("orderBy", jsonObject.get("orderBy"));
         if (basePageRequest.getPageType() == 0){
             List<Record> records = Db.find(Db.getSqlPara("pmp.receivableRecords.queryList", kv));
@@ -46,8 +50,7 @@ public class PmpReceivableRecordsServer {
     }
 
     @Before(Tx.class)
-    public R addOrUpdate(JSONObject jsonObject) {
-        PmpReceivableRecords pmpReceivableRecords = jsonObject.getObject("pmpReceivableRecords", PmpReceivableRecords.class);
+    public R addOrUpdate(PmpReceivableRecords pmpReceivableRecords) {
         boolean saveOrUpdate;
         if (pmpReceivableRecords.getReceivableRecordsId() != null){
             pmpReceivableRecords.setUpdateTime(LocalDateTime.now());
@@ -79,7 +82,7 @@ public class PmpReceivableRecordsServer {
     }
 
     public R queryByContractId(Long contractId) {
-        Kv kv = Kv.by("customerId", contractId);
+        Kv kv = Kv.by("contractId", contractId).set("orderBy", "1");
         List<Record> records = Db.find(Db.getSqlPara("pmp.receivableRecords.queryList", kv));
         return R.ok().put("data",records);
     }

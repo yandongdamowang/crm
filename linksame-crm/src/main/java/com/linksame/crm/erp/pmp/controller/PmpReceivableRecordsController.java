@@ -49,17 +49,17 @@ public class PmpReceivableRecordsController extends Controller {
     /**
      * 新增 或者 修改
      */
-    @Permissions({"crm:collectionRecord:save","crm:collectionRecord:update"})
+    @Permissions({"pmp:collectionRecord:save"})
     public void addOrUpdate(){
-        JSONObject jsonObject = JSON.parseObject(getRawData());
-        renderJson(pmpReceivableRecordsServer.addOrUpdate(jsonObject));
+        PmpReceivableRecords pmpContract = JSON.parseObject(getRawData(),PmpReceivableRecords.class);
+        renderJson(pmpReceivableRecordsServer.addOrUpdate(pmpContract));
     }
 
     /**
      * 根据ID 删除
      * @param receivableRecordsIds 多个ID 使用 ‘，’隔开
      */
-    @Permissions("pmp:contract:delete")
+    @Permissions("pmp:collectionRecord:delete")
     public void deleteByIds(@Para("receivableRecordsIds")String receivableRecordsIds){
         renderJson(pmpReceivableRecordsServer.deleteByIds(receivableRecordsIds));
     }

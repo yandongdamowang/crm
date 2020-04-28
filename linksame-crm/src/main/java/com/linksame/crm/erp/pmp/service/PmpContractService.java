@@ -190,8 +190,9 @@ public class PmpContractService {
         BigDecimal awaitBigDecimal = new BigDecimal(0);
         int contractCountOk = 0;
         for (Record record : records) {
-            LocalDate end_time = record.get("end_time");
-            if(end_time.isBefore(LocalDate.now())){
+            Date end_time = record.get("end_time");
+            LocalDate localDate = end_time.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            if(localDate.isBefore(LocalDate.now())){
                 contractCountOk = contractCountOk +1;
             }
             List<PmpContractPayment> pmpContractPayments = pmpContractPaymentService.findByContractId(record.getLong("contract_id"), null);
