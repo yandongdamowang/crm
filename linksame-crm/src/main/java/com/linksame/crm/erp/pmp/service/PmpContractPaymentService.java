@@ -110,7 +110,7 @@ public class PmpContractPaymentService {
     }
 
     public R queryAdvanceBybillId(Long billId) {
-        Kv kv = Kv.by("billId", billId);
+        Kv kv = Kv.by("billId", billId).set("orderBy","1");
         Record first = Db.findFirst(Db.getSqlPara("pmp.contractPayment.queryAdvanceList", kv));
         first.set("amountAdvanced",new BigDecimal(0));//预付金额
         Long supplier_id = first.getLong("supplier_id");

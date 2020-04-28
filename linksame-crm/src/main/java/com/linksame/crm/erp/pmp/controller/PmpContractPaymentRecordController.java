@@ -25,7 +25,7 @@ public class PmpContractPaymentRecordController extends Controller {
      *
      * @param basePageRequest 付款记录分页
      */
-    @Permissions("pmp:paymentRecord:index")
+    @Permissions("project:paymentRecord:index")
     public void queryList(BasePageRequest<PmpContractPaymentRecord> basePageRequest){
         renderJson(contractPaymentRecordService.queryList(basePageRequest));
     }
@@ -33,7 +33,7 @@ public class PmpContractPaymentRecordController extends Controller {
      *
      * @param paymentRecordId 根据付款记录ID 查询详情
      */
-    @Permissions("pmp:paymentRecord:read")
+    @Permissions("project:paymentRecord:read")
     public void queryById(@Para("paymentRecordId")Long paymentRecordId){
         renderJson(contractPaymentRecordService.queryById(paymentRecordId));
     }
@@ -41,7 +41,7 @@ public class PmpContractPaymentRecordController extends Controller {
      *
      *  付款记录报表
      */
-    @Permissions("pmp:paymentRecord:dashBoard")
+    @Permissions("project:paymentRecord:dashBoard")
     public void paymentReport(){
         renderJson(contractPaymentRecordService.paymentReport(JSON.parseObject(getRawData())));
     }
