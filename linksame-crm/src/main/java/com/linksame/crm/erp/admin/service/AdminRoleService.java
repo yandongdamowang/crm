@@ -72,6 +72,9 @@ public class AdminRoleService {
             case 8:
                 realm = "project";
                 break;
+            case 9:
+                realm = "file";
+                break;
             default:
                 return new ArrayList<>();
         }
