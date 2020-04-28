@@ -22,7 +22,7 @@ public class PmpReceivableRecordsController extends Controller {
      * 根据条件分页 或者 查询 列表
      * @param basePageRequest 返回分页或者列表
      */
-    @Permissions("pmp:collectionRecord:index")
+    @Permissions("project:collectionRecord:index")
     public void queryList(BasePageRequest<PmpReceivableRecords> basePageRequest){
         renderJson(pmpReceivableRecordsServer.queryList(basePageRequest));
     }
@@ -32,7 +32,7 @@ public class PmpReceivableRecordsController extends Controller {
      *
      * @param receivableRecordsId 根据ID 查询详情
      */
-    @Permissions("pmp:collectionRecord:read")
+    @Permissions("project:collectionRecord:read")
     public void queryById(@Para("receivableRecordsId")Long receivableRecordsId){
         renderJson(pmpReceivableRecordsServer.queryById(receivableRecordsId));
     }
@@ -41,7 +41,7 @@ public class PmpReceivableRecordsController extends Controller {
      *
      * @param contractId 根据合同ID 查询回款信息
      */
-    @Permissions("pmp:contract:read")
+    @Permissions("project:contract:read")
     public void queryByContractId(@Para("contractId")Long contractId){
         renderJson(pmpReceivableRecordsServer.queryByContractId(contractId));
     }
@@ -49,7 +49,7 @@ public class PmpReceivableRecordsController extends Controller {
     /**
      * 新增 或者 修改
      */
-    @Permissions({"pmp:collectionRecord:save"})
+    @Permissions({"project:collectionRecord:save"})
     public void addOrUpdate(){
         PmpReceivableRecords pmpContract = JSON.parseObject(getRawData(),PmpReceivableRecords.class);
         renderJson(pmpReceivableRecordsServer.addOrUpdate(pmpContract));
@@ -59,7 +59,7 @@ public class PmpReceivableRecordsController extends Controller {
      * 根据ID 删除
      * @param receivableRecordsIds 多个ID 使用 ‘，’隔开
      */
-    @Permissions("pmp:collectionRecord:delete")
+    @Permissions("project:collectionRecord:delete")
     public void deleteByIds(@Para("receivableRecordsIds")String receivableRecordsIds){
         renderJson(pmpReceivableRecordsServer.deleteByIds(receivableRecordsIds));
     }
