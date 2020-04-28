@@ -2,6 +2,7 @@ package com.linksame.crm.erp.work.controller;
 
 import com.jfinal.aop.Inject;
 import com.jfinal.core.Controller;
+import com.linksame.crm.common.annotation.Permissions;
 import com.linksame.crm.erp.work.service.RelyService;
 import live.autu.plugin.jfinal.swagger.annotation.Api;
 import live.autu.plugin.jfinal.swagger.annotation.ApiImplicitParam;
@@ -29,6 +30,7 @@ public class RelyController extends Controller {
             @ApiImplicitParam(name="preTaskIds", description="依赖任务ID数组字符串(,号间隔)"),
             @ApiImplicitParam(name="relyFlag", description="标识(0前置任务 非0后置任务)")
     })
+    @Permissions({"project:taskManage:saveRely"})
     public void setRely(){
         renderJson(relyService.setRely(getInt("taskId"),getPara("preTaskIds"),getInt("relyFlag")));
     }

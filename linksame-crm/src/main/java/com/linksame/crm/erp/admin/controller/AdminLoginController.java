@@ -43,10 +43,11 @@ public class AdminLoginController extends Controller{
 
     /**
      * 用户登录
-     * @param adminUser 用户对象
+     * @param username  用户名
+     * @param password  密码
      */
-    public void login(@Para("") AdminUser adminUser){
-        String key = BaseConstant.USER_LOGIN_ERROR_KEY + adminUser.getUsername();
+    public void login(@Para("username") String username, @Para("password") String password){
+        String key = BaseConstant.USER_LOGIN_ERROR_KEY + username;
         Redis redis= RedisManager.getRedis();
         long beforeTime = System.currentTimeMillis() - 60 * 5 * 1000;
         if(redis.exists(key)){
@@ -59,12 +60,12 @@ public class AdminLoginController extends Controller{
             }
         }
         redis.zadd(key, System.currentTimeMillis(), System.currentTimeMillis());
-        AdminUser user = AdminUser.dao.findFirst(Db.getSql("admin.user.queryByUserName"), adminUser.getUsername().trim());
+        AdminUser user = AdminUser.dao.findFirst(Db.getSql("admin.user.queryByUserName"), username.trim());
         if(user == null){
             renderJson(R.error("用户名或密码错误！"));
             return;
         }
-        if(StringUtils.isEmpty(adminUser.getUsername()) || StringUtils.isEmpty(adminUser.getPassword())){
+        if(StringUtils.isEmpty(username) || StringUtils.isEmpty(password)){
             renderJson(R.error("账号或者密码不能为空！"));
             return;
         }
@@ -72,7 +73,7 @@ public class AdminLoginController extends Controller{
             renderJson(R.error("账户被禁用！"));
             return;
         }
-        if(BaseUtil.verify(adminUser.getUsername() + adminUser.getPassword(), user.getSalt(), user.getPassword())){
+        if(BaseUtil.verify(username + password, user.getSalt(), user.getPassword())){
             if(user.getStatus() == 2){
                 user.setStatus(1);
             }

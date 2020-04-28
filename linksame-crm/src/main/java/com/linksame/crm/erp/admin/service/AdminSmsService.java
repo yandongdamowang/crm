@@ -105,14 +105,16 @@ public class AdminSmsService {
     public R sendCaptcha(String mobile, Integer seconds){
         Redis redis= RedisManager.getRedis();
         String key = BaseConstant.PHONE_LOGIN_KEY + mobile;
+        //默认有效时长60秒
+        Integer effTime = 60;
         if (redis.exists(key)){
             return R.error("验证码仍在有效期");
         }
         if(StringUtils.isEmpty(mobile)){
             return R.error("参数mobile不能为空");
         }
-        if(seconds == null){
-            return R.error("参数seconds不能为空");
+        if(seconds != null){
+            effTime = seconds;
         }
         String captcha = "";
 
@@ -124,9 +126,9 @@ public class AdminSmsService {
             }
 
             StringBuffer sb = new StringBuffer();
-            //生成四位随机数
-            captcha = String.valueOf((int)((Math.random() * 9 + 1 ) * 1000));
-            String content = "您的登录验证码为: " + captcha + "，有效时长" + seconds/60 + "分钟，请尽快完成登录，如非本人操作请忽略此短信！";
+            //生成六位随机数
+            captcha = String.valueOf((int)((Math.random() * 9 + 1 ) * 100000));
+            String content = "您的登录验证码为: " + captcha + "，有效时长" + effTime/60 + "分钟，请尽快完成登录，如非本人操作请忽略此短信！";
             sb.append("username=" + SmsConstant.SMS_USERNAME)
                     .append("&userpwd=" + SmsConstant.SMS_PASSWORD)
                     .append("&mobiles=" + mobile)
@@ -140,7 +142,7 @@ public class AdminSmsService {
             adminSms = parseXml(resultXml, adminSms);
             if(adminSms.getErrorcode() == 1){
                 //存储redis缓存----根据前端传递的有效时长缓存验证码
-                redis.setex(key, seconds-1, captcha);
+                redis.setex(key, effTime-1, captcha);
                 //存储短信数据
                 adminSms.setSendTime(new Date());
                 adminSms.save();
