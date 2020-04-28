@@ -88,6 +88,11 @@ public class AdminMenuService {
             List<AdminMenu> adminMenuList = getExceptWorkMenuList(project.getMenuId(),BaseConstant.AUTH_DATA_RECURSION_NUM);
             project.put("childMenu", adminMenuList);
             kv.set("data", project);
+        } else if(type == 9) {
+            AdminMenu file = AdminMenu.dao.findFirst("select * from admin_menu where parent_id = 0 and realm = 'file'");
+            List<AdminMenu> adminMenuList = getExceptWorkMenuList(file.getMenuId(),BaseConstant.AUTH_DATA_RECURSION_NUM);
+            file.put("childMenu", adminMenuList);
+            kv.set("data", file);
         }
         return R.ok().put("data", kv);
     }
