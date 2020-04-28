@@ -14,9 +14,11 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author ZhangJie
@@ -125,9 +127,49 @@ public class PmpContractPaymentService {
     }
 
     public R queryPaymentDetail(Long contractId) {
-        List<Record> records = Db.find("select * from pmp_contract_payment_record as pcpr where pcpr.contract_id = ? ", contractId);
+        // 预付款
         List<Record> records1 = Db.find("select * from pmp_contract_payment as pcp where pcp.contract_id = ? and pcp.trade_form =" + PmpInterface.contractPayment.trade.form.EXPENF + " and pcp.status =" + PmpInterface.contractPayment.trade.stats.OK, contractId);
-        records.addAll(records1);
+        //账单ID  bill_id
+        //合同ID  contract_id
+        //款项    payment_name
+        //预计付款时间    payment_node
+        //支付比例      cost_percentage
+        //支付金额      money
+        //实际支付比例
+        //实际支付金额
+        //关联任务      ...
+        //状态        trade_status
+        //备注
+        //付款记录
+        List<Record> records = Db.find("select * from pmp_contract_payment_record as pcpr where pcpr.contract_id = ? ", contractId);
+        //账单ID  payment_record_id
+        //合同ID  contract_id
+        //款项    payment_clause
+        //预计付款时间    payment_time
+        //支付比例      advance_ratio
+        //支付金额      amount_advanced
+        //实际支付比例    practical_ratio
+        //实际支付金额    practica_advanced
+        //关联任务      ...
+        //状态
+        //备注        remark
+        records.forEach(record -> record.set("tradeStatus","1"));
+        for (Record record : records1) {
+            Record record1 = new Record();
+            record1.set("paymentRecordId", record.getLong("bill_id"));//账单ID
+            record1.set("contractId", record.getLong("contract_id"));//合同ID
+            record1.set("paymentClause", record.getStr("payment_name"));//款项
+            record1.set("payment_time", record.get("payment_node"));//预计付款时间
+            record1.set("advance_ratio", record.getInt("cost_percentage"));//支付比例
+            record1.set("amount_advanced", record.get("money"));//支付金额
+            record1.set("practicalRatio", null);//实际支付比例
+            record1.set("practicaAdvanced", null);//实际支付金额
+            record1.set("task", "");//关联任务
+            record1.set("tradeStatus", record.getStr("trade_status"));//状态
+            record1.set("remark", "");//备注
+            records.add(record1);
+
+        }
         return R.ok().put("paymentDetails",records);
     }
 

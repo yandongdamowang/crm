@@ -44,7 +44,7 @@ public class PmpContractPaymentRecordService {
     public R queryById(Long paymentRecordId) {
         Kv kv = Kv.by("paymentRecordId", paymentRecordId);
         Record first = Db.findFirst(Db.getSqlPara("pmp.contractPaymentRecord.queryById", kv));
-
+        first.set("supplierName","承包商名字");
         return R.ok().put("paymentRecord",first);
     }
 

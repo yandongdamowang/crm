@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.jfinal.aop.Inject;
 import com.jfinal.core.Controller;
 import com.jfinal.core.paragetter.Para;
+import com.linksame.crm.common.annotation.Permissions;
 import com.linksame.crm.common.config.paragetter.BasePageRequest;
 import com.linksame.crm.erp.pmp.entity.PmpContract;
 import com.linksame.crm.erp.pmp.entity.PmpReceivableRecords;
@@ -21,6 +22,7 @@ public class PmpReceivableRecordsController extends Controller {
      * 根据条件分页 或者 查询 列表
      * @param basePageRequest 返回分页或者列表
      */
+    @Permissions("pmp:collectionRecord:index")
     public void queryList(BasePageRequest<PmpReceivableRecords> basePageRequest){
         renderJson(pmpReceivableRecordsServer.queryList(basePageRequest));
     }
@@ -30,6 +32,7 @@ public class PmpReceivableRecordsController extends Controller {
      *
      * @param receivableRecordsId 根据ID 查询详情
      */
+    @Permissions("pmp:collectionRecord:read")
     public void queryById(@Para("receivableRecordsId")Long receivableRecordsId){
         renderJson(pmpReceivableRecordsServer.queryById(receivableRecordsId));
     }
@@ -38,6 +41,7 @@ public class PmpReceivableRecordsController extends Controller {
      *
      * @param contractId 根据合同ID 查询回款信息
      */
+    @Permissions("pmp:contract:read")
     public void queryByContractId(@Para("contractId")Long contractId){
         renderJson(pmpReceivableRecordsServer.queryByContractId(contractId));
     }
@@ -45,6 +49,7 @@ public class PmpReceivableRecordsController extends Controller {
     /**
      * 新增 或者 修改
      */
+    @Permissions({"crm:collectionRecord:save","crm:collectionRecord:update"})
     public void addOrUpdate(){
         JSONObject jsonObject = JSON.parseObject(getRawData());
         renderJson(pmpReceivableRecordsServer.addOrUpdate(jsonObject));
@@ -54,6 +59,7 @@ public class PmpReceivableRecordsController extends Controller {
      * 根据ID 删除
      * @param receivableRecordsIds 多个ID 使用 ‘，’隔开
      */
+    @Permissions("pmp:contract:delete")
     public void deleteByIds(@Para("receivableRecordsIds")String receivableRecordsIds){
         renderJson(pmpReceivableRecordsServer.deleteByIds(receivableRecordsIds));
     }
