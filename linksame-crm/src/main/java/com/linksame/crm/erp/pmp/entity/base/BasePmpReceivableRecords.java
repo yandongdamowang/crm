@@ -4,8 +4,8 @@ package com.linksame.crm.erp.pmp.entity.base;
 import com.jfinal.plugin.activerecord.IBean;
 import com.jfinal.plugin.activerecord.Model;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
+import java.util.Date;
 
 @SuppressWarnings("serial")
 public abstract class BasePmpReceivableRecords<M extends BasePmpReceivableRecords<M>> extends Model<M> implements IBean {
@@ -34,19 +34,19 @@ public abstract class BasePmpReceivableRecords<M extends BasePmpReceivableRecord
         return getStr("receivable_type");
     }
 
-    public void setUpdateTime(LocalDateTime updateTime) {
+    public void setUpdateTime(Date updateTime) {
         set("update_time", updateTime);
     }
 
-    public LocalDateTime getUpdateTime() {
+    public Date getUpdateTime() {
         return get("update_time");
     }
 
-    public void setCreatedTime(LocalDateTime createdTime) {
+    public void setCreatedTime(Date createdTime) {
         set("created_time", createdTime);
     }
 
-    public LocalDateTime getCreatedTime() {
+    public Date getCreatedTime() {
         return get("created_time");
     }
 
@@ -132,11 +132,11 @@ public abstract class BasePmpReceivableRecords<M extends BasePmpReceivableRecord
         return getStr("collection_number");
     }
 
-    public void setCollectingTime(LocalDate collectingTime) {
+    public void setCollectingTime(Date collectingTime) {
         set("collecting_time", collectingTime);
     }
 
-    public LocalDate getCollectingTime() {
+    public Date getCollectingTime() {
         return get("collecting_time");
     }
 

@@ -3,7 +3,8 @@ package com.linksame.crm.erp.pmp.entity.base;
 import com.jfinal.plugin.activerecord.IBean;
 import com.jfinal.plugin.activerecord.Model;
 
-import java.time.LocalDate;
+import java.util.Date;
+
 
 /**
  * @author ZhangJie
@@ -94,11 +95,11 @@ public abstract class BasePmpContractPaymentRecord<M extends BasePmpContractPaym
         return get("practica_advanced");
     }
 
-    public void setPaymentTime(LocalDate paymentTime) {
+    public void setPaymentTime(Date paymentTime) {
         set("payment_time", paymentTime);
     }
 
-    public LocalDate getPaymentTime() {
+    public Date getPaymentTime() {
         return get("payment_time");
     }
 
@@ -126,27 +127,27 @@ public abstract class BasePmpContractPaymentRecord<M extends BasePmpContractPaym
         return getStr("remark");
     }
 
-    public void setUpdateTime(LocalDate updateTime) {
+    public void setUpdateTime(Date updateTime) {
         set("update_time", updateTime);
     }
 
-    public LocalDate getUpdateTime() {
+    public Date getUpdateTime() {
         return get("update_time");
     }
 
-    public void setCreateTime(LocalDate createTime) {
+    public void setCreateTime(Date createTime) {
         set("create_time", createTime);
     }
 
-    public LocalDate getCreateTime() {
+    public Date getCreateTime() {
         return get("create_time");
     }
 
-    public void setPlannedPaymentTime(LocalDate plannedPaymentTime) {
+    public void setPlannedPaymentTime(Date plannedPaymentTime) {
         set("planned_payment_time", plannedPaymentTime);
     }
 
-    public LocalDate getPlannedPaymentTime() {
+    public Date getPlannedPaymentTime() {
         return get("planned_payment_time");
     }
 

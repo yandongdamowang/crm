@@ -21,7 +21,7 @@
         from pmp_receivable_records as prr
             where 1 = 1
             #if(paymentMethod)
-                and prr.payment_method like concat('%', #para(paymentMethod), '%')
+                and prr.payment_method = #para(contractId)
             #end
             #if(contractId)
                 and prr.contract_id = #para(contractId)

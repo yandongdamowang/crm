@@ -62,7 +62,7 @@ public class PmpContractService {
                     contractPayment.setProjectId(pmpContract.getLong("project_id"));
                     contractPayment.setTradeForm(PmpInterface.contractPayment.trade.form.EXPENF);
                     contractPayment.setTradeStatus(PmpInterface.contractPayment.trade.stats.OK);
-                    contractPayment.setCreationTime(LocalDateTime.now());
+                    contractPayment.setCreationTime(new Date(System.currentTimeMillis()));
                     contractPayment.save();
                 }else {
                     return false;
@@ -176,7 +176,7 @@ public class PmpContractService {
     @Before(Tx.class)
     public R update(JSONObject object) {
         PmpContract pmpContract = object.getObject("entity", PmpContract.class);
-        pmpContract.setUpdateTime(LocalDateTime.now());
+        pmpContract.setUpdateTime(new Date(System.currentTimeMillis()));
         return pmpContract.update() ? R.ok():R.error();
     }
 
