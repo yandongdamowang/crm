@@ -15,6 +15,7 @@
             prr.collecting_company,
             prr.collection_bank,
             prr.collection_account,
+            prr.collection_number,
             prr.collecting_time,
             prr.agent
         from pmp_receivable_records as prr

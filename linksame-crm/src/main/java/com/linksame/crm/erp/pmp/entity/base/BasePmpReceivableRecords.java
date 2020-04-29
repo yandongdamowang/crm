@@ -122,6 +122,16 @@ public abstract class BasePmpReceivableRecords<M extends BasePmpReceivableRecord
         return getStr("collection_account");
     }
 
+
+
+    public void setCollectionNumber(java.lang.String collectionNumber) {
+        set("collection_number", collectionNumber);
+    }
+
+    public java.lang.String getCollectionNumber() {
+        return getStr("collection_number");
+    }
+
     public void setCollectingTime(LocalDate collectingTime) {
         set("collecting_time", collectingTime);
     }
