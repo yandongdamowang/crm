@@ -3,6 +3,7 @@ package com.linksame.crm.erp.work.service;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
+import com.aliyuncs.utils.StringUtils;
 import com.jfinal.aop.Before;
 import com.jfinal.aop.Inject;
 import com.jfinal.kit.Kv;
@@ -86,7 +87,9 @@ public class TaskService{
             task.setCreateTime(new Date());
             task.setUpdateTime(new Date());
             task.setCreateUserId(user.getUserId());
-            task.setBatchId(IdUtil.simpleUUID());
+            if(StringUtils.isEmpty(task.getBatchId())){
+                task.setBatchId(IdUtil.simpleUUID());
+            }
             bol = task.save();
             WorkTaskLog workTaskLog = new WorkTaskLog();
             workTaskLog.setUserId(user.getUserId());

@@ -377,7 +377,7 @@ public class AdminFileService {
      */
     public R queryByUserId(){
         Kv kv = Kv.by("createUserId", BaseUtil.getUser().getUserId());
-        return R.ok().put("data", AdminFile.dao.find(Db.getSqlPara("admin.file.queryByBatchId",kv)));
+        return R.ok().put("data", AdminFile.dao.find(Db.getSqlPara("admin.file.queryByUserId",kv)));
     }
 
     /**
