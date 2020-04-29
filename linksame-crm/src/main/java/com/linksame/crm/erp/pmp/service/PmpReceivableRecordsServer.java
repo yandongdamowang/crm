@@ -34,8 +34,8 @@ public class PmpReceivableRecordsServer {
                 .set("collectingStarttime", startTime)
                 .set("collectingEndtime", endTime)
                 .set("orderBy", jsonObject.get("orderBy"));
-        List<Record> payment_method = Db.find(Db.getSqlPara("SELECT prr.payment_method FROM pmp_receivable_records AS prr WHERE 1=1 GROUP BY prr.payment_method"));
-        List<Record> customer_id = Db.find(Db.getSqlPara("SELECT prr.customer_id FROM pmp_receivable_records AS prr WHERE 1=1 GROUP BY prr.customer_id"));
+        List<Record> payment_method = Db.find("SELECT prr.payment_method FROM pmp_receivable_records AS prr WHERE 1=1 GROUP BY prr.payment_method");
+        List<Record> customer_id = Db.find("SELECT prr.customer_id FROM pmp_receivable_records AS prr WHERE 1=1 GROUP BY prr.customer_id");
         customer_id.forEach(record -> record.set("customerName","客户名称"));
         if (basePageRequest.getPageType() == 0){
             List<Record> records = Db.find(Db.getSqlPara("pmp.receivableRecords.queryList", kv));
