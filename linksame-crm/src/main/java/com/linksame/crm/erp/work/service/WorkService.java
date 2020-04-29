@@ -2,10 +2,12 @@ package com.linksame.crm.erp.work.service;
 
 import java.util.Date;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.aliyuncs.utils.StringUtils;
 import com.linksame.crm.common.config.paragetter.BasePageRequest;
 import com.linksame.crm.common.constant.BaseConstant;
 import com.linksame.crm.erp.admin.entity.AdminMenu;
@@ -45,6 +47,10 @@ public class WorkService{
     public R setWork(Work work){
         if(Arrays.asList(work._getAttrNames()).contains("name")&&StrUtil.isEmpty(work.getName())){
             return R.error("项目名称不能为空！");
+        }
+        //如果BatchId为空, 自动生成一个
+        if(StringUtils.isEmpty(work.getBatchId())){
+            work.setBatchId(IdUtil.simpleUUID());
         }
         Long userId = BaseUtil.getUser().getUserId();
         boolean bol;
