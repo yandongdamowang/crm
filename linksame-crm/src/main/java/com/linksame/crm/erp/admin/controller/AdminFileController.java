@@ -24,7 +24,7 @@ public class AdminFileController extends Controller {
     private AdminFileService adminFileService;
 
     /**
-     * 附件分页列表
+     * 附件查询
      * @param basePageRequest   分页对象
      */
     @ApiOperation(methods= RequestMethod.POST, description="附件分页列表")
@@ -42,11 +42,10 @@ public class AdminFileController extends Controller {
     @ApiOperation(methods= RequestMethod.POST, description="附件上传")
     @ApiImplicitParams({
             @ApiImplicitParam(name="file", description="附件"),
-            @ApiImplicitParam(name="adminFile", description="附件对象"),
-            @ApiImplicitParam(name="workId", description="项目ID")
+            @ApiImplicitParam(name="adminFile", description="附件对象")
     })
     public void upload(@Para("") AdminFile adminFile) {
-        renderJson(adminFileService.upload(getFile("file"),adminFile,getInt("workId")));
+        renderJson(adminFileService.upload(getFile("file"),adminFile));
     }
 
     /**
@@ -54,11 +53,10 @@ public class AdminFileController extends Controller {
      */
     @ApiOperation(methods= RequestMethod.POST, description="批量附件上传")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="files", description="附件集合"),
-            @ApiImplicitParam(name="workId", description="项目ID")
+            @ApiImplicitParam(name="files", description="附件集合")
     })
     public void batchUpload(@Para("") AdminFile adminFile){
-        renderJson(adminFileService.batchUpload(getFiles("files"),adminFile,getInt("workId")));
+        renderJson(adminFileService.batchUpload(getFiles("files"),adminFile));
     }
 
     /**
@@ -67,12 +65,11 @@ public class AdminFileController extends Controller {
     @ApiOperation(methods= RequestMethod.POST, description="更换附件版本")
     @ApiImplicitParams({
             @ApiImplicitParam(name="file", description="附件"),
-            @ApiImplicitParam(name="adminFile", description="附件对象"),
-            @ApiImplicitParam(name="workId", description="项目ID")
+            @ApiImplicitParam(name="adminFile", description="附件对象")
     })
     @Permissions({"file:fileManage:changeVersion"})
     public void changeVersion(@Para("") AdminFile adminFile){
-        renderJson(adminFileService.changeVersion(getFile("file"),adminFile,getInt("workId")));
+        renderJson(adminFileService.changeVersion(getFile("file"),adminFile));
     }
 
     /**
@@ -120,15 +117,15 @@ public class AdminFileController extends Controller {
     }
 
     /**
-     * 通过批次ID查询
+     * 通过批次ID查询(任务, 合同, 回款等业务通过批次ID查询)
      */
-    @ApiOperation(methods= RequestMethod.POST, description="通过批次ID查询")
+    /*@ApiOperation(methods= RequestMethod.POST, description="通过批次ID查询(任务, 合同, 回款等业务通过批次ID查询)")
     @ApiImplicitParams({
             @ApiImplicitParam(name="batchId", description="批次ID")
     })
     public void queryByBatchId(){
         renderJson(adminFileService.queryByBatchId(getPara("batchId")));
-    }
+    }*/
 
     /**
      * 通过ID查询
@@ -202,10 +199,10 @@ public class AdminFileController extends Controller {
     /**
      * 查询用户网盘附件(通过用户编号查询附件)
      */
-    @ApiOperation(methods= RequestMethod.POST, description="查询用户网盘附件(当前用户)")
+    /*@ApiOperation(methods= RequestMethod.POST, description="查询用户网盘附件(当前用户)")
     public void queryByUserId(){
         renderJson(adminFileService.queryByUserId());
-    }
+    }*/
 
     /**
      * 网盘上传

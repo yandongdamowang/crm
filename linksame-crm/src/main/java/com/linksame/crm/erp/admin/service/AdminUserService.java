@@ -151,10 +151,10 @@ public class AdminUserService {
         }
         if (request.getPageType() == 0) {
             List<Record> recordList = Db.find(Db.getSqlPara("admin.user.queryUserList", Kv.by("name", request.getData().getRealname()).set("deptId", deptIdList).set("status", request.getData().getStatus()).set("roleId", roleId)));
-            return R.ok().put("data", recordList);
+            return R.ok().put("data", recordList).put("dataCount", recordList.size());
         } else {
             Page<Record> paginate = Db.paginate(request.getPage(), request.getLimit(), Db.getSqlPara("admin.user.queryUserList", Kv.by("name", request.getData().getRealname()).set("deptId", deptIdList).set("status", request.getData().getStatus()).set("roleId", roleId)));
-            return R.ok().put("data", paginate);
+            return R.ok().put("data", paginate).put("dataCount", paginate.getTotalRow());
         }
     }
 

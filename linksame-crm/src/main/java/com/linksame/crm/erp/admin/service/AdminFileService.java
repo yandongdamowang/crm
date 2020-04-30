@@ -40,9 +40,20 @@ public class AdminFileService {
         Kv kv= Kv.by("batchId", jo.getString("batchId"))
                 .set("oldName", jo.getString("oldName"))
                 .set("folderId", jo.getInteger("folderId"))
-                .set("createUserId", BaseUtil.getUser().getUserId());
-        Page<Record> recordList = Db.paginate(basePageRequest.getPage(), basePageRequest.getLimit(), Db.getSqlPara("admin.file.queryPageList", kv));
-        return R.ok().put("data", recordList);
+                .set("workId", jo.getInteger("workId"))
+                .set("ifUser", jo.getInteger("ifUser"));
+        if(jo.getInteger("ifUser") != null){
+            if(jo.getInteger("ifUser") == 0){
+                kv.set("createUserId", BaseUtil.getUser().getUserId());
+            }
+        }
+        if(basePageRequest.getPageType() == 0){
+            List<Record> recordList = Db.find(Db.getSqlPara("admin.file.queryList", kv));
+            return R.ok().put("data", recordList);
+        } else {
+            Page<Record> pageList = Db.paginate(basePageRequest.getPage(), basePageRequest.getLimit(), Db.getSqlPara("admin.file.queryList", kv));
+            return R.ok().put("data", pageList);
+        }
     }
 
     /**
@@ -52,7 +63,7 @@ public class AdminFileService {
      * @return
      */
     @Before(Tx.class)
-    public R upload(UploadFile file, AdminFile adminFile) {
+    public R sysUpload(UploadFile file, AdminFile adminFile) {
         try{
             //上传文件至minio服务器
             AdminFile resultFile = MinioServicce.uploadFile(file);
@@ -86,7 +97,7 @@ public class AdminFileService {
      * @param batchId 批次ID
      */
     @Before(Tx.class)
-    public R upload(UploadFile file, AdminFile adminFile, Integer workId) {
+    public R upload(UploadFile file, AdminFile adminFile) {
         String compositionName;
         if(adminFile.getFolderId() == null){
             return R.error("folderId参数为空");
@@ -111,7 +122,7 @@ public class AdminFileService {
             adminFile.setFileName(resultFile.getFileName());
             adminFile.setSize(file.getFile().length());
             //生成
-            compositionName = compositionFileName(adminFile.getFolderId(),workId,adminFile.getTypeId(), 1, suffix);
+            compositionName = compositionFileName(adminFile.getFolderId(),adminFile.getWorkId(),adminFile.getTypeId(), 1, suffix);
             adminFile.setCompositionName(compositionName);
             adminFile.remove("file_id");
             boolean bol = adminFile.save();
@@ -135,12 +146,12 @@ public class AdminFileService {
      * @return
      */
     @Before(Tx.class)
-    public R batchUpload(List<UploadFile> files, AdminFile adminFile, Integer workId){
+    public R batchUpload(List<UploadFile> files, AdminFile adminFile){
         if(CollectionUtil.isEmpty(files)){
             return R.error("文件数据为空");
         }
         for(UploadFile file : files){
-            upload(file, adminFile, workId);
+            upload(file, adminFile);
         }
         return R.ok();
     }
@@ -152,7 +163,7 @@ public class AdminFileService {
      * @return
      */
     @Before(Tx.class)
-    public R changeVersion(UploadFile file, AdminFile adminFile, Integer workId) {
+    public R changeVersion(UploadFile file, AdminFile adminFile) {
         String compositionName;
         if(adminFile.getFolderId() == null){
             return R.error("folderId参数为空");
@@ -185,7 +196,7 @@ public class AdminFileService {
             adminFile.setIsMainVersion(1);
             if(adminFile.getFolderId() != 0){
                 //生成
-                compositionName = compositionFileName(adminFile.getFolderId(),workId,adminFile.getTypeId(), history.getFileVersion()+1, suffix);
+                compositionName = compositionFileName(adminFile.getFolderId(),adminFile.getWorkId(),adminFile.getTypeId(), history.getFileVersion()+1, suffix);
                 adminFile.setCompositionName(compositionName);
             }
             //删除id,执行插入
@@ -394,9 +405,6 @@ public class AdminFileService {
         if(StringUtils.isEmpty(fileIds)){
             return R.error("fileIds参数为空");
         }
-        if(StringUtils.isEmpty(batchId)){
-            return R.error("batchId参数为空");
-        }
         if(folderId == null){
             return R.error("folderId参数为空");
         }
@@ -406,7 +414,9 @@ public class AdminFileService {
             AdminFile adminFile = AdminFile.dao.findById(id);
             adminFile.remove("file_id").remove("is_main_version").remove("file_version").remove("file_remark");
             adminFile.setCreateTime(new Date());
-            adminFile.setBatchId(batchId);
+            if(StringUtils.isNotEmpty(batchId)){
+                adminFile.setBatchId(batchId);
+            }
             if(adminFile.getFolderId() != 0){
                 //生成
                 compositionName = compositionFileName(folderId,workId,adminFile.getTypeId(), 1, FileUtil.extName(adminFile.getFileName()));
