@@ -17,15 +17,6 @@ public class PmpContract extends BasePmpContract<PmpContract> {
     private List<PmpContractPayment> pmpContractPayments;
     private String supplierName;
     private String agentName;
-    private List<PmpAccessory> pmpAccessories;
-
-    public List<PmpAccessory> getPmpAccessories() {
-        return pmpAccessories;
-    }
-
-    public void setPmpAccessories(List<PmpAccessory> pmpAccessories) {
-        this.pmpAccessories = pmpAccessories;
-    }
 
     public String getSupplierName() {
         return supplierName;

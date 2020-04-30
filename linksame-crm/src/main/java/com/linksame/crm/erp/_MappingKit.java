@@ -21,7 +21,10 @@ public class _MappingKit {
 		arp.addMapping("admin_field_style", "id", AdminFieldStyle.class);
 		arp.addMapping("admin_fieldv", "id", AdminFieldv.class);
 		arp.addMapping("admin_file", "file_id", AdminFile.class);
+		arp.addMapping("admin_file_type", "type_id", AdminFileType.class);
 		arp.addMapping("admin_file_folder", "folder_id", AdminFileFolder.class);
+		arp.addMapping("admin_sms", "sms_id", AdminSms.class);
+		arp.addMapping("admin_file_log", "log_id", AdminFileLog.class);
 		arp.addMapping("admin_menu", "menu_id", AdminMenu.class);
 		arp.addMapping("admin_message", "message_id", AdminMessage.class);
 		arp.addMapping("admin_record", "record_id", AdminRecord.class);
@@ -76,7 +79,6 @@ public class _MappingKit {
 		arp.addMapping("crm_business_change", "change_id", CrmBusinessChange.class);
         arp.addMapping("pmp_contract", "contract_id", PmpContract.class);
         arp.addMapping("pmp_contract_payment", "bill_id", PmpContractPayment.class);
-        arp.addMapping("pmp_accessory", "accessory_id", PmpAccessory.class);
         arp.addMapping("pmp_contract_payment_record", "payment_record_id", PmpContractPaymentRecord.class);
 		arp.addMapping("pmp_receivable_records", "receivable_records_id", PmpReceivableRecords.class);
 	}

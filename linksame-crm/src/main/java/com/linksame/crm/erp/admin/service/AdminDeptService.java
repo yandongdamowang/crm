@@ -1,8 +1,12 @@
 package com.linksame.crm.erp.admin.service;
 
 import cn.hutool.core.util.StrUtil;
+import com.aliyuncs.utils.StringUtils;
+import com.jfinal.aop.Before;
+import com.jfinal.plugin.activerecord.tx.Tx;
 import com.linksame.crm.common.constant.BaseConstant;
 import com.linksame.crm.erp.admin.entity.AdminDept;
+import com.linksame.crm.erp.admin.entity.AdminUser;
 import com.linksame.crm.utils.BaseUtil;
 import com.linksame.crm.utils.R;
 import com.jfinal.plugin.activerecord.Db;
@@ -150,5 +154,33 @@ public class AdminDeptService {
         }
         int delete = Db.delete("delete from admin_dept where dept_id = ?", id);
         return delete > 0 ? R.ok() : R.error();
+    }
+
+    /**
+     * 批量设置员工到某个部门
+     * @param deptId    部门ID
+     * @param userIds   员工ID数组字符串
+     * @return
+     */
+    @Before(Tx.class)
+    public R batchSetUserByDept(Integer deptId, String userIds){
+        if(deptId == null){
+            return R.error("deptId参数不能为空");
+        }
+        if(StringUtils.isEmpty(userIds)){
+            return R.error("userIds参数没有数据");
+        }
+        String[] userIdArr = userIds.split(",");
+        List<Record> list = new ArrayList();
+        for(String userId : userIdArr){
+            Record record = new Record()
+                    .set("user_id", Long.parseLong(userId))
+                    .set("dept_id", deptId);
+            list.add(record);
+        }
+        //批量执行修改
+        Db.batchUpdate("admin_user", "user_id", list, list.size());
+
+        return R.ok("设置成功");
     }
 }

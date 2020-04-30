@@ -36,9 +36,13 @@ public class AdminUserService {
         boolean bol;
         updateScene(adminUser);
         if (adminUser.getUserId() == null) {
-            Integer count = Db.queryInt("select count(*) from admin_user where username = ?", adminUser.getUsername());
-            if (count > 0) {
-                return R.error("手机号重复！");
+            Integer usernameCount = Db.queryInt("select count(*) from admin_user where username = ?", adminUser.getUsername());
+            if (usernameCount > 0) {
+                return R.error("用户名已存在！");
+            }
+            Integer mobileCount = Db.queryInt("select count(*) from admin_user where mobile = ?", adminUser.getMobile());
+            if(mobileCount > 0){
+                return R.error("手机号已注册！");
             }
             String salt = IdUtil.fastSimpleUUID();
             adminUser.setNum(RandomUtil.randomNumbers(15));
@@ -147,10 +151,10 @@ public class AdminUserService {
         }
         if (request.getPageType() == 0) {
             List<Record> recordList = Db.find(Db.getSqlPara("admin.user.queryUserList", Kv.by("name", request.getData().getRealname()).set("deptId", deptIdList).set("status", request.getData().getStatus()).set("roleId", roleId)));
-            return R.ok().put("data", recordList);
+            return R.ok().put("data", recordList).put("dataCount", recordList.size());
         } else {
             Page<Record> paginate = Db.paginate(request.getPage(), request.getLimit(), Db.getSqlPara("admin.user.queryUserList", Kv.by("name", request.getData().getRealname()).set("deptId", deptIdList).set("status", request.getData().getStatus()).set("roleId", roleId)));
-            return R.ok().put("data", paginate);
+            return R.ok().put("data", paginate).put("dataCount", paginate.getTotalRow());
         }
     }
 

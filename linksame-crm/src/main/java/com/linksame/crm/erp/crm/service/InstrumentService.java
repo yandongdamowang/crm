@@ -78,7 +78,7 @@ public class InstrumentService{
     }
 
     /**
-     * 业绩指标
+     * 业绩指标 null,null,3,0,year,3
      */
     public R queryPerformance(String startTime, String endTime, String userIds, String deptIds, Integer status, String type, String allUsetIds){
         String[] userIdss = {};

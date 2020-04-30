@@ -15,18 +15,19 @@
             prr.collecting_company,
             prr.collection_bank,
             prr.collection_account,
+            prr.collection_number,
             prr.collecting_time,
             prr.agent
         from pmp_receivable_records as prr
-            where 1 = 1 and
+            where 1 = 1
             #if(paymentMethod)
-                and prr.payment_method like concat('%', #para(paymentMethod), '%')
+                and prr.payment_method = #para(contractId)
             #end
             #if(contractId)
                 and prr.contract_id = #para(contractId)
             #end
             #if(collectingStarttime)
-                prr.collecting_time between DATE_FORMAT(#para(collectingStarttime), '%Y-%m-%d') and DATE_FORMAT(#para(collectingEndtime), '%Y-%m-%d')
+                and prr.collecting_time between DATE_FORMAT(#para(collectingStarttime), '%Y-%m-%d') and DATE_FORMAT(#para(collectingEndtime), '%Y-%m-%d')
             #end
             #if(orderBy =='1')
                order by prr.collecting_time asc
@@ -43,5 +44,13 @@
 
     #sql("deleteByIds")
       delete from pmp_receivable_records where receivable_records_id = ?
+    #end
+
+
+    #sql("paymentDashboard")
+         select  a.collecting_time, SUM(a.receivable_amount) as receivableAmountMoney,
+            count(a.receivable_records_id) as ids
+        from pmp_contract b LEFT JOIN pmp_receivable_records a ON b.contract_id = a.contract_id WHERE 1=1 and a.collecting_time  between DATE_FORMAT(#para(startTime), '%Y-%m-%d') and DATE_FORMAT(#para(endTime), '%Y-%m-%d')
+        group by a.collecting_time
     #end
 #end

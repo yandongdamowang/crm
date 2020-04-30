@@ -345,6 +345,8 @@ public class AdminSceneService{
     }
 
     public R filterConditionAndGetPageList(BasePageRequest basePageRequest){
+
+
         JSONObject jsonObject = basePageRequest.getJsonObject();
         Integer sceneId = jsonObject.getInteger("sceneId");
         JSONObject data = new JSONObject();
@@ -369,6 +371,22 @@ public class AdminSceneService{
      * Crm列表页查询
      */
     public R getCrmPageList(BasePageRequest basePageRequest){
+        /**
+         * 我参与      {"ro_user_id":{"condition":"takePart","name":"ro_user_id","value":6}}
+         * sceneId: 69
+         * type: 6
+         * 下属负责     {"owner_user_id":{"condition":"in","name":"owner_user_id","value":"0"}}
+         * sceneId: 68
+         * type: 6
+         * 我负责      {"owner_user_id":{"condition":"is","name":"owner_user_id","value":6}}
+         * sceneId: 67
+         * type: 6
+         * 全部       ""
+         * sceneId: 66
+         * type: 6
+         * 默认
+         * type: 6
+         */
         JSONObject jsonObject = basePageRequest.getJsonObject();
         Kv kv = new Kv();
         String realm;

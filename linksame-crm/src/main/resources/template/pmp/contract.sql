@@ -74,4 +74,9 @@
     #sql("deleteByIds")
       delete from pmp_contract where contract_id = ?
     #end
+
+    #sql("contractApprove")
+         select * from admin_examine_log where record_id = ?
+    #end
+--      and is_recheck = 0
 #end

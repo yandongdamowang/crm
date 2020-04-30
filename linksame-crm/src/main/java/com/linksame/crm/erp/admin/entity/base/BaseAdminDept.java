@@ -36,6 +36,14 @@ public abstract class BaseAdminDept<M extends BaseAdminDept<M>> extends Model<M>
 	public void setNum(java.lang.Integer num) {
 		set("num", num);
 	}
+
+	public java.lang.String getCode() {
+		return getStr("code");
+	}
+
+	public void setCode(java.lang.Integer code) {
+		set("code", code);
+	}
 	
 	public java.lang.Integer getNum() {
 		return getInt("num");

@@ -3,6 +3,7 @@ package com.linksame.crm.erp.work.service;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
+import com.aliyuncs.utils.StringUtils;
 import com.jfinal.aop.Before;
 import com.jfinal.aop.Inject;
 import com.jfinal.kit.Kv;
@@ -69,6 +70,10 @@ public class TaskService{
     public R setTask(Task task, TaskRelation taskRelation){
         AdminUser user = BaseUtil.getUser();
         boolean bol;
+        //如果BatchId为空, 自动生成一个
+        if(StringUtils.isEmpty(task.getBatchId())){
+            task.setBatchId(IdUtil.simpleUUID());
+        }
         if(task.getLabelId() != null){
             task.setLabelId(TagUtil.fromString(task.getLabelId()));
         }
@@ -86,7 +91,9 @@ public class TaskService{
             task.setCreateTime(new Date());
             task.setUpdateTime(new Date());
             task.setCreateUserId(user.getUserId());
-            task.setBatchId(IdUtil.simpleUUID());
+            if(StringUtils.isEmpty(task.getBatchId())){
+                task.setBatchId(IdUtil.simpleUUID());
+            }
             bol = task.save();
             WorkTaskLog workTaskLog = new WorkTaskLog();
             workTaskLog.setUserId(user.getUserId());
@@ -389,6 +396,20 @@ public class TaskService{
                             if("main_user_id".equals(y.getKey())){
                                 newValue = Db.queryStr("select realname from `admin_user` where user_id = ?", newValue);
                             }
+                            //修改状态时显示具体信息,后续有需求时再放开注释
+                            /*if("status".equals(y.getKey())){
+                                if(Integer.parseInt(newValue.toString()) == 1){
+                                    workTaskLog.setContent("修改 完成状态 为: 正在进行");
+                                } else if(Integer.parseInt(newValue.toString()) == 2){
+                                    workTaskLog.setContent("修改 完成状态 为: 延期");
+                                } else if(Integer.parseInt(newValue.toString()) == 3){
+                                    workTaskLog.setContent("修改 完成状态 为: 归档");
+                                } else {
+                                    workTaskLog.setContent("修改 完成状态 为: 结束");
+                                }
+                            } else {
+                                workTaskLog.setContent("修改" + getTaileName(y.getKey()) + "为: " + newValue + "");
+                            }*/
                             workTaskLog.setContent("修改" + getTaileName(y.getKey()) + "为：" + newValue + "");
                         }
                         saveWorkTaskLog(workTaskLog);

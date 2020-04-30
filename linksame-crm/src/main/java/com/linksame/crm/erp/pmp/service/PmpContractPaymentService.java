@@ -14,9 +14,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author ZhangJie
@@ -84,7 +83,7 @@ public class PmpContractPaymentService {
                         //修改后的
                         contractPayment1.setCostPercentage(contractPayment.getCostPercentage());
                         contractPayment1.setMoney(contractPayment.getMoney());
-                        contractPayment1.setUpdateTime(LocalDateTime.now());
+                        contractPayment1.setUpdateTime(new Date(System.currentTimeMillis()));
                         contractPayment1.update();
                     }
                 });
@@ -108,7 +107,7 @@ public class PmpContractPaymentService {
     }
 
     public R queryAdvanceBybillId(Long billId) {
-        Kv kv = Kv.by("billId", billId);
+        Kv kv = Kv.by("billId", billId).set("orderBy","1");
         Record first = Db.findFirst(Db.getSqlPara("pmp.contractPayment.queryAdvanceList", kv));
         first.set("amountAdvanced",new BigDecimal(0));//预付金额
         Long supplier_id = first.getLong("supplier_id");
@@ -125,9 +124,92 @@ public class PmpContractPaymentService {
     }
 
     public R queryPaymentDetail(Long contractId) {
-        List<Record> records = Db.find("select * from pmp_contract_payment_record as pcpr where pcpr.contract_id = ? ", contractId);
+        // 预付款
         List<Record> records1 = Db.find("select * from pmp_contract_payment as pcp where pcp.contract_id = ? and pcp.trade_form =" + PmpInterface.contractPayment.trade.form.EXPENF + " and pcp.status =" + PmpInterface.contractPayment.trade.stats.OK, contractId);
-        records.addAll(records1);
+        //账单ID  bill_id
+        //合同ID  contract_id
+        //款项    payment_name
+        //预计付款时间    payment_node
+        //支付比例      cost_percentage
+        //支付金额      money
+        //实际支付比例
+        //实际支付金额
+        //关联任务      ...
+        //状态        trade_status
+        //备注
+        //付款记录
+        List<Record> records = Db.find("select * from pmp_contract_payment_record as pcpr where pcpr.contract_id = ? ", contractId);
+        //账单ID  payment_record_id
+        //合同ID  contract_id
+        //款项    payment_clause
+        //预计付款时间    payment_time
+        //支付比例      advance_ratio
+        //支付金额      amount_advanced
+        //实际支付比例    practical_ratio
+        //实际支付金额    practica_advanced
+        //关联任务      ...
+        //状态
+        //备注        remark
+        records.forEach(record -> record.set("tradeStatus","1"));
+        for (Record record : records1) {
+            Record record1 = new Record();
+            record1.set("paymentRecordId", record.getLong("bill_id"));//账单ID
+            record1.set("contractId", record.getLong("contract_id"));//合同ID
+            record1.set("paymentClause", record.getStr("payment_name"));//款项
+            record1.set("payment_time", record.get("payment_node"));//预计付款时间
+            record1.set("advance_ratio", record.getInt("cost_percentage"));//支付比例
+            record1.set("amount_advanced", record.get("money"));//支付金额
+            record1.set("practicalRatio", null);//实际支付比例
+            record1.set("practicaAdvanced", null);//实际支付金额
+            record1.set("task", "");//关联任务
+            record1.set("tradeStatus", record.getStr("trade_status"));//状态
+            record1.set("remark", "");//备注
+            records.add(record1);
+
+        }
         return R.ok().put("paymentDetails",records);
+    }
+
+    /**
+     * 预付款报表
+     * @param parseObject 条件
+     * @return 报表
+     */
+    public R paymentReport(JSONObject parseObject) {
+        LocalDate startTime = LocalDate.parse(parseObject.getString("startTime"), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        LocalDate endTime = LocalDate.parse(parseObject.getString("endTime"), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        Kv kv = Kv.by("startTime", startTime)
+                .set("endTime", endTime)
+                .set("supplierId", parseObject.get("supplierId"))
+                .set("projectId", parseObject.get("projectId"));
+        List<Record> records = null;
+        if (endTime.toEpochDay() - startTime.toEpochDay() > 300){
+            records = Db.find(Db.getSqlPara("pmp.contractPayment.paymentDashboard2", kv));
+        }else {
+            records = Db.find(Db.getSqlPara("pmp.contractPayment.paymentDashboard1", kv));
+        }
+        //报表曲线图
+        int contractCount = 0;
+        for (Record record : records) {
+            contractCount = contractCount + record.getInt("ids");
+        }
+        //回款
+        List<Record>  agencyFund = Db.find(Db.getSqlPara("pmp.receivableRecords.paymentDashboard", kv));
+        BigDecimal receivableAmountMoney = new BigDecimal(0);
+        for (Record record : agencyFund) {
+            BigDecimal receivableAmountMoney1 = record.getBigDecimal("receivableAmountMoney");
+            if (receivableAmountMoney1 != null) {
+                receivableAmountMoney = receivableAmountMoney.add(receivableAmountMoney1);
+            }
+        }
+//        BigDecimal bigDecimal = new BigDecimal(0);
+        //dashboard 曲线数据
+            //practicaAdvanced 实际付款金额
+            //paymentTime 付款日期
+            //ids 支付笔数
+        //contractCount 合同总数
+        //paymentCountMoney 预付款金额
+        //receivableAmountMoney 预回款金额
+        return R.ok().put("dashboard",records).put("contractCount",contractCount).put("receivableAmountMoney",receivableAmountMoney);
     }
 }

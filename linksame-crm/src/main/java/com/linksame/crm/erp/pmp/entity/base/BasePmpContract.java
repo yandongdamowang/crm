@@ -4,6 +4,7 @@ import com.jfinal.plugin.activerecord.IBean;
 import com.jfinal.plugin.activerecord.Model;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 /**
  * @author ZhangJie
@@ -94,43 +95,43 @@ public abstract class BasePmpContract<M extends BasePmpContract<M>> extends Mode
         return getLong("project_id");
     }
 
-    public void setRequiredSigningTime(java.time.LocalDate requiredSigningTime) {
+    public void setRequiredSigningTime(Date requiredSigningTime) {
         set("required_signing_time", requiredSigningTime);
     }
 
-    public java.time.LocalDate getRequiredSigningTime() {
+    public Date getRequiredSigningTime() {
         return get("required_signing_time");
     }
 
-    public void setActualSigningTime(java.time.LocalDate actualSigningTime) {
+    public void setActualSigningTime(Date actualSigningTime) {
         set("actual_signing_time", actualSigningTime);
     }
 
-    public java.time.LocalDate getActualSigningTime() {
+    public Date getActualSigningTime() {
         return get("actual_signing_time");
     }
 
-    public void setPurchaseTime(java.time.LocalDate purchaseTime) {
+    public void setPurchaseTime(Date purchaseTime) {
         set("purchase_time", purchaseTime);
     }
 
-    public java.time.LocalDate getPurchaseTime() {
+    public Date getPurchaseTime() {
         return get("purchase_time");
     }
 
-    public void setBeginTime(java.time.LocalDate beginTime) {
+    public void setBeginTime(Date beginTime) {
         set("begin_time", beginTime);
     }
 
-    public java.time.LocalDate getBeginTime() {
+    public Date getBeginTime() {
         return get("begin_time");
     }
 
-    public void setEndTime(java.time.LocalDate endTime) {
+    public void setEndTime(Date endTime) {
         set("end_time", endTime);
     }
 
-    public java.time.LocalDate getEndTime() {
+    public Date getEndTime() {
         return get("end_time");
     }
 
@@ -142,19 +143,19 @@ public abstract class BasePmpContract<M extends BasePmpContract<M>> extends Mode
         return getLong("agent");
     }
 
-    public void setCreationTime(java.time.LocalDateTime creationTime) {
+    public void setCreationTime(Date creationTime) {
         set("creation_time", creationTime);
     }
 
-    public java.time.LocalDateTime getCreationTime() {
+    public Date getCreationTime() {
         return get("creation_time");
     }
 
-    public void setUpdateTime(java.time.LocalDateTime updateTime) {
+    public void setUpdateTime(Date updateTime) {
         set("update_time", updateTime);
     }
 
-    public java.time.LocalDateTime getUpdateTime() {
+    public Date getUpdateTime() {
         return get("update_time");
     }
 
@@ -174,19 +175,19 @@ public abstract class BasePmpContract<M extends BasePmpContract<M>> extends Mode
         return get("money");
     }
 
-    public void setContractPurchaseStartTime(LocalDate contractPurchaseStartTime) {
+    public void setContractPurchaseStartTime(Date contractPurchaseStartTime) {
         set("contract_purchase_start_time", contractPurchaseStartTime);
     }
 
-    public LocalDate getContractPurchaseStartTime() {
+    public Date getContractPurchaseStartTime() {
         return get("contract_purchase_start_time");
     }
 
-    public void setContractPurchaseEndTime(LocalDate contractPurchaseEndTime) {
+    public void setContractPurchaseEndTime(Date contractPurchaseEndTime) {
         set("contract_purchase_end_time", contractPurchaseEndTime);
     }
 
-    public LocalDate getContractPurchaseEndTime() {
+    public Date getContractPurchaseEndTime() {
         return get("contract_purchase_end_time");
     }
 
@@ -196,6 +197,22 @@ public abstract class BasePmpContract<M extends BasePmpContract<M>> extends Mode
 
     public java.lang.String getBatchId() {
         return getStr("batch_id");
+    }
+
+    public void setCheckStatus(java.lang.Integer checkStatus) {
+        set("check_status", checkStatus);
+    }
+
+    public java.lang.Integer getCheckStatus() {
+        return getInt("check_status");
+    }
+
+    public void setExamineRecordId(java.lang.Integer examineRecordId) {
+        set("examine_record_id", examineRecordId);
+    }
+
+    public java.lang.Integer getExamineRecordId() {
+        return getInt("examine_record_id");
     }
 
 }

@@ -3,6 +3,7 @@ package com.linksame.crm.erp.admin.controller;
 import com.jfinal.aop.Inject;
 import com.jfinal.core.Controller;
 import com.jfinal.core.paragetter.Para;
+import com.linksame.crm.common.annotation.Permissions;
 import com.linksame.crm.erp.admin.entity.AdminFileFolder;
 import com.linksame.crm.erp.admin.service.AdminFileFolderService;
 import com.linksame.crm.utils.R;
@@ -31,6 +32,7 @@ public class AdminFileFolderController extends Controller {
     @ApiImplicitParams({
             @ApiImplicitParam(name="adminFileFolder", description="文件夹对象")
     })
+    @Permissions({"file:folderManage:create"})
     public void createFolder(@Para("") AdminFileFolder adminFileFolder){
         renderJson(adminFileFolderService.createFolder(adminFileFolder));
     }
@@ -40,10 +42,10 @@ public class AdminFileFolderController extends Controller {
      */
     @ApiOperation(methods= RequestMethod.POST, description="查询文件夹(层级展示)")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="batchId", description="批次ID")
+            @ApiImplicitParam(name="ifUser", description="是否根据当前用户查询文件目录树(0=是, 不传或非0=否)")
     })
     public void queryFolder(){
-        renderJson(adminFileFolderService.queryFolder(getPara("batchId")));
+        renderJson(adminFileFolderService.queryFolder(getInt("ifUser")));
     }
 
     /**
@@ -51,9 +53,24 @@ public class AdminFileFolderController extends Controller {
      */
     @ApiOperation(methods= RequestMethod.POST, description="文件夹重命名")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="adminFileFolder", description="文件夹对象")
+            @ApiImplicitParam(name="folderId", description="文件夹编号"),
+            @ApiImplicitParam(name="folderName", description="文件夹名称")
     })
+    @Permissions({"file:folderManage:rename"})
     public void renameFolder(@Para("") AdminFileFolder adminFileFolder){
+        renderJson(adminFileFolder.update() ? R.ok() : R.error());
+    }
+
+    /**
+     * 移动文件夹
+     */
+    @ApiOperation(methods= RequestMethod.POST, description="移动文件夹")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="folderId", description="文件夹编号"),
+            @ApiImplicitParam(name="folderPid", description="文件夹父编号")
+    })
+    @Permissions({"file:folderManage:mobile"})
+    public void mobileFolder(@Para("") AdminFileFolder adminFileFolder){
         renderJson(adminFileFolder.update() ? R.ok() : R.error());
     }
 
@@ -64,6 +81,7 @@ public class AdminFileFolderController extends Controller {
     @ApiImplicitParams({
             @ApiImplicitParam(name="adminFileFolder", description="文件夹对象")
     })
+    @Permissions({"file:folderManage:delete"})
     public void deleteFolder(){
         adminFileFolderService.deleteFolder(getInt("folderId"));
         renderJson(R.ok());

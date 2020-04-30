@@ -72,6 +72,9 @@ public class AdminRoleService {
             case 8:
                 realm = "project";
                 break;
+            case 9:
+                realm = "file";
+                break;
             default:
                 return new ArrayList<>();
         }
@@ -337,6 +340,9 @@ public class AdminRoleService {
             case 8:
                 name = "项目管理角色";
                 break;
+            case 9:
+                name = "附件管理角色";
+                break;
             default:
                 name = "自定义角色";
         }
@@ -388,6 +394,7 @@ public class AdminRoleService {
         data.add(Kv.by("name","办公管理角色").set("roleType",7));
         data.add(Kv.by("name","客户管理角色").set("roleType",2));
         data.add(Kv.by("name","项目管理角色").set("roleType",8));
+        data.add(Kv.by("name","附件管理角色").set("roleType",9));
         return R.ok().put("data",data);
     }
 }

@@ -38,6 +38,14 @@ public abstract class BaseAdminFile<M extends BaseAdminFile<M>> extends Model<M>
 		return getStr("file_name");
 	}
 
+	public void setCompositionName(java.lang.String compositionName) {
+		set("composition_name", compositionName);
+	}
+
+	public java.lang.String getCompositionName() {
+		return getStr("composition_name");
+	}
+
 	public void setOldName(java.lang.String oldName) {
 		set("old_name", oldName);
 	}
@@ -78,12 +86,44 @@ public abstract class BaseAdminFile<M extends BaseAdminFile<M>> extends Model<M>
 		return getStr("path");
 	}
 
+	public void setSuffix(java.lang.String suffix) {
+		set("suffix", suffix);
+	}
+
+	public java.lang.String getSuffix() {
+		return getStr("suffix");
+	}
+
 	public void setFileType(java.lang.String fileType) {
 		set("file_type", fileType);
 	}
 	
 	public java.lang.String getFileType() {
 		return getStr("file_type");
+	}
+
+	public void setFolderId(java.lang.Integer folderId) {
+		set("folder_id", folderId);
+	}
+
+	public java.lang.Integer getFolderId() {
+		return getInt("folder_id");
+	}
+
+	public void setWorkId(java.lang.Integer workId) {
+		set("work_id", workId);
+	}
+
+	public java.lang.Integer getWorkId() {
+		return getInt("work_id");
+	}
+
+	public void setTypeId(java.lang.Integer typeId) {
+		set("type_id", typeId);
+	}
+
+	public java.lang.Integer getTypeId() {
+		return getInt("type_id");
 	}
 
 	public void setBatchId(java.lang.String batchId) {
@@ -94,4 +134,35 @@ public abstract class BaseAdminFile<M extends BaseAdminFile<M>> extends Model<M>
 		return getStr("batch_id");
 	}
 
+	public void setIsMainVersion(java.lang.Integer isMainVersion) {
+		set("is_main_version", isMainVersion);
+	}
+
+	public java.lang.Integer getIsMainVersion() {
+		return getInt("is_main_version");
+	}
+
+	public void setHistoryFileId(java.lang.Integer historyFileId) {
+		set("history_file_id", historyFileId);
+	}
+
+	public java.lang.Integer getHistoryFileId() {
+		return getInt("history_file_id");
+	}
+
+	public void setFileVersion(java.lang.Integer fileVersion) {
+		set("file_version", fileVersion);
+	}
+
+	public java.lang.Integer getFileVersion() {
+		return getInt("file_version");
+	}
+
+	public void setFileRemark(java.lang.String fileRemark) {
+		set("file_remark", fileRemark);
+	}
+
+	public java.lang.String getFileRemark() {
+		return getStr("file_remark");
+	}
 }

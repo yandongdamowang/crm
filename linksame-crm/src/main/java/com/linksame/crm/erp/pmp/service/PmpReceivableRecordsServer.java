@@ -16,25 +16,35 @@ import com.linksame.crm.erp.crm.entity.CrmBusinessProduct;
 import com.linksame.crm.erp.pmp.entity.PmpReceivableRecords;
 import com.linksame.crm.utils.R;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class PmpReceivableRecordsServer {
     public R queryList(BasePageRequest<PmpReceivableRecords> basePageRequest) {
         JSONObject jsonObject = basePageRequest.getJsonObject();
+        LocalDate startTime = LocalDate.parse(jsonObject.getString("collectingStarttime"), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        LocalDate endTime = LocalDate.parse(jsonObject.getString("collectingEndtime"), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         //客户   支付方式   回款时间 开始结束
         Kv kv = Kv.by("customerId", jsonObject.getString("customerId"))
                 .set("paymentMethod", jsonObject.getLong("paymentMethod"))
-                .set("collectingStarttime", jsonObject.getLong("collectingStarttime"))
-                .set("collectingEndtime", jsonObject.getLong("collectingEndtime"))
+                .set("collectingStarttime", startTime)
+                .set("collectingEndtime", endTime)
                 .set("orderBy", jsonObject.get("orderBy"));
+        List<Record> payment_method = Db.find("SELECT prr.payment_method FROM pmp_receivable_records AS prr WHERE 1=1 GROUP BY prr.payment_method");
+        List<Record> customer_id = Db.find("SELECT prr.customer_id FROM pmp_receivable_records AS prr WHERE 1=1 GROUP BY prr.customer_id");
+        customer_id.forEach(record -> record.set("customerName","客户名称"));
         if (basePageRequest.getPageType() == 0){
             List<Record> records = Db.find(Db.getSqlPara("pmp.receivableRecords.queryList", kv));
-            return R.ok().put("data",records);
+            records.forEach(record -> record.set("customerName","客户名称"));
+            return R.ok().put("data",records).put("paymentMethod",payment_method).put("customerId",customer_id);
         }else {
             Page<Record> paginate = Db.paginate(basePageRequest.getPage(), basePageRequest.getLimit(), Db.getSqlPara("pmp.receivableRecords.queryList", kv));
-            return R.ok().put("data", paginate);
+            paginate.getList().forEach(record -> record.set("customerName","客户名称"));
+            return R.ok().put("data", paginate).put("paymentMethod",payment_method).put("customerId",customer_id);
         }
     }
 
@@ -42,18 +52,19 @@ public class PmpReceivableRecordsServer {
         if (receivableRecordsId == null) {
             return R.error("id参数为空");
         }
-        return R.ok().put("data", PmpReceivableRecords.dao.findById(receivableRecordsId));
+        PmpReceivableRecords byId = PmpReceivableRecords.dao.findById(receivableRecordsId);
+        byId.setCollectingTime(byId.getCollectingTime());
+        return R.ok().put("data", byId);
     }
 
     @Before(Tx.class)
-    public R addOrUpdate(JSONObject jsonObject) {
-        PmpReceivableRecords pmpReceivableRecords = jsonObject.getObject("pmpReceivableRecords", PmpReceivableRecords.class);
+    public R addOrUpdate(PmpReceivableRecords pmpReceivableRecords) {
         boolean saveOrUpdate;
         if (pmpReceivableRecords.getReceivableRecordsId() != null){
-            pmpReceivableRecords.setUpdateTime(LocalDateTime.now());
+            pmpReceivableRecords.setUpdateTime(new Date(System.currentTimeMillis()));
             saveOrUpdate = pmpReceivableRecords.update();
         }else {
-            pmpReceivableRecords.setCreatedTime(LocalDateTime.now());
+            pmpReceivableRecords.setCreatedTime(new Date(System.currentTimeMillis()));
             pmpReceivableRecords.setBatchId(IdUtil.simpleUUID());
             saveOrUpdate = pmpReceivableRecords.save();
         }
@@ -76,5 +87,11 @@ public class PmpReceivableRecordsServer {
                 return true;
             })? R.ok() : R.error();
         }
+    }
+
+    public R queryByContractId(Long contractId) {
+        Kv kv = Kv.by("contractId", contractId).set("orderBy", "1");
+        List<Record> records = Db.find(Db.getSqlPara("pmp.receivableRecords.queryList", kv));
+        return R.ok().put("data",records);
     }
 }
