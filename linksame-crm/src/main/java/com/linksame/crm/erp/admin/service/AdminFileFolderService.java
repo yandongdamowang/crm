@@ -35,12 +35,16 @@ public class AdminFileFolderService {
 
     /**
      * 查询文件夹(层级展示)
-     * @param batchId   批次ID
+     * @param ifUser    是否根据当前用户查询文件目录树(0=是, 不传或非0=否)
      * @return          文件夹列表
      */
-    public R queryFolder(String batchId){
-        Kv kv = Kv.by("createUserId", BaseUtil.getUser().getUserId())
-                .set("batchId", batchId);
+    public R queryFolder(Integer ifUser){
+        Kv kv = Kv.by("ifUser", ifUser);
+        if(ifUser != null){
+            if(ifUser == 0){
+                kv.set("createUserId", BaseUtil.getUser().getUserId());
+            }
+        }
         List<Record> folderList = Db.find(Db.getSqlPara("admin.folder.queryFolderList", kv));
         //有父元素的数据需要从原list中抹除
         Iterator<Record> it = folderList.iterator();

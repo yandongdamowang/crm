@@ -42,10 +42,10 @@ public class AdminFileFolderController extends Controller {
      */
     @ApiOperation(methods= RequestMethod.POST, description="查询文件夹(层级展示)")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="batchId", description="批次ID")
+            @ApiImplicitParam(name="ifUser", description="是否根据当前用户查询文件目录树(0=是, 不传或非0=否)")
     })
     public void queryFolder(){
-        renderJson(adminFileFolderService.queryFolder(getPara("batchId")));
+        renderJson(adminFileFolderService.queryFolder(getInt("ifUser")));
     }
 
     /**

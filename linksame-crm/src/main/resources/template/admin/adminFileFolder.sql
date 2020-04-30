@@ -2,7 +2,10 @@
     #sql("queryFolderList")
         select aff.*
         from `admin_file_folder` AS aff
-        where aff.create_user_id = #para(createUserId) and aff.batch_id = #para(batchId)
+        where 1=1
+        #if(createUserId)
+            and aff.create_user_id = #para(createUserId)
+        #end
     #end
     #sql("queryFolderByPid")
         select * from admin_file_folder where folder_pid = #para(folderId)
