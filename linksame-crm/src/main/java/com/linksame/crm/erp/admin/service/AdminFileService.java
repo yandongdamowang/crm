@@ -36,14 +36,14 @@ public class AdminFileService {
      * @param basePageRequest  条件构造对象
      */
     public R getFileList(BasePageRequest basePageRequest){
-        JSONObject jo = basePageRequest.getJsonObject();
-        Kv kv= Kv.by("batchId", jo.getString("batchId"))
-                .set("oldName", jo.getString("oldName"))
-                .set("folderId", jo.getInteger("folderId"))
-                .set("workId", jo.getInteger("workId"))
-                .set("ifUser", jo.getInteger("ifUser"));
-        if(jo.getInteger("ifUser") != null){
-            if(jo.getInteger("ifUser") == 0){
+        JSONObject jsonObject = basePageRequest.getJsonObject();
+        Kv kv= Kv.by("batchId", jsonObject.getString("batchId"))
+                .set("oldName", jsonObject.getString("oldName"))
+                .set("folderId", jsonObject.getInteger("folderId"))
+                .set("workId", jsonObject.getInteger("workId"))
+                .set("ifUser", jsonObject.getInteger("ifUser"));
+        if(jsonObject.getInteger("ifUser") != null){
+            if(jsonObject.getInteger("ifUser") == 0){
                 kv.set("createUserId", BaseUtil.getUser().getUserId());
             }
         }
@@ -518,8 +518,10 @@ public class AdminFileService {
      * @return
      */
     public R queryFileLog(BasePageRequest<AdminFileLog> basePageRequest){
-        Page<Record> recordList = Db.paginate(basePageRequest.getPage(), basePageRequest.getLimit(), Db.getSqlPara("admin.file.queryFileLog", Kv.by("fileId", basePageRequest.getJsonObject().get("fileId"))));
-        return R.ok().put("data", recordList);
+        JSONObject jsonObject = basePageRequest.getJsonObject();
+        Kv kv= Kv.by("fileId", jsonObject.getInteger("fileId"));
+        Page<Record> pageList = Db.paginate(basePageRequest.getPage(), basePageRequest.getLimit(), Db.getSqlPara("admin.file.queryFileLog", kv));
+        return R.ok().put("data", pageList);
     }
 
     /**
