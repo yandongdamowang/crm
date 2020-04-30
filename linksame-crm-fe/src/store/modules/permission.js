@@ -80,6 +80,10 @@ const permission = {
     oaRouters: {
       name: 'oa',
       children: []
+    },
+    annexRouters: {
+      name: 'annex',
+      children: []
     }
   },
   mutations: {
@@ -97,6 +101,8 @@ const permission = {
           state.biRouters = element
         } else if (element.name == 'manager') {
           state.manageRouters = element
+        } else if (element.name == 'annex') {
+          state.annexRouters = element
         }
       }
     },

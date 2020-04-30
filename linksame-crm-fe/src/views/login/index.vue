@@ -6,16 +6,8 @@
 
     <div class="right">
       <div class="title">{{ name }}</div>
-      <el-tabs
-        v-model="activeName"
-        class="table"
-        @tab-click="handleClick"
-      >
-
-        <el-tab-pane
-          label="账号密码登录"
-          name="first"
-        >
+      <el-tabs v-model="activeName" class="table" @tab-click="handleClick">
+        <el-tab-pane label="账号密码登录" name="first">
           <el-form
             ref="loginForm"
             :model="loginForm"
@@ -24,7 +16,6 @@
             auto-complete="on"
             label-position="left"
           >
-
             <el-form-item prop="username">
               <div class="content">用户名</div>
               <el-input
@@ -36,7 +27,7 @@
                 auto-complete="on"
                 placeholder="请输入用户名"
                 @keyup.enter.native="handleLogin"
-              />
+              ></el-input>
             </el-form-item>
 
             <el-form-item prop="password">
@@ -56,18 +47,12 @@
                 :loading="loading"
                 class="submit-btn"
                 @click.native.prevent="handleLogin"
-              >
-                登录
-              </el-button>
+              >登录</el-button>
             </el-form-item>
-
           </el-form>
         </el-tab-pane>
 
-        <el-tab-pane
-          label="手机号登录"
-          name="second"
-        >
+        <el-tab-pane label="手机号登录" name="second">
           <el-form
             ref="loginForm"
             :model="loginForm"
@@ -76,7 +61,6 @@
             auto-complete="on"
             label-position="left"
           >
-
             <el-form-item prop="username">
               <div class="content">手机号</div>
               <el-input
@@ -104,17 +88,9 @@
                   @keyup.enter.native="handleLogin"
                 />
 
-                <el-button
-                  v-show="sendAuthCode"
-                  plain
-                  @click="getAuthCode"
-                >获取验证码</el-button>
-                <el-button
-                  v-show="!sendAuthCode"
-                  plain
-                >重新发送 {{ auth_time }} 秒</el-button>
+                <el-button v-show="sendAuthCode" plain @click="getAuthCode">获取验证码</el-button>
+                <el-button v-show="!sendAuthCode" plain>重新发送 {{ auth_time }} 秒</el-button>
               </div>
-
             </el-form-item>
 
             <el-form-item>
@@ -122,26 +98,18 @@
                 :loading="loading"
                 class="submit-btn"
                 @click.native.prevent="handleLogin"
-              >
-                登录
-              </el-button>
+              >登录</el-button>
             </el-form-item>
-
           </el-form>
-
         </el-tab-pane>
         <!-- <div class="regist">
           <el-button type="text">免费注册</el-button>
           <el-button type="text">忘记密码?</el-button>
-        </div> -->
+        </div>-->
       </el-tabs>
-
     </div>
 
-    <img
-      :src="logo"
-      class="logo"
-    >
+    <img :src="logo" class="logo" />
   </div>
 </template>
 
@@ -198,6 +166,7 @@ export default {
   },
   mounted() { },
   methods: {
+      
     getAuthCode: function() {
       //   const verification = this.loginForm.telephone
 

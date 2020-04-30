@@ -29,6 +29,7 @@ const getters = {
   oaRouters: state => state.permission.oaRouters,
   crmRouters: state => state.permission.crmRouters,
   contractRouters: state => state.permission.contractRouters,
+  annexRouters: state => state.permission.annexRouters,
   biRouters: state => state.permission.biRouters,
   manageRouters: state => state.permission.manageRouters,
   // 客户管理信息

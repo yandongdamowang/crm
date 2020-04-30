@@ -15,7 +15,8 @@ const user = {
     bi: {}, // 商业智能
     manage: {}, // 管理后台
     oa: {}, // 办公
-    project: {} // 项目管理
+    project: {}, // 项目管理
+    annex: {} // 项目管理
   },
 
   mutations: {
@@ -30,6 +31,9 @@ const user = {
     },
     SET_CONTRACT: (state, contract) => {
       state.contract = contract
+    },
+    SET_ANNEX: (state, contract) => {
+      state.annexRouters = contract
     },
     SET_BI: (state, bi) => {
       state.bi = bi
@@ -76,6 +80,30 @@ const user = {
                 delete: true
               }
             }
+            data.auth.annex = {
+              annex: {
+                discard: true,
+                read: true,
+                transfer: true,
+                excelexport: true,
+                save: true,
+                update: true,
+                index: true,
+                excelimport: true,
+                delete: true
+              },
+              recycle: {
+                discard: true,
+                read: true,
+                transfer: true,
+                excelexport: true,
+                save: true,
+                update: true,
+                index: true,
+                excelimport: true,
+                delete: true
+              }
+            }
             console.log(123, data)
             Lockr.set('Admin-Token', data['Admin-Token'])
             Lockr.set('loginUserInfo', data.user)
@@ -89,6 +117,7 @@ const user = {
             commit('SET_CRM', data.auth.crm)
             // 合同
             commit('SET_CONTRACT', data.auth.contract)
+            commit('SET_ANNEX', data.auth.annex)
 
             commit('SET_BI', data.auth.bi)
             commit('SET_MANAGE', data.auth.manage)
@@ -131,6 +160,30 @@ const user = {
                 delete: true
               }
             }
+            response.data.annex = {
+              annex: {
+                discard: true,
+                read: true,
+                transfer: true,
+                excelexport: true,
+                save: true,
+                update: true,
+                index: true,
+                excelimport: true,
+                delete: true
+              },
+              recycle: {
+                discard: true,
+                read: true,
+                transfer: true,
+                excelexport: true,
+                save: true,
+                update: true,
+                index: true,
+                excelimport: true,
+                delete: true
+              }
+            }
             const data = response.data
             Lockr.set('authList', data)
             commit('SET_ALLAUTH', data)
@@ -140,6 +193,7 @@ const user = {
             commit('SET_OA', data.oa)
             commit('SET_PROJECT', data.project)
             commit('SET_CONTRACT', data.contract)
+            commit('SET_ANNEX', data.annex)
             resolve(data)
           })
           .catch(error => {

@@ -63,6 +63,13 @@ Vue.use(photo)
 import { emoji } from './utils/emoji'
 Vue.prototype.emoji = emoji
 
+import wlExplorer from 'wl-explorer'
+import 'wl-explorer/lib/wl-explorer.css'
+Vue.use(wlExplorer)
+
+import request from '@/utils/request'
+Vue.prototype.$request = request
+
 Vue.config.productionTip = false
 
 window.app = new Vue({

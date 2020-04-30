@@ -1,22 +1,15 @@
 <template>
-  <div
-    v-loading="loading"
-    class="task-calendars">
+  <div v-loading="loading" class="task-calendars">
     <div class="add-btn">
-      <el-button
-        type="primary"
-        @click="createTask">
-        创建任务
-      </el-button>
+      <el-button type="primary" @click="createTask">创建任务</el-button>
     </div>
     <div
       ref="hoverDialog"
       :style="{'border-color': getPriorityColor(hoverDialogList.priority)}"
-      class="hover-dialog">
-      <flexbox
-        class="title"
-        align="stretch">
-        <el-checkbox/>
+      class="hover-dialog"
+    >
+      <flexbox class="title" align="stretch">
+        <el-checkbox />
         <div>{{ hoverDialogList.name }}</div>
       </flexbox>
       <div class="img-content">
@@ -28,7 +21,8 @@
       :visible="taskCreateShow"
       :action="createActionInfo"
       @handleClose="handleClose"
-      @submit="refetchCalendar"/>
+      @submit="refetchCalendar"
+    />
     <!-- 详情 -->
     <particulars
       v-if="taskDetailShow"
@@ -36,9 +30,10 @@
       :id="taskID"
       :detail-index="detailIndex"
       @on-handle="refetchCalendar"
-      @close="closeBtn"/>
+      @close="closeBtn"
+    />
     <!-- 日历 -->
-    <div id="calendar"/>
+    <div id="calendar" />
   </div>
 </template>
 
@@ -263,11 +258,11 @@ export default {
 </script>
 
 <style>
-@import 'fullcalendar/dist/fullcalendar.css';
+@import "fullcalendar/dist/fullcalendar.css";
 </style>
 
 <style lang="scss" scoped>
-@import '@/styles/calendars.scss';
+@import "@/styles/calendars.scss";
 
 .task-calendars {
   position: relative;

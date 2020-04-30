@@ -1,46 +1,32 @@
 <template>
   <div style="height:100%">
-
-    <div class="ls-header"> 付款账单
+    <div class="ls-header">
+      付款账单
       <span class="grep">
-        <el-date-picker
+        <!-- <el-date-picker
           v-model="search.datetime"
           style="float: right;margin: 8px 50px 0 0"
           type="daterange"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           value-format="yyyy-MM-dd"
-        />
+        />-->
       </span>
     </div>
 
     <div class="ls-box">
-
-      <el-form
-        ref="form"
-        :inline="true"
-      >
-
+      <el-form ref="form" :inline="true">
         <el-form-item label="付款编号：">
-          <el-input
-            v-model="search.paymentNumber"
-            placeholder="请输入内容"
-          />
+          <el-input v-model="search.paymentNumber" placeholder="请输入内容" />
         </el-form-item>
 
         <el-form-item label="客户：">
-          <el-input
-            v-model="search.supplierId"
-            placeholder="请输入内容"
-          />
+          <el-input v-model="search.supplierId" placeholder="请输入内容" />
         </el-form-item>
 
         <el-form-item>
           <span>
-            <el-button
-              type="primary"
-              @click="retrivePaymentBillList"
-            >查询</el-button>
+            <el-button type="primary" @click="retrivePaymentBillList">查询</el-button>
           </span>
           <span>
             <el-button @click="searchReset">重置</el-button>
@@ -58,16 +44,9 @@
       >
         <!-- style="width: 100%; margin:20px 0 0 0" -->
 
-        <el-table-column
-          type="selection"
-          width="55"
-        />
+        <el-table-column type="index" label="序号" width="55" />
 
-        <!-- <el-table-column
-          prop="paymentNumber"
-          label="付款编号"
-          width="150"
-        >
+        <el-table-column prop="paymentNumber" label="付款编号" width="150">
           <template slot-scope="scope">
             <el-button
               type="text"
@@ -75,48 +54,17 @@
               @click="drawerDetail(scope.row)"
             >{{ scope.row.paymentNumber }}</el-button>
           </template>
-        </el-table-column> -->
+        </el-table-column>
 
-        <el-table-column
-          prop="paymentNumber"
-          label="付款编号"
-        />
-        <el-table-column
-          prop="supplierId"
-          label="客户/承包商"
-        />
-        <el-table-column
-          prop="amountAdvanced"
-          label="预付金额"
-        />
-        <el-table-column
-          prop="practicalRatio"
-          label="实付比例"
-          width="150"
-        />
-        <el-table-column
-          prop="practicaAdvanced"
-          label="实付金额"
-          width="150"
-        />
-        <el-table-column
-          prop="paymentTime"
-          label="实际付款时间"
-          width="150"
-        />
+        <el-table-column prop="supplierId" label="客户/承包商" />
+        <el-table-column prop="amountAdvanced" label="预付金额" />
+        <el-table-column prop="practicalRatio" label="实付比例" width="150" />
+        <el-table-column prop="practicaAdvanced" label="实付金额" width="150" />
+        <el-table-column prop="paymentTime" label="实际付款时间" width="150" />
 
-        <el-table-column
-          prop="paymentType"
-          label="付款方式"
-        />
-        <el-table-column
-          prop="responsiblePerson"
-          label="经办人"
-        />
-        <el-table-column
-          prop="remark"
-          label="备注"
-        />
+        <el-table-column prop="paymentType" label="付款方式" />
+        <el-table-column prop="responsiblePerson" label="经办人" />
+        <el-table-column prop="remark" label="备注" />
       </el-table>
 
       <div class="ls-pagination">
@@ -131,38 +79,25 @@
         />
       </div>
 
-      <el-dialog
-        :visible.sync="dialogVisible"
-        :title="dialogTitle"
-        :width="dialogwidth"
-      >
-        <component
-          ref="child"
-          :is="dialogComponents"
-        />
+      <el-dialog :visible.sync="dialogVisible" :title="dialogTitle" :width="dialogwidth">
+        <component ref="child" :is="dialogComponents" />
 
         <span slot="footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button
-            type="primary"
-            @click="commitData"
-          >确 定</el-button>
+          <el-button type="primary" @click="commitData">确 定</el-button>
         </span>
       </el-dialog>
 
       <el-drawer
         :title="drawerTitle"
+        :with-header="false"
         :visible.sync="drawer"
         :destroy-on-close="true"
         size="70%"
         @open="drawerDetail()"
       >
-        <component
-          :is="drawerComponents"
-          :drawer-data="drawerData"
-        />
+        <component :is="drawerComponents" :drawer-data="drawerData" />
       </el-drawer>
-
     </div>
   </div>
 </template>
@@ -231,7 +166,7 @@ export default {
         .then(res => {
           console.log(res)
           this.paymentBillListData = res.data.list
-        this.pageTotal = res.data.totalRow
+          this.pageTotal = res.data.totalRow
         //   this.paymentBillListSubData = res.data.list
         })
         .catch(() => {
@@ -265,10 +200,10 @@ export default {
     },
     drawerDetail(row) {
       this.drawer = true
-      this.drawerTitle = row.contractName
+      //   this.drawerTitle = row.contractName
       this.drawerComponents = 'DrawerDetail'
-      console.log(row)
-      this.drawerData = row.contractId
+      console.log('drawerDetail', row)
+      this.drawerData = row.paymentRecordId
     }
 
   }

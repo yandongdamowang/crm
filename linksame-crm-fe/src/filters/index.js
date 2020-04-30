@@ -1,8 +1,5 @@
 // set function formatTime to filter
-import {
-  timestampToFormatTime,
-  formatTimeToTimestamp
-} from '@/utils'
+import { timestampToFormatTime, formatTimeToTimestamp } from '@/utils'
 
 /**
  * 时间戳到格式化时间
@@ -14,7 +11,7 @@ export function filterTimestampToFormatTime(time, cFormat) {
   if (!cFormat) {
     cFormat = 'YYYY-MM-DD HH:mm'
   }
-  if (!time || time == 0) {
+  if (!time || time === 0) {
     return ''
   }
   return timestampToFormatTime(time, cFormat)

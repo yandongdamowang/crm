@@ -7,89 +7,64 @@
       :close-on-click-modal="false"
       :before-close="handleClose"
       title="新建任务"
-      width="700px">
-      <img
-        class="el-icon-close"
-        src="@/assets/img/project/task_close.png"
-        alt=""
-        @click="handleClose">
-      <el-form
-        ref="form"
-        :model="formData"
-        :rules="rules">
+      width="700px"
+    >
+      <img class="el-icon-close" src="@/assets/img/project/task_close.png" alt @click="handleClose" />
+      <el-form ref="form" :model="formData" :rules="rules">
         <el-form-item
           v-for="(item, index) in formList"
           :class="'el-form-item'+ '-' + item.field"
           :label="item.label"
           :prop="item.field"
-          :key="index">
+          :key="index"
+        >
           <el-input
             v-if="item.type == 'textarea'"
             :autosize="{ minRows: 4}"
             v-model="formData[item.field]"
-            type="textarea"/>
+            type="textarea"
+          />
           <el-date-picker
             v-else-if="item.type == 'time'"
             v-model="formData[item.field]"
             type="date"
             value-format="yyyy-MM-dd"
-            placeholder="选择日期"/>
-          <div
-            v-else-if="item.type == 'priority'"
-            class="priority-box">
-            <el-radio-group
-              v-model="formData[item.field]"
-              fill="red"
-              text-color="#FFF">
+            placeholder="选择日期"
+          />
+          <div v-else-if="item.type == 'priority'" class="priority-box">
+            <el-radio-group v-model="formData[item.field]" fill="red" text-color="#FFF">
               <el-radio :label="3">高</el-radio>
               <el-radio :label="2">中</el-radio>
               <el-radio :label="1">低</el-radio>
               <el-radio :label="0">无</el-radio>
             </el-radio-group>
           </div>
-          <div
-            v-else-if="item.type == 'popover'"
-            class="type-popover">
-            <el-popover
-              placement="bottom-end"
-              width="280"
-              trigger="click">
+          <div v-else-if="item.type == 'popover'" class="type-popover">
+            <el-popover placement="bottom-end" width="280" trigger="click">
               <xh-user
                 ref="xhuser"
                 :radio="radio"
                 :selected-data="colleaguesList"
-                @changeCheckout="changeCheckout"/>
-              <div
-                slot="reference"
-                class="select-box">
-                <span
-                  v-for="(item, index) in colleaguesList"
-                  :key="index"
-                  class="select-box-span">
+                @changeCheckout="changeCheckout"
+              />
+              <div slot="reference" class="select-box">
+                <span v-for="(item, index) in colleaguesList" :key="index" class="select-box-span">
                   {{ item.realname }}
                   <span
                     class="el-icon-close"
-                    @click.stop="selectDelect(item, index)"/>
+                    @click.stop="selectDelect(item, index)"
+                  />
                 </span>
-                <span class="el-icon-plus"/>
+                <span class="el-icon-plus" />
               </div>
             </el-popover>
           </div>
-          <el-input
-            v-else
-            v-model="formData[item.field]"/>
+          <el-input v-else v-model="formData[item.field]" />
         </el-form-item>
-        <related-business
-          :all-data="allData"
-          :margin-left="'0'"
-          @checkInfos="checkInfos"/>
+        <related-business :all-data="allData" :margin-left="'0'" @checkInfos="checkInfos" />
       </el-form>
-      <span
-        slot="footer"
-        class="dialog-footer">
-        <el-button
-          type="primary"
-          @click="dialogVisibleSubmit">保存</el-button>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="dialogVisibleSubmit">保存</el-button>
         <el-button @click="handleClose">取消</el-button>
       </span>
     </el-dialog>

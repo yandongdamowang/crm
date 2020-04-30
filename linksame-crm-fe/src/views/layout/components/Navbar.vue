@@ -1,9 +1,6 @@
 <template>
   <div class="navbar">
-    <img
-      :src="logo"
-      class="logo"
-    >
+    <img :src="logo" class="logo" />
 
     <div class="nav-items-container">
       <flexbox style="width: auto;">
@@ -38,30 +35,18 @@
       trigger="click"
     >
       <div class="handel-items">
-        <div
-          class="handel-item"
-          @click="handleClick('person')"
-        ><i class="wukong wukong-personcenter" />个人中心</div>
-        <div
-          class="handel-item"
-          @click="handleClick('goout')"
-        ><i class="wukong wukong-goout" />退出登录</div>
+        <div class="handel-item" @click="handleClick('person')">
+          <i class="wukong wukong-personcenter" />个人中心
+        </div>
+        <div class="handel-item" @click="handleClick('goout')">
+          <i class="wukong wukong-goout" />退出登录
+        </div>
         <!-- <div :style="{'margin-bottom': manage ? '15px' : '0'}" class="handel-item hr-top" style="pointer-events: none;"><i class="wukong wukong-versions" />版本 V9.2.3.191220</div> -->
-        <div
-          v-if="manage"
-          class="handel-box"
-        >
-          <el-button
-            type="primary"
-            class="handel-button"
-            @click="enterSystemSet()"
-          >进入企业管理后台</el-button>
+        <div v-if="manage" class="handel-box">
+          <el-button type="primary" class="handel-button" @click="enterSystemSet()">进入企业管理后台</el-button>
         </div>
       </div>
-      <div
-        slot="reference"
-        class="user-container"
-      >
+      <div slot="reference" class="user-container">
         <div
           v-photo="userInfo"
           v-lazy:background-image="$options.filters.filterUserLazyImg(userInfo.img)"
@@ -71,9 +56,7 @@
         <div>{{ userInfo.username }}</div>
         <i class="el-icon-caret-bottom mark" />
       </div>
-
     </el-popover>
-
   </div>
 </template>
 
@@ -112,6 +95,7 @@ export default {
       'logo',
       'crm',
       'contract',
+      'annex',
       //   'bi',
       'manage',
       'oa',
@@ -152,12 +136,12 @@ export default {
           icon: 'contract'
         })
       }
-      //   tempsItems.push({
-      //     title: '账单管理',
-      //     type: 4,
-      //     path: '/contract',
-      //     icon: 'contract'
-      //   },
+        tempsItems.push({
+          title: '附件管理',
+          type: 6,
+          path: '/annex',
+          icon: 'task'
+        })
       //   {
       //     title: '附件管理',
       //     type: 5,

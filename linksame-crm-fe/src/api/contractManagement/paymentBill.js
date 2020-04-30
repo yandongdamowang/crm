@@ -11,3 +11,14 @@ export function paymentBillList(data) {
     // }
   })
 }
+
+export function paymentBillDetail(data) {
+  return request({
+    url: 'pmpContractPaymentRecord/queryById',
+    method: 'post',
+    data: data
+    // headers: {
+    //   'Content-Type': 'application/json;charset=UTF-8'
+    // }
+  })
+}

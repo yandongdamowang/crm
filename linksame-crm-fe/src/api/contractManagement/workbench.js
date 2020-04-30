@@ -67,3 +67,26 @@ export function crmIndexGetRecordListAPI(data) {
     data: data
   })
 }
+
+// 预付款
+export function prepaymentReport(data) {
+  return request({
+    url: 'pmpContractPayment/paymentReport',
+    method: 'post',
+    data: data,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
+  })
+}
+// 付款
+export function paymentReport(data) {
+  return request({
+    url: 'pmpContractPaymentRecord/paymentReport',
+    method: 'post',
+    data: data,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
+  })
+}

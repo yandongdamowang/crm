@@ -76,6 +76,16 @@ const recycleRouter = {
     fontSize: '18px'
   }
 }
+// // 附件
+// const annexRouter = {
+//   path: 'annex',
+//   component: () => import('@/views/projectManagement/annex/Main'),
+//   meta: {
+//     icon: 'schedule',
+//     title: '附件',
+//     fontSize: '14px'
+//   }
+// }
 
 // 其他
 const otherRouter = {
@@ -113,6 +123,7 @@ export const children = [
   archiveRouter,
   ...tagRouter.children,
   recycleRouter,
+  //   annexRouter,
   ...otherRouter.children
 ]
 export const childrenMenu = [
@@ -122,4 +133,5 @@ export const childrenMenu = [
   archiveRouter,
   tagRouter,
   recycleRouter
+  //   annexRouter
 ]

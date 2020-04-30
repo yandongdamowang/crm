@@ -12,6 +12,7 @@ import contractRouter from './modules/contract'
 import projectRouter from './modules/project/index'
 import { managerRouter } from './modules/manager'
 import personRouter from './modules/person'
+import annexRouter from './modules/annex'
 // import { biRouter } from './modules/business'
 
 /**
@@ -58,6 +59,8 @@ export const asyncRouterMap = [
   workbenchRouter,
   customerRouter,
   //   biRouter,
+
+  annexRouter,
   managerRouter,
   contractRouter
 ]

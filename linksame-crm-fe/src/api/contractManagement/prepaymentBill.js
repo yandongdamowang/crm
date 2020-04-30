@@ -20,3 +20,12 @@ export function prepaymentBillDetail(data) {
     data: data
   })
 }
+
+// 修改优先级
+export function prepaymentSetPriority(data) {
+  return request({
+    url: 'pmpContractPayment/setPriority',
+    method: 'post',
+    data: data
+  })
+}

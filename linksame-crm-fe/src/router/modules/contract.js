@@ -31,7 +31,7 @@ const contractRouter = {
       }
     },
     {
-      path: 'prepaymentBill',
+      path: 'prepayment',
       hidden: true,
       component: () => import('@/views/contractManagement/prepaymentBill/Main'),
       meta: {
@@ -40,7 +40,7 @@ const contractRouter = {
       }
     },
     {
-      path: 'paymentBill',
+      path: 'payment',
       hidden: true,
       component: () => import('@/views/contractManagement/paymentBill/Main'),
       meta: {
@@ -49,6 +49,16 @@ const contractRouter = {
       }
     },
     {
+      path: 'rebate',
+      hidden: true,
+      component: () => import('@/views/contractManagement/rebateBill/Main'),
+      meta: {
+        title: '回款账单',
+        icon: 'log'
+      }
+    },
+
+    {
       path: 'ledger',
       meta: {
         title: '账单',
@@ -56,15 +66,21 @@ const contractRouter = {
       },
       children: [
         {
-          path: 'prepaymentBill',
+          path: 'prepayment',
           meta: {
             title: '预付款账单'
           }
         },
         {
-          path: 'paymentBill',
+          path: 'payment',
           meta: {
             title: '付款账单'
+          }
+        },
+        {
+          path: 'rebate',
+          meta: {
+            title: '回款账单'
           }
         }
       ]

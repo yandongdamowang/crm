@@ -5,7 +5,8 @@
       placement="bottom"
       width="800"
       popper-class="no-padding-popover"
-      trigger="click">
+      trigger="click"
+    >
       <crm-relative
         v-if="showRelative"
         ref="crmrelative"
@@ -13,21 +14,15 @@
         :selected-data="selectedData"
         :show-types="showTypes"
         @close="crmrelativeClose"
-        @changeCheckout="checkInfos"/>
-      <p
-        slot="reference"
-        class="add-file"
-        @click="showRelative = true">
-        <img
-          src="@/assets/img/relevance_business.png"
-          alt="">
+        @changeCheckout="checkInfos"
+      />
+      <p slot="reference" class="add-file" @click="showRelative = true">
+        <img src="@/assets/img/relevance_business.png" alt />
         关联业务
       </p>
     </el-popover>
     <div class="related-business">
-      <div
-        v-for="(items, key) in selectedData"
-        :key="key">
+      <div v-for="(items, key) in selectedData" :key="key">
         <related-business-cell
           v-for="(item, itemIndex) in items"
           :data="item"
@@ -35,7 +30,8 @@
           :type="key"
           :key="itemIndex"
           :cursor-pointer="false"
-          @unbind="delRelevance"/>
+          @unbind="delRelevance"
+        />
       </div>
     </div>
   </div>

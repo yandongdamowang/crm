@@ -1,9 +1,10 @@
 <template>
   <div style="height:100%">
-    <div class="ls-header"> 仪表盘
+    <div class="ls-header">
+      仪表盘
       <div class="ls-header-r">
         <el-date-picker
-          v-model="headerGrep.datetime"
+          v-model="datetime"
           type="daterange"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
@@ -12,36 +13,20 @@
       </div>
 
       <div class="ls-header-r">
-        <el-radio-group v-model="headerGrep.type">
-          <el-radio-button label="今日">今日</el-radio-button>
-          <el-radio-button label="本周" />
-          <el-radio-button label="本月" />
-          <el-radio-button label="全年" />
-        </el-radio-group>
-
+        <el-button type="primary" plain @click="getDate('day')">今日</el-button>
+        <el-button type="primary" plain @click="getDate('week')">本周</el-button>
+        <el-button type="primary" plain @click="getDate('month')">本月</el-button>
       </div>
-      <!-- {{headerGrep.type}} -->
-
+      <!-- {{ datetime }} -->
       <div class="ls-header-r">
-        <el-select
-          v-model="headerGrep.project"
-          placeholder="选择项目"
-        >
-          <el-option
-            label="项目一"
-            value="shanghai"
-          />
-          <el-option
-            label="项目二"
-            value="beijing"
-          />
+        <el-select v-model="headerGrep.project" placeholder="选择项目">
+          <el-option label="项目一" value="shanghai" />
+          <el-option label="项目二" value="beijing" />
         </el-select>
       </div>
-
     </div>
 
     <div class="ls-box">
-
       <el-row :gutter="12">
         <el-col :span="24">
           <el-card shadow="hover">
@@ -49,59 +34,49 @@
               <span style="font-size:28px">数据概览</span>
             </div>
             <div class="content">
-
-              <span
-                class="logo"
-                style="color:rgb(164,204,100)"
-              > <i class="el-icon-document-copy" /> </span>
-              <span style="font-size:26px"> {{ contractDashboardData.contractCount }} </span>
-              <span> 个 </span>
-              <span style="font-size:14px"> 总合同数 </span>
+              <span class="logo" style="color:rgb(164,204,100)">
+                <i class="el-icon-document-copy" />
+              </span>
+              <span style="font-size:26px">{{ contractDashboardData.contractCount }}</span>
+              <span>个</span>
+              <span style="font-size:14px">总合同数</span>
             </div>
 
             <div class="content">
-              <span
-                class="logo"
-                style="color:rgb(0,183,255)"
-              > <i class="el-icon-document-checked" /></span>
-              <span style="font-size:30px"> {{ contractDashboardData.contractCount }}</span>
-              <span> 个 </span>
-              <span style="font-size:14px"> 完成合同数 </span>
+              <span class="logo" style="color:rgb(0,183,255)">
+                <i class="el-icon-document-checked" />
+              </span>
+              <span style="font-size:30px">{{ contractDashboardData.contractCount }}</span>
+              <span>个</span>
+              <span style="font-size:14px">完成合同数</span>
             </div>
 
             <div class="content">
-              <span
-                class="logo"
-                style="color:rgb(226,100,115)"
-              > <i class="el-icon-money" /></span>
-              <span style="font-size:30px"> {{ contractDashboardData.waitPayment }} </span>
-              <span> 元 </span>
-              <span style="font-size:14px"> 预计付款金额 </span>
+              <span class="logo" style="color:rgb(226,100,115)">
+                <i class="el-icon-money" />
+              </span>
+              <span style="font-size:30px">{{ contractDashboardData.waitPayment }}</span>
+              <span>元</span>
+              <span style="font-size:14px">预计付款金额</span>
             </div>
 
             <div class="content">
-              <span
-                class="logo"
-                style="color:rgb(205,205,73)"
-              > <i class="el-icon-bank-card" /></span>
-              <span style="font-size:30px"> {{ contractDashboardData.cumulativePayment }}</span>
-              <span> 元 </span>
-              <span style="font-size:14px"> 总支付累计付款金额 </span>
+              <span class="logo" style="color:rgb(205,205,73)">
+                <i class="el-icon-bank-card" />
+              </span>
+              <span style="font-size:30px">{{ contractDashboardData.cumulativePayment }}</span>
+              <span>元</span>
+              <span style="font-size:14px">总支付累计付款金额</span>
             </div>
-
           </el-card>
         </el-col>
-
       </el-row>
 
       <div style="margin: 10px 0 0 0">
         <el-row :gutter="12">
           <el-col :span="16">
             <el-card shadow="hover">
-              <div
-                id="axismain"
-                style="width: 600px;height:300px;"
-              />
+              <div id="axismain" style="width: 100%;height:300px;" />
             </el-card>
           </el-col>
           <el-col :span="8">
@@ -112,29 +87,11 @@
               </div>
 
               <el-divider />
-              <el-table
-                :data="workbenchTableData"
-                style="width: 100%"
-              >
-                <el-table-column
-                  type="index"
-                  label="排名"
-                  width="80"
-                />
-                <el-table-column
-                  prop="a"
-                  label="供应商"
-                  width="180"
-                />
-                <el-table-column
-                  prop="b"
-                  label="合同数"
-                />
-                <el-table-column
-                  prop="c"
-                  label="合同金额"
-                />
-
+              <el-table :data="workbenchTableData" style="width: 100%">
+                <el-table-column type="index" label="排名" width="80" />
+                <el-table-column prop="a" label="供应商" width="180" />
+                <el-table-column prop="b" label="合同数" />
+                <el-table-column prop="c" label="合同金额" />
               </el-table>
             </el-card>
           </el-col>
@@ -147,7 +104,9 @@
 <script>
 
 import echarts from 'echarts'
+import moment from 'moment'
 import { contractDashboard } from '@/api/contractManagement/contacts'
+import { prepaymentReport, paymentReport } from '@/api/contractManagement/workbench'
 export default {
   name: 'Main',
   components: {
@@ -156,8 +115,11 @@ export default {
   filters: {},
   data() {
     return {
+      datetime: ['2020-01-01', '2020-05-29'],
+      echartXData: [],
+      echartPrepaymentItemData: [],
+      echartPaymentItemData: [],
       headerGrep: {
-        datetime: ['2020-01-01', '2020-05-29'],
         project: '',
         type: []
       },
@@ -190,19 +152,84 @@ export default {
     }
   },
   mounted() {
-    this.$store.commit('SET_HEADERNAME', '仪表盘')
+    // this.$store.commit('SET_HEADERNAME', '仪表盘')
     this.retriveContractDashboard()
-    this.initAxis()
+    this.retrivePrepaymentReport()
+    this.retrivePaymentReport()
   },
   methods: {
-    retriveContractDashboard() {
-    //   console.log(123)
-      contractDashboard({
-        startTime: this.headerGrep.datetime[0],
-        endTime: this.headerGrep.datetime[1]
+
+    getDate(date) {
+      const weekOfday = parseInt(moment().format('d')) // 计算今天是这周第几天 周日为一周中的第一天
+      if (date == 'day') {
+        this.datetime = [moment().format('YYYY-MM-DD'), moment().format('YYYY-MM-DD')]
+        // console.log(this.datetime)
+      } else if (date == 'week') {
+        this.datetime = [moment().subtract(weekOfday - 1, 'days').format('YYYY-MM-DD'), moment().add(7 - weekOfday, 'days').format('YYYY-MM-DD')]
+      } else if (date == 'month') {
+        this.datetime = [moment().add('month', 0).format('YYYY-MM') + '-01', moment(moment().add('month', 0).format('YYYY-MM') + '-01').add('month', 1).add('days', -1).format('YYYY-MM-DD')]
+      }
+    },
+
+    // 预付款
+    retrivePrepaymentReport() {
+      const xData = []
+      const itemData = []
+      prepaymentReport({
+        startTime: this.datetime[0],
+        endTime: this.datetime[1]
       })
         .then(res => {
-          console.log(res)
+          console.log('retrivePrepaymentReport', res)
+          res.dashboard.forEach((item, index) => {
+            xData.push(item.paymentNode)
+            itemData.push(item.money)
+          })
+          this.echartXData = xData
+          this.echartPrepaymentItemData = itemData
+          this.initAxis()
+        })
+
+        .catch((e) => {
+          console.log(e)
+        })
+    },
+
+    // 付款
+    retrivePaymentReport() {
+      const xData = []
+      const itemData = []
+      paymentReport({
+        startTime: this.datetime[0],
+        endTime: this.datetime[1]
+      })
+        .then(res => {
+          console.log('paymentReport', res)
+          res.dashboard.forEach((item, index) => {
+            xData.push(item.paymentTime)
+            itemData.push(item.practicaAdvanced)
+          })
+          this.echartXData = xData
+          this.echartPaymentItemData = itemData
+          this.initAxis()
+        })
+
+        .catch((e) => {
+          console.log(e)
+        })
+    },
+
+
+
+
+
+
+    retriveContractDashboard() {
+      contractDashboard({
+        startTime: this.datetime[0],
+        endTime: this.datetime[1]
+      })
+        .then(res => {
           this.contractDashboardData = res
         })
         .catch(() => {
@@ -213,54 +240,82 @@ export default {
 
 
     initAxis() {
+      console.log('initAxis', this.echartXData)
+      //   console.log('initAxis', this.echartPrepaymentItemData)
       var axisChart = echarts.init(document.getElementById('axismain'))
-
       var option = {
         title: {
+          // 表格标题
           text: '付款金额对比',
+          // 表格标题
           textStyle: {
             fontWeight: 'normal',
             fontSize: 16
           }
         },
-        color: ['#6ca2ff', '#6ac9d7', '#ff7474'],
+        grid: {
+          top: '80px',
+          left: '10px',
+          //   right: '20px',
+          bottom: '10px',
+          containLabel: true,
+          borderColor: 'red'
+        },
+
+        // 设置折线图颜色
+        // color: ['red', 'pink', 'green'],
         tooltip: {
           trigger: 'axis',
           axisPointer: {
-            // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+            // 坐标轴指示器，鼠标移上去的效果
+            // 'line' | 'shadow'
+            type: 'shadow'
           }
         },
+
+        // 设置图例
         legend: {
-          data: ['计划付款金额', '实际付款金额', 'XXX'],
-          bottom: '0px',
-          itemWidth: 14
+          // 必须和 series 的 name 一致
+          data: ['预付款', '付款'],
+          // 这个字段控制形状 类型包括 circle，rect ，roundRect，triangle，diamond，pin，arrow，none
+          icon: 'circle',
+          // 设置宽度
+          itemWidth: 10,
+          // 设置高度
+          itemHeight: 10,
+          // 设置间距
+          itemGap: 40
         },
-        grid: {
-          top: '80px',
-          left: '20px',
-          right: '20px',
-          bottom: '20px',
-          containLabel: true,
-          borderColor: '#fff'
-        },
+
+
+        series: [
+          {
+            name: '预付款',
+            // 图表类型
+            // type: 'bar',
+            type: 'line',
+            yAxisIndex: 0,
+            // 设置颜色
+            color: '#0097F5',
+            // 图表数据
+            data: this.echartPrepaymentItemData
+          },
+          {
+            name: '付款',
+            type: 'line',
+            yAxisIndex: 0,
+            color: '#52C41A',
+            data: this.echartPaymentItemData
+          }
+        ],
+
+
+        // X 轴设置
         xAxis: [
           {
             type: 'category',
-            data: [
-              '1月',
-              '2月',
-              '3月',
-              '4月',
-              '5月',
-              '6月',
-              '7月',
-              '8月',
-              '9月',
-              '10月',
-              '11月',
-              '12月'
-            ],
+            name: '时间',
+            data: this.echartXData,
             axisTick: {
               alignWithLabel: true,
               lineStyle: { width: 0 }
@@ -268,8 +323,9 @@ export default {
             axisLabel: {
               color: '#BDBDBD'
             },
-            /** 坐标轴轴线相关设置 */
+            // X 轴的轴线设置
             axisLine: {
+              // 设置轴线的颜色
               lineStyle: { color: '#BDBDBD' }
             },
             splitLine: {
@@ -277,17 +333,13 @@ export default {
             }
           }
         ],
+        // Y 轴设置
         yAxis: [
           {
             type: 'value',
-            name: '合同金额',
-            data: [
-              '1月',
-              '2月',
-              '3月',
-              '4月'
-
-            ],
+            // Y 轴的名字
+            name: '金额',
+            data: [],
             axisTick: {
               alignWithLabel: true,
               lineStyle: { width: 0 }
@@ -296,57 +348,16 @@ export default {
               color: '#BDBDBD',
               formatter: '{value} 元'
             },
-            /** 坐标轴轴线相关设置 */
+            // Y 轴的轴线设置
             axisLine: {
               lineStyle: { color: '#BDBDBD' }
             },
             splitLine: {
               show: false
             }
-          },
-          {
-            type: 'value',
-            name: '完成率',
-            axisTick: {
-              alignWithLabel: true,
-              lineStyle: { width: 0 }
-            },
-            position: 'right',
-            axisLabel: {
-              color: '#BDBDBD',
-              formatter: '{value} %'
-            },
-            /** 坐标轴轴线相关设置 */
-            axisLine: {
-              lineStyle: { color: '#BDBDBD' }
-            },
-            splitLine: {
-              show: false
-            }
-          }
-        ],
-        series: [
-          {
-            name: '合同金额',
-            type: 'bar',
-            yAxisIndex: 0,
-            barWidth: 15,
-            data: [1, 2, 3, 4, 5]
-          },
-          {
-            name: '目标',
-            type: 'bar',
-            yAxisIndex: 0,
-            barWidth: 15,
-            data: [2, 3, 4, 5, 6]
-          },
-          {
-            name: '完成率',
-            type: 'line',
-            yAxisIndex: 1,
-            data: [6, 7, 8, 9, 10]
           }
         ]
+
       }
 
       axisChart.setOption(option, true)

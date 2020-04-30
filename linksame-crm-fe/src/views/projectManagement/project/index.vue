@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="project-list"
-    direction="column"
-  >
+  <div class="project-list" direction="column">
     <div class="nav-box">
       <div class="title">
         <flexbox class="title-left lt">
@@ -42,87 +39,44 @@
                 @handle="projectSettingsHandle"
                 @click="projectHandleShow = false"
               />
-              <p
-                v-if="canUpdateWork"
-                @click="archiveProject"
-              >归档项目</p>
-              <p
-                v-if="canUpdateWork"
-                @click="deleteProject"
-              >删除项目</p>
-              <p
-                v-if="projectData.isOpen == 0"
-                @click="exitProject"
-              >退出项目</p>
+              <p v-if="canUpdateWork" @click="archiveProject">归档项目</p>
+              <p v-if="canUpdateWork" @click="deleteProject">删除项目</p>
+              <p v-if="projectData.isOpen == 0" @click="exitProject">退出项目</p>
             </div>
-            <img
-              slot="reference"
-              src="@/assets/img/project/t_set.png"
-              class="img-right"
-            >
+            <img slot="reference" src="@/assets/img/project/t_set.png" class="img-right" />
           </el-popover>
         </flexbox>
         <div class="title-right rt">
           <!-- 人员列表 -->
-          <img
-            src="@/assets/img/project/task_circle.png"
-            alt=""
-            @click="membersShow = true"
-          >
+          <img src="@/assets/img/project/task_circle.png" alt @click="membersShow = true" />
           <!-- 筛选 -->
           <img
             v-show="screeningButtonShow"
             src="@/assets/img/project/project_filtrate.png"
-            alt=""
+            alt
             @click="screeningShow = true"
-          >
+          />
         </div>
       </div>
       <div class="nav">
-        <el-tabs
-          v-model="activeName"
-          @tab-click="tabClick"
-        >
-          <el-tab-pane
-            label="里程碑看板"
-            name="task-board"
-          />
-          <el-tab-pane
-            label="时间轴看板"
-            name="time-board"
-          />
+        <el-tabs v-model="activeName" @tab-click="tabClick">
+          <el-tab-pane label="里程碑看板" name="task-board" />
+          <el-tab-pane label="时间轴看板" name="time-board" />
 
-          <el-tab-pane
-            label="附件"
-            name="attachment"
-          />
-          <el-tab-pane
-            label="任务统计"
-            name="task-statistical"
-          />
-          <el-tab-pane
-            label="归档任务"
-            name="archiving-task"
-          />
+          <el-tab-pane label="附件" name="annex" />
+          <el-tab-pane label="任务统计" name="task-statistical" />
+          <el-tab-pane label="归档任务" name="archiving-task" />
         </el-tabs>
       </div>
     </div>
     <div class="content">
       <keep-alive>
-        <component
-          :is="activeName"
-          :work-id="workId"
-          :permission="permission"
-        />
+        <component :is="activeName" :work-id="workId" :permission="permission" />
       </keep-alive>
     </div>
 
     <!-- 筛选 -->
-    <task-screening
-      v-if="screeningShow"
-      :work-id="workId"
-      @close="screeningShow = false"
-    />
+    <task-screening v-if="screeningShow" :work-id="workId" @close="screeningShow = false" />
 
     <!-- 人员列表 -->
     <members
@@ -139,6 +93,7 @@
 <script>
 import TaskBoard from './components/taskBoard'
 import TimeBoard from './components/timeBoard'
+
 import Attachment from './components/attachment'
 import TaskStatistical from './components/taskStatistical'
 import ArchivingTask from './components/archivingTask'
@@ -165,7 +120,8 @@ export default {
     ProjectSettings,
     TaskScreening,
     Members,
-    MembersDep
+    MembersDep,
+
   },
 
   data() {
