@@ -223,6 +223,6 @@ public class AdminFileController extends Controller {
      */
     @ApiOperation(methods= RequestMethod.POST, description="查询附件日志")
     public void queryFileLog(BasePageRequest<AdminFileLog> basePageRequest){
-        renderJson(R.ok().put("data",adminFileService.queryFileLog(basePageRequest)));
+        renderJson(adminFileService.queryFileLog(basePageRequest));
     }
 }
