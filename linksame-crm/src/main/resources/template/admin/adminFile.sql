@@ -18,7 +18,7 @@
     #sql("queryFileNameByBatchId")
       SELECT file_name FROM `admin_file` as a where a.batch_id = ?
     #end
-    #sql("queryPageList")
+    #sql("queryList")
       select
         a.file_id,
         a.bucket_name,
@@ -42,6 +42,9 @@
         #end
         #if(folderId)
             and a.folder_id = #para(folderId)
+        #end
+        #if(workId)
+            and a.work_id = #para(workId)
         #end
         #if(oldName)
             and a.old_name like concat('%', #para(oldName), '%')

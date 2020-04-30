@@ -48,10 +48,6 @@ public class WorkService{
         if(Arrays.asList(work._getAttrNames()).contains("name")&&StrUtil.isEmpty(work.getName())){
             return R.error("项目名称不能为空！");
         }
-        //如果BatchId为空, 自动生成一个
-        if(StringUtils.isEmpty(work.getBatchId())){
-            work.setBatchId(IdUtil.simpleUUID());
-        }
         Long userId = BaseUtil.getUser().getUserId();
         boolean bol;
         if(work.getWorkId() == null){

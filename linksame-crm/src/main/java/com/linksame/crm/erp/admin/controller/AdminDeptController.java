@@ -59,4 +59,11 @@ public class AdminDeptController extends Controller {
         String id = getPara("id");
         renderJson(adminDeptService.deleteDept(id));
     }
+
+    /**
+     * 批量设置员工到某个部门
+     */
+    public void batchSetUserByDept(){
+        renderJson(adminDeptService.batchSetUserByDept(getInt("deptId"), getPara("userIds")));
+    }
 }

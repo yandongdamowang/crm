@@ -102,6 +102,14 @@ public abstract class BaseAdminFile<M extends BaseAdminFile<M>> extends Model<M>
 		return getInt("folder_id");
 	}
 
+	public void setWorkId(java.lang.Integer workId) {
+		set("work_id", workId);
+	}
+
+	public java.lang.Integer getWorkId() {
+		return getInt("work_id");
+	}
+
 	public void setTypeId(java.lang.Integer typeId) {
 		set("type_id", typeId);
 	}
