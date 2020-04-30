@@ -76,11 +76,23 @@ public class AdminFileService {
             newFile.setCreateUserId(BaseUtil.getUser().getUserId());
             //如果是图片类型,通过文件名请求minio,获取访问路径
             String suffix = FileUtil.extName(resultFile.getFileName());
+            adminFile.setSuffix(suffix);
+            //根据文件后缀判断文件类型
             if(suffix.equalsIgnoreCase("gif") || suffix.equalsIgnoreCase("png")
                     || suffix.equalsIgnoreCase("jpg") || suffix.equalsIgnoreCase("jpeg")) {
                 String path = MinioServicce.getImgUrl(resultFile.getFileName(), suffix);
-                newFile.setPath(path);
-                newFile.setFileType("img");
+                adminFile.setPath(path);
+                adminFile.setFileType("img");
+            } else if(suffix.equalsIgnoreCase("xlsx") || suffix.equalsIgnoreCase("xls")){
+                adminFile.setFileType("excel");
+            } else if(suffix.equalsIgnoreCase("doc") || suffix.equalsIgnoreCase("docx")){
+                adminFile.setFileType("word");
+            } else if(suffix.equalsIgnoreCase("pdf") || suffix.equalsIgnoreCase("ppt")){
+                adminFile.setFileType("office");
+            } else if(suffix.equalsIgnoreCase("xmind")){
+                adminFile.setFileType("xmind");
+            } else {
+                adminFile.setFileType("file");
             }
             newFile.setFileName(resultFile.getFileName());
             newFile.setSize(file.getFile().length());
@@ -113,11 +125,23 @@ public class AdminFileService {
             adminFile.setCreateUserId(BaseUtil.getUser().getUserId());
             //如果是图片类型,通过文件名请求minio,获取访问路径
             String suffix = FileUtil.extName(resultFile.getFileName());
+            adminFile.setSuffix(suffix);
+            //根据文件后缀判断文件类型
             if(suffix.equalsIgnoreCase("gif") || suffix.equalsIgnoreCase("png")
                     || suffix.equalsIgnoreCase("jpg") || suffix.equalsIgnoreCase("jpeg")) {
                 String path = MinioServicce.getImgUrl(resultFile.getFileName(), suffix);
                 adminFile.setPath(path);
                 adminFile.setFileType("img");
+            } else if(suffix.equalsIgnoreCase("xlsx") || suffix.equalsIgnoreCase("xls")){
+                adminFile.setFileType("excel");
+            } else if(suffix.equalsIgnoreCase("doc") || suffix.equalsIgnoreCase("docx")){
+                adminFile.setFileType("word");
+            } else if(suffix.equalsIgnoreCase("pdf") || suffix.equalsIgnoreCase("ppt")){
+                adminFile.setFileType("office");
+            } else if(suffix.equalsIgnoreCase("xmind")){
+                adminFile.setFileType("xmind");
+            } else {
+                adminFile.setFileType("file");
             }
             adminFile.setFileName(resultFile.getFileName());
             adminFile.setSize(file.getFile().length());

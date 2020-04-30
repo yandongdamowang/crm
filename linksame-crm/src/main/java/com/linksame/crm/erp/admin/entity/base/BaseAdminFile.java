@@ -86,6 +86,14 @@ public abstract class BaseAdminFile<M extends BaseAdminFile<M>> extends Model<M>
 		return getStr("path");
 	}
 
+	public void setSuffix(java.lang.String suffix) {
+		set("suffix", suffix);
+	}
+
+	public java.lang.String getSuffix() {
+		return getStr("suffix");
+	}
+
 	public void setFileType(java.lang.String fileType) {
 		set("file_type", fileType);
 	}
