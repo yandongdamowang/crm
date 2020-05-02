@@ -1,18 +1,42 @@
 #namespace("admin.file")
     #sql("queryByBatchId")
-      SELECT
-        a.file_id,
-        a.bucket_name,
-        a.old_name,
-        a.file_name,
-        CONCAT(FLOOR(a.size/1000),"KB") as size,
-        a.create_user_id,
-        b.realname as create_user_name,
-        a.create_time,
-        a.path,
-        a.file_type,
-        a.batch_id
-      FROM `admin_file` as a inner join `admin_user` as b on a.create_user_id = b.user_id
+      select
+		a.file_id,
+		a.bucket_name,
+		a.old_name,
+		a.composition_name,
+		a.file_name,
+		CONCAT(FLOOR(a.size/1000),"KB") as size,
+		a.path,
+		a.suffix,
+		a.file_type,
+		a.folder_id,
+		c.folder_name as folder_name,
+		a.label_id,
+		d.name as label_name,
+		a.work_id,
+		e.name as work_name,
+		a.type_id,
+		f.type_name as type_name,
+		a.create_user_id,
+		b.realname as create_user_name,
+		a.create_time,
+		a.batch_id,
+		a.is_main_version,
+		a.history_file_id,
+		a.file_version,
+		a.file_remark,
+		a.del_flag,
+		a.del_user_id,
+		g.realname as del_user_name,
+		a.del_time
+	from `admin_file` as a
+	left join `admin_user` as b on a.create_user_id = b.user_id
+	left join `admin_file_folder` as c on a.folder_id = c.folder_id
+	left join `admin_file_label` as d on a.label_id = d.file_label_id
+	left join `work` as e on a.work_id = e.work_id
+	left join `admin_file_type` as f on a.type_id = f.type_id
+	left join `admin_user` as g on a.del_user_id = g.user_id
       where a.batch_id = ?
     #end
     #sql("queryFileNameByBatchId")
@@ -20,19 +44,42 @@
     #end
     #sql("queryList")
       select
-        a.file_id,
-        a.bucket_name,
-        a.old_name,
-        a.file_name,
-        CONCAT(FLOOR(a.size/1000),"KB") as size,
-        a.create_user_id,
-        b.realname as create_user_name,
-        a.create_time,
-        a.path,
-        a.file_type,
-        a.folder_id,
-        a.batch_id
-      from `admin_file` as a inner join `admin_user` as b on a.create_user_id = b.user_id
+		a.file_id,
+		a.bucket_name,
+		a.old_name,
+		a.composition_name,
+		a.file_name,
+		CONCAT(FLOOR(a.size/1000),"KB") as size,
+		a.path,
+		a.suffix,
+		a.file_type,
+		a.folder_id,
+		c.folder_name as folder_name,
+		a.label_id,
+		d.name as label_name,
+		a.work_id,
+		e.name as work_name,
+		a.type_id,
+		f.type_name as type_name,
+		a.create_user_id,
+		b.realname as create_user_name,
+		a.create_time,
+		a.batch_id,
+		a.is_main_version,
+		a.history_file_id,
+		a.file_version,
+		a.file_remark,
+		a.del_flag,
+		a.del_user_id,
+		g.realname as del_user_name,
+		a.del_time
+	from `admin_file` as a
+	left join `admin_user` as b on a.create_user_id = b.user_id
+	left join `admin_file_folder` as c on a.folder_id = c.folder_id
+	left join `admin_file_label` as d on a.label_id = d.file_label_id
+	left join `work` as e on a.work_id = e.work_id
+	left join `admin_file_type` as f on a.type_id = f.type_id
+	left join `admin_user` as g on a.del_user_id = g.user_id
       where 1=1
         #if(createUserId)
             and a.create_user_id = #para(createUserId)
@@ -61,19 +108,43 @@
             where a.file_id = #para(fileId)
     #end
     #sql("queryByUserId")
-      SELECT
-        a.file_id,
-        a.bucket_name,
-        a.old_name,
-        a.file_name,
-        CONCAT(FLOOR(a.size/1000),"KB") as size,
-        a.create_user_id,
-        b.realname as create_user_name,
-        a.create_time,
-        a.path,
-        a.file_type,
-        a.batch_id
-      FROM `admin_file` as a inner join `admin_user` as b on a.create_user_id = b.user_id
+      select
+		a.file_id,
+		a.bucket_name,
+		a.old_name,
+		a.composition_name,
+		a.file_name,
+		CONCAT(FLOOR(a.size/1000),"KB") as size,
+		a.path,
+		a.suffix,
+		a.file_type,
+		a.folder_id,
+		c.folder_name as folder_name,
+		a.label_id,
+		d.name as label_name,
+		a.work_id,
+		e.name as work_name,
+		a.type_id,
+		f.type_name as type_name,
+		a.create_user_id,
+		b.realname as create_user_name,
+		a.create_time,
+		a.batch_id,
+		a.is_main_version,
+		a.history_file_id,
+		a.file_version,
+		a.file_remark,
+		a.del_flag,
+		a.del_user_id,
+		g.realname as del_user_name,
+		a.del_time
+	from `admin_file` as a
+	left join `admin_user` as b on a.create_user_id = b.user_id
+	left join `admin_file_folder` as c on a.folder_id = c.folder_id
+	left join `admin_file_label` as d on a.label_id = d.file_label_id
+	left join `work` as e on a.work_id = e.work_id
+	left join `admin_file_type` as f on a.type_id = f.type_id
+	left join `admin_user` as g on a.del_user_id = g.user_id
       where create_user_id = #para(createUserId)
     #end
 #end
