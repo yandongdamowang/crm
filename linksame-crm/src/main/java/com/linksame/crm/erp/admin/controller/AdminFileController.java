@@ -139,6 +139,20 @@ public class AdminFileController extends Controller {
     }
 
     /**
+     * 通过附件ID将附件放入回收站
+     */
+    @ApiOperation(methods= RequestMethod.POST, description="通过附件ID将附件放入回收站")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="id", description="附件ID")
+    })
+    //TODO 权限待添加
+    public void addRecycleById() {
+        renderJson(adminFileService.addRecycleById(getPara("id")));
+    }
+
+    //TODO 批量加入回收站
+
+    /**
      * 通过ID删除
      */
     @ApiOperation(methods= RequestMethod.POST, description="通过ID删除")
@@ -147,7 +161,7 @@ public class AdminFileController extends Controller {
     })
     @Permissions({"file:fileManage:delete"})
     public void removeById() throws Exception {
-        renderJson(adminFileService.removeById(getPara("id")));
+        renderJson(adminFileService.removeById(getInt("id")));
     }
 
     /**

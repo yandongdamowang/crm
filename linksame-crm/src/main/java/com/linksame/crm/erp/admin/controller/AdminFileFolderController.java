@@ -30,7 +30,7 @@ public class AdminFileFolderController extends Controller {
      */
     @ApiOperation(methods= RequestMethod.POST, description="创建文件夹")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="adminFileFolder", description="文件夹对象")
+            @ApiImplicitParam(name="adminFileFolder", description="文件夹对象(第一层文件夹folderPid可传0, 不可传空字符串)")
     })
     @Permissions({"file:folderManage:create"})
     public void createFolder(@Para("") AdminFileFolder adminFileFolder){

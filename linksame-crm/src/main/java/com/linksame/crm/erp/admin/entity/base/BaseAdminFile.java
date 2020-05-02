@@ -110,6 +110,14 @@ public abstract class BaseAdminFile<M extends BaseAdminFile<M>> extends Model<M>
 		return getInt("folder_id");
 	}
 
+	public void setLabelId(java.lang.String labelId) {
+		set("label_id", labelId);
+	}
+
+	public java.lang.String getLabelId() {
+		return getStr("label_id");
+	}
+
 	public void setWorkId(java.lang.Integer workId) {
 		set("work_id", workId);
 	}
@@ -164,5 +172,29 @@ public abstract class BaseAdminFile<M extends BaseAdminFile<M>> extends Model<M>
 
 	public java.lang.String getFileRemark() {
 		return getStr("file_remark");
+	}
+
+	public void setDelFlag(java.lang.Integer delFlag) {
+		set("del_flag", delFlag);
+	}
+
+	public java.lang.Integer getDelFlag() {
+		return getInt("del_flag");
+	}
+
+	public void setDelUserId(java.lang.Long delUserId) {
+		set("del_user_id", delUserId);
+	}
+
+	public java.lang.Long getDelUserId() {
+		return getLong("del_user_id");
+	}
+
+	public void setDelTime(java.util.Date delTime) {
+		set("del_time", delTime);
+	}
+
+	public java.util.Date getDelTime() {
+		return get("del_time");
 	}
 }

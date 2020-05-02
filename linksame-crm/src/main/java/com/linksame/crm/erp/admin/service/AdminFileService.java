@@ -279,6 +279,7 @@ public class AdminFileService {
         List<Record> contractList = Db.find("select * from pmp_contract where batch_id = ? and is_deleted = 0", file.getStr("batch_id"));
         //查询附件历史数据
         List<Record> historyFileList = Db.find("select * from admin_file where history_file_id = ?", fileId);
+        //TODO 待添加查询标签信息
         //从历史附件中排除当前附件
         Iterator<Record> it = historyFileList.iterator();
         while(it.hasNext()){
@@ -337,11 +338,36 @@ public class AdminFileService {
     }
 
     /**
+     * 通过附件ID将附件放入回收站
+     * @param id    附件ID
+     * @return
+     */
+    @Before(Tx.class)
+    public R addRecycleById(String id){
+        AdminFile adminFile = AdminFile.dao.findById(id);
+        if(adminFile == null){
+            return R.error("附件不存在");
+        }
+        adminFile.setDelFlag(1);
+        adminFile.setDelUserId(BaseUtil.getUser().getUserId());
+        adminFile.setDelTime(new Date());
+        adminFile.update();
+        //保存日志
+        AdminFileLog adminFileLog = new AdminFileLog();
+        adminFileLog.setUserId(BaseUtil.getUser().getUserId());
+        adminFileLog.setFileId(adminFile.getFileId());
+        adminFileLog.setContent("用户 " + BaseUtil.getUser().getRealname() + " 将附件 " + adminFile.getCompositionName() + " 加入回收站, 历史版本为: " + adminFile.getFileVersion());
+        saveFileLog(adminFileLog);
+
+        return R.ok("操作成功");
+    }
+
+    /**
      * 通过ID删除
      * @param id 文件ID
      */
     @Before(Tx.class)
-    public R removeById(String id) throws Exception {
+    public R removeById(Integer id) throws Exception {
         if (id == null) {
             return R.error("id参数为空");
         }
@@ -352,15 +378,14 @@ public class AdminFileService {
         adminFileLog.setFileId(adminFile.getFileId());
         adminFileLog.setContent("用户 " + BaseUtil.getUser().getRealname() + " 删除了附件 " + adminFile.getCompositionName() + " 历史版本为: " + adminFile.getFileVersion());
         saveFileLog(adminFileLog);
-        if(adminFile!=null){
+        if(adminFile != null){
             //minio服务器文件删除
             MinioServicce.removeFile(adminFile.getFileName());
             //数据库文件删除
             adminFile.delete();
         }
 
-
-        return R.ok();
+        return R.ok("删除成功");
     }
 
     /**

@@ -50,6 +50,9 @@ public class AdminFileFolderService {
         Iterator<Record> it = folderList.iterator();
         while(it.hasNext()){
             Record x = it.next();
+            if(x.getInt("folder_pid") == null){
+                return R.error("folderPid参数不可为null");
+            }
             if(x.getInt("folder_pid") != 0) it.remove();
         }
         recData(folderList);
