@@ -9,27 +9,27 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings("serial")
 public abstract class BaseCrmBusiness<M extends BaseCrmBusiness<M>> extends Model<M> implements IBean {
 
-	public void setBusinessId(java.lang.Integer businessId) {
+	public void setBusinessId(Integer businessId) {
 		set("business_id", businessId);
 	}
 	
-	public java.lang.Integer getBusinessId() {
+	public Integer getBusinessId() {
 		return getInt("business_id");
 	}
 
-	public void setTypeId(java.lang.Integer typeId) {
+	public void setTypeId(Integer typeId) {
 		set("type_id", typeId);
 	}
 	
-	public java.lang.Integer getTypeId() {
+	public Integer getTypeId() {
 		return getInt("type_id");
 	}
 
-	public void setStatusId(java.lang.Integer statusId) {
+	public void setStatusId(Integer statusId) {
 		set("status_id", statusId);
 	}
 	
-	public java.lang.Integer getStatusId() {
+	public Integer getStatusId() {
 		return getInt("status_id");
 	}
 
@@ -41,11 +41,11 @@ public abstract class BaseCrmBusiness<M extends BaseCrmBusiness<M>> extends Mode
 		return get("next_time");
 	}
 
-	public void setCustomerId(java.lang.Integer customerId) {
+	public void setCustomerId(Integer customerId) {
 		set("customer_id", customerId);
 	}
 	
-	public java.lang.Integer getCustomerId() {
+	public Integer getCustomerId() {
 		return getInt("customer_id");
 	}
 
@@ -57,11 +57,11 @@ public abstract class BaseCrmBusiness<M extends BaseCrmBusiness<M>> extends Mode
 		return get("deal_date");
 	}
 
-	public void setBusinessName(java.lang.String businessName) {
+	public void setBusinessName(String businessName) {
 		set("business_name", businessName);
 	}
 	
-	public java.lang.String getBusinessName() {
+	public String getBusinessName() {
 		return getStr("business_name");
 	}
 
@@ -89,27 +89,27 @@ public abstract class BaseCrmBusiness<M extends BaseCrmBusiness<M>> extends Mode
 		return get("total_price");
 	}
 
-	public void setRemark(java.lang.String remark) {
+	public void setRemark(String remark) {
 		set("remark", remark);
 	}
 	
-	public java.lang.String getRemark() {
+	public String getRemark() {
 		return getStr("remark");
 	}
 
-	public void setCreateUserId(java.lang.Long createUserId) {
+	public void setCreateUserId(Long createUserId) {
 		set("create_user_id", createUserId);
 	}
 	
-	public java.lang.Long getCreateUserId() {
+	public Long getCreateUserId() {
 		return getLong("create_user_id");
 	}
 
-	public void setOwnerUserId(java.lang.Long ownerUserId) {
+	public void setOwnerUserId(Long ownerUserId) {
 		set("owner_user_id", ownerUserId);
 	}
 	
-	public java.lang.Long getOwnerUserId() {
+	public Long getOwnerUserId() {
 		return getLong("owner_user_id");
 	}
 
@@ -129,43 +129,43 @@ public abstract class BaseCrmBusiness<M extends BaseCrmBusiness<M>> extends Mode
 		return get("update_time");
 	}
 
-	public void setBatchId(java.lang.String batchId) {
+	public void setBatchId(String batchId) {
 		set("batch_id", batchId);
 	}
 	
-	public java.lang.String getBatchId() {
+	public String getBatchId() {
 		return getStr("batch_id");
 	}
 
-	public void setRoUserId(java.lang.String roUserId) {
+	public void setRoUserId(String roUserId) {
 		set("ro_user_id", roUserId);
 	}
 	
-	public java.lang.String getRoUserId() {
+	public String getRoUserId() {
 		return getStr("ro_user_id");
 	}
 
-	public void setRwUserId(java.lang.String rwUserId) {
+	public void setRwUserId(String rwUserId) {
 		set("rw_user_id", rwUserId);
 	}
 	
-	public java.lang.String getRwUserId() {
+	public String getRwUserId() {
 		return getStr("rw_user_id");
 	}
 
-	public void setIsEnd(java.lang.Integer isEnd) {
+	public void setIsEnd(Integer isEnd) {
 		set("is_end", isEnd);
 	}
 	
-	public java.lang.Integer getIsEnd() {
+	public Integer getIsEnd() {
 		return getInt("is_end");
 	}
 
-	public void setStatusRemark(java.lang.String statusRemark) {
+	public void setStatusRemark(String statusRemark) {
 		set("status_remark", statusRemark);
 	}
 	
-	public java.lang.String getStatusRemark() {
+	public String getStatusRemark() {
 		return getStr("status_remark");
 	}
 

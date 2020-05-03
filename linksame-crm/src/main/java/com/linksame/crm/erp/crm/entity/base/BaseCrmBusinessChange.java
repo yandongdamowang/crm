@@ -9,27 +9,27 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings("serial")
 public abstract class BaseCrmBusinessChange<M extends BaseCrmBusinessChange<M>> extends Model<M> implements IBean {
 
-	public void setChangeId(java.lang.Integer changeId) {
+	public void setChangeId(Integer changeId) {
 		set("change_id", changeId);
 	}
 	
-	public java.lang.Integer getChangeId() {
+	public Integer getChangeId() {
 		return getInt("change_id");
 	}
 
-	public void setBusinessId(java.lang.Integer businessId) {
+	public void setBusinessId(Integer businessId) {
 		set("business_id", businessId);
 	}
 	
-	public java.lang.Integer getBusinessId() {
+	public Integer getBusinessId() {
 		return getInt("business_id");
 	}
 
-	public void setStatusId(java.lang.Integer statusId) {
+	public void setStatusId(Integer statusId) {
 		set("status_id", statusId);
 	}
 	
-	public java.lang.Integer getStatusId() {
+	public Integer getStatusId() {
 		return getInt("status_id");
 	}
 
@@ -41,11 +41,11 @@ public abstract class BaseCrmBusinessChange<M extends BaseCrmBusinessChange<M>> 
 		return get("create_time");
 	}
 
-	public void setCreateUserId(java.lang.Long createUserId) {
+	public void setCreateUserId(Long createUserId) {
 		set("create_user_id", createUserId);
 	}
 	
-	public java.lang.Long getCreateUserId() {
+	public Long getCreateUserId() {
 		return getLong("create_user_id");
 	}
 

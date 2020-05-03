@@ -95,7 +95,7 @@ public class PmpContractPaymentService {
     public R queryAdvanceList(BasePageRequest basePageRequest) {
         JSONObject jsonObject = basePageRequest.getJsonObject();
         Kv kv = Kv.by("contractNumber", jsonObject.getString("contractNumber"))
-                .set("supplierId", jsonObject.getLong("supplierId"))
+                .set("customerId", jsonObject.getLong("customerId"))
                 .set("orderBy", jsonObject.get("orderBy"));
         if (basePageRequest.getPageType() == 0){
             List<Record> records = Db.find(Db.getSqlPara("pmp.contractPayment.queryAdvanceList", kv));
@@ -180,7 +180,7 @@ public class PmpContractPaymentService {
         LocalDate endTime = LocalDate.parse(parseObject.getString("endTime"), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         Kv kv = Kv.by("startTime", startTime)
                 .set("endTime", endTime)
-                .set("supplierId", parseObject.get("supplierId"))
+                .set("customerId", parseObject.get("customerId"))
                 .set("projectId", parseObject.get("projectId"));
         List<Record> records = null;
         if (endTime.toEpochDay() - startTime.toEpochDay() > 300){

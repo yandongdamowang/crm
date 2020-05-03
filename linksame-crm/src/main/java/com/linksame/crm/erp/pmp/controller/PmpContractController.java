@@ -1,13 +1,17 @@
 package com.linksame.crm.erp.pmp.controller;
 
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.aop.Inject;
 import com.jfinal.core.Controller;
 import com.jfinal.core.paragetter.Para;
 import com.linksame.crm.common.annotation.Permissions;
 import com.linksame.crm.common.config.paragetter.BasePageRequest;
+import com.linksame.crm.erp.oa.entity.OaExamine;
+import com.linksame.crm.erp.oa.entity.OaExamineRelation;
 import com.linksame.crm.erp.pmp.entity.PmpContract;
 import com.linksame.crm.erp.pmp.entity.PmpContractPayment;
 import com.linksame.crm.erp.pmp.service.PmpContractService;
@@ -28,7 +32,6 @@ public class PmpContractController extends Controller {
     @Inject
     private PmpContractService pmpContractService;
 
-
     /**
      *
      *  新增合同
@@ -36,15 +39,18 @@ public class PmpContractController extends Controller {
     @Permissions("project:contract:save")
     public void add(){
         String data = getRawData();
-        PmpContract pmpContract = JSON.parseObject(data,PmpContract.class);
-        JSONObject jsonObject1 = JSON.parseObject(data);
+        JSONObject jsonObject = JSON.parseObject(data);
+        PmpContract pmpContract = jsonObject.getObject("pmpContract",PmpContract.class);
+        boolean notEmpty = StrUtil.isNotEmpty(pmpContract.getBatchId());
+        pmpContract.setBatchId(notEmpty ? pmpContract.getBatchId() : IdUtil.simpleUUID());
         List<PmpContractPayment> pmpContractPayments = new ArrayList<>();
-        List pmpContractPayments1 = jsonObject1.getObject("pmpContractPayments", List.class);
-        for (Object o : pmpContractPayments1) {
-            pmpContractPayments.add(JSON.parseObject(o.toString(),PmpContractPayment.class));
+        JSONArray pmpContractPayments2 = jsonObject.getJSONArray("pmpContractPayments");
+        for (Object o : pmpContractPayments2) {
+            PmpContractPayment pmpContractPayment = JSON.parseObject(o.toString(), PmpContractPayment.class);
+            pmpContractPayment.setBatchId(StrUtil.isNotEmpty(pmpContractPayment.getBatchId()) ? pmpContractPayment.getBatchId() : IdUtil.simpleUUID());
+            pmpContractPayments.add(pmpContractPayment);
         }
-        pmpContract.setPmpContractPayment(pmpContractPayments);
-        renderJson(pmpContractService.add(pmpContract));
+        renderJson(pmpContractService.add(pmpContract,pmpContractPayments));
     }
 
     /**

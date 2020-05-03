@@ -150,12 +150,20 @@ public abstract class BasePmpContractPayment<M extends BasePmpContractPayment<M>
         return getStr("batch_id");
     }
 
-    public void setSupplierId(java.lang.Long supplierId) {
-        set("supplier_id", supplierId);
+    public void setPracticalCostPercentage(java.lang.Long practicalCostPercentage) {
+        set("practical_cost_percentage", practicalCostPercentage);
     }
 
-    public java.lang.Long getSupplierId() {
-        return getLong("supplier_id");
+    public java.lang.Long getPracticalCostPercentage() {
+        return getLong("practical_cost_percentage");
+    }
+
+    public void setpracticalMoney(java.math.BigDecimal practicalMoney) {
+        set("practical_money", practicalMoney);
+    }
+
+    public java.math.BigDecimal getPracticalMoney() {
+        return get("practical_money");
     }
 
 }

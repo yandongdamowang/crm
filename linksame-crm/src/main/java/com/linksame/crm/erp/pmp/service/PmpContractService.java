@@ -1,7 +1,5 @@
 package com.linksame.crm.erp.pmp.service;
 
-import cn.hutool.core.util.IdUtil;
-import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.aop.Before;
 import com.jfinal.aop.Inject;
@@ -12,8 +10,6 @@ import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.linksame.crm.common.config.paragetter.BasePageRequest;
 import com.linksame.crm.erp.admin.service.AdminExamineRecordService;
-import com.linksame.crm.erp.crm.common.CrmEnum;
-import com.linksame.crm.erp.crm.entity.CrmContract;
 import com.linksame.crm.erp.crm.service.CrmRecordService;
 import com.linksame.crm.erp.pmp.common.PmpInterface;
 import com.linksame.crm.erp.pmp.entity.PmpContract;
@@ -23,9 +19,9 @@ import com.linksame.crm.utils.R;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 /**
@@ -44,15 +40,18 @@ public class PmpContractService {
     private AdminExamineRecordService examineRecordService;
 
     @Before(Tx.class)
-    public R add(PmpContract pmpContract) {
-//        pmpContract.setContractId(BaseUtil.getUserId());
-        return Db.tx(() ->{
+    public R add(PmpContract pmpContract,List<PmpContractPayment> pmpContractPayments) {
+        return Db.tx(() -> {
+            pmpContract.setCreationTime(new Date(System.currentTimeMillis()));
+            pmpContract.setUpdateTime(new Date(System.currentTimeMillis()));
+            pmpContract.setCheckStatus(0);
+            pmpContract.setCreateUserId(BaseUtil.getUserId());
+            boolean save = pmpContract.save();
             BigDecimal money = pmpContract.getMoney();
             BigDecimal money1 = new BigDecimal(0);
             //保存 合同
-            pmpContract.save();
             //保存付款单
-            for (PmpContractPayment contractPayment : pmpContract.getPmpContractPayment()) {
+            for (PmpContractPayment contractPayment : pmpContractPayments) {
                 if (contractPayment.getMoney() != null
                         && contractPayment.getPaymentNode() != null
                         && contractPayment.getPaymentName() != null
@@ -61,30 +60,31 @@ public class PmpContractService {
                     contractPayment.setContractId(pmpContract.getLong("contract_id"));
                     contractPayment.setProjectId(pmpContract.getLong("project_id"));
                     contractPayment.setTradeForm(PmpInterface.contractPayment.trade.form.EXPENF);
-                    contractPayment.setTradeStatus(PmpInterface.contractPayment.trade.stats.OK);
+                    contractPayment.setTradeStatus(PmpInterface.contractPayment.trade.stats.TRADING);
                     contractPayment.setCreationTime(new Date(System.currentTimeMillis()));
-                    contractPayment.save();
-                }else {
-                    return false;
+                    contractPayment.setpracticalMoney(new BigDecimal(0));
+                    contractPayment.setPracticalCostPercentage(0L);
+                    boolean save1 = contractPayment.save();
+                } else {
+                    return false;//R.error("预付款数据缺失");
                 }
             }
-            if (money.compareTo(money1) != 0){
-                return false;
+            if (money.compareTo(money1) != 0) {
+                return false;//R.error("预付款金额不符");
             }
             //保存 附件
-
-            return true;
+            return true;//
         }) ? R.ok() : R.error();
     }
 
     public R queryById(Long contractId) {
         PmpContract pmpContract = PmpContract.dao.findFirst(Db.getSql("pmp.contract.queryById"), contractId);
         //供应商名称
-        pmpContract.setSupplierName("此处添加供应商名称");
-        pmpContract.setAgentName("参与人名称");
-        pmpContract.remove("status","is_deleted");
-        List<PmpContractPayment> contractPayment = pmpContractPaymentService.findByContractId(contractId,null);
-        return R.ok().put("pmpContract",pmpContract).put("pmpContractPayment",contractPayment);
+        if (pmpContract != null){
+            pmpContract.remove("status","is_deleted");
+        }
+//        List<PmpContractPayment> contractPayment = pmpContractPaymentService.findByContractId(contractId,null);
+        return R.ok().put("pmpContract",pmpContract);//.put("pmpContractPayment",contractPayment);
     }
 
     private final String PAYMENTRATION = "paymentRatio"; //支付比例
@@ -94,16 +94,17 @@ public class PmpContractService {
     public R queryList(BasePageRequest basePageRequest) {
         JSONObject jsonObject = basePageRequest.getJsonObject();
         Kv kv= Kv.by("contractNumber", jsonObject.getString("contractNumber"))
-                .set("supplierId", jsonObject.getLong("supplierId"))
+                .set("customerId", jsonObject.getLong("customerId"))
                 .set("orderBy", jsonObject.get("orderBy"));
+        List<Record> groupBy = Db.find("SELECT pc.customer_id,cc.contractor_name FROM pmp_contract AS pc LEFT JOIN crm_customer AS cc ON pc.customer_id = cc.customer_id WHERE 1=1 GROUP BY pc.customer_id");
         if (basePageRequest.getPageType() == 0){
             List<Record> records = Db.find(Db.getSqlPara("pmp.contract.queryList", kv));
             billLoading(records);
-            return R.ok().put("data",records);
+            return R.ok().put("data",records).put("groupBy",groupBy);
         }else {
             Page<Record> paginate = Db.paginate(basePageRequest.getPage(), basePageRequest.getLimit(), Db.getSqlPara("pmp.contract.queryList", kv));
             billLoading(paginate.getList());
-            return R.ok().put("data", paginate);
+            return R.ok().put("data", paginate).put("groupBy",groupBy);
         }
     }
 
