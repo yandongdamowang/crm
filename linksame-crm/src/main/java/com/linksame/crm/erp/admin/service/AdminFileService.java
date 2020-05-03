@@ -41,7 +41,10 @@ public class AdminFileService {
                 .set("oldName", jsonObject.getString("oldName"))
                 .set("folderId", jsonObject.getInteger("folderId"))
                 .set("workId", jsonObject.getInteger("workId"))
+                .set("delFlag",  jsonObject.getInteger("delFlag"))
+                .set("orderBy", jsonObject.getInteger("orderBy"))
                 .set("ifUser", jsonObject.getInteger("ifUser"));
+        //如果有ifUser参数且等于0, 则根据当前用户查询, 否则查询全部
         if(jsonObject.getInteger("ifUser") != null){
             if(jsonObject.getInteger("ifUser") == 0){
                 kv.set("createUserId", BaseUtil.getUser().getUserId());
