@@ -37,7 +37,7 @@
 	left join `work` as e on a.work_id = e.work_id
 	left join `admin_file_type` as f on a.type_id = f.type_id
 	left join `admin_user` as g on a.del_user_id = g.user_id
-      where a.batch_id = ?
+      where a.batch_id = ? and a.del_flag = 0
     #end
     #sql("queryFileNameByBatchId")
       SELECT file_name FROM `admin_file` as a where a.batch_id = ?
@@ -96,7 +96,10 @@
         #if(oldName)
             and a.old_name like concat('%', #para(oldName), '%')
         #end
-        #if(orderBy == '1')
+        #if(delFlag)
+            and a.del_flag = #para(delFlag)
+        #end
+        #if(orderBy == 1)
            order by a.create_time asc
         #else
             order by a.create_time desc
@@ -145,6 +148,6 @@
 	left join `work` as e on a.work_id = e.work_id
 	left join `admin_file_type` as f on a.type_id = f.type_id
 	left join `admin_user` as g on a.del_user_id = g.user_id
-      where create_user_id = #para(createUserId)
+      where a.create_user_id = #para(createUserId) and a.del_flag = 0
     #end
 #end
