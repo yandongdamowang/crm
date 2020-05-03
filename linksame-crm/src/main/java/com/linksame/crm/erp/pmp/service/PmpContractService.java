@@ -46,7 +46,7 @@ public class PmpContractService {
             pmpContract.setUpdateTime(new Date(System.currentTimeMillis()));
             pmpContract.setCheckStatus(0);
             pmpContract.setCreateUserId(BaseUtil.getUserId());
-            pmpContract.save();
+            boolean save = pmpContract.save();
             BigDecimal money = pmpContract.getMoney();
             BigDecimal money1 = new BigDecimal(0);
             //保存 合同
@@ -60,11 +60,11 @@ public class PmpContractService {
                     contractPayment.setContractId(pmpContract.getLong("contract_id"));
                     contractPayment.setProjectId(pmpContract.getLong("project_id"));
                     contractPayment.setTradeForm(PmpInterface.contractPayment.trade.form.EXPENF);
-                    contractPayment.setTradeStatus(PmpInterface.contractPayment.trade.stats.OK);
+                    contractPayment.setTradeStatus(PmpInterface.contractPayment.trade.stats.TRADING);
                     contractPayment.setCreationTime(new Date(System.currentTimeMillis()));
                     contractPayment.setpracticalMoney(new BigDecimal(0));
                     contractPayment.setPracticalCostPercentage(0L);
-                    contractPayment.save();
+                    boolean save1 = contractPayment.save();
                 } else {
                     return false;//R.error("预付款数据缺失");
                 }

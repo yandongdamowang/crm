@@ -47,7 +47,7 @@ public class PmpContractController extends Controller {
         JSONArray pmpContractPayments2 = jsonObject.getJSONArray("pmpContractPayments");
         for (Object o : pmpContractPayments2) {
             PmpContractPayment pmpContractPayment = JSON.parseObject(o.toString(), PmpContractPayment.class);
-            pmpContractPayment.setBatchId(StrUtil.isNotEmpty(pmpContract.getBatchId()) ? pmpContract.getBatchId() : IdUtil.simpleUUID());
+            pmpContractPayment.setBatchId(StrUtil.isNotEmpty(pmpContractPayment.getBatchId()) ? pmpContractPayment.getBatchId() : IdUtil.simpleUUID());
             pmpContractPayments.add(pmpContractPayment);
         }
         renderJson(pmpContractService.add(pmpContract,pmpContractPayments));
