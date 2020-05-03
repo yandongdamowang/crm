@@ -4,6 +4,8 @@
     from admin_scene as a left join admin_scene_default as b on a.scene_id = b.scene_id
     where a.type = ? and a.user_id = ? and is_hide = 0 order by a.sort asc
     #end
+
+--           IFNULL(`e`.`business_name`,'') AS `business_name`,
     #sql ("queryCrmPageListByFieldType1")
       #(select) FROM (
         SELECT
@@ -20,7 +22,6 @@
 	        `f`.`name` AS `status_name`,
 	        #elseif(label==6)
           `d`.`customer_name` AS `customer_name`,
-          IFNULL(`e`.`business_name`,'') AS `business_name`,
           `f`.`name` AS `contacts_name`,
           `g`.`realname` AS `company_user_name`,
           #elseif(label==7)
@@ -32,7 +33,7 @@
           #end
           `z`.*
         FROM
-          `crm_#(realm)` as `a`
+          `#(realm)` as `a`
         #if(label==3)
           LEFT JOIN `crm_customer` `d` ON `a`.`customer_id` = `d`.`customer_id`
         #elseif(label==4)
@@ -43,7 +44,6 @@
           LEFT JOIN `crm_business_status` `f` ON `a`.`status_id` = `f`.`status_id`
         #elseif(label==6)
           LEFT JOIN `crm_customer` `d` ON `a`.`customer_id` = `d`.`customer_id`
-					LEFT JOIN `crm_business` `e` ON `a`.`business_id` = `e`.`business_id`
 					LEFT JOIN `crm_contacts` `f` ON `a`.`contacts_id` = `f`.`contacts_id`
 					LEFT JOIN `admin_user` `g` ON `a`.`company_user_id` = `g`.`user_id`
 				#elseif(label==7)
@@ -65,7 +65,7 @@
                 #end
               #end
             #end
-            FROM admin_fieldv AS a RIGHT JOIN (SELECT batch_id FROM crm_#(realm) as a
+            FROM admin_fieldv AS a RIGHT JOIN (SELECT batch_id FROM #(realm) as a
             WHERE 1=1
             #if(batchList&&batchList.size()>0)
               and batch_id in ( #fori(batchList))
@@ -116,7 +116,7 @@
           #end
           `z`.*
         FROM
-        `crm_#(realm)` as `a`
+        `#(realm)` as `a`
         #if(label==3)
           LEFT JOIN `crm_customer` `d` ON `a`.`customer_id` = `d`.`customer_id`
         #elseif(label==4)
@@ -171,7 +171,7 @@
         #end
     #end
     #sql ("queryCrmPageListCount")
-      SELECT count(1) FROM crm_#(realm) as a
+      SELECT count(1) FROM #(realm) as a
       WHERE 1=1
       #if(batchList&&batchList.size()>0)
           and batch_id in ( #for(str:batchList) #(for.index == 0 ? "" : ",") #para(str) #end)

@@ -79,14 +79,6 @@ public abstract class BasePmpContract<M extends BasePmpContract<M>> extends Mode
         return getInt("status");
     }
 
-    public void setSupplierId(java.lang.Long supplierId) {
-        set("supplier_id", supplierId);
-    }
-
-    public java.lang.Long getSupplierId() {
-        return getLong("supplier_id");
-    }
-
     public void setProjectId(java.lang.Long projectId) {
         set("project_id", projectId);
     }
@@ -135,13 +127,6 @@ public abstract class BasePmpContract<M extends BasePmpContract<M>> extends Mode
         return get("end_time");
     }
 
-    public void setAgent(java.lang.Long agent) {
-        set("agent", agent);
-    }
-
-    public java.lang.Long getAgent() {
-        return getLong("agent");
-    }
 
     public void setCreationTime(Date creationTime) {
         set("creation_time", creationTime);
@@ -213,6 +198,49 @@ public abstract class BasePmpContract<M extends BasePmpContract<M>> extends Mode
 
     public java.lang.Integer getExamineRecordId() {
         return getInt("examine_record_id");
+    }
+
+    public void setCreateUserId(java.lang.Long createUserId) {
+        set("create_user_id", createUserId);
+    }
+
+    public java.lang.Long getCreateUserId() {
+        return getLong("create_user_id");
+    }
+
+    public void setOwnerUserId(java.lang.Long ownerUserId) {
+        set("owner_user_id", ownerUserId);
+    }
+
+    public java.lang.Long getOwnerUserId() {
+        return getLong("owner_user_id");
+    }
+
+
+    public void setCustomerId(Integer customerId) {
+        set("customer_id", customerId);
+    }
+
+    public java.lang.Integer getCustomerId() {
+        return getInt("customer_id");
+    }
+
+
+    public void setContactsId(Integer contactsId) {
+        set("contacts_id", contactsId);
+    }
+
+    public java.lang.Integer getContactsId() {
+        return getInt("contacts_id");
+    }
+
+
+    public void setCompanyUserId(Integer companyUserId) {
+        set("company_user_id", companyUserId);
+    }
+
+    public java.lang.Integer getCompanyUserId() {
+        return getInt("company_user_id");
     }
 
 }

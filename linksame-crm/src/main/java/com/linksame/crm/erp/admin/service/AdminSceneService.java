@@ -400,25 +400,25 @@ public class AdminSceneService{
                 realm = "leads";
                 break;
             case 2:
-                realm = "customer";
+                realm = "crm_customer";
                 break;
             case 3:
-                realm = "contacts";
+                realm = "crm_contacts";
                 break;
             case 4:
-                realm = "product";
+                realm = "crm_product";
                 break;
             case 5:
-                realm = "business";
+                realm = "crm_business";
                 break;
             case 6:
-                realm = "contract";
+                realm = "pmp_contract";
                 break;
             case 7:
-                realm = "receivables";
+                realm = "crm_receivables";
                 break;
             case 9:
-                realm = "customer";
+                realm = "crm_customer";
                 break;
             case 0:
                 realm = "business";
@@ -531,7 +531,7 @@ public class AdminSceneService{
         }else if (type == CrmEnum.CRM_CONTRACT.getType()){
             if(recordPage.size() > 0){
                 List<Integer> contractIds = recordPage.stream().map(record -> record.getInt("contract_id")).collect(Collectors.toList());
-                Record record = Db.findFirst("SELECT IFNULL(SUM(money),0) AS contractMoney,IFNULL(SUM(receivedMoney),0) AS receivedMoney from (SELECT a.money,(SELECT SUM(money) FROM crm_receivables AS b where b.contract_id=a.contract_id and b.check_status = 1) as receivedMoney FROM crm_contract AS a WHERE a.check_status = '1' AND a.contract_id IN (" + StrUtil.join(",", contractIds) + ")) as x");
+                Record record = Db.findFirst("SELECT IFNULL(SUM(money),0) AS contractMoney,IFNULL(SUM(receivedMoney),0) AS receivedMoney from (SELECT a.money,(SELECT SUM(practical_ratio ) FROM pmp_contract_payment_record AS b where b.contract_id=a.contract_id) as receivedMoney FROM crm_contract AS a WHERE a.check_status = '1' AND a.contract_id IN (" + StrUtil.join(",", contractIds) + ")) as x");
                 resultJsonObject.put("money", record);
             }
         }

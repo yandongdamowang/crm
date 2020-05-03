@@ -194,4 +194,11 @@ public abstract class BaseCrmCustomer<M extends BaseCrmCustomer<M>> extends Mode
 		return getStr("last_content");
 	}
 
+	public void setContractorName(java.lang.String contractorName) {
+		set("contractor_name", contractorName);
+	}
+
+	public java.lang.String getContractorName() {
+		return getStr("contractor_name");
+	}
 }

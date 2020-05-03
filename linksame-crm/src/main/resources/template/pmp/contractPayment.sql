@@ -31,8 +31,9 @@
     #end
 
     #sql("queryAdvanceList")
-        select pcp.*,pc.contract_number,pc.supplier_id,pc.money as contractMoney,pc.proprietor
+        select pcp.*,pc.contract_number,pc.customer_id,pc.money as contractMoney,pc.proprietor,cc.customer_name
         from  pmp_contract as pc left join pmp_contract_payment AS pcp on pcp.contract_id = pc.contract_id
+        left join crm_customer AS cc on cc.customer_id = pc.customer_id
         where pcp.is_deleted = '0'
             and pcp.trade_status <> '1'
             #if(billId)
@@ -41,8 +42,8 @@
             #if(contractNumber)
                 and pc.contract_number like concat('%', #para(contractNumber), '%')
             #end
-            #if(supplierId)
-                and pc.supplier_id = #para(supplierId)
+            #if(customerId)
+                and pc.customer_id = #para(customerId)
             #end
             #if(orderBy =='1')
                order by pcp.priority asc
@@ -56,8 +57,8 @@
         select  a.payment_node, SUM(a.money) as countMoney,
             count(a.bill_id) as ids
         from pmp_contract b LEFT JOIN pmp_contract_payment a ON b.contract_id = a.contract_id WHERE 1=1 and a.payment_node between DATE_FORMAT(#para(startTime), '%Y-%m-%d') and DATE_FORMAT(#para(endTime), '%Y-%m-%d')
-            #if(supplierId)
-                and a.supplier_id = #para(supplierId)
+            #if(customerId)
+                and pc.customer_id = #para(customerId)
             #end
             #if(projectId)
                 and a.project_id = #para(projectId)
@@ -72,8 +73,8 @@
             count(a.bill_id) as ids
         from pmp_contract b LEFT JOIN pmp_contract_payment a ON b.contract_id = a.contract_id
         WHERE 1=1 and a.payment_node between DATE_FORMAT(#para(startTime), '%Y-%m-%d') and DATE_FORMAT(#para(endTime), '%Y-%m-%d')
-            #if(supplierId)
-                and a.supplier_id = #para(supplierId)
+            #if(customerId)
+                and pc.customer_id = #para(customerId)
             #end
             #if(projectId)
                 and a.project_id = #para(projectId)

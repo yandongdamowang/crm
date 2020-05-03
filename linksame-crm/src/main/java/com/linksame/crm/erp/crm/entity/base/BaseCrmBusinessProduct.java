@@ -9,27 +9,27 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings("serial")
 public abstract class BaseCrmBusinessProduct<M extends BaseCrmBusinessProduct<M>> extends Model<M> implements IBean {
 
-	public void setRId(java.lang.Integer rId) {
+	public void setRId(Integer rId) {
 		set("r_id", rId);
 	}
 	
-	public java.lang.Integer getRId() {
+	public Integer getRId() {
 		return getInt("r_id");
 	}
 
-	public void setBusinessId(java.lang.Integer businessId) {
+	public void setBusinessId(Integer businessId) {
 		set("business_id", businessId);
 	}
 	
-	public java.lang.Integer getBusinessId() {
+	public Integer getBusinessId() {
 		return getInt("business_id");
 	}
 
-	public void setProductId(java.lang.Integer productId) {
+	public void setProductId(Integer productId) {
 		set("product_id", productId);
 	}
 	
-	public java.lang.Integer getProductId() {
+	public Integer getProductId() {
 		return getInt("product_id");
 	}
 
@@ -49,11 +49,11 @@ public abstract class BaseCrmBusinessProduct<M extends BaseCrmBusinessProduct<M>
 		return get("sales_price");
 	}
 
-	public void setNum(java.lang.Integer num) {
+	public void setNum(Integer num) {
 		set("num", num);
 	}
 	
-	public java.lang.Integer getNum() {
+	public Integer getNum() {
 		return getInt("num");
 	}
 
@@ -73,11 +73,11 @@ public abstract class BaseCrmBusinessProduct<M extends BaseCrmBusinessProduct<M>
 		return get("subtotal");
 	}
 
-	public void setUnit(java.lang.String unit) {
+	public void setUnit(String unit) {
 		set("unit", unit);
 	}
 	
-	public java.lang.String getUnit() {
+	public String getUnit() {
 		return getStr("unit");
 	}
 

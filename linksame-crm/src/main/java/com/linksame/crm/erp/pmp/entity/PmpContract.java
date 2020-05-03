@@ -15,23 +15,32 @@ public class PmpContract extends BasePmpContract<PmpContract> {
     public static final PmpContract dao = new PmpContract().dao();
 
     private List<PmpContractPayment> pmpContractPayments;
-    private String supplierName;
-    private String agentName;
+    private String companyUserName;//公司签约人
+    private String customerName;//供应商/承包商ID/客户
+    private String contactsName;//客户签约人
 
-    public String getSupplierName() {
-        return supplierName;
+    public void setCompanyUserName(String companyUserName) {
+        this.companyUserName = companyUserName;
     }
 
-    public void setAgentName(String agentName) {
-        this.agentName = agentName;
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
-    public String getAgentName() {
-        return agentName;
+    public void setContactsName(String contactsName) {
+        this.contactsName = contactsName;
     }
 
-    public void setSupplierName(String supplierName) {
-        this.supplierName = supplierName;
+    public String getCompanyUserName() {
+        return companyUserName;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public String getContactsName() {
+        return contactsName;
     }
 
     public List<PmpContractPayment> getPmpContractPayment() {
