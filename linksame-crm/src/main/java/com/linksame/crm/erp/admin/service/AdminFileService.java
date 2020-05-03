@@ -76,6 +76,10 @@ public class AdminFileService {
             newFile.setCreateUserId(BaseUtil.getUser().getUserId());
             //如果是图片类型,通过文件名请求minio,获取访问路径
             String suffix = FileUtil.extName(resultFile.getFileName());
+            //文件格式校验
+            if(StringUtils.isEmpty(suffix) || suffix.length()<3 || !suffix.matches("[a-zA-Z]+") || suffix.indexOf(" ") != -1){
+                return R.error("请上传格式正确的文件");
+            }
             adminFile.setSuffix(suffix);
             //根据文件后缀判断文件类型
             if(suffix.equalsIgnoreCase("gif") || suffix.equalsIgnoreCase("png")
@@ -112,7 +116,7 @@ public class AdminFileService {
     public R upload(UploadFile file, AdminFile adminFile) {
         String compositionName;
         if(adminFile.getFolderId() == null){
-            return R.error("folderId参数为空");
+            return R.error("folderId参数不允许为空");
         }
         try{
             //上传文件至minio服务器
@@ -125,6 +129,10 @@ public class AdminFileService {
             adminFile.setCreateUserId(BaseUtil.getUser().getUserId());
             //如果是图片类型,通过文件名请求minio,获取访问路径
             String suffix = FileUtil.extName(resultFile.getFileName());
+            //文件格式校验
+            if(StringUtils.isEmpty(suffix) || suffix.length()<3 || !suffix.matches("[a-zA-Z]+") || suffix.indexOf(" ") != -1){
+                return R.error("请上传格式正确的文件");
+            }
             adminFile.setSuffix(suffix);
             //根据文件后缀判断文件类型
             if(suffix.equalsIgnoreCase("gif") || suffix.equalsIgnoreCase("png")
@@ -172,7 +180,7 @@ public class AdminFileService {
     @Before(Tx.class)
     public R batchUpload(List<UploadFile> files, AdminFile adminFile){
         if(CollectionUtil.isEmpty(files)){
-            return R.error("文件数据为空");
+            return R.error("文件数据不允许为空");
         }
         for(UploadFile file : files){
             upload(file, adminFile);
@@ -190,7 +198,7 @@ public class AdminFileService {
     public R changeVersion(UploadFile file, AdminFile adminFile) {
         String compositionName;
         if(adminFile.getFolderId() == null){
-            return R.error("folderId参数为空");
+            return R.error("folderId参数不允许为空");
         }
         try{
             //上传文件至minio服务器
@@ -321,7 +329,7 @@ public class AdminFileService {
      */
     public R queryByBatchId(String batchId) {
         if (batchId == null) {
-            return R.error("batchId参数为空");
+            return R.error("batchId参数不允许为空");
         }
         return R.ok().put("data", Db.find(Db.getSqlPara("admin.file.queryPageList", Kv.by("batchId", batchId))));
     }
@@ -330,11 +338,11 @@ public class AdminFileService {
      * 通过ID查询
      * @param id 文件ID
      */
-    public R queryById(String id) {
-        if (id == null) {
-            return R.error("id参数为空");
+    public R queryById(String fileId) {
+        if (fileId == null) {
+            return R.error("fileId参数不允许为空");
         }
-        return R.ok().put("data", AdminFile.dao.findById(id));
+        return R.ok().put("data", AdminFile.dao.findById(fileId));
     }
 
     /**
@@ -343,8 +351,8 @@ public class AdminFileService {
      * @return
      */
     @Before(Tx.class)
-    public R addRecycleById(String id){
-        AdminFile adminFile = AdminFile.dao.findById(id);
+    public R addRecycleById(String fileId){
+        AdminFile adminFile = AdminFile.dao.findById(fileId);
         if(adminFile == null){
             return R.error("附件不存在");
         }
@@ -369,7 +377,7 @@ public class AdminFileService {
     @Before(Tx.class)
     public R removeById(Integer id) throws Exception {
         if (id == null) {
-            return R.error("id参数为空");
+            return R.error("id参数不允许为空");
         }
         AdminFile adminFile = AdminFile.dao.findById(id);
         //保存日志
@@ -395,7 +403,7 @@ public class AdminFileService {
     @Before(Tx.class)
     public R removeByBatchId(String batchId) {
         if(StrUtil.isEmpty(batchId)){
-            return R.error("batchId参数为空");
+            return R.error("batchId参数不允许为空");
         }
         //查询该批次的所有文件的文件名称
         List<String> fileNames = Db.query(Db.getSql("admin.file.queryFileNameByBatchId"), batchId);
@@ -418,7 +426,7 @@ public class AdminFileService {
     @Before(Tx.class)
     public R renameFileById(AdminFile file){
         if(StringUtils.isEmpty(file.getCompositionName())){
-            return R.error("文件名不能为空");
+            return R.error("文件名不允许为空");
         }
         AdminFile adminFile = AdminFile.dao.findById(file.getFileId());
         //保存日志
@@ -443,19 +451,19 @@ public class AdminFileService {
     /**
      * 网盘上传
      * @param fileIds   文件ID集合
-     * @param batchId   批次ID(关联业务: 任务, 合同等等)
      * @param folderId  文件夹ID
      * @param workId    项目ID
+     * @param batchId   批次ID(关联业务: 任务, 合同等等)
      * @return
      */
     @Before(Tx.class)
-    public R netdiskUpload(String fileIds, String batchId, Integer folderId, Integer workId){
+    public R netdiskUpload(String fileIds, Integer folderId, Integer workId, String batchId){
         String compositionName;
         if(StringUtils.isEmpty(fileIds)){
-            return R.error("fileIds参数为空");
+            return R.error("fileIds参数不允许为空");
         }
         if(folderId == null){
-            return R.error("folderId参数为空");
+            return R.error("folderId参数不允许为空");
         }
         //拆解
         String[] fileIdArr = fileIds.split(",");
@@ -481,6 +489,44 @@ public class AdminFileService {
         }
         return R.ok();
     }
+
+    /**
+     * 移动附件
+     * @param fileIds   文件ID集合
+     * @param folderId  文件夹ID
+     * @param workId    项目ID
+     * @param batchId   批次ID(关联业务: 任务, 合同等等)
+     * @return
+     */
+    @Before(Tx.class)
+    public R mobileFiles(String fileIds, Integer folderId, Integer workId, String batchId){
+        if(StringUtils.isEmpty(fileIds)){
+            return R.error("fileIds参数为空");
+        }
+        if(folderId == null){
+            return R.error("folderId参数为空");
+        }
+        String[] fileIdArr = fileIds.split(",");
+        List<AdminFile> list = new ArrayList<>();
+        for(String fileId : fileIdArr){
+            AdminFile adminFile = AdminFile.dao.findById(fileId);
+            if(adminFile == null){
+                return R.error("ID为: " + fileId + "的附件数据不存在");
+            }
+            adminFile.setFolderId(folderId);
+            if(workId != null && workId != 0){
+                adminFile.setWorkId(workId);
+            }
+            if(StringUtils.isNotEmpty(batchId)){
+                adminFile.setBatchId(batchId);
+            }
+            list.add(adminFile);
+        }
+        Db.batchUpdate(list, list.size());
+
+        return R.ok("操作成功");
+    }
+
 
     /**
      * 如果有传入文件夹id,说明是从附件管理进入指定文件夹上传的附件,需要按照一定规则生成文件名

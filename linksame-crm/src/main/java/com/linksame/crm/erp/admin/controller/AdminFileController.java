@@ -132,10 +132,10 @@ public class AdminFileController extends Controller {
      */
     @ApiOperation(methods= RequestMethod.POST, description="通过ID查询")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="id", description="附件ID")
+            @ApiImplicitParam(name="fileId", description="附件ID")
     })
     public void queryById(){
-        renderJson(adminFileService.queryById(getPara("id")));
+        renderJson(adminFileService.queryById(getPara("fileId")));
     }
 
     /**
@@ -143,25 +143,28 @@ public class AdminFileController extends Controller {
      */
     @ApiOperation(methods= RequestMethod.POST, description="通过附件ID将附件放入回收站")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="id", description="附件ID")
+            @ApiImplicitParam(name="fileId", description="附件ID")
     })
-    //TODO 权限待添加
+    @Permissions({"file:fileManage:recycle"})
     public void addRecycleById() {
-        renderJson(adminFileService.addRecycleById(getPara("id")));
+        renderJson(adminFileService.addRecycleById(getPara("fileId")));
     }
 
-    //TODO 批量加入回收站
+    //TODO 批量加入回收站, 业务层待编码
+    /*public void addRecycleByIds() {
+        renderJson(adminFileService.addRecycleByIds(getPara("fileIds")));
+    }*/
 
     /**
      * 通过ID删除
      */
     @ApiOperation(methods= RequestMethod.POST, description="通过ID删除")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="id", description="附件ID")
+            @ApiImplicitParam(name="fileId", description="附件ID")
     })
     @Permissions({"file:fileManage:delete"})
     public void removeById() throws Exception {
-        renderJson(adminFileService.removeById(getInt("id")));
+        renderJson(adminFileService.removeById(getInt("fileId")));
     }
 
     /**
@@ -229,7 +232,22 @@ public class AdminFileController extends Controller {
             @ApiImplicitParam(name="workId", description="项目ID")
     })
     public void netdiskUpload(){
-        renderJson(adminFileService.netdiskUpload(getPara("fileIds"), getPara("batchId"), getInt("folderId"), getInt("workId")));
+        renderJson(adminFileService.netdiskUpload(getPara("fileIds"), getInt("folderId"), getInt("workId"), getPara("batchId")));
+    }
+
+    /**
+     * 移动附件
+     */
+    @ApiOperation(methods= RequestMethod.POST, description="移动附件")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="fileIds", description="附件ID数组"),
+            @ApiImplicitParam(name="batchId", description="批次ID"),
+            @ApiImplicitParam(name="folderId", description="文件夹ID"),
+            @ApiImplicitParam(name="workId", description="项目ID")
+    })
+    public void mobileFiles(){
+        getInt("folderId");
+        renderJson(adminFileService.mobileFiles(getPara("fileIds"), getInt("folderId"), getInt("workId"), getPara("batchId")));
     }
 
     /**
