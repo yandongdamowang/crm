@@ -71,40 +71,26 @@ public class AdminFileService {
             //上传文件至minio服务器
             AdminFile resultFile = MinioServicce.uploadFile(file);
             //插入数据到文件表中
-            AdminFile newFile = new AdminFile();
-            newFile.setBucketName(resultFile.getBucketName());
-            newFile.setOldName(resultFile.getOldName());
-            newFile.setBatchId(adminFile.getBatchId());
-            newFile.setCreateTime(new Date());
-            newFile.setCreateUserId(BaseUtil.getUser().getUserId());
+            adminFile.setFileName(resultFile.getFileName());
+            adminFile.setSize(file.getFile().length());
+            adminFile.setBucketName(resultFile.getBucketName());
+            adminFile.setOldName(resultFile.getOldName());
+            adminFile.setBatchId(adminFile.getBatchId());
+            adminFile.setCreateTime(new Date());
+            adminFile.setCreateUserId(BaseUtil.getUser().getUserId());
             //如果是图片类型,通过文件名请求minio,获取访问路径
-            String suffix = FileUtil.extName(resultFile.getFileName());
+            String suffix = FileUtil.extName(adminFile.getFileName());
             //文件格式校验
             if(StringUtils.isEmpty(suffix) || suffix.length()<3 || !suffix.matches("[a-zA-Z]+") || suffix.indexOf(" ") != -1){
                 return R.error("请上传格式正确的文件");
             }
             adminFile.setSuffix(suffix);
-            //根据文件后缀判断文件类型
-            if(suffix.equalsIgnoreCase("gif") || suffix.equalsIgnoreCase("png")
-                    || suffix.equalsIgnoreCase("jpg") || suffix.equalsIgnoreCase("jpeg")) {
-                String path = MinioServicce.getImgUrl(resultFile.getFileName(), suffix);
-                adminFile.setPath(path);
-                adminFile.setFileType("img");
-            } else if(suffix.equalsIgnoreCase("xlsx") || suffix.equalsIgnoreCase("xls")){
-                adminFile.setFileType("excel");
-            } else if(suffix.equalsIgnoreCase("doc") || suffix.equalsIgnoreCase("docx")){
-                adminFile.setFileType("word");
-            } else if(suffix.equalsIgnoreCase("pdf") || suffix.equalsIgnoreCase("ppt")){
-                adminFile.setFileType("office");
-            } else if(suffix.equalsIgnoreCase("xmind")){
-                adminFile.setFileType("xmind");
-            } else {
-                adminFile.setFileType("file");
-            }
-            newFile.setFileName(resultFile.getFileName());
-            newFile.setSize(file.getFile().length());
-            boolean bol = newFile.save();
-            return R.ok().put("batchId", adminFile.getBatchId()).put("fileName",newFile.getFileName()).put("oldName",newFile.getOldName()).put("path", newFile.getPath()).put("size",file.getFile().length()/1000+"KB").put("fileId",newFile.getFileId());
+
+            //文件格式处理
+            adminFile = withSuffixByFile(adminFile);
+
+            boolean bol = adminFile.save();
+            return R.ok().put("batchId", adminFile.getBatchId()).put("fileName",adminFile.getFileName()).put("oldName",adminFile.getOldName()).put("path", adminFile.getPath()).put("size",file.getFile().length()/1000+"KB").put("fileId",adminFile.getFileId());
         } catch (RuntimeException e) {
             throw new RuntimeException("上传文件至Minio服务器出现异常");
         }
@@ -125,37 +111,25 @@ public class AdminFileService {
             //上传文件至minio服务器
             AdminFile resultFile = MinioServicce.uploadFile(file);
             //插入数据到文件表中
+            adminFile.setFileName(resultFile.getFileName());
+            adminFile.setSize(file.getFile().length());
             adminFile.setBucketName(resultFile.getBucketName());
             adminFile.setOldName(resultFile.getOldName());
             adminFile.setBatchId(adminFile.getBatchId());
             adminFile.setCreateTime(new Date());
             adminFile.setCreateUserId(BaseUtil.getUser().getUserId());
+
             //如果是图片类型,通过文件名请求minio,获取访问路径
-            String suffix = FileUtil.extName(resultFile.getFileName());
+            String suffix = FileUtil.extName(adminFile.getFileName());
             //文件格式校验
             if(StringUtils.isEmpty(suffix) || suffix.length()<3 || !suffix.matches("[a-zA-Z]+") || suffix.indexOf(" ") != -1){
                 return R.error("请上传格式正确的文件");
             }
             adminFile.setSuffix(suffix);
-            //根据文件后缀判断文件类型
-            if(suffix.equalsIgnoreCase("gif") || suffix.equalsIgnoreCase("png")
-                    || suffix.equalsIgnoreCase("jpg") || suffix.equalsIgnoreCase("jpeg")) {
-                String path = MinioServicce.getImgUrl(resultFile.getFileName(), suffix);
-                adminFile.setPath(path);
-                adminFile.setFileType("img");
-            } else if(suffix.equalsIgnoreCase("xlsx") || suffix.equalsIgnoreCase("xls")){
-                adminFile.setFileType("excel");
-            } else if(suffix.equalsIgnoreCase("doc") || suffix.equalsIgnoreCase("docx")){
-                adminFile.setFileType("word");
-            } else if(suffix.equalsIgnoreCase("pdf") || suffix.equalsIgnoreCase("ppt")){
-                adminFile.setFileType("office");
-            } else if(suffix.equalsIgnoreCase("xmind")){
-                adminFile.setFileType("xmind");
-            } else {
-                adminFile.setFileType("file");
-            }
-            adminFile.setFileName(resultFile.getFileName());
-            adminFile.setSize(file.getFile().length());
+
+            //文件格式处理
+            adminFile = withSuffixByFile(adminFile);
+
             //生成
             compositionName = compositionFileName(adminFile.getFolderId(),adminFile.getWorkId(),adminFile.getTypeId(), 1, suffix);
             adminFile.setCompositionName(compositionName);
@@ -171,6 +145,30 @@ public class AdminFileService {
         } catch (RuntimeException e) {
             throw new RuntimeException("上传文件至Minio服务器出现异常");
         }
+    }
+
+    //文件格式处理
+    private AdminFile withSuffixByFile(AdminFile adminFile){
+        String suffix = adminFile.getSuffix();
+        //根据文件后缀判断文件类型
+        if(suffix.equalsIgnoreCase("gif") || suffix.equalsIgnoreCase("png")
+                || suffix.equalsIgnoreCase("jpg") || suffix.equalsIgnoreCase("jpeg")) {
+            String path = MinioServicce.getImgUrl(adminFile.getFileName(), suffix);
+            adminFile.setPath(path);
+            adminFile.setFileType("img");
+        } else if(suffix.equalsIgnoreCase("xlsx") || suffix.equalsIgnoreCase("xls")){
+            adminFile.setFileType("excel");
+        } else if(suffix.equalsIgnoreCase("doc") || suffix.equalsIgnoreCase("docx")){
+            adminFile.setFileType("word");
+        } else if(suffix.equalsIgnoreCase("pdf") || suffix.equalsIgnoreCase("ppt")){
+            adminFile.setFileType("office");
+        } else if(suffix.equalsIgnoreCase("xmind")){
+            adminFile.setFileType("xmind");
+        } else {
+            adminFile.setFileType("file");
+        }
+
+        return adminFile;
     }
 
     /**
@@ -349,28 +347,106 @@ public class AdminFileService {
     }
 
     /**
-     * 通过附件ID将附件放入回收站
+     * 通过附件ID将附件加入回收站(删除)
      * @param id    附件ID
      * @return
      */
     @Before(Tx.class)
-    public R addRecycleById(String fileId){
+    public R addRecycleById(Integer fileId){
         AdminFile adminFile = AdminFile.dao.findById(fileId);
         if(adminFile == null){
             return R.error("附件不存在");
         }
-        adminFile.setDelFlag(1);
-        adminFile.setDelUserId(BaseUtil.getUser().getUserId());
-        adminFile.setDelTime(new Date());
-        adminFile.update();
-        //保存日志
-        AdminFileLog adminFileLog = new AdminFileLog();
-        adminFileLog.setUserId(BaseUtil.getUser().getUserId());
-        adminFileLog.setFileId(adminFile.getFileId());
-        adminFileLog.setContent("用户 " + BaseUtil.getUser().getRealname() + " 将附件 " + adminFile.getCompositionName() + " 加入回收站, 历史版本为: " + adminFile.getFileVersion());
-        saveFileLog(adminFileLog);
+        //执行回收
+        recycleOrReduction(adminFile, 1);
 
         return R.ok("操作成功");
+    }
+
+    /**
+     * 批量加入回收站
+     * @param fileIds   附件id数组字符串
+     * @return
+     */
+    @Before(Tx.class)
+    public R addRecycleByIds(String fileIds){
+        String[] fileIdArr = fileIds.split(",");
+        for(String fileId : fileIdArr){
+            AdminFile adminFile = AdminFile.dao.findById(fileId);
+            if(adminFile == null){
+                return R.error("附件不存在");
+            }
+            //执行回收
+            recycleOrReduction(adminFile, 1);
+        }
+
+        return R.ok("操作成功");
+    }
+
+    /**
+     * 通过附件ID将附件移出回收站(还原)
+     * @param fileId    附件ID
+     * @return
+     */
+    public R removeRecycleById(Integer fileId){
+        AdminFile adminFile = AdminFile.dao.findById(fileId);
+        if(adminFile == null){
+            return R.error("附件不存在");
+        }
+        //执行还原
+        recycleOrReduction(adminFile, 2);
+
+        return R.ok("操作成功");
+    }
+
+    /**
+     * 批量移除回收站
+     * @param fileIds   附件id数组字符串
+     * @return
+     */
+    public R removeRecycleByIds(String fileIds){
+        String[] fileIdArr = fileIds.split(",");
+        for(String fileId : fileIdArr){
+            AdminFile adminFile = AdminFile.dao.findById(fileId);
+            if(adminFile == null){
+                return R.error("附件不存在");
+            }
+            //执行还原
+            recycleOrReduction(adminFile, 2);
+        }
+
+        return R.ok("操作成功");
+    }
+
+    /**
+     * 回收/还原
+     * @param adminFile 附件对象
+     * @param flag      1.回收 2还原
+     */
+    private void recycleOrReduction(AdminFile adminFile, Integer flag){
+        if(flag == 1){
+            adminFile.setDelFlag(1);
+            adminFile.setDelUserId(BaseUtil.getUser().getUserId());
+            adminFile.setDelTime(new Date());
+            adminFile.update();
+            //保存日志
+            AdminFileLog adminFileLog = new AdminFileLog();
+            adminFileLog.setUserId(BaseUtil.getUser().getUserId());
+            adminFileLog.setFileId(adminFile.getFileId());
+            adminFileLog.setContent("用户 " + BaseUtil.getUser().getRealname() + " 将附件 " + adminFile.getCompositionName() + " 加入回收站, 历史版本为: " + adminFile.getFileVersion());
+            saveFileLog(adminFileLog);
+        } else if(flag == 2){
+            adminFile.setDelFlag(0);
+            adminFile.setDelUserId(null);
+            adminFile.setDelTime(null);
+            adminFile.update();
+            //保存日志
+            AdminFileLog adminFileLog = new AdminFileLog();
+            adminFileLog.setUserId(BaseUtil.getUser().getUserId());
+            adminFileLog.setFileId(adminFile.getFileId());
+            adminFileLog.setContent("用户 " + BaseUtil.getUser().getRealname() + " 将附件 " + adminFile.getCompositionName() + " 移出回收站");
+            saveFileLog(adminFileLog);
+        }
     }
 
     /**
@@ -431,6 +507,16 @@ public class AdminFileService {
         if(StringUtils.isEmpty(file.getCompositionName())){
             return R.error("文件名不允许为空");
         }
+        String suffix = FileUtil.extName(file.getCompositionName());
+        //文件格式校验
+        if(StringUtils.isEmpty(suffix) || suffix.length()<3 || !suffix.matches("[a-zA-Z]+") || suffix.indexOf(" ") != -1){
+            return R.error("请按照规范重命名文件");
+        }
+        file.setSuffix(suffix);
+
+        //文件格式处理
+        file = withSuffixByFile(file);
+
         AdminFile adminFile = AdminFile.dao.findById(file.getFileId());
         //保存日志
         AdminFileLog adminFileLog = new AdminFileLog();
@@ -438,6 +524,7 @@ public class AdminFileService {
         adminFileLog.setFileId(file.getFileId());
         adminFileLog.setContent("用户 " + BaseUtil.getUser().getRealname() + " 将文件 " + adminFile.getCompositionName() + " 重命名为: " + file.getCompositionName());
         saveFileLog(adminFileLog);
+
         return file.update() ? R.ok() : R.error();
     }
 
