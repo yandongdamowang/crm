@@ -139,21 +139,52 @@ public class AdminFileController extends Controller {
     }
 
     /**
-     * 通过附件ID将附件放入回收站
+     * 通过附件ID将附件加入回收站(删除)
      */
     @ApiOperation(methods= RequestMethod.POST, description="通过附件ID将附件放入回收站")
     @ApiImplicitParams({
             @ApiImplicitParam(name="fileId", description="附件ID")
     })
-    @Permissions({"file:fileManage:recycle"})
+    @Permissions({"file:fileManage:addRecycle"})
     public void addRecycleById() {
-        renderJson(adminFileService.addRecycleById(getPara("fileId")));
+        renderJson(adminFileService.addRecycleById(getInt("fileId")));
     }
 
-    //TODO 批量加入回收站, 业务层待编码
-    /*public void addRecycleByIds() {
+    /**
+     * 批量加入回收站
+     */
+    @ApiOperation(methods= RequestMethod.POST, description="批量加入回收站")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="fileIds", description="附件ID数组字符串,逗号分隔")
+    })
+    @Permissions({"file:fileManage:addRecycles"})
+    public void addRecycleByIds() {
         renderJson(adminFileService.addRecycleByIds(getPara("fileIds")));
-    }*/
+    }
+
+    /**
+     * 通过附件ID将附件移出回收站(还原)
+     */
+    @ApiOperation(methods= RequestMethod.POST, description="通过附件ID将附件放入回收站")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="fileId", description="附件ID")
+    })
+    @Permissions({"file:fileManage:removeRecycle"})
+    public void removeRecycleById() {
+        renderJson(adminFileService.removeRecycleById(getInt("fileId")));
+    }
+
+    /**
+     * 批量移出回收站
+     */
+    @ApiOperation(methods= RequestMethod.POST, description="批量移出回收站")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="fileIds", description="附件ID数组字符串,逗号分隔")
+    })
+    @Permissions({"file:fileManage:removeRecycles"})
+    public void removeRecycleByIds() {
+        renderJson(adminFileService.removeRecycleByIds(getPara("fileIds")));
+    }
 
     /**
      * 通过ID删除
