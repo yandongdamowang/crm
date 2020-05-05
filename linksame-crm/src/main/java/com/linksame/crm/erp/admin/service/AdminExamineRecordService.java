@@ -22,6 +22,7 @@ import java.util.*;
 public class AdminExamineRecordService {
     /**
      * 第一次添加审核记录和审核日志 type 1 合同 2 回款 userId:授权审批人
+     * Integer type, Long userId, Long ownerUserId, Integer recordId,Integer status
      */
     @Before(Tx.class)
     public Map<String, Integer> saveExamineRecord(Integer type, Long userId, Long ownerUserId, Integer recordId,Integer status) {
@@ -129,7 +130,14 @@ public class AdminExamineRecordService {
      */
     @Before(Tx.class)
     public R auditExamine(Integer recordId, Integer status, String remarks, Integer id, Long nextUserId, Long ownerUserId) {
-
+        /**
+         *Integer recordId = getInt("recordId");//recordId:审核记录id
+         *Integer status = getInt("status");//审核状态 0 未审核 1 审核通过 2 审核拒绝 3 审核中 4 已撤回
+         *Integer id = getInt("id");// id:审核对象的id（合同或者回款的id）
+         *String remarks = get("remarks");//remarks:审核备注
+         *Long nextUserId = getLong("nextUserId");//下一审批人
+         *Long ownerUserId = getLong("ownerUserId");//审批负责人
+         */
         //当前审批人
         Long auditUserId = BaseUtil.getUser().getUserId();
 

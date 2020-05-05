@@ -34,7 +34,7 @@ public class AuthUtil {
                 tableParaMap.put("realm","leads");
                 break;
             case CRM_CONTRACT:
-                tableParaMap.put("tableName", "crm_contract");
+                tableParaMap.put("tableName", "pmp_contract");
                 tableParaMap.put("tableId", "contract_id");
                 tableParaMap.put("realm","contract");
                 break;
@@ -70,10 +70,12 @@ public class AuthUtil {
         List<Long> longs = Aop.get(AdminUserService.class).queryUserByAuth(userId,tablePara.get("realm"));
         StringBuilder authSql = new StringBuilder("select count(*) from ");
         authSql.append(tablePara.get("tableName")).append(" where ").append(tablePara.get("tableId")).append(" = ").append(id);
-        if(! BaseConstant.SUPER_ADMIN_USER_ID.equals(userId) && !roles.contains(BaseConstant.SUPER_ADMIN_ROLE_ID)){
+        boolean equals = BaseConstant.SUPER_ADMIN_USER_ID.equals(userId);
+        boolean contains = roles.contains(BaseConstant.SUPER_ADMIN_ROLE_ID);
+        if(! equals && !contains){
             if(longs != null && longs.size() > 0){
                 authSql.append(" and (owner_user_id in (").append(StrUtil.join(",", longs)).append(")");
-                if("crm_customer".equals(tablePara.get("tableName")) || "crm_business".equals(tablePara.get("tableName")) || "crm_contract".equals(tablePara.get("tableName"))){
+                if("crm_customer".equals(tablePara.get("tableName")) || "crm_business".equals(tablePara.get("tableName")) || "pmp_contract".equals(tablePara.get("tableName"))){
                     authSql.append(" or ro_user_id like CONCAT('%,','").append(userId).append("',',%')").append(" or rw_user_id like CONCAT('%,','").append(userId).append("',',%')");
                 }
                 authSql.append(")");

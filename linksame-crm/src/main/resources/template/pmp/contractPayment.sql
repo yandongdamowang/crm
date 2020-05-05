@@ -31,7 +31,7 @@
     #end
 
     #sql("queryAdvanceList")
-        select pcp.*,pc.contract_number,pc.customer_id,pc.money as contractMoney,pc.proprietor,cc.contractor_name
+        select pcp.*,pc.contract_number,pc.customer_id,pc.money as contractMoney,pc.proprietor,cc.customer_name
         from  pmp_contract as pc left join pmp_contract_payment AS pcp on pcp.contract_id = pc.contract_id
         left join crm_customer AS cc on cc.customer_id = pc.customer_id
         where pcp.is_deleted = '0'
@@ -46,9 +46,9 @@
                 and pc.customer_id = #para(customerId)
             #end
             #if(orderBy =='1')
-               order by pcp.priority desc
+               order by pcp.priority asc
             #else
-                order by pcp.priority asc
+                order by pcp.priority desc
             #end
     #end
 
@@ -97,4 +97,10 @@
             #end
         group by date_format(a.payment_node, '%Y-%m')
     #end
+
+
+    #sql("deleteBycontractIds")
+      delete from pmp_contract_payment where contract_id = ?
+    #end
+
 #end

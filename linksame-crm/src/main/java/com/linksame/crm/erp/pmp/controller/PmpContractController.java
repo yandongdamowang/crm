@@ -10,12 +10,16 @@ import com.jfinal.core.Controller;
 import com.jfinal.core.paragetter.Para;
 import com.linksame.crm.common.annotation.Permissions;
 import com.linksame.crm.common.config.paragetter.BasePageRequest;
-import com.linksame.crm.erp.oa.entity.OaExamine;
-import com.linksame.crm.erp.oa.entity.OaExamineRelation;
 import com.linksame.crm.erp.pmp.entity.PmpContract;
 import com.linksame.crm.erp.pmp.entity.PmpContractPayment;
 import com.linksame.crm.erp.pmp.service.PmpContractService;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -32,6 +36,7 @@ public class PmpContractController extends Controller {
     @Inject
     private PmpContractService pmpContractService;
 
+
     /**
      *
      *  新增合同
@@ -47,14 +52,14 @@ public class PmpContractController extends Controller {
         JSONArray pmpContractPayments2 = jsonObject.getJSONArray("pmpContractPayments");
         for (Object o : pmpContractPayments2) {
             PmpContractPayment pmpContractPayment = JSON.parseObject(o.toString(), PmpContractPayment.class);
-            pmpContractPayment.setBatchId(StrUtil.isNotEmpty(pmpContractPayment.getBatchId()) ? pmpContractPayment.getBatchId() : IdUtil.simpleUUID());
+            pmpContractPayment.setBatchId(StrUtil.isNotEmpty(pmpContract.getBatchId()) ? pmpContract.getBatchId() : IdUtil.simpleUUID());
             pmpContractPayments.add(pmpContractPayment);
         }
         renderJson(pmpContractService.add(pmpContract,pmpContractPayments));
+
     }
 
     /**
-     *
      *  查询审批记录
      */
     @Permissions("project:contract:read")
@@ -108,5 +113,13 @@ public class PmpContractController extends Controller {
     @Permissions("project:contract:index")
     public void queryList(BasePageRequest<PmpContract> basePageRequest){
         renderJson(pmpContractService.queryList(basePageRequest));
+    }
+    /**
+     *  查询账单
+     */
+    @Permissions("project:contract:index")
+    public void contractBill(){
+        Long contractId = getLong("contractId");
+        renderJson(pmpContractService.contractBill(contractId));
     }
 }
