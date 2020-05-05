@@ -44,10 +44,7 @@ public class PmpContract extends BasePmpContract<PmpContract> {
     }
 
     public List<PmpContractPayment> getPmpContractPayment() {
-        return pmpContractPayments;
-    }
 
-    public void setPmpContractPayment(List<PmpContractPayment> pmpContractPayments) {
-        this.pmpContractPayments = pmpContractPayments;
+        return this.pmpContractPayments = pmpContractPayments;
     }
 }

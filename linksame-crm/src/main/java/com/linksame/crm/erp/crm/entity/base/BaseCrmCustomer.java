@@ -9,35 +9,35 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings("serial")
 public abstract class BaseCrmCustomer<M extends BaseCrmCustomer<M>> extends Model<M> implements IBean {
 
-	public void setCustomerId(java.lang.Integer customerId) {
+	public void setCustomerId(Integer customerId) {
 		set("customer_id", customerId);
 	}
 	
-	public java.lang.Integer getCustomerId() {
+	public Integer getCustomerId() {
 		return getInt("customer_id");
 	}
 
-	public void setCustomerName(java.lang.String customerName) {
+	public void setCustomerName(String customerName) {
 		set("customer_name", customerName);
 	}
 	
-	public java.lang.String getCustomerName() {
+	public String getCustomerName() {
 		return getStr("customer_name");
 	}
 
-	public void setFollowup(java.lang.Integer followup) {
+	public void setFollowup(Integer followup) {
 		set("followup", followup);
 	}
 	
-	public java.lang.Integer getFollowup() {
+	public Integer getFollowup() {
 		return getInt("followup");
 	}
 
-	public void setIsLock(java.lang.Integer isLock) {
+	public void setIsLock(Integer isLock) {
 		set("is_lock", isLock);
 	}
 	
-	public java.lang.Integer getIsLock() {
+	public Integer getIsLock() {
 		return getInt("is_lock");
 	}
 
@@ -49,115 +49,115 @@ public abstract class BaseCrmCustomer<M extends BaseCrmCustomer<M>> extends Mode
 		return get("next_time");
 	}
 
-	public void setDealStatus(java.lang.Integer dealStatus) {
+	public void setDealStatus(Integer dealStatus) {
 		set("deal_status", dealStatus);
 	}
 	
-	public java.lang.Integer getDealStatus() {
+	public Integer getDealStatus() {
 		return getInt("deal_status");
 	}
 
-	public void setMobile(java.lang.String mobile) {
+	public void setMobile(String mobile) {
 		set("mobile", mobile);
 	}
 	
-	public java.lang.String getMobile() {
+	public String getMobile() {
 		return getStr("mobile");
 	}
 
-	public void setTelephone(java.lang.String telephone) {
+	public void setTelephone(String telephone) {
 		set("telephone", telephone);
 	}
 	
-	public java.lang.String getTelephone() {
+	public String getTelephone() {
 		return getStr("telephone");
 	}
 
-	public void setWebsite(java.lang.String website) {
+	public void setWebsite(String website) {
 		set("website", website);
 	}
 	
-	public java.lang.String getWebsite() {
+	public String getWebsite() {
 		return getStr("website");
 	}
 
-	public void setRemark(java.lang.String remark) {
+	public void setRemark(String remark) {
 		set("remark", remark);
 	}
 	
-	public java.lang.String getRemark() {
+	public String getRemark() {
 		return getStr("remark");
 	}
 
-	public void setCreateUserId(java.lang.Long createUserId) {
+	public void setCreateUserId(Long createUserId) {
 		set("create_user_id", createUserId);
 	}
 	
-	public java.lang.Long getCreateUserId() {
+	public Long getCreateUserId() {
 		return getLong("create_user_id");
 	}
 
-	public void setOwnerUserId(java.lang.Long ownerUserId) {
+	public void setOwnerUserId(Long ownerUserId) {
 		set("owner_user_id", ownerUserId);
 	}
 	
-	public java.lang.Long getOwnerUserId() {
+	public Long getOwnerUserId() {
 		return getLong("owner_user_id");
 	}
 
-	public void setRoUserId(java.lang.String roUserId) {
+	public void setRoUserId(String roUserId) {
 		set("ro_user_id", roUserId);
 	}
 	
-	public java.lang.String getRoUserId() {
+	public String getRoUserId() {
 		return getStr("ro_user_id");
 	}
 
-	public void setRwUserId(java.lang.String rwUserId) {
+	public void setRwUserId(String rwUserId) {
 		set("rw_user_id", rwUserId);
 	}
 	
-	public java.lang.String getRwUserId() {
+	public String getRwUserId() {
 		return getStr("rw_user_id");
 	}
 
-	public void setAddress(java.lang.String address) {
+	public void setAddress(String address) {
 		set("address", address);
 	}
 	
-	public java.lang.String getAddress() {
+	public String getAddress() {
 		return getStr("address");
 	}
 
-	public void setLocation(java.lang.String location) {
+	public void setLocation(String location) {
 		set("location", location);
 	}
 	
-	public java.lang.String getLocation() {
+	public String getLocation() {
 		return getStr("location");
 	}
 
-	public void setDetailAddress(java.lang.String detailAddress) {
+	public void setDetailAddress(String detailAddress) {
 		set("detail_address", detailAddress);
 	}
 	
-	public java.lang.String getDetailAddress() {
+	public String getDetailAddress() {
 		return getStr("detail_address");
 	}
 
-	public void setLng(java.lang.String lng) {
+	public void setLng(String lng) {
 		set("lng", lng);
 	}
 	
-	public java.lang.String getLng() {
+	public String getLng() {
 		return getStr("lng");
 	}
 
-	public void setLat(java.lang.String lat) {
+	public void setLat(String lat) {
 		set("lat", lat);
 	}
 	
-	public java.lang.String getLat() {
+	public String getLat() {
 		return getStr("lat");
 	}
 
@@ -177,28 +177,29 @@ public abstract class BaseCrmCustomer<M extends BaseCrmCustomer<M>> extends Mode
 		return get("update_time");
 	}
 
-	public void setBatchId(java.lang.String batchId) {
+	public void setBatchId(String batchId) {
 		set("batch_id", batchId);
 	}
 	
-	public java.lang.String getBatchId() {
+	public String getBatchId() {
 		return getStr("batch_id");
 	}
 
-	public M setLastContent(java.lang.String lastContent) {
+	public M setLastContent(String lastContent) {
 		set("last_content", lastContent);
 		return (M)this;
 	}
 
-	public java.lang.String getLastContent() {
+	public String getLastContent() {
 		return getStr("last_content");
 	}
 
-	public void setContractorName(java.lang.String contractorName) {
+	public void setContractorName(String contractorName) {
 		set("contractor_name", contractorName);
 	}
 
-	public java.lang.String getContractorName() {
+	public String getContractorName() {
 		return getStr("contractor_name");
 	}
+
 }

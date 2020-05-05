@@ -97,6 +97,7 @@ public class PmpContractPaymentService {
         Kv kv = Kv.by("contractNumber", jsonObject.getString("contractNumber"))
                 .set("customerId", jsonObject.getLong("customerId"))
                 .set("orderBy", jsonObject.get("orderBy"));
+
         if (basePageRequest.getPageType() == 0){
             List<Record> records = Db.find(Db.getSqlPara("pmp.contractPayment.queryAdvanceList", kv));
             return R.ok().put("data",records);
@@ -109,9 +110,6 @@ public class PmpContractPaymentService {
     public R queryAdvanceBybillId(Long billId) {
         Kv kv = Kv.by("billId", billId).set("orderBy","1");
         Record first = Db.findFirst(Db.getSqlPara("pmp.contractPayment.queryAdvanceList", kv));
-        first.set("amountAdvanced",new BigDecimal(0));//预付金额
-        Long supplier_id = first.getLong("supplier_id");
-        first.set("supplierName","承包商"+supplier_id);
         return R.ok().put("data", first);
     }
 

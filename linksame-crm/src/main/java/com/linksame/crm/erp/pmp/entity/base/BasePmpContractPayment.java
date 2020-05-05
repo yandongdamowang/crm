@@ -14,51 +14,51 @@ import java.util.Date;
 @SuppressWarnings("serial")
 public abstract class BasePmpContractPayment<M extends BasePmpContractPayment<M>> extends Model<M> implements IBean {
 
-    public void setBillId(java.lang.Long billId) {
+    public void setBillId(Long billId) {
         set("bill_id", billId);
     }
 
-    public java.lang.Long getBillId() {
+    public Long getBillId() {
         return getLong("bill_id");
     }
 
-    public void setContractId(java.lang.Long contractId) {
+    public void setContractId(Long contractId) {
         set("contract_id", contractId);
     }
 
-    public java.lang.Long getContractId() {
+    public Long getContractId() {
         return getLong("contract_id");
     }
 
-    public void setProjectId(java.lang.Long projectId) {
+    public void setProjectId(Long projectId) {
         set("project_id", projectId);
     }
 
-    public java.lang.Long getProjectId() {
+    public Long getProjectId() {
         return getLong("project_id");
     }
 
-    public void setPaymentName(java.lang.String paymentName) {
+    public void setPaymentName(String paymentName) {
         set("payment_name", paymentName);
     }
 
-    public java.lang.String getPaymentName() {
+    public String getPaymentName() {
         return getStr("payment_name");
     }
 
-    public void setPaymentClause(java.lang.String paymentClause) {
+    public void setPaymentClause(String paymentClause) {
         set("payment_clause", paymentClause);
     }
 
-    public java.lang.String getPaymentClause() {
+    public String getPaymentClause() {
         return getStr("payment_clause");
     }
 
-    public void setCostPercentage(java.lang.Long costPercentage) {
+    public void setCostPercentage(Long costPercentage) {
         set("cost_percentage", costPercentage);
     }
 
-    public java.lang.Long getCostPercentage() {
+    public Long getCostPercentage() {
         return getLong("cost_percentage");
     }
 
@@ -70,19 +70,19 @@ public abstract class BasePmpContractPayment<M extends BasePmpContractPayment<M>
         return get("money");
     }
 
-    public void setPaymentStage(java.lang.Integer paymentStage) {
+    public void setPaymentStage(Integer paymentStage) {
         set("payment_stage", paymentStage);
     }
 
-    public java.lang.Integer getPaymentStage() {
+    public Integer getPaymentStage() {
         return getInt("payment_stage");
     }
 
-    public void setPriority(java.lang.String priority) {
+    public void setPriority(String priority) {
         set("priority", priority);
     }
 
-    public java.lang.String getPriority() {
+    public String getPriority() {
         return getStr("priority");
     }
 
@@ -110,51 +110,51 @@ public abstract class BasePmpContractPayment<M extends BasePmpContractPayment<M>
         return get("update_time");
     }
 
-    public void setStatus(java.lang.String status) {
+    public void setStatus(String status) {
         set("status", status);
     }
 
-    public java.lang.String getStatus() {
+    public String getStatus() {
         return getStr("status");
     }
 
-    public void setIsDeleted(java.lang.String isDeleted) {
+    public void setIsDeleted(String isDeleted) {
         set("is_deleted", isDeleted);
     }
 
-    public java.lang.String getIsDeleted() {
+    public String getIsDeleted() {
         return getStr("is_deleted");
     }
 
-    public void setTradeForm(java.lang.String tradeForm) {
+    public void setTradeForm(String tradeForm) {
         set("trade_form", tradeForm);
     }
 
-    public java.lang.String getTradeForm() {
+    public String getTradeForm() {
         return getStr("trade_form");
     }
 
-    public void setTradeStatus(java.lang.String tradeStatus) {
+    public void setTradeStatus(String tradeStatus) {
         set("trade_status", tradeStatus);
     }
 
-    public java.lang.String getTradeStatus() {
+    public String getTradeStatus() {
         return getStr("trade_status");
     }
 
-    public void setBatchId(java.lang.String batchId) {
+    public void setBatchId(String batchId) {
         set("batch_id", batchId);
     }
 
-    public java.lang.String getBatchId() {
+    public String getBatchId() {
         return getStr("batch_id");
     }
 
-    public void setPracticalCostPercentage(java.lang.Long practicalCostPercentage) {
+    public void setPracticalCostPercentage(Long practicalCostPercentage) {
         set("practical_cost_percentage", practicalCostPercentage);
     }
 
-    public java.lang.Long getPracticalCostPercentage() {
+    public Long getPracticalCostPercentage() {
         return getLong("practical_cost_percentage");
     }
 
@@ -164,6 +164,22 @@ public abstract class BasePmpContractPayment<M extends BasePmpContractPayment<M>
 
     public java.math.BigDecimal getPracticalMoney() {
         return get("practical_money");
+    }
+
+    public void setExamineRecordId(Integer examineRecordId) {
+        set("examine_record_id", examineRecordId);
+    }
+
+    public Integer getExamineRecordId() {
+        return getInt("examine_record_id");
+    }
+
+    public void setCheckStatus(Integer checkStatus) {
+        set("check_status", checkStatus);
+    }
+
+    public Integer getCheckStatus() {
+        return getInt("check_status");
     }
 
 }

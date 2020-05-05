@@ -1,5 +1,7 @@
 package com.linksame.crm.erp.pmp.service;
 
+import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.aop.Before;
 import com.jfinal.aop.Inject;
@@ -10,6 +12,8 @@ import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.linksame.crm.common.config.paragetter.BasePageRequest;
 import com.linksame.crm.erp.admin.service.AdminExamineRecordService;
+import com.linksame.crm.erp.crm.common.CrmEnum;
+import com.linksame.crm.erp.crm.entity.CrmContract;
 import com.linksame.crm.erp.crm.service.CrmRecordService;
 import com.linksame.crm.erp.pmp.common.PmpInterface;
 import com.linksame.crm.erp.pmp.entity.PmpContract;
@@ -19,9 +23,9 @@ import com.linksame.crm.utils.R;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 /**
@@ -41,12 +45,14 @@ public class PmpContractService {
 
     @Before(Tx.class)
     public R add(PmpContract pmpContract,List<PmpContractPayment> pmpContractPayments) {
-        return Db.tx(() -> {
+        if (!Db.tx(() -> {
             pmpContract.setCreationTime(new Date(System.currentTimeMillis()));
             pmpContract.setUpdateTime(new Date(System.currentTimeMillis()));
             pmpContract.setCheckStatus(0);
             pmpContract.setCreateUserId(BaseUtil.getUserId());
-            boolean save = pmpContract.save();
+            pmpContract.setRwUserId(",");
+            pmpContract.setRoUserId(",");
+            pmpContract.save();
             BigDecimal money = pmpContract.getMoney();
             BigDecimal money1 = new BigDecimal(0);
             //保存 合同
@@ -64,17 +70,19 @@ public class PmpContractService {
                     contractPayment.setCreationTime(new Date(System.currentTimeMillis()));
                     contractPayment.setpracticalMoney(new BigDecimal(0));
                     contractPayment.setPracticalCostPercentage(0L);
-                    boolean save1 = contractPayment.save();
+                    contractPayment.save();
                 } else {
-                    return false;//R.error("预付款数据缺失");
+                    return false;
                 }
             }
             if (money.compareTo(money1) != 0) {
-                return false;//R.error("预付款金额不符");
+                return false;
             }
             //保存 附件
-            return true;//
-        }) ? R.ok() : R.error();
+
+            return true;
+        })) return R.error();
+        return R.ok();
     }
 
     public R queryById(Long contractId) {
@@ -83,8 +91,9 @@ public class PmpContractService {
         if (pmpContract != null){
             pmpContract.remove("status","is_deleted");
         }
+
 //        List<PmpContractPayment> contractPayment = pmpContractPaymentService.findByContractId(contractId,null);
-        return R.ok().put("pmpContract",pmpContract);//.put("pmpContractPayment",contractPayment);
+        return R.ok().put("pmpContract",pmpContract);
     }
 
     private final String PAYMENTRATION = "paymentRatio"; //支付比例
@@ -96,15 +105,14 @@ public class PmpContractService {
         Kv kv= Kv.by("contractNumber", jsonObject.getString("contractNumber"))
                 .set("customerId", jsonObject.getLong("customerId"))
                 .set("orderBy", jsonObject.get("orderBy"));
-        List<Record> groupBy = Db.find("SELECT pc.customer_id,cc.contractor_name FROM pmp_contract AS pc LEFT JOIN crm_customer AS cc ON pc.customer_id = cc.customer_id WHERE 1=1 GROUP BY pc.customer_id");
-        if (basePageRequest.getPageType() == 0){
+        List<Record> groupBy = Db.find("SELECT pc.customer_id,cc.contractor_name FROM pmp_contract AS pc LEFT JOIN crm_customer AS cc ON pc.customer_id = cc.customer_id WHERE 1=1 GROUP BY pc.customer_id");if (basePageRequest.getPageType() == 0){
             List<Record> records = Db.find(Db.getSqlPara("pmp.contract.queryList", kv));
             billLoading(records);
             return R.ok().put("data",records).put("groupBy",groupBy);
         }else {
-            Page<Record> paginate = Db.paginate(basePageRequest.getPage(), basePageRequest.getLimit(), Db.getSqlPara("pmp.contract.queryList", kv));
-            billLoading(paginate.getList());
-            return R.ok().put("data", paginate).put("groupBy",groupBy);
+            Page<Record> records = Db.paginate(basePageRequest.getPage(), basePageRequest.getLimit(), Db.getSqlPara("pmp.contract.queryList", kv));
+            billLoading(records.getList());
+            return R.ok().put("data",records).put("groupBy",groupBy);
         }
     }
 
@@ -220,7 +228,7 @@ public class PmpContractService {
         }
         return Db.tx(()->{
             Db.batch(Db.getSql("pmp.contract.deleteByIds"), "contract_id", idsList, 100);
-            Db.batch("delete from pmp_contract_payment where contract_id = ?", "batch_id", idsList, 100);
+            Db.batch(Db.getSql("pmp.contractPayment.deleteBycontractIds"), "contract_id", idsList, 100);
             return true;
         }) ? R.ok() : R.error();
     }
@@ -229,5 +237,11 @@ public class PmpContractService {
         List<Record> records = Db.find(Db.getSql("pmp.contract.contractApprove"), examineRecordId);
 
         return R.ok().put("date",records);
+    }
+
+    public R contractBill(Long contractId) {
+        Long money = Db.queryLong("SELECT SUM(pcp.money) FROM pmp_contract AS pc LEFT JOIN pmp_contract_payment AS pcp ON pcp.contract_id = pc.contract_id where pc.contract_id = ?",  contractId);
+        Long practicaAdvanced = Db.queryLong("SELECT SUM(pcpr.practica_advanced) FROM pmp_contract AS pc LEFT JOIN pmp_contract_payment_record AS pcpr ON pcpr.contract_id = pc.contract_id where pc.contract_id = ?", contractId);
+        return R.ok().put("advanceMoney",money).put("accountPaid",practicaAdvanced);
     }
 }

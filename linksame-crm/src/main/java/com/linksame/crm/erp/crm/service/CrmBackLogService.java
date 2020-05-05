@@ -219,7 +219,7 @@ public class CrmBackLogService {
         JSONObject jsonObject = basePageRequest.getJsonObject();
         Integer type = jsonObject.getInteger("type");
         Integer isSub = jsonObject.getInteger("isSub");
-        StringBuffer stringBuffer = new StringBuffer("select contract_id from crm_contract as a inner join admin_examine_record as b on a.examine_record_id = b.record_id left join admin_examine_log as c on b.record_id = c.record_id where c.is_recheck != 1 and ifnull(b.examine_step_id, 1) = ifnull(c.examine_step_id, 1) and");
+        StringBuffer stringBuffer = new StringBuffer("select contract_id from pmp_contract as a inner join admin_examine_record as b on a.examine_record_id = b.record_id left join admin_examine_log as c on b.record_id = c.record_id where c.is_recheck != 1 and ifnull(b.examine_step_id, 1) = ifnull(c.examine_step_id, 1) and");
         if (type == 1){
             stringBuffer.append(" a.check_status in (0,3) and c.examine_status in (0,3)");
         }else if (type == 2){
