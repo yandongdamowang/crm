@@ -26,7 +26,6 @@ import com.linksame.crm.erp.crm.entity.CrmContract;
 import com.linksame.crm.erp.crm.entity.CrmCustomer;
 import com.linksame.crm.erp.oa.common.OaEnum;
 import com.linksame.crm.erp.oa.entity.*;
-import com.linksame.crm.erp.pmp.entity.PmpContract;
 import com.linksame.crm.utils.*;
 import com.linksame.crm.erp.oa.entity.*;
 import com.linksame.crm.utils.*;
@@ -144,31 +143,28 @@ public class OaExamineService{
         AdminUser user = BaseUtil.getUser();
         OaExamine oaExamine = jsonObject.getObject("oaExamine", OaExamine.class);
         boolean oaAuth = AuthUtil.isOaAuth(OaEnum.EXAMINE_TYPE_KEY.getTypes(), oaExamine.getExamineId());
-        //判断是不是进行中的审批
         if(oaAuth){
             return R.noAuth();
         }
-        //审批时间 校验
         if(oaExamine.getStartTime() != null && oaExamine.getEndTime() != null){
             if((oaExamine.getStartTime().compareTo(oaExamine.getEndTime())) == 1){
                 return R.error("审批结束时间早于开始时间");
             }
         }
         boolean bol;
-        //生成    批次ID
         String batchId = StrUtil.isNotEmpty(oaExamine.getBatchId()) ? oaExamine.getBatchId() : IdUtil.simpleUUID();
-        adminFieldService.save(jsonObject.getJSONArray("field"), batchId);//？？？？？？？？？？？？
+        adminFieldService.save(jsonObject.getJSONArray("field"), batchId);
         oaExamine.setBatchId(batchId);
-        String checkUserIds = jsonObject.getString("checkUserId");//发起人
-        Integer categoryId = oaExamine.getCategoryId();//审批类型   合同 7
-        OaExamineCategory oaExamineCategory = OaExamineCategory.dao.findById(categoryId);//审批类型
-        OaExamineStep oaExamineStep = new OaExamineStep();//创建审批步骤
+        String checkUserIds = jsonObject.getString("checkUserId");
+        Integer categoryId = oaExamine.getCategoryId();
+        OaExamineCategory oaExamineCategory = OaExamineCategory.dao.findById(categoryId);
+        OaExamineStep oaExamineStep = new OaExamineStep();
         Integer examineType = oaExamineCategory.getExamineType();
         if(oaExamineCategory.getExamineType() == 1){
             oaExamineStep = OaExamineStep.dao.findFirst("SELECT * FROM oa_examine_step WHERE category_id = ? ORDER BY step_num LIMIT 0,1", categoryId);
         }
         Integer recordId = null;
-        //创建创建或者更新
+        //创建审批记录
         if(oaExamine.getExamineId() == null){
             oaExamine.setCreateUserId(user.getUserId());
             oaExamine.setCreateTime(new Date());
@@ -181,11 +177,11 @@ public class OaExamineService{
             recordId = Db.queryInt("select  record_id from oa_examine_record where examine_id = ? limit 1", oaExamine.getExamineId());
         }
         oaExamine = new OaExamine().findById(oaExamine.getExamineId());
-        OaExamineRecord oaExamineRecord = new OaExamineRecord();//创建审核记录
+        OaExamineRecord oaExamineRecord = new OaExamineRecord();
         oaExamineRecord.setExamineId(oaExamine.getExamineId());
         oaExamineRecord.setExamineStepId(oaExamineStep.getStepId());
-        oaExamineRecord.setExamineStatus(0);//审核状态 0 未审核 1 审核通过 2 审核拒绝 3 审核中 4 已撤回
-        //新增或者 修改审批记录
+        oaExamineRecord.setExamineStatus(0);
+        //生成审批记录
         if(recordId == null){
             oaExamineRecord.setCreateUser(user.getUserId());
             oaExamineRecord.setCreateTime(new Date());
@@ -218,27 +214,22 @@ public class OaExamineService{
             oaExamineRecord.update();
         }else{
             //添加审核日志
-            Set<Integer> integers = TagUtil.toSet(checkUserIds);
-            for(Integer userId : integers){
-                OaExamineLog oaExamineLog = new OaExamineLog();//创建审核日志
+            for(Integer userId : TagUtil.toSet(checkUserIds)){
+                OaExamineLog oaExamineLog = new OaExamineLog();
                 oaExamineLog.setRecordId(oaExamineRecord.getRecordId());
                 oaExamineLog.setOrderId(1);
                 if(oaExamineStep.getStepId() != null){
                     oaExamineLog.setExamineStepId(oaExamineStep.getStepId());
                 }
-                oaExamineLog.setExamineStatus(0);//审核状态 0 未审核 1 审核通过 2 审核拒绝4 撤回审核
+                oaExamineLog.setExamineStatus(0);
                 oaExamineLog.setCreateUser(user.getUserId());
                 oaExamineLog.setCreateTime(new Date());
-                oaExamineLog.setExamineUser(Long.valueOf(userId));//审核人
+                oaExamineLog.setExamineUser(Long.valueOf(userId));
                 oaExamineLog.save();
             }
         }
-        Integer examineId = oaExamine.getExamineId();
-        Integer types = OaEnum.EXAMINE_TYPE_KEY.getTypes();
-        int i = oaExamine.getUpdateTime() == null ? 1 : 2;
-        String joinIds = oaActionRecordService.getJoinIds(user.getUserId(), TagUtil.fromString(checkUserIds));
-        oaActionRecordService.addRecord(examineId,types, i,joinIds, "");//oa操作记录
-        if(jsonObject.get("oaExamineRelation") != null){//审批关联业务
+        oaActionRecordService.addRecord(oaExamine.getExamineId(), OaEnum.EXAMINE_TYPE_KEY.getTypes(), oaExamine.getUpdateTime() == null ? 1 : 2, oaActionRecordService.getJoinIds(user.getUserId(), TagUtil.fromString(checkUserIds)), "");
+        if(jsonObject.get("oaExamineRelation") != null){
             OaExamineRelation oaExamineRelation = jsonObject.getObject("oaExamineRelation", OaExamineRelation.class);
             oaExamineRelation.setRId(null);
             oaExamineRelation.setBusinessIds(TagUtil.fromString(oaExamineRelation.getBusinessIds()));
@@ -249,7 +240,7 @@ public class OaExamineService{
             oaExamineRelation.setCreateTime(new Date());
             oaExamineRelation.save();
         }
-        if(jsonObject.get("oaExamineTravelList") != null){//差旅行程表
+        if(jsonObject.get("oaExamineTravelList") != null){
             JSONArray oaExamineRelation = jsonObject.getJSONArray("oaExamineTravelList");
             for(Object json : oaExamineRelation){
                 OaExamineTravel oaExamineTravel = TypeUtils.castToJavaBean(json, OaExamineTravel.class);
@@ -530,14 +521,13 @@ public class OaExamineService{
                     }
                 }
             }
-            //修改的合同指向
             relationRecord.set("customerList", customerList);
-            List<PmpContract> contactsList = new ArrayList<>();
+            List<CrmContacts> contactsList = new ArrayList<>();
             if(record.getStr("contacts_ids") != null && ! record.getStr("contacts_ids").isEmpty()){
                 for(Integer contactsId : TagUtil.toSet(record.getStr("contacts_ids"))){
-                    PmpContract pmpContract = PmpContract.dao.findById(contactsId);
-                    if(pmpContract != null){
-                        contactsList.add(pmpContract);
+                    CrmContacts crmContacts = CrmContacts.dao.findById(contactsId);
+                    if(crmContacts != null){
+                        contactsList.add(crmContacts);
                     }
                 }
             }
