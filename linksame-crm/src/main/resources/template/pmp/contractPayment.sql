@@ -46,9 +46,9 @@
                 and pc.customer_id = #para(customerId)
             #end
             #if(orderBy =='1')
-               order by pcp.priority asc
+               order by pcp.priority desc
             #else
-                order by pcp.priority desc
+                order by pcp.priority asc
             #end
     #end
 
