@@ -91,5 +91,8 @@
     #sql("contractApprove")
          select * from admin_examine_log where record_id = ?
     #end
---      and is_recheck = 0
+
+  #sql ("updateCheckStatusById")
+    update pmp_contract set check_status = ? where contract_id = ?
+  #end
 #end

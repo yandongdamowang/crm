@@ -8,6 +8,7 @@ import com.linksame.crm.erp.admin.entity.*;
 import com.linksame.crm.erp.admin.entity.*;
 import com.linksame.crm.erp.crm.entity.CrmContract;
 import com.linksame.crm.erp.crm.entity.CrmReceivables;
+import com.linksame.crm.erp.pmp.entity.PmpContract;
 import com.linksame.crm.utils.BaseUtil;
 import com.linksame.crm.utils.R;
 import com.jfinal.aop.Before;
@@ -159,7 +160,7 @@ public class AdminExamineRecordService {
         //查询审批流程
         AdminExamine examine = AdminExamine.dao.findById(examineRecord.getExamineId());
         if (examine.getCategoryType() == 1) {
-            ownerUserId = Long.valueOf(CrmContract.dao.findById(id).getOwnerUserId());
+            ownerUserId = Long.valueOf(PmpContract.dao.findById(id).getOwnerUserId());
         } else {
             ownerUserId = Long.valueOf(CrmReceivables.dao.findById(id).getOwnerUserId());
         }
@@ -192,7 +193,7 @@ public class AdminExamineRecordService {
 
             if (examine.getCategoryType() == 1) {
                 //合同
-                Db.update(Db.getSql("crm.contract.updateCheckStatusById"),status,id);
+                Db.update(Db.getSql("pmp.contract.updateCheckStatusById"),status,id);
             } else {
                 //回款
                 Db.update(Db.getSql("crm.receivables.updateCheckStatusById"),status,id);
@@ -225,11 +226,11 @@ public class AdminExamineRecordService {
             examineLog.save();
             if (examine.getCategoryType() == 1) {
                 //合同
-                CrmContract contract = CrmContract.dao.findById(id);
+                PmpContract contract = PmpContract.dao.findById(id);
                 if (contract.getCheckStatus() == 1) {
                     return R.error("该合同已审核通过，不能撤回！");
                 }
-                Db.update(Db.getSql("crm.contract.updateCheckStatusById"),4,id);
+                Db.update(Db.getSql("pmp.contract.updateCheckStatusById"),4,id);
             } else {
                 //回款
                 CrmReceivables receivables = CrmReceivables.dao.findById(id);
@@ -273,7 +274,7 @@ public class AdminExamineRecordService {
                         examineRecord.setExamineStatus(3);
                         if (examine.getCategoryType() == 1) {
                             //合同
-                            Db.update(Db.getSql("crm.contract.updateCheckStatusById"),3,id);
+                            Db.update(Db.getSql("pmp.contract.updateCheckStatusById"),3,id);
 
                         } else {
                             //回款
@@ -346,7 +347,7 @@ public class AdminExamineRecordService {
                         // AdminExamineLog examineLog = new AdminExamineLog();
                         if (examine.getCategoryType() == 1) {
                             //合同
-                            Db.update(Db.getSql("crm.contract.updateCheckStatusById"),3,id);
+                            Db.update(Db.getSql("pmp.contract.updateCheckStatusById"),3,id);
                         } else {
                             //回款
                             Db.update(Db.getSql("crm.receivables.updateCheckStatusById"),3,id);
@@ -355,8 +356,8 @@ public class AdminExamineRecordService {
                         //没有下一审批流程步骤
                         if (examine.getCategoryType() == 1) {
                             //合同
-                            Db.update(Db.getSql("crm.contract.updateCheckStatusById"),1,id);
-                            CrmContract contract = CrmContract.dao.findById(id);
+                            Db.update(Db.getSql("pmp.contract.updateCheckStatusById"),1,id);
+                            PmpContract contract = PmpContract.dao.findById(id);
                             Db.update(Db.getSql("crm.customer.updateDealStatusById"),"1",contract.getCustomerId());
                         } else {
                             //回款
@@ -381,7 +382,7 @@ public class AdminExamineRecordService {
                     examineLog.save();
                     if (examine.getCategoryType() == 1) {
                         //合同
-                        Db.update(Db.getSql("crm.contract.updateCheckStatusById"),3,id);
+                        Db.update(Db.getSql("pmp.contract.updateCheckStatusById"),3,id);
                     } else {
                         //回款
                         Db.update(Db.getSql("crm.receivables.updateCheckStatusById"),3,id);
@@ -390,8 +391,8 @@ public class AdminExamineRecordService {
                     //没有下一审批人
                     if (examine.getCategoryType() == 1) {
                         //合同
-                        Db.update(Db.getSql("crm.contract.updateCheckStatusById"),1,id);
-                        CrmContract contract = CrmContract.dao.findById(id);
+                        Db.update(Db.getSql("pmp.contract.updateCheckStatusById"),1,id);
+                        PmpContract contract = PmpContract.dao.findById(id);
                         Db.update(Db.getSql("crm.customer.updateDealStatusById"),1,contract.getCustomerId());
                     } else {
                         //回款
