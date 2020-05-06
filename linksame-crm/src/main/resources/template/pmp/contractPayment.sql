@@ -103,4 +103,7 @@
       delete from pmp_contract_payment where contract_id = ?
     #end
 
+     #sql ("updateCheckStatusById")
+      update pmp_contract_payment set check_status = ? where bill_id = ?
+     #end
 #end

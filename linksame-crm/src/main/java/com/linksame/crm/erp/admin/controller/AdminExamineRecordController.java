@@ -5,6 +5,7 @@ import com.linksame.crm.erp.admin.service.AdminExamineRecordService;
 import com.jfinal.aop.Inject;
 import com.jfinal.core.Controller;
 import com.linksame.crm.erp.crm.common.CrmEnum;
+import com.linksame.crm.erp.crm.service.CrmRecordService;
 import com.linksame.crm.erp.pmp.entity.PmpContract;
 import com.linksame.crm.erp.pmp.entity.PmpContractPayment;
 import com.linksame.crm.erp.pmp.service.PmpContractPaymentService;
@@ -27,8 +28,10 @@ public class AdminExamineRecordController extends Controller {
     @Inject
     private PmpContractPaymentService pmpContractPaymentService;
 
+    @Inject
+    private CrmRecordService crmRecordService;
     /**
-     * 审核合同或者回款 recordId:审核记录id status:审批状态：审核状态  1 审核通过 2 审核拒绝 4 已撤回
+     * 审核合同或者付款 recordId:审核记录id status:审批状态：审核状态  1 审核通过 2 审核拒绝 4 已撤回
      * remarks:审核备注 id:审核对象的id（合同或者回款的id）
      */
     public void auditExamine(){
@@ -45,9 +48,9 @@ public class AdminExamineRecordController extends Controller {
      * remarks:审核备注 id:审核对象的id（合同或者回款的id）
      */
     public void addExamine(){
-        Integer type = getInt("type");
-        Long checkUserId = getLong("checkUserId");
-        Long Id = getLong("id");
+        Integer type = getInt("type");//审核合同或者付款
+        Long checkUserId = getLong("checkUserId");//添加或者审核人
+        Long Id = getLong("id");//预付款ID
         /**
          * type 审批类型  1 合同审批 2.付款审批
          * checkUserId 授权审批人
@@ -55,9 +58,15 @@ public class AdminExamineRecordController extends Controller {
          * recordId 审批ID
          * status 审批状态 审核状态 0 未审核 1 审核通过 2 审核拒绝 3 审核中 4 已撤回
          */
+        PmpContract pmpContract = null;
+        PmpContractPayment pmpContractPayment = null;
+        if (type != null && type.equals(2)){
+            pmpContractPayment = PmpContractPayment.dao.findById(Id);
+            Id = pmpContractPayment.getContractId();
+        }
+        pmpContract = PmpContract.dao.findById(Id);
+        Map<String, Integer> map = examineRecordService.saveExamineRecord(type, checkUserId, pmpContract.getOwnerUserId(), null, null);
         if (type != null && type.equals(1)){
-            PmpContract pmpContract = PmpContract.dao.findById(Id);
-            Map<String, Integer> map = examineRecordService.saveExamineRecord(type, checkUserId, pmpContract.getOwnerUserId(), null, null);
             if (map.get("status") == 0) {
                 renderJson(R.error("没有启动的审核步骤，不能添加！"));
             } else {
@@ -68,13 +77,11 @@ public class AdminExamineRecordController extends Controller {
             } else {
                 pmpContract.setCheckStatus(0);
             }
-
+            crmRecordService.updateRecord(new PmpContract().dao().findById(Id), pmpContract, CrmEnum.CRM_CONTRACT);
+            pmpContract.setUpdateTime(new Date(System.currentTimeMillis()));
             boolean save = pmpContract.update();
             renderJson(save ? R.ok() : R.error());
         }else if (type != null && type.equals(2)){
-            PmpContractPayment pmpContractPayment = PmpContractPayment.dao.findById(Id);
-            PmpContract pmpContract = PmpContract.dao.findById(pmpContractPayment.getContractId());
-            Map<String, Integer> map = examineRecordService.saveExamineRecord(type, checkUserId, pmpContract.getOwnerUserId(), null, null);
             if (map.get("status") == 0) {
                 renderJson(R.error("没有启动的审核步骤，不能添加！"));
             } else {
@@ -85,8 +92,11 @@ public class AdminExamineRecordController extends Controller {
             } else {
                 pmpContractPayment.setCheckStatus(0);
             }
+            crmRecordService.updateRecord(new PmpContractPayment().dao().findById(Id), pmpContractPayment, CrmEnum.PMP_PAYMENT);
+
             pmpContractPayment.setUpdateTime(new Date(System.currentTimeMillis()));
             boolean update = pmpContractPayment.update();
+            renderJson(update ? R.ok() : R.error());
         }
     }
     /**

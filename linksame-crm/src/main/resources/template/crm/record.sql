@@ -8,7 +8,7 @@
     union all
     select  distinct COLUMN_NAME , COLUMN_COMMENT,'1' as type FROM INFORMATION_SCHEMA.COLUMNS  where table_name = 'crm_leads'
     union all
-    select  distinct COLUMN_NAME , COLUMN_COMMENT,'6' as type FROM INFORMATION_SCHEMA.COLUMNS  where table_name = 'crm_contract'
+    select  distinct COLUMN_NAME , COLUMN_COMMENT,'6' as type FROM INFORMATION_SCHEMA.COLUMNS  where table_name = 'pmp_contract'
     union all
     select  distinct COLUMN_NAME , COLUMN_COMMENT,'7' as type FROM INFORMATION_SCHEMA.COLUMNS  where table_name = 'crm_receivables'
     union all

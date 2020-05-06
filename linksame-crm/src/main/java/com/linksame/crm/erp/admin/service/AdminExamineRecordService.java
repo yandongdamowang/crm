@@ -9,6 +9,7 @@ import com.linksame.crm.erp.admin.entity.*;
 import com.linksame.crm.erp.crm.entity.CrmContract;
 import com.linksame.crm.erp.crm.entity.CrmReceivables;
 import com.linksame.crm.erp.pmp.entity.PmpContract;
+import com.linksame.crm.erp.pmp.entity.PmpContractPayment;
 import com.linksame.crm.utils.BaseUtil;
 import com.linksame.crm.utils.R;
 import com.jfinal.aop.Before;
@@ -162,7 +163,7 @@ public class AdminExamineRecordService {
         if (examine.getCategoryType() == 1) {
             ownerUserId = Long.valueOf(PmpContract.dao.findById(id).getOwnerUserId());
         } else {
-            ownerUserId = Long.valueOf(CrmReceivables.dao.findById(id).getOwnerUserId());
+            ownerUserId = Long.valueOf(PmpContractPayment.dao.findById(id).getOwnerUserId());
         }
         //查询当前审批步骤
         AdminExamineStep examineStep = AdminExamineStep.dao.findById(examineRecord.getExamineStepId());
@@ -196,7 +197,7 @@ public class AdminExamineRecordService {
                 Db.update(Db.getSql("pmp.contract.updateCheckStatusById"),status,id);
             } else {
                 //回款
-                Db.update(Db.getSql("crm.receivables.updateCheckStatusById"),status,id);
+                Db.update(Db.getSql("pmp.contractPayment.updateCheckStatusById"),status,id);
             }
         } else if (status == 4) {
             //先查询该审批流程的审批步骤的第一步
@@ -233,11 +234,11 @@ public class AdminExamineRecordService {
                 Db.update(Db.getSql("pmp.contract.updateCheckStatusById"),4,id);
             } else {
                 //回款
-                CrmReceivables receivables = CrmReceivables.dao.findById(id);
-                if (receivables.getCheckStatus() == 1) {
-                    return R.error("该回款已审核通过，不能撤回！");
+                PmpContractPayment pmpContractPayment = PmpContractPayment.dao.findById(id);
+                if (pmpContractPayment.getCheckStatus() == 1) {
+                    return R.error("该付款已审核通过，不能撤回！");
                 }
-                Db.update(Db.getSql("crm.receivables.updateCheckStatusById"),4,id);
+                Db.update(Db.getSql("pmp.contractPayment.updateCheckStatusById"),4,id);
             }
         } else {
             //审核通过
@@ -278,7 +279,7 @@ public class AdminExamineRecordService {
 
                         } else {
                             //回款
-                            Db.update(Db.getSql("crm.receivables.updateCheckStatusById"),3,id);
+                            Db.update(Db.getSql("pmp.contractPayment.updateCheckStatusById"),3,id);
 
                         }
                     }
@@ -350,7 +351,7 @@ public class AdminExamineRecordService {
                             Db.update(Db.getSql("pmp.contract.updateCheckStatusById"),3,id);
                         } else {
                             //回款
-                            Db.update(Db.getSql("crm.receivables.updateCheckStatusById"),3,id);
+                            Db.update(Db.getSql("pmp.contractPayment.updateCheckStatusById"),3,id);
                         }
                     } else {
                         //没有下一审批流程步骤
@@ -361,7 +362,7 @@ public class AdminExamineRecordService {
                             Db.update(Db.getSql("crm.customer.updateDealStatusById"),"1",contract.getCustomerId());
                         } else {
                             //回款
-                            Db.update(Db.getSql("crm.receivables.updateCheckStatusById"),1,id);
+                            Db.update(Db.getSql("pmp.contractPayment.updateCheckStatusById"),1,id);
                         }
 
                     }
@@ -385,7 +386,7 @@ public class AdminExamineRecordService {
                         Db.update(Db.getSql("pmp.contract.updateCheckStatusById"),3,id);
                     } else {
                         //回款
-                        Db.update(Db.getSql("crm.receivables.updateCheckStatusById"),3,id);
+                        Db.update(Db.getSql("pmp.contractPayment.updateCheckStatusById"),3,id);
                     }
                 } else {
                     //没有下一审批人
@@ -396,7 +397,7 @@ public class AdminExamineRecordService {
                         Db.update(Db.getSql("crm.customer.updateDealStatusById"),1,contract.getCustomerId());
                     } else {
                         //回款
-                        Db.update(Db.getSql("crm.receivables.updateCheckStatusById"),1,id);
+                        Db.update(Db.getSql("pmp.contractPayment.updateCheckStatusById"),1,id);
                     }
                 }
 
