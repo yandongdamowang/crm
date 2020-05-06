@@ -53,6 +53,9 @@ public class PmpContractService {
             pmpContract.setRwUserId(",");
             pmpContract.setRoUserId(",");
             pmpContract.save();
+            Long contractId = pmpContract.getLong("contract_id");
+            int i = contractId.intValue();
+            crmRecordService.addRecord(i  , CrmEnum.CRM_CONTRACT);
             BigDecimal money = pmpContract.getMoney();
             BigDecimal money1 = new BigDecimal(0);
             //保存 合同

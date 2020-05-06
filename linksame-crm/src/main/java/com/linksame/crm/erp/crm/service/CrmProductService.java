@@ -69,6 +69,7 @@ public class CrmProductService {
             crmProduct.setCreateTime(DateUtil.date());
             crmProduct.setUpdateTime(DateUtil.date());
             crmProduct.setOwnerUserId(BaseUtil.getUser().getUserId());
+
             crmProduct.setBatchId(batchId);
             boolean save = crmProduct.save();
             crmRecordService.addRecord(crmProduct.getProductId(), CrmEnum.CRM_PRODUCT);

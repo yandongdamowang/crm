@@ -182,4 +182,12 @@ public abstract class BasePmpContractPayment<M extends BasePmpContractPayment<M>
         return getInt("check_status");
     }
 
+    public void setOwnerUserId(Long ownerUserId) {
+        set("owner_user_id", ownerUserId);
+    }
+
+    public Long getOwnerUserId() {
+        return getLong("owner_user_id");
+    }
+
 }

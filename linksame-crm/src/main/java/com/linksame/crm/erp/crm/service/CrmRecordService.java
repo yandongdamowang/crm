@@ -63,7 +63,7 @@ public class CrmRecordService<T extends Model>{
      * @param crmEnum 类型
      */
     @SuppressWarnings("unchecked")
-    void updateRecord(T oldObj, T newObj, CrmEnum crmEnum){
+    public void updateRecord(T oldObj, T newObj, CrmEnum crmEnum){
         init();
         CrmActionRecord crmActionRecord = new CrmActionRecord();
         crmActionRecord.setCreateUserId(BaseUtil.getUser().getUserId());
@@ -145,8 +145,8 @@ public class CrmRecordService<T extends Model>{
                         newValue = Db.queryStr("select business_name from `crm_business` where business_name = ?", newValue);
                         oldValue = Db.queryStr("select business_name from `crm_business` where business_name = ?", oldValue);
                     }else if("contract_id".equals(x.getKey())){
-                        newValue = Db.queryStr("select name from `crm_contract` where contract_id = ?", newValue);
-                        oldValue = Db.queryStr("select name from `crm_contract` where contract_id = ?", oldValue);
+                        newValue = Db.queryStr("select name from `pmp_contract` where contract_id = ?", newValue);
+                        oldValue = Db.queryStr("select name from `pmp_contract` where contract_id = ?", oldValue);
                     }else if("category_id".equals(x.getKey())){
                         newValue = Db.queryStr("select name from `crm_product_category` where category_id = ?", newValue);
                         oldValue = Db.queryStr("select name from `crm_product_category` where category_id = ?", oldValue);
