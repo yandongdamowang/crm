@@ -15,6 +15,11 @@
       @close="dialogClose"
     >
       <el-form ref="form" label-width="80px">
+        <el-form-item v-if="versionData != undefined" label="版本备注：">
+          <el-input v-model="fileRemark" placeholder="请输入备注" />
+          <!-- {{ fileRemark }} -->
+        </el-form-item>
+
         <el-form-item label="文件类型：">
           <el-select v-model="fileTypeId" placeholder="请选择文件类型" @change="selectChanged">
             <el-option
@@ -27,14 +32,11 @@
           <!-- {{ fileTypeId }} -->
         </el-form-item>
 
-        <el-form-item v-if="versionData != undefined" label="版本备注：">
-          <el-input v-model="fileRemark" placeholder="请输入备注" />
-        </el-form-item>
-
         <el-upload
           :headers="uploadHeaders"
           :action="uploadAction"
           :before-upload="beforeUpload"
+          :on-success="onSuccess"
           class="upload-demo"
           drag
           multiple
@@ -113,7 +115,7 @@ export default {
       dialogNetdiskStatus: false,
       fileTypeId: undefined,
       fileTypeList: [],
-      fileRemark: '',
+      fileRemark: undefined,
       uploadAction: '',
       uploadActionVersion: '',
       uploadHeaders: {
@@ -151,6 +153,7 @@ export default {
     },
 
     localUpload() {
+      console.log(123, this.fileRemark)
       this.versionData === undefined
         ? this.uploadAction = process.env.BASE_API + `/file/upload?folderId=${this.folderId}&typeId=${this.fileTypeId}`
         : this.uploadAction = process.env.BASE_API + `/file/changeVersion?fileId=${this.versionData.fileId}&folderId=${this.versionData.folderId}&fileRemark=${this.fileRemark}`
@@ -160,7 +163,7 @@ export default {
     },
 
     beforeUpload(file) {
-      console.log(file)
+    //   console.log(file)
       if (this.folderId == null) {
         this.$message.error('请选择上传的文件夹')
         return false
@@ -174,10 +177,18 @@ export default {
     },
 
     selectChanged(value) {
+      if (this.versionData !== undefined && this.fileRemark === undefined) { this.$message.error('请填写备注') }
       this.fileTypeId = value
       this.localUpload()
+    },
+    onSuccess() {
+      console.log('成功')
+      this.$emit('uploadStatus', false)
+      this.dialogLocalStatus = false
+      this.$message.success('上传成功')
+      this.fileRemark = undefined
+      this.fileTypeId = undefined
     }
-
 
 
 

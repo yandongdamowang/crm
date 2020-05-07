@@ -19,8 +19,8 @@
           :data="folderListData"
           :props="defaultProps"
           :filter-node-method="filterNode"
+          :default-expand-all="false"
           class="filter-tree"
-          default-expand-all
           @node-click="handleNodeClick"
           @node-contextmenu="handleContextmenu"
         >
@@ -68,9 +68,9 @@
           :data="folderListData"
           :props="defaultProps"
           :filter-node-method="filterNode"
+          :default-expand-all="false"
           style="margin:20px 0 0 0"
           class="filter-tree"
-          default-expand-all
           @node-click="handleNodeMoveFileClick"
         >
           <span slot-scope="{node,data}">
@@ -158,7 +158,6 @@
         :data="folderListData"
         :props="defaultProps"
         :filter-node-method="filterNode"
-        :default-expand-all="false"
         style="margin:20px 0 0 0"
         class="filter-tree"
         @node-click="handleNodeMoveClick"
@@ -197,15 +196,15 @@
       <div style="padding: 30px">
         <div class="ls-drawertitle">
           <div class="ls-drawertitle-l">
-            {{ '导航' }}
+            所属文件夹：/{{ filePath }}/{{ fileSelect.compositionName }}
             <!-- <tag-index :placement="'bottom'" :task-data="taskData"> -->
-            <span>
+            <!-- <span>
               <tag-index :placement="'bottom'">
                 <div slot="editIndex">
                   <span>标签</span>
                 </div>
               </tag-index>
-            </span>
+            </span>-->
           </div>
 
           <!-- <div class="particulars-priority-copy">
@@ -351,15 +350,19 @@
               :color="activity.color"
           :size="activity.size"-->
           <el-tab-pane label="历史版本" name="second">
+            <!-- {{ historyVersionData }} -->
             <el-timeline>
               <el-timeline-item
                 v-for="(activity, index) in historyVersionData"
                 :key="index"
                 :timestamp="activity.createTime"
               >
-                备注：{{ activity.fileRemark }}
-                <div>文件名：</div>
-                <div type="primary" @click="moveFolder">确 定</div>
+                <!-- {{ activity }} -->
+                <div>文件名：{{ activity.oldName }}</div>
+                <div>附件名：{{ activity.compositionName }}</div>
+                <div>文件版本：{{ activity.fileVersion }}</div>
+                <div>备注：{{ activity.fileRemark }}</div>
+                <!-- <div type="primary" @click="moveFolder">确 定</div> -->
               </el-timeline-item>
             </el-timeline>
           </el-tab-pane>
@@ -450,6 +453,7 @@ export default {
       fileRenameNew: undefined,
       fileMovefolderId: undefined,
       fileDetailLogTable: [],
+      filePath: '',
       tmDisplay: false,
       rightMenu: {},
       filterText: '',
@@ -569,7 +573,8 @@ export default {
 
 
     uploadStatus(status) {
-      console.log(status)
+      console.log('关闭弹窗', status)
+      this.retriveFileList()
     },
 
 
@@ -588,20 +593,21 @@ export default {
 
 
     createFolder(folderCreateName, folderCreateNamePid) {
-      this.$request
-        .post(`/folder/createFolder?folderName=${folderCreateName}&folderCode=CONTRACTUAL&folderPid=${folderCreateNamePid}&batchId=${this.batchId}`)
-        .then(res => {
-          console.log(res)
-          this.folderName = ''
-          this.folderListData = res.data
+      folderCreateName === undefined ? this.$message.error('请输入文件名')
+        : this.$request
+          .post(`/folder/createFolder?folderName=${folderCreateName}&folderCode=CONTRACTUAL&folderPid=${folderCreateNamePid}&batchId=${this.batchId}`)
+          .then(res => {
+            console.log(res)
+            this.folderName = ''
+            this.folderListData = res.data
 
-          this.dialogCreateStatus = false
-          this.folderCreateNameOut = ''
-          this.folderCreateNameInner = ''
-          this.retriveFolderList()
-        }).catch(e => {
-          console.log('retriveFolderList err', e)
-        })
+            this.dialogCreateStatus = false
+            this.folderCreateNameOut = ''
+            this.folderCreateNameInner = ''
+            this.retriveFolderList()
+          }).catch(e => {
+            console.log('retriveFolderList err', e)
+          })
     },
 
 
@@ -671,6 +677,12 @@ export default {
           this.drawer = true
           this.fileSelect = res.data
           this.historyVersionData = res.data.historyFileList
+          this.$request
+            .post(`/file/queryFolderPathById?fileId=${row.fileId}`)
+            .then(res => {
+              console.log('文件路径', res.data)
+              this.filePath = res.data
+            })
           this.retriveFileDetailLog()
         }).catch(e => {
           console.log('/file/getFileList err', e)
