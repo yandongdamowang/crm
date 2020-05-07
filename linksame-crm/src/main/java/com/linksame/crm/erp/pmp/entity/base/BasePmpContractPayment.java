@@ -70,6 +70,14 @@ public abstract class BasePmpContractPayment<M extends BasePmpContractPayment<M>
         return get("money");
     }
 
+    public void setAppliedAmount(java.math.BigDecimal appliedAmount) {
+        set("applied_amount", appliedAmount);
+    }
+
+    public java.math.BigDecimal getAppliedAmount() {
+        return get("applied_amount");
+    }
+
     public void setPaymentStage(Integer paymentStage) {
         set("payment_stage", paymentStage);
     }
