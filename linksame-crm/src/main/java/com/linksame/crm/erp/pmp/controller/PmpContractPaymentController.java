@@ -40,6 +40,17 @@ public class PmpContractPaymentController extends Controller {
 
     }
     /**
+     * 更新账单
+     */
+    @Permissions("project:advance:update")
+    public void update(){
+        String data = getRawData();
+        JSONObject jsonObject1 = JSON.parseObject(data);
+        PmpContractPayment bills = jsonObject1.getObject("pmpContractPayment",PmpContractPayment.class);
+        renderJson(pmpContractPaymentService.update(bills));
+
+    }
+    /**
      * 月份查询账单
      */
     @Permissions("project:advance:index")

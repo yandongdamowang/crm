@@ -26,8 +26,9 @@
 
     #sql("queryById")
         select
-            pcpr.*,pc.contract_number,pc.money,pc.supplier_id,pc.proprietor
+            pcpr.*,pc.contract_number,pc.money,pc.customer_id,pc.proprietor , ccr.customer_name
         from pmp_contract as pc join pmp_contract_payment_record as pcpr on pcpr.contract_id = pc.contract_id
+				JOIN crm_customer AS ccr ON pc.customer_id = ccr.customer_id
             where 1 = 1
             #if(paymentRecordId)
                 and pcpr.payment_record_id = #para(paymentRecordId)

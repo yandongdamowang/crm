@@ -44,9 +44,6 @@ public class PmpContractPaymentService {
         return pmpContractPayments;
     }
 
-    public R update(JSONObject object) {
-        return null;
-    }
 
     public R queryPaymentByMonthly(String month) {
         LocalDate localDate = LocalDate.parse(month, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
@@ -217,5 +214,9 @@ public class PmpContractPaymentService {
         //paymentCountMoney 预付款金额
         //receivableAmountMoney 预回款金额
         return R.ok().put("dashboard",records).put("contractCount",contractCount).put("receivableAmountMoney",receivableAmountMoney);
+    }
+
+    public R update(PmpContractPayment bills) {
+        return bills.update() ? R.ok() : R.error();
     }
 }
