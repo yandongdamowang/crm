@@ -1,11 +1,14 @@
 package com.linksame.crm.erp.pmp.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.jfinal.aop.Inject;
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.linksame.crm.common.config.paragetter.BasePageRequest;
+import com.linksame.crm.erp.crm.common.CrmEnum;
+import com.linksame.crm.erp.crm.service.CrmRecordService;
 import com.linksame.crm.erp.pmp.common.PmpInterface;
 import com.linksame.crm.erp.pmp.entity.PmpContractPayment;
 import com.linksame.crm.utils.R;
@@ -24,6 +27,10 @@ import java.util.stream.Collectors;
  * @Description TODO
  **/
 public class PmpContractPaymentService {
+
+
+    @Inject
+    private CrmRecordService crmRecordService;
 
     public List<PmpContractPayment> findByContractId(Long contractId,String tradeStatus) {
         Kv kv = Kv.by("contractId", contractId)
@@ -87,6 +94,7 @@ public class PmpContractPaymentService {
                         contractPayment1.update();
                     }
                 });
+//                crmRecordService.updateRecord(byId,pmpContract, CrmEnum.PMP_PAYMENT);
             });
             return true;
         }) ? R.ok(): R.error();

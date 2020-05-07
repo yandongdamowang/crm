@@ -58,16 +58,6 @@ public class PmpContractController extends Controller {
         renderJson(pmpContractService.add(pmpContract,pmpContractPayments));
 
     }
-
-    /**
-     *  查询审批记录
-     */
-    @Permissions("project:contract:read")
-    public void contractApprove(){
-        Integer examineRecordId = getInt("examineRecordId");
-
-        renderJson(pmpContractService.contractApprove(examineRecordId));
-    }
     /**
      *
      * @param contractIds 合同IDs
@@ -91,7 +81,7 @@ public class PmpContractController extends Controller {
 
     /**
      *
-     * 更新线索合同
+     * 更新合同
      */
     @Permissions("project:contract:update")
     public void update(){
@@ -108,7 +98,7 @@ public class PmpContractController extends Controller {
     }
     /**
      *
-     * @param basePageRequest 根据合同ID 查询详情
+     * @param basePageRequest 分页 或者列表查询
      */
     @Permissions("project:contract:index")
     public void queryList(BasePageRequest<PmpContract> basePageRequest){

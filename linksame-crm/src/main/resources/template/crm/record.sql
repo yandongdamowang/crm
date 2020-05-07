@@ -13,6 +13,8 @@
     select  distinct COLUMN_NAME , COLUMN_COMMENT,'7' as type FROM INFORMATION_SCHEMA.COLUMNS  where table_name = 'crm_receivables'
     union all
     select  distinct COLUMN_NAME , COLUMN_COMMENT,'5' as type FROM INFORMATION_SCHEMA.COLUMNS  where table_name = 'crm_business'
+    union all
+    select  distinct COLUMN_NAME , COLUMN_COMMENT,'10' as type FROM INFORMATION_SCHEMA.COLUMNS  where table_name = 'pmp_contract_payment'
   #end
 
   #sql ("queryRecordList")
