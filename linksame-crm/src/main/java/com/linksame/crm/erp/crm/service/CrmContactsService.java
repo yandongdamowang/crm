@@ -61,18 +61,19 @@ public class CrmContactsService {
      * @author wyq
      * 分页条件查询联系人
      */
-    public Page<Record> queryList(BasePageRequest<CrmContacts> basePageRequest){
+    public R queryList(BasePageRequest<CrmContacts> basePageRequest){
         String contactsName = basePageRequest.getData().getName();
         String telephone = basePageRequest.getData().getTelephone();
         String mobile = basePageRequest.getData().getMobile();
         String customerName = basePageRequest.getData().getCustomerName();
-        if (!crmParamValid.isValid(customerName)){
-            return new Page<>();
+        Kv set = Kv.by("contactsName", contactsName).set("customerName", customerName).set("telephone", telephone).set("mobile", mobile);
+        if (basePageRequest.getPageType() == 0){
+            List<Record> records = Db.find(Db.getSqlPara("crm.contact.getContactsPageList",set));
+            return R.ok().put("data",records);
+        }else {
+            Page<Record> paginate = Db.paginate(basePageRequest.getPage(), basePageRequest.getLimit(), Db.getSqlPara("crm.contact.getContactsPageList",set));
+            return R.ok().put("data", paginate);
         }
-        if (StrUtil.isEmpty(contactsName) && StrUtil.isEmpty(telephone) && StrUtil.isEmpty(mobile) && StrUtil.isEmpty(customerName)){
-            return new Page<>();
-        }
-        return Db.paginate(basePageRequest.getPage(),basePageRequest.getLimit(), Db.getSqlPara("crm.contact.getContactsPageList", Kv.by("contactsName",contactsName).set("customerName",customerName).set("telephone",telephone).set("mobile",mobile)));
     }
 
     /**

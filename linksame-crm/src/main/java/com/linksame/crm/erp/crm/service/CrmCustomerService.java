@@ -64,17 +64,17 @@ public class CrmCustomerService{
      * @author wyq
      * 分页条件查询客户
      */
-    public Page<Record> getCustomerPageList(BasePageRequest<CrmCustomer> basePageRequest){
-        String customerName = basePageRequest.getData().getCustomerName();
-        if(! crmParamValid.isValid(customerName)){
-            return new Page<>();
+    public R getCustomerPageList(BasePageRequest<CrmCustomer> basePageRequest){
+        Kv set = Kv.by("contractorName", basePageRequest.getData().getContractorName())
+                .set("mobile", basePageRequest.getData().getMobile())
+                .set("telephone", basePageRequest.getData().getTelephone());
+        if (basePageRequest.getPageType() == 0){
+            List<Record> records = Db.find(Db.getSqlPara("crm.customer.getCustomerPageList",set ));
+            return R.ok().put("data",records);
+        }else {
+            Page<Record> paginate = Db.paginate(basePageRequest.getPage(), basePageRequest.getLimit(), Db.getSqlPara("crm.customer.getCustomerPageList",set ));
+            return R.ok().put("data", paginate);
         }
-        String mobile = basePageRequest.getData().getMobile();
-        String telephone = basePageRequest.getData().getTelephone();
-        if(StrUtil.isEmpty(customerName) && StrUtil.isEmpty(telephone) && StrUtil.isEmpty(mobile)){
-            return new Page<>();
-        }
-        return Db.paginate(basePageRequest.getPage(), basePageRequest.getLimit(), Db.getSqlPara("crm.customer.getCustomerPageList", Kv.by("customerName", customerName).set("mobile", mobile).set("telephone", telephone)));
     }
 
     /**

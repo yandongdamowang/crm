@@ -97,7 +97,7 @@ public class CrmCustomerController extends Controller {
      * 全局搜索查询客户
      */
     public void queryList(BasePageRequest<CrmCustomer> basePageRequest) {
-        renderJson(R.ok().put("data", crmCustomerService.getCustomerPageList(basePageRequest)));
+        renderJson(crmCustomerService.getCustomerPageList(basePageRequest));
     }
 
     /**
