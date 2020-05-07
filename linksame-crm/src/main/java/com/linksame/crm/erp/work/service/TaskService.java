@@ -70,10 +70,6 @@ public class TaskService{
     public R setTask(Task task, TaskRelation taskRelation){
         AdminUser user = BaseUtil.getUser();
         boolean bol;
-        //如果BatchId为空, 自动生成一个
-        if(StringUtils.isEmpty(task.getBatchId())){
-            task.setBatchId(IdUtil.simpleUUID());
-        }
         if(task.getLabelId() != null){
             task.setLabelId(TagUtil.fromString(task.getLabelId()));
         }
