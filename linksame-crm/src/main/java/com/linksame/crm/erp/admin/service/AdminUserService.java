@@ -281,6 +281,12 @@ public class AdminUserService {
         return R.ok();
     }
 
+    /**
+     * 修改用户头像
+     * @param url       头像访问路径
+     * @param userId    用户编号
+     * @return
+     */
     public boolean updateImg(String url, Long userId) {
         AdminUser adminUser = AdminUser.dao.findById(userId);
         adminUser.setImg(url);
