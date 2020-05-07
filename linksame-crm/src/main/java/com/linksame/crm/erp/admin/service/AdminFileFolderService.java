@@ -50,7 +50,9 @@ public class AdminFileFolderService {
         Iterator<Record> it = folderList.iterator();
         while(it.hasNext()){
             Record x = it.next();
-            if(x.getInt("folder_pid") != 0 && x.getInt("folder_pid") != null) it.remove();
+            if(x.getInt("folder_pid") != 0 && x.getInt("folder_pid") != null){
+                it.remove();
+            }
         }
         recData(folderList);
 

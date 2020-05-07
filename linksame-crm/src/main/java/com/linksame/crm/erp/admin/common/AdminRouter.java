@@ -2,6 +2,7 @@ package com.linksame.crm.erp.admin.common;
 
 import com.jfinal.config.Routes;
 import com.linksame.crm.erp.admin.controller.*;
+import com.linksame.crm.erp.admin.entity.AdminFileLabel;
 
 public class AdminRouter extends Routes {
     @Override
@@ -18,6 +19,7 @@ public class AdminRouter extends Routes {
         add("/folder", AdminFileFolderController.class);
         add("/sms", AdminSmsController.class);
         add("/log", AdminFileLogController.class);
+        add("/label", AdminFileLabelController.class);
         add("/field",AdminFieldController.class);
         add("/scene",AdminSceneController.class);
         add("/businessType", AdminBusinessTypeController.class);

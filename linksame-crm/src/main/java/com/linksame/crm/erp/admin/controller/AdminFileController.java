@@ -128,14 +128,14 @@ public class AdminFileController extends Controller {
     }*/
 
     /**
-     * 通过ID查询
+     * 通过ID查询所在文件夹绝对路径
      */
-    @ApiOperation(methods= RequestMethod.POST, description="通过ID查询")
+    @ApiOperation(methods= RequestMethod.POST, description="通过ID查询所在文件夹绝对路径")
     @ApiImplicitParams({
             @ApiImplicitParam(name="fileId", description="附件ID")
     })
-    public void queryById(){
-        renderJson(adminFileService.queryById(getPara("fileId")));
+    public void queryFolderPathById(){
+        renderJson(adminFileService.queryFolderPathById(getInt("fileId")));
     }
 
     /**

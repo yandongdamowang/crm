@@ -90,6 +90,9 @@
         #if(folderId)
             and a.folder_id = #para(folderId)
         #end
+        #if(labelId)
+            and find_in_set(#para(labelId), a.label_id)
+        #end
         #if(workId)
             and a.work_id = #para(workId)
         #end

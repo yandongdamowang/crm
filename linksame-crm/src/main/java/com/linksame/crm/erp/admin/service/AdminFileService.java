@@ -40,6 +40,7 @@ public class AdminFileService {
         Kv kv= Kv.by("batchId", jsonObject.getString("batchId"))
                 .set("oldName", jsonObject.getString("oldName"))
                 .set("folderId", jsonObject.getInteger("folderId"))
+                .set("labelId", jsonObject.getInteger("labelId"))
                 .set("workId", jsonObject.getInteger("workId"))
                 .set("delFlag",  jsonObject.getInteger("delFlag"))
                 .set("orderBy", jsonObject.getInteger("orderBy"))
@@ -285,10 +286,17 @@ public class AdminFileService {
         //关联业务-任务列表
         List<Record> taskList = Db.find("select * from task where batch_id = ? and ishidden = 0", file.getStr("batch_id"));
         //关联业务-合同列表
-        List<Record> contractList = Db.find("select * from pmp_contract where batch_id = ? and is_deleted = 0", file.getStr("batch_id"));
+        List<Record> contractList = Db.find("select *from pmp_contract where batch_id = ? and status = 1 and is_deleted = '0'", file.getStr("batch_id"));
         //查询附件历史数据
         List<Record> historyFileList = Db.find("select * from admin_file where history_file_id = ?", fileId);
-        //TODO 待添加查询标签信息
+        //查询标签信息
+        List<String> fileLabelList = new ArrayList<>();
+        String labelIds = file.getStr("label_id");
+        String[] labelIdsArr = labelIds.split(",");
+        for(String id : labelIdsArr){
+            fileLabelList.add(id);
+        }
+        List<Record> labelList = Db.find(Db.getSqlPara("admin.label.queryLabelByIds", Kv.by("fileLabelList", fileLabelList)));
         //从历史附件中排除当前附件
         Iterator<Record> it = historyFileList.iterator();
         while(it.hasNext()){
@@ -299,6 +307,7 @@ public class AdminFileService {
         file.set("taskList", taskList);
         file.set("contractList", contractList);
         file.set("historyFileList", historyFileList);
+        file.set("labelList", labelList);
 
         return R.ok().put("data",file);
     }
@@ -336,14 +345,32 @@ public class AdminFileService {
     }
 
     /**
-     * 通过ID查询
+     * 通过ID查询所在文件夹绝对路径
      * @param id 文件ID
+     * @return   文件夹路径
      */
-    public R queryById(String fileId) {
+    public R queryFolderPathById(Integer fileId) {
         if (fileId == null) {
             return R.error("fileId参数不允许为空");
         }
-        return R.ok().put("data", AdminFile.dao.findById(fileId));
+        //查询附件所在文件夹名称
+        Record folder = Db.findFirst("select * from admin_file_folder a inner join admin_file b on a.folder_id = b.folder_id where b.file_id = ?", fileId);
+        //递归查询
+        StringBuffer sb = new StringBuffer(folder.getStr("folder_name"));
+        StringBuffer folderPath = iterativeQuery(folder, sb);
+
+        return R.ok().put("data", folderPath.toString());
+    }
+
+    //查询父id是否为0, 是则组装数据返回, 否则继续查询
+    private StringBuffer iterativeQuery(Record folder, StringBuffer sb){
+        if(folder.getInt("folder_pid") != 0){
+            //查询附件所在文件夹名称
+            Record item = Db.findFirst("select * from admin_file_folder where folder_id = ?", folder.getInt("folder_pid"));
+            sb.insert(0, item.getStr("folder_name") + "/");
+            iterativeQuery(item, sb);
+        }
+        return sb;
     }
 
     /**
