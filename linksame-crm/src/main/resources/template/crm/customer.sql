@@ -15,6 +15,20 @@
     where customer_id = ?
   #end
 
+  #sql("getCustomerPageList")
+    select a.*
+    from `crm_customer` as a left join admin_user as b on a.owner_user_id = b.user_id
+    #if(contractorName)
+      and a.contractor_name like concat('%',#para(contractorName),'%')
+    #end
+    #if(mobile)
+      and a.mobile = #para(mobile)
+    #end
+    #if(telephone)
+      and a.mobile = #para(telephone)
+    #end
+  #end
+
   #sql("deleteByIds")
     delete from crm_customer where customer_id = ?
   #end

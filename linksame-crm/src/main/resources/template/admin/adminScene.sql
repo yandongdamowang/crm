@@ -31,7 +31,12 @@
           #end
           `z`.*
         FROM
-          `pmp_#(realm)` as `a`
+        #if(realm == contract)
+            `pmp_#(realm)` as `a`
+        #else
+          `crm_#(realm)` as `a`
+        #end
+
         #if(label==3)
           LEFT JOIN `crm_customer` `d` ON `a`.`customer_id` = `d`.`customer_id`
         #elseif(label==4)
@@ -63,7 +68,12 @@
                 #end
               #end
             #end
-            FROM admin_fieldv AS a RIGHT JOIN (SELECT batch_id FROM pmp_#(realm) as a
+            FROM admin_fieldv AS a RIGHT JOIN (SELECT batch_id FROM
+            #if(realm == contract)
+                `pmp_#(realm)` as `a`
+            #else
+                `crm_#(realm)` as `a`
+            #end
             WHERE 1=1
             #if(batchList&&batchList.size()>0)
               and batch_id in ( #fori(batchList))
