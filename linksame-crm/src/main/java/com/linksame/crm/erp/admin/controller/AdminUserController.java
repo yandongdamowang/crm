@@ -1,8 +1,11 @@
 package com.linksame.crm.erp.admin.controller;
 
+import cn.hutool.core.io.FileUtil;
 import com.linksame.crm.common.annotation.NotNullValidate;
 import com.linksame.crm.common.annotation.Permissions;
 import com.linksame.crm.common.config.paragetter.BasePageRequest;
+import com.linksame.crm.common.minio.service.MinioServicce;
+import com.linksame.crm.erp.admin.entity.AdminFile;
 import com.linksame.crm.erp.admin.entity.AdminUser;
 import com.linksame.crm.erp.admin.service.AdminFileService;
 import com.linksame.crm.erp.admin.service.AdminUserService;
@@ -112,19 +115,21 @@ public class AdminUserController extends Controller {
         renderJson(R.ok().put("data",adminUserService.resetUser(getRequest())));
     }
 
+    /**
+     * 修改用户头像
+     */
     public void updateImg(){
-        String prefix= BaseUtil.getDate();
-        UploadFile uploadFile=getFile("file");
-        R r=adminFileService.sysUpload(uploadFile,null);
-        if(r.isSuccess()){
-            String url= (String) r.get("url");
-            if(adminUserService.updateImg(url,getParaToLong("userId"))){
-                renderJson(R.ok());
-                return;
-            }
+        UploadFile uploadFile = getFile("file");
+        //上传至minio服务器, 直接返回访问路径
+        R r = adminFileService.sysUpload(uploadFile);
+        if(adminUserService.updateImg(r.get("url").toString(),BaseUtil.getUser().getUserId())){
+            renderJson(R.ok());
+            return;
         }
+
         renderJson(R.error("修改头像失败"));
     }
+
     public void updatePassword(){
         String oldPass=getPara("oldPwd");
         String newPass=getPara("newPwd");

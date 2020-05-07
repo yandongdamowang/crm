@@ -11,6 +11,7 @@ import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.linksame.crm.common.annotation.Permissions;
 import com.linksame.crm.erp.admin.entity.AdminConfig;
+import com.linksame.crm.erp.admin.entity.AdminFile;
 import com.linksame.crm.erp.admin.service.AdminFileService;
 import com.linksame.crm.utils.BaseUtil;
 import com.linksame.crm.utils.R;
@@ -41,15 +42,15 @@ public class AdminSysConfigController extends Controller {
     @Permissions("manage:system:update")
     @Before(Tx.class)
     public void setSysConfig(){
-        String prefix= BaseUtil.getDate();
         UploadFile file = getFile("file");
         Kv kv = getKv();
         if(file!=null){
-            R r=adminFileService.sysUpload(file,null);
-            kv.set("logo",r.get("url"));
+            //上传至minio服务器, 直接返回访问路径
+            R r = adminFileService.sysUpload(file);
+            kv.set("logo", r.get("url").toString());
         }
         Db.deleteById("admin_config","name",SYS_CONFIG_KEY);
-        AdminConfig adminConfig=new AdminConfig();
+        AdminConfig adminConfig = new AdminConfig();
         adminConfig.setStatus(1);
         adminConfig.setName(SYS_CONFIG_KEY);
         adminConfig.setValue(kv.toJson());

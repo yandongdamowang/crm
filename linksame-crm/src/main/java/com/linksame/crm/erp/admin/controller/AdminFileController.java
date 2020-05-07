@@ -73,6 +73,18 @@ public class AdminFileController extends Controller {
     }
 
     /**
+     * 设置标签
+     */
+    @ApiOperation(methods= RequestMethod.POST, description="设置标签")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="fileId", description="附件ID"),
+            @ApiImplicitParam(name="labelIds", description="附件标签ID数组字符串")
+    })
+    public void setLabelByFile(){
+        renderJson((adminFileService.setLabelByFile(getInt("fileId"), getPara("labelIds"))));
+    }
+
+    /**
      * 编辑版本信息
      * @param adminFile 附件对象
      */
