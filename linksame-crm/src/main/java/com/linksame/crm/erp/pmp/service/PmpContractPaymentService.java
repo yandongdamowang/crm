@@ -11,6 +11,7 @@ import com.linksame.crm.erp.crm.common.CrmEnum;
 import com.linksame.crm.erp.crm.service.CrmRecordService;
 import com.linksame.crm.erp.pmp.common.PmpInterface;
 import com.linksame.crm.erp.pmp.entity.PmpContractPayment;
+import com.linksame.crm.erp.pmp.entity.PmpContractPaymentRecord;
 import com.linksame.crm.utils.R;
 
 import java.math.BigDecimal;
@@ -115,7 +116,9 @@ public class PmpContractPaymentService {
     public R queryAdvanceBybillId(Long billId) {
         Kv kv = Kv.by("billId", billId).set("orderBy","1");
         Record first = Db.findFirst(Db.getSqlPara("pmp.contractPayment.queryAdvanceList", kv));
-        return R.ok().put("data", first);
+        Long contractId = first.getLong("contract_id");
+        BigDecimal aLong = Db.queryBigDecimal("SELECT SUM(pcpr.practica_advanced)  FROM pmp_contract_payment_record pcpr LEFT JOIN pmp_contract pc ON pcpr.contract_id = pc.contract_id WHERE pc.contract_id = ?", contractId);
+        return R.ok().put("data", first).put("totalPayment",aLong);
     }
 
     public R setPriority(long billId, String priority) {
