@@ -76,7 +76,7 @@ public class AdminFileLabelService {
      * @return
      */
     public R delLabel(Integer labelId){
-        Integer count = Db.queryInt("select count(*) from admin_file where label_id = ?", labelId);
+        Integer count = Db.queryInt("select count(*) from admin_file where find_in_set(?, label_id)", labelId);
         if(count > 0){
             return R.error("该标签有关联中的附件, 不允许删除");
         }

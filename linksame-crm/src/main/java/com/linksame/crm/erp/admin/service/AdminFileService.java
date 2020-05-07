@@ -290,13 +290,17 @@ public class AdminFileService {
         //查询附件历史数据
         List<Record> historyFileList = Db.find("select * from admin_file where history_file_id = ?", fileId);
         //查询标签信息
+        List<Record> labelList = new ArrayList<>();
         List<String> fileLabelList = new ArrayList<>();
         String labelIds = file.getStr("label_id");
-        String[] labelIdsArr = labelIds.split(",");
-        for(String id : labelIdsArr){
-            fileLabelList.add(id);
+        if(StringUtils.isNotEmpty(labelIds)){
+            String[] labelIdsArr = labelIds.split(",");
+            for(String id : labelIdsArr){
+                fileLabelList.add(id);
+            }
+            labelList = Db.find(Db.getSqlPara("admin.label.queryLabelByIds", Kv.by("fileLabelList", fileLabelList)));
         }
-        List<Record> labelList = Db.find(Db.getSqlPara("admin.label.queryLabelByIds", Kv.by("fileLabelList", fileLabelList)));
+
         //从历史附件中排除当前附件
         Iterator<Record> it = historyFileList.iterator();
         while(it.hasNext()){
