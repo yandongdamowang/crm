@@ -7,11 +7,18 @@ import com.jfinal.core.Controller;
 import com.jfinal.core.paragetter.Para;
 import com.linksame.crm.common.annotation.Permissions;
 import com.linksame.crm.common.config.paragetter.BasePageRequest;
+import com.linksame.crm.erp.admin.service.AdminExamineRecordService;
+import com.linksame.crm.erp.crm.common.CrmEnum;
+import com.linksame.crm.erp.crm.service.CrmRecordService;
+import com.linksame.crm.erp.pmp.entity.PmpContract;
 import com.linksame.crm.erp.pmp.entity.PmpContractPayment;
 import com.linksame.crm.erp.pmp.service.PmpContractPaymentService;
+import com.linksame.crm.utils.R;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author ZhangJie
@@ -23,7 +30,11 @@ public class PmpContractPaymentController extends Controller {
     @Inject
     private PmpContractPaymentService pmpContractPaymentService;
 
+    @Inject
+    private AdminExamineRecordService examineRecordService;
 
+    @Inject
+    private CrmRecordService crmRecordService;
     /**
      * 更新账单
      */
@@ -48,6 +59,35 @@ public class PmpContractPaymentController extends Controller {
         JSONObject jsonObject1 = JSON.parseObject(data);
         PmpContractPayment bills = jsonObject1.getObject("pmpContractPayment",PmpContractPayment.class);
         renderJson(pmpContractPaymentService.update(bills));
+
+    }
+
+
+
+    /**
+     * 付款审批
+     */
+    public void requestPayment(){
+        String data = getRawData();
+        Long checkUserId = getLong("checkUserId");//添加或者审核人
+        JSONObject jsonObject1 = JSON.parseObject(data);
+        PmpContractPayment pmpContractPayment = jsonObject1.getObject("pmpContractPayment",PmpContractPayment.class);
+        Map<String, Integer> map = examineRecordService.saveExamineRecord(2, checkUserId, pmpContractPayment.getOwnerUserId(), null, null);
+        if (map.get("status") == 0) {
+            renderJson(R.error("没有启动的审核步骤，不能添加！"));
+        } else {
+            pmpContractPayment.setExamineRecordId(map.get("id"));
+        }
+        if (pmpContractPayment.getCheckStatus() != null && pmpContractPayment.getCheckStatus() == 5) {
+            pmpContractPayment.setCheckStatus(5);
+        } else {
+            pmpContractPayment.setCheckStatus(0);
+        }
+        crmRecordService.updateRecord(new PmpContractPayment().dao().findById(pmpContractPayment.getContractId()), pmpContractPayment, CrmEnum.PMP_PAYMENT);
+
+        pmpContractPayment.setUpdateTime(new Date(System.currentTimeMillis()));
+        boolean update = pmpContractPayment.update();
+        renderJson();
 
     }
     /**
