@@ -52,18 +52,6 @@ public class PmpContractPaymentController extends Controller {
         }
         renderJson(pmpContractPaymentService.queryPaymentByMonthly(month));
     }
-//    /**
-//     * 调整支付金额
-//     */
-//    public void updatePaymentAmount (){
-//        //yyyy-mm
-//        String month = getPara("month");
-//        System.out.println(month.length());
-//        if (month.length() < 8){
-//            month = month +"-01";
-//        }
-//        renderJson(pmpContractPaymentService.queryPaymentByMonthly(month));
-//    }
 
 
     /**

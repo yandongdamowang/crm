@@ -61,7 +61,7 @@ public class AdminExamineRecordController extends Controller {
         PmpContract pmpContract = null;
         PmpContractPayment pmpContractPayment = null;
         if (type != null && type.equals(2)){
-            pmpContractPayment = PmpContractPayment.dao.findById(Id);
+            pmpContractPayment = PmpContractPayment.dao.findFirst("select * from pmp_contract_payment  where contract_id = ?",Id);;
             Id = pmpContractPayment.getContractId();
         }
         pmpContract = PmpContract.dao.findById(Id);
@@ -134,8 +134,8 @@ public class AdminExamineRecordController extends Controller {
         if(id != null){
             auth = AuthUtil.isCrmAuth(CrmEnum.CRM_CONTRACT,id);
         }else {
-            id = Db.queryInt("select receivables_id from `crm_receivables` where examine_record_id = ?",recordId);
-            auth = AuthUtil.isCrmAuth(CrmEnum.CRM_RECEIVABLES,id);
+            id = Db.queryInt("select bill_id from pmp_contract_payment where examine_record_id = ?",recordId);
+            auth = AuthUtil.isCrmAuth(CrmEnum.PMP_PAYMENT,id);
         }
         return auth;
     }

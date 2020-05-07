@@ -88,10 +88,6 @@
       delete from pmp_contract where contract_id = ?
     #end
 
-    #sql("contractApprove")
-         select * from admin_examine_log where record_id = ?
-    #end
-
   #sql ("updateCheckStatusById")
     update pmp_contract set check_status = ? where contract_id = ?
   #end

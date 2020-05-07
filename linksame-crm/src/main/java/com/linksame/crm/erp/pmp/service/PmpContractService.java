@@ -74,6 +74,8 @@ public class PmpContractService {
                     contractPayment.setpracticalMoney(new BigDecimal(0));
                     contractPayment.setPracticalCostPercentage(0L);
                     contractPayment.save();
+                    Long billId = contractPayment.getLong("bill_id");
+                    crmRecordService.addRecord(billId.intValue()  , CrmEnum.PMP_PAYMENT);
                 } else {
                     return false;
                 }
@@ -108,7 +110,8 @@ public class PmpContractService {
         Kv kv= Kv.by("contractNumber", jsonObject.getString("contractNumber"))
                 .set("customerId", jsonObject.getLong("customerId"))
                 .set("orderBy", jsonObject.get("orderBy"));
-        List<Record> groupBy = Db.find("SELECT pc.customer_id,cc.contractor_name FROM pmp_contract AS pc LEFT JOIN crm_customer AS cc ON pc.customer_id = cc.customer_id WHERE 1=1 GROUP BY pc.customer_id");if (basePageRequest.getPageType() == 0){
+        List<Record> groupBy = Db.find("SELECT pc.customer_id,cc.contractor_name FROM pmp_contract AS pc LEFT JOIN crm_customer AS cc ON pc.customer_id = cc.customer_id WHERE 1=1 GROUP BY pc.customer_id");
+        if (basePageRequest.getPageType() == 0){
             List<Record> records = Db.find(Db.getSqlPara("pmp.contract.queryList", kv));
             billLoading(records);
             return R.ok().put("data",records).put("groupBy",groupBy);
@@ -189,6 +192,8 @@ public class PmpContractService {
     public R update(JSONObject object) {
         PmpContract pmpContract = object.getObject("entity", PmpContract.class);
         pmpContract.setUpdateTime(new Date(System.currentTimeMillis()));
+        PmpContract byId = PmpContract.dao.findById(pmpContract.getContractId());
+        crmRecordService.updateRecord(byId,pmpContract,CrmEnum.CRM_CONTRACT);
         return pmpContract.update() ? R.ok():R.error();
     }
 
@@ -234,12 +239,6 @@ public class PmpContractService {
             Db.batch(Db.getSql("pmp.contractPayment.deleteBycontractIds"), "contract_id", idsList, 100);
             return true;
         }) ? R.ok() : R.error();
-    }
-
-    public R contractApprove(Integer examineRecordId) {
-        List<Record> records = Db.find(Db.getSql("pmp.contract.contractApprove"), examineRecordId);
-
-        return R.ok().put("date",records);
     }
 
     public R contractBill(Long contractId) {
