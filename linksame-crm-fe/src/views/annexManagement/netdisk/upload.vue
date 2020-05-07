@@ -1,44 +1,82 @@
 <template>
   <div class="ls-upload">
-    <el-dropdown>
-      <el-button type="primary">上传文件</el-button>
-      <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item @click.native="localUpload">本地上传</el-dropdown-item>
-        <el-dropdown-item @click.native="netdiskUpload">网盘上传</el-dropdown-item>
-      </el-dropdown-menu>
-    </el-dropdown>
-    <!-- :before-upload="beforeUpload" -->
-    <el-dialog :visible.sync="dialogLocalStatus" title="本地上传" width="30%">
+    <span>
+      <el-button
+        type="primary"
+        @click="dialogLocalStatus = true"
+      >{{ versionData === undefined? '上传文件' :'替换版本' }}</el-button>
+    </span>
+
+    <el-dialog
+      :visible.sync="dialogLocalStatus"
+      :append-to-body="true"
+      title="本地上传"
+      width="30%"
+      @close="dialogClose"
+    >
+      <el-form ref="form" label-width="80px">
+        <el-form-item label="文件类型：">
+          <el-select v-model="fileTypeId" placeholder="请选择文件类型" @change="selectChanged">
+            <el-option
+              v-for="(item,index) in fileTypeList"
+              :key="index"
+              :label="item.typeName"
+              :value="item.typeId"
+            />
+          </el-select>
+          <!-- {{ fileTypeId }} -->
+        </el-form-item>
+
+        <el-form-item v-if="versionData != undefined" label="版本备注：">
+          <el-input v-model="fileRemark" placeholder="请输入备注" />
+        </el-form-item>
+
+        <el-upload
+          :headers="uploadHeaders"
+          :action="uploadAction"
+          :before-upload="beforeUpload"
+          class="upload-demo"
+          drag
+          multiple
+        >
+          <i class="el-icon-upload" />
+          <div class="el-upload__text">
+            将文件拖到此处，或
+            <em>点击上传</em>
+          </div>
+
+          <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
+        </el-upload>
+        <!--
+        <el-upload
+          :headers="uploadHeaders"
+          :action="uploadActionVersion"
+          :before-upload="beforeUpload"
+          class="upload-demo"
+          drag
+          multiple
+        >
+          <i class="el-icon-upload" />
+          <div class="el-upload__text">
+            将文件拖到此处，或
+            <em>上传版本</em>
+          </div>
+        </el-upload>-->
+
+        <!-- <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogLocalStatus = false">取 消</el-button>
+        <el-button type="primary">确 定</el-button>
+        </span>-->
+      </el-form>
+    </el-dialog>
+
+    <!-- <el-dialog :visible.sync="dialogNetdiskStatus" title="网盘上传" width="30%">
       <el-upload :headers="uploadHeaders" :action="uploadAction" class="upload-demo" drag multiple>
         <i class="el-icon-upload" />
         <div class="el-upload__text">
           将文件拖到此处，或
           <em>点击上传</em>
-        </div>
-        <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
-      </el-upload>
-
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogLocalStatus = false">取 消</el-button>
-        <el-button type="primary">确 定</el-button>
-      </span>
-    </el-dialog>
-
-    <el-dialog :visible.sync="dialogNetdiskStatus" title="网盘上传" width="30%">
-      <el-upload :headers="uploadHeaders" :action="uploadAction" class="upload-demo" drag multiple>
-        <i class="el-icon-upload" />
-        <div class="el-upload__text">
-          将文件拖到此处，或
-          <em>点击上传</em>
-        </div>
-        <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
-      </el-upload>
-
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogLocalStatus = false">取 消</el-button>
-        <el-button type="primary">确 定</el-button>
-      </span>
-    </el-dialog>
+    </div>-->
   </div>
 </template>
 
@@ -48,7 +86,24 @@ import Lockr from 'lockr'
 
 export default {
   name: 'App',
+
+
   components: {
+
+  },
+  props: {
+    versionData: {
+      type: Object,
+      default: undefined
+    },
+    folderId: {
+      type: Number,
+      default: undefined
+    },
+    batchId: {
+      type: Number,
+      default: undefined
+    }
 
   },
 
@@ -56,15 +111,17 @@ export default {
     return {
       dialogLocalStatus: false,
       dialogNetdiskStatus: false,
-      uploadAction: process.env.BASE_API + `/file/upload?batchId=b9df6992915b42e19b719fcd70b12836&folderId=16&workId=1&typeId=9`,
+      fileTypeId: undefined,
+      fileTypeList: [],
+      fileRemark: '',
+      uploadAction: '',
+      uploadActionVersion: '',
       uploadHeaders: {
         'Admin-Token': Lockr.get('Admin-Token')
         // 'Content-Type': 'multipart/form-data;',
         // 'Accept': '*/*',
         // 'Accept-Encoding': 'gzip, deflate, br'
-
       }
-
     }
   },
   watch: {
@@ -75,11 +132,59 @@ export default {
   },
 
   mounted() {
-    //   console.log('tokne', Lockr.get('Admin-Token'))
+    console.log('versionData', this.versionData)
+    this.retriveTypeList()
   },
 
 
   methods: {
+
+    retriveTypeList() {
+      this.$request
+        .post(`/type/queryList?pageType=0`)
+        .then(res => {
+          console.log('附件类型列表', res)
+          this.fileTypeList = res.data
+        }).catch(e => {
+          console.log('retriveTypeList err', e)
+        })
+    },
+
+    localUpload() {
+      this.versionData === undefined
+        ? this.uploadAction = process.env.BASE_API + `/file/upload?folderId=${this.folderId}&typeId=${this.fileTypeId}`
+        : this.uploadAction = process.env.BASE_API + `/file/changeVersion?fileId=${this.versionData.fileId}&folderId=${this.versionData.folderId}&fileRemark=${this.fileRemark}`
+
+      this.dialogLocalStatus = true
+      console.log('上传地址', this.uploadAction)
+    },
+
+    beforeUpload(file) {
+      console.log(file)
+      if (this.folderId == null) {
+        this.$message.error('请选择上传的文件夹')
+        return false
+      } else if (this.fileTypeId == undefined) {
+        this.$message.error('请选择文件类型')
+        return false
+      }
+    },
+    dialogClose() {
+    //   this.fileTypeId = undefined
+    },
+
+    selectChanged(value) {
+      this.fileTypeId = value
+      this.localUpload()
+    }
+
+
+
+
+
+    // netdiskUpload() {
+    //   this.dialogNetdiskStatus = true
+    // }
 
     // beforeUpload(file) {
     //   const fd = new Formdata()
@@ -94,13 +199,6 @@ export default {
     // },
 
 
-
-    localUpload() {
-      this.dialogLocalStatus = true
-    },
-    netdiskUpload() {
-      this.dialogNetdiskStatus = true
-    }
 
 
 

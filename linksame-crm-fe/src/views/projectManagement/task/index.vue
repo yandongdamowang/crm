@@ -1,37 +1,17 @@
 <template>
   <div class="my-task">
-    <div class="my-task-header">
-      我的任务
-    </div>
+    <div class="my-task-header">我的任务</div>
     <div class="my-task-body">
-      <div
-        v-loading="loading"
-        v-scrollx="{ ignoreClass :['ignoreClass']}"
-        class="content-box"
-      >
-        <div
-          v-for="(item, index) in taskList"
-          :key="index"
-          class="board-column"
-        >
-          <flexbox
-            orient="vertical"
-            align="stretch"
-            class="board-column-wrapper ignoreClass"
-          >
+      <div v-loading="loading" v-scrollx="{ ignoreClass :['ignoreClass']}" class="content-box">
+        <div v-for="(item, index) in taskList" :key="index" class="board-column">
+          <flexbox orient="vertical" align="stretch" class="board-column-wrapper ignoreClass">
             <div class="board-column-header">
               <div>
-                <span class="text"> {{ item.title }} </span>
+                <span class="text">{{ item.title }}</span>
                 <span class="text-num">{{ item.checkedNum }} / {{ item.list.length }}</span>
               </div>
-              <el-progress
-                v-if="item.checkedNum == 0"
-                :percentage="0"
-              />
-              <el-progress
-                v-else
-                :percentage="item.checkedNum / item.list.length * 100"
-              />
+              <el-progress v-if="item.checkedNum == 0" :percentage="0" />
+              <el-progress v-else :percentage="item.checkedNum / item.list.length * 100" />
             </div>
             <draggable
               :list="item.list"
@@ -40,7 +20,6 @@
               class="board-column-content"
               @end="moveEndTask"
             >
-
               <div
                 v-for="(element, i) in item.list"
                 ref="taskRow"
@@ -51,12 +30,12 @@
               >
                 <flexbox align="stretch">
                   <div @click.stop>
-                    <el-checkbox
-                      v-model="element.checked"
-                      @change="checkboxChange(element, item)"
-                    />
+                    <el-checkbox v-model="element.checked" @change="checkboxChange(element, item)" />
                   </div>
-                  <div class="element-label">{{ element.name }}<span v-if="element.workName">（{{ element.workName }}）</span></div>
+                  <div class="element-label">
+                    {{ element.name }}
+                    <span v-if="element.workName">（{{ element.workName }}）</span>
+                  </div>
                   <div
                     v-photo="element.mainUser"
                     v-lazy:background-image="$options.filters.filterUserLazyImg(element.mainUser.img)"
@@ -66,34 +45,24 @@
                   />
                 </flexbox>
                 <div class="img-group">
-                  <div
-                    v-if="element.stopTime"
-                    class="img-box"
-                  >
+                  <div v-if="element.stopTime" class="img-box">
                     <i
                       :style="{'color': element.isEnd == 1 && !element.checked ? 'red': '#999'}"
                       class="wukong wukong-time-task"
                     />
-                    <span :style="{'color': element.isEnd == 1 && !element.checked ? 'red': '#999'}">{{ new Date(element.stopTime).getTime() | filterTimestampToFormatTime('MM-DD') }} 截止</span>
+                    <span
+                      :style="{'color': element.isEnd == 1 && !element.checked ? 'red': '#999'}"
+                    >{{ new Date(element.stopTime).getTime() | filterTimestampToFormatTime('MM-DD') }} 截止</span>
                   </div>
-                  <div
-                    v-if="element.childAllCount > 0"
-                    class="img-box"
-                  >
+                  <div v-if="element.childAllCount > 0" class="img-box">
                     <i class="wukong wukong-sub-task" />
                     <span>{{ element.childWCCount }}/{{ element.childAllCount }}</span>
                   </div>
-                  <div
-                    v-if="element.fileCount"
-                    class="img-box"
-                  >
+                  <div v-if="element.fileCount" class="img-box">
                     <i class="wukong wukong-file" />
                     <span>{{ element.fileCount }}</span>
                   </div>
-                  <div
-                    v-if="element.commentCount"
-                    class="img-box"
-                  >
+                  <div v-if="element.commentCount" class="img-box">
                     <i class="wukong wukong-comment-task" />
                     <span>{{ element.commentCount }}</span>
                   </div>
@@ -104,9 +73,7 @@
                       :key="j"
                       :style="{'background': k.color}"
                       class="item-label"
-                    >
-                      {{ k.labelName }}
-                    </div>
+                    >{{ k.labelName }}</div>
                   </template>
                   <template v-else>
                     <div
@@ -122,10 +89,7 @@
                       effect="light"
                       popper-class="tooltip-change-border task-tooltip"
                     >
-                      <div
-                        slot="content"
-                        style="margin: 10px 10px 10px 0;"
-                      >
+                      <div slot="content" style="margin: 10px 10px 10px 0;">
                         <div
                           v-for="(k, j) in element.labelList"
                           :key="j"
@@ -143,15 +107,11 @@
                         <i>...</i>
                       </div>
                     </el-tooltip>
-
                   </template>
                 </div>
               </div>
             </draggable>
-            <div
-              class="new-task"
-              @click="createTaskByTop(item.isTop)"
-            >
+            <div class="new-task" @click="createTaskByTop(item.isTop)">
               <span class="el-icon-plus" />
               <span>新建任务</span>
             </div>

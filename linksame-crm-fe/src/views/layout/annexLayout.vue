@@ -55,7 +55,7 @@ export default {
 
   computed: {
 
-    ...mapGetters(['annex', 'annexRouters', 'headerName']),
+    ...mapGetters(['annex', 'annexRouters', 'headerName'])
     // 快捷添加
     // quickAddList() {
     //   var addItems = []

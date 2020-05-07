@@ -43,7 +43,32 @@ export default {
     }
   },
   mounted() {
-    // 初始化
+    this.$request({
+      url: '/work/queryTaskByWorkId',
+      method: 'post',
+      data: {
+        'workId': '1',
+        'orderType': 4
+      },
+      headers: {
+        'Content-Type': 'application/json'
+        // '123': '456'
+      }
+    }).then(res => {
+      console.log('任务列表', res)
+      //   this.data = res.data
+      //   let layerA = []
+      //   res.data.forEach((itemA, indexA) => {
+      //     itemA.list.forEach((itemB, indexB) => {
+      //       console.log(itemB)
+      //     })
+      //   })
+
+      console.log(this.flatten(res.data))
+    }).catch(e => {
+      console.log(e)
+    })
+
 
     //
     gantt.config.columns = [
@@ -70,7 +95,26 @@ export default {
     // ]
     gantt.init(this.$refs.gantt)
     gantt.parse(this.tasks)
+  },
+  methods: {
+
+
+    flatten(arr) {
+      var res = []
+      for (var i = 0; i < arr.length; i++) {
+        if (Array.isArray(arr[i])) {
+          res = res.concat(this.flatten(arr[i]))
+        } else {
+          res.push(arr[i])
+        }
+      }
+      return res
+    }
+
+
+
   }
+
 }
 </script>
 

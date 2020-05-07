@@ -1,7 +1,5 @@
 <template>
-  <div
-    v-loading="loading"
-    class="content-box">
+  <div v-loading="loading" class="content-box">
     <draggable
       v-scrollx="{ ignoreClass :['ignoreClass']}"
       id="task-board-body"
@@ -10,26 +8,26 @@
       :move="moveParentTask"
       handle=".board-column-wrapper"
       class="board-column-content-parent"
-      @end="moveEndParentTask">
+      @end="moveEndParentTask"
+    >
       <div
         v-for="(item, index) in taskList"
         :key="index"
         :class="{'ignore-elements': item.classId == -1}"
-        class="board-column">
-        <flexbox
-          orient="vertical"
-          align="stretch"
-          class="board-column-wrapper ignoreClass">
+        class="board-column"
+      >
+        <flexbox orient="vertical" align="stretch" class="board-column-wrapper ignoreClass">
           <div class="board-column-header">
             <div>
-              <span class="text"> {{ item.className }} </span>
+              <span class="text">{{ item.className }}</span>
               <span class="text-num">{{ item.checkedNum }} / {{ item.list.length }}</span>
               <el-popover
                 v-if="canUpdateTaskClass && item.classId != -1"
                 v-model="item.taskHandleShow"
                 placement="bottom-start"
                 width="150"
-                trigger="click">
+                trigger="click"
+              >
                 <div class="omit-popover-box">
                   <!-- 重命名 -->
                   <el-popover
@@ -38,57 +36,37 @@
                     placement="bottom-start"
                     width="250"
                     popper-class="task-board-rechristen-popover"
-                    trigger="click">
+                    trigger="click"
+                  >
                     <div class="task-board-rechristen-box">
                       <div class="title">
                         <span>重命名</span>
-                        <span
-                          class="el-icon-close rt"
-                          @click="item.renameShow = false"/>
+                        <span class="el-icon-close rt" @click="item.renameShow = false" />
                       </div>
                       <div class="content">
-                        <el-input
-                          :value="item.className"
-                          v-model="renameInput"
-                          size="mini"/>
+                        <el-input :value="item.className" v-model="renameInput" size="mini" />
                         <div class="btn-box">
-                          <el-button
-                            size="mini"
-                            type="primary"
-                            @click="renameSubmit(item)">保存</el-button>
-                          <el-button
-                            size="mini"
-                            @click="item.renameShow = false">取消</el-button>
+                          <el-button size="mini" type="primary" @click="renameSubmit(item)">保存</el-button>
+                          <el-button size="mini" @click="item.renameShow = false">取消</el-button>
                         </div>
                       </div>
                     </div>
-                    <p
-                      slot="reference"
-                      @click="renameTaskListClick(item)">重命名</p>
+                    <p slot="reference" @click="renameTaskListClick(item)">重命名</p>
                   </el-popover>
-                  <p
-                    v-if="canCreateTask"
-                    @click="createSubTaskClick(item)">新建任务</p>
-                  <p
-                    v-if="canUpdateTaskClass"
-                    @click="archiveTaskListClick(item)">归档已完成任务</p>
-                  <p
-                    v-if="canDeleteTaskClass"
-                    @click="delectTaskListClick(item, index)">删除列表</p>
+                  <p v-if="canCreateTask" @click="createSubTaskClick(item)">新建任务</p>
+                  <p v-if="canUpdateTaskClass" @click="archiveTaskListClick(item)">归档已完成任务</p>
+                  <p v-if="canDeleteTaskClass" @click="delectTaskListClick(item, index)">删除列表</p>
                 </div>
                 <img
                   ref="imgPopoverSlot"
                   slot="reference"
                   class="img-gd"
-                  src="@/assets/img/project/task_ellipsis.png">
+                  src="@/assets/img/project/task_ellipsis.png"
+                />
               </el-popover>
             </div>
-            <el-progress
-              v-if="item.checkedNum == 0"
-              :percentage="0"/>
-            <el-progress
-              v-else
-              :percentage="item.checkedNum / item.list.length * 100"/>
+            <el-progress v-if="item.checkedNum == 0" :percentage="0" />
+            <el-progress v-else :percentage="item.checkedNum / item.list.length * 100" />
           </div>
           <draggable
             :list="item.list"
@@ -98,55 +76,49 @@
             }, forceFallback: false, dragClass: 'sortable-drag'}"
             :id="item.classId"
             class="board-column-content"
-            @end="moveEndSonTask">
+            @end="moveEndSonTask"
+          >
             <div
               v-for="(element, i) in item.list"
               ref="taskRow"
               :key="i"
               :class="element.checked ? 'board-item board-item-active' : 'board-item'"
               :style="{'border-color': element.priority == 1 ? '#8bb5f0' : element.priority == 2 ? '#FF9668' : element.priority == 3 ? '#ED6363' : ''}"
-              @click="showDetailView(element, index , i)">
+              @click="showDetailView(element, index , i)"
+            >
               <div
                 v-photo="element.mainUser"
                 v-lazy:background-image="$options.filters.filterUserLazyImg(element.mainUser.img)"
                 v-if="element.mainUser"
                 :key="element.mainUser.img"
-                class="head-png div-photo"/>
+                class="head-png div-photo"
+              />
               <flexbox align="stretch">
-                <div
-                  style="display: inline-block;"
-                  @click.stop>
-                  <el-checkbox
-                    v-model="element.checked"
-                    @change="checkboxChange(element, item)"/>
+                <div style="display: inline-block;" @click.stop>
+                  <el-checkbox v-model="element.checked" @change="checkboxChange(element, item)" />
                 </div>
                 <div class="element-label">{{ element.name }}</div>
               </flexbox>
               <div class="img-group">
-                <div
-                  v-if="element.stopTime"
-                  class="img-box">
+                <div v-if="element.stopTime" class="img-box">
                   <i
                     :style="{'color': element.isEnd == 1 && !element.checked ? 'red': '#999'}"
-                    class="wukong wukong-time-task"/>
-                  <span :style="{'color': element.isEnd == 1 && !element.checked ? 'red': '#999'}">{{ new Date(element.stopTime).getTime() | filterTimestampToFormatTime('MM-DD') }}截止</span>
+                    class="wukong wukong-time-task"
+                  />
+                  <span
+                    :style="{'color': element.isEnd == 1 && !element.checked ? 'red': '#999'}"
+                  >{{ new Date(element.stopTime).getTime() | filterTimestampToFormatTime('MM-DD') }}截止</span>
                 </div>
-                <div
-                  v-if="element.childAllCount > 0"
-                  class="img-box">
-                  <i class="wukong wukong-sub-task"/>
+                <div v-if="element.childAllCount > 0" class="img-box">
+                  <i class="wukong wukong-sub-task" />
                   <span>{{ element.childWCCount }}/{{ element.childAllCount }}</span>
                 </div>
-                <div
-                  v-if="element.fileCount"
-                  class="img-box">
-                  <i class="wukong wukong-file"/>
+                <div v-if="element.fileCount" class="img-box">
+                  <i class="wukong wukong-file" />
                   <span>{{ element.fileCount }}</span>
                 </div>
-                <div
-                  v-if="element.commentCount"
-                  class="img-box">
-                  <i class="wukong wukong-comment-task"/>
+                <div v-if="element.commentCount" class="img-box">
+                  <i class="wukong wukong-comment-task" />
                   <span>{{ element.commentCount }}</span>
                 </div>
 
@@ -155,94 +127,91 @@
                     v-for="(k, j) in element.labelList"
                     :key="j"
                     :style="{'background': k.color}"
-                    class="item-label">
-                    {{ k.labelName }}
-                  </div>
+                    class="item-label"
+                  >{{ k.labelName }}</div>
                 </template>
                 <template v-else>
                   <div
                     :style="{'background': element.labelList[0].color}"
-                    class="item-label">{{ element.labelList[0].labelName }}</div>
+                    class="item-label"
+                  >{{ element.labelList[0].labelName }}</div>
                   <div
                     :style="{'background': element.labelList[1].color}"
-                    class="item-label">{{ element.labelList[1].labelName }}</div>
+                    class="item-label"
+                  >{{ element.labelList[1].labelName }}</div>
                   <el-tooltip
                     placement="top"
                     effect="light"
-                    popper-class="tooltip-change-border task-tooltip">
-                    <div
-                      slot="content"
-                      style="margin: 10px 10px 10px 0;">
+                    popper-class="tooltip-change-border task-tooltip"
+                  >
+                    <div slot="content" style="margin: 10px 10px 10px 0;">
                       <div
                         v-for="(k, j) in element.labelList"
                         :key="j"
-                        style="display: inline-block; margin-right: 10px;">
+                        style="display: inline-block; margin-right: 10px;"
+                      >
                         <span
                           v-if="j >= 2"
                           :style="{'background': k.color ? k.color: '#ccc'}"
                           class="k-name"
-                          style="border-radius: 3px; color: #FFF; padding: 3px 10px;">{{ k.labelName }}</span>
+                          style="border-radius: 3px; color: #FFF; padding: 3px 10px;"
+                        >{{ k.labelName }}</span>
                       </div>
                     </div>
                     <div class="color-label-more">
                       <i>...</i>
                     </div>
                   </el-tooltip>
-
                 </template>
               </div>
             </div>
           </draggable>
           <!-- 新建任务 -->
-          <div
-            v-if="createSubTaskClassId == item.classId"
-            class="new-task-input">
-            <el-input
-              :rows="2"
-              v-model="subTaskContent"
-              type="textarea"
-              placeholder="请输入内容"/>
+          <div v-if="createSubTaskClassId == item.classId" class="new-task-input">
+            <el-input :rows="2" v-model="subTaskContent" type="textarea" placeholder="请输入内容" />
             <div class="img-box">
               <span class="stop-time">
-                <span
-                  v-if="subTaskStopTimeDate"
-                  class="bg-color">{{ subTaskStopTimeDate | moment('MM-DD') }}<i
+                <span v-if="subTaskStopTimeDate" class="bg-color">
+                  {{ subTaskStopTimeDate | moment('MM-DD') }}
+                  <i
                     class="el-icon-close"
-                    @click="subTaskStopTimeDate = ''"/></span>
-                <i
-                  v-else
-                  class="wukong wukong-time-task"/>
+                    @click="subTaskStopTimeDate = ''"
+                  />
+                </span>
+                <i v-else class="wukong wukong-time-task" />
                 <el-date-picker
                   v-model="subTaskStopTimeDate"
                   :style="{'width': subTaskStopTimeDate ? '54px' : '18px'}"
                   type="date"
                   value-format="yyyy-MM-dd"
-                  placeholder="选择日期"/>
+                  placeholder="选择日期"
+                />
               </span>
 
               <el-popover
                 v-model="item.ownerListShow"
                 placement="bottom-start"
                 width="250"
-                style=""
-                trigger="click">
+                style
+                trigger="click"
+              >
                 <div class="task-board-personnel-list-popover">
-                  <el-input
-                    size="mini"
-                    placeholder="搜索成员"/>
+                  <el-input size="mini" placeholder="搜索成员" />
                   <div class="list-box">
                     <div
                       v-for="(k, i) in ownerList"
                       :key="i"
                       :class="k.checked ? 'personnel-list personnel-list-active' : 'personnel-list'"
-                      @click="selectOwnerList(item, k)">
+                      @click="selectOwnerList(item, k)"
+                    >
                       <div
                         v-photo="k"
                         v-lazy:background-image="$options.filters.filterUserLazyImg(k.img)"
                         :key="k.img"
-                        class="div-photo k-img"/>
+                        class="div-photo k-img"
+                      />
                       <span>{{ k.realname }}</span>
-                      <i class="el-icon-check"/>
+                      <i class="el-icon-check" />
                     </div>
                   </div>
                 </div>
@@ -253,60 +222,47 @@
                   slot="reference"
                   :key="selectMainUser.img"
                   class="div-photo head-img"
-                  @click="showOwnerListClick(item)"/>
+                  @click="showOwnerListClick(item)"
+                />
                 <i
                   v-else
                   slot="reference"
                   class="wukong wukong-user"
-                  @click="showOwnerListClick(item)"/>
+                  @click="showOwnerListClick(item)"
+                />
               </el-popover>
             </div>
             <div class="btn-box">
-              <el-button
-                size="mini"
-                type="primary"
-                @click="addSubTask(item)">确定</el-button>
-              <el-button
-                size="mini"
-                @click="createSubTaskClassId = 'hidden'">取消</el-button>
+              <el-button size="mini" type="primary" @click="addSubTask(item)">确定</el-button>
+              <el-button size="mini" @click="createSubTaskClassId = 'hidden'">取消</el-button>
             </div>
           </div>
           <div
             v-else-if="canCreateTask && item.classId != -1"
             class="new-task"
-            @click="createSubTaskClick(item)">
-            <span class="el-icon-plus"/>
+            @click="createSubTaskClick(item)"
+          >
+            <span class="el-icon-plus" />
             <span>新建任务</span>
           </div>
         </flexbox>
       </div>
 
       <!-- 新建列表 -->
-      <div
-        v-if="canCreateTaskClass"
-        class="board-column-new-list">
+      <div v-if="canCreateTaskClass" class="board-column-new-list">
         <div
           v-if="!createTaskListShow && loading == false"
           class="new-list"
-          @click="createTaskListShow = true">
-          <span class="el-icon-plus"/>
+          @click="createTaskListShow = true"
+        >
+          <span class="el-icon-plus" />
           <span>新建列表</span>
         </div>
-        <div
-          v-else-if="createTaskListShow && loading == false"
-          class="input-btn">
-          <el-input
-            v-model="taskListName"
-            size="small"
-            placeholder="列表名"/>
+        <div v-else-if="createTaskListShow && loading == false" class="input-btn">
+          <el-input v-model="taskListName" size="small" placeholder="列表名" />
           <div class="button-box">
-            <el-button
-              size="mini"
-              type="primary"
-              @click="createTaskListSave">保存</el-button>
-            <el-button
-              size="mini"
-              @click="createTaskListShow = false">取消</el-button>
+            <el-button size="mini" type="primary" @click="createTaskListSave">保存</el-button>
+            <el-button size="mini" @click="createTaskListShow = false">取消</el-button>
           </div>
         </div>
       </div>
@@ -320,7 +276,8 @@
       :detail-index="detailIndex"
       :detail-section="detailSection"
       @on-handle="detailHandle"
-      @close="closeBtn"/>
+      @close="closeBtn"
+    />
   </div>
 </template>
 <script>
@@ -470,7 +427,7 @@ export default {
       if (params) {
         params.workId = this.workId
       } else {
-        params = { workId: this.workId }
+        params = { workId: this.workId, 'orderType': 4 }
       }
       this.loading = true
       workTaskIndexAPI(params)

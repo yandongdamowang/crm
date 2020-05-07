@@ -18,17 +18,27 @@ const annexRouter = {
       component: () => import('@/views/annexManagement/netdisk/Main'),
       meta: {
         title: '网盘',
-        icon: 'schedule'
+        icon: 'product'
+      }
+    },
+
+    {
+      path: 'type',
+      //   hidden: true,
+      component: () => import('@/views/annexManagement/type/Main'),
+      meta: {
+        title: '附件类型',
+        icon: 'tag'
       }
     },
 
     {
       path: 'recycle',
-      hidden: true,
-      component: () => import('@/views/contractManagement/rebateBill/Main'),
+      //   hidden: true,
+      component: () => import('@/views/annexManagement/recycle/Main'),
       meta: {
         title: '回收站',
-        icon: 'log'
+        icon: 'recycle'
       }
     }
 

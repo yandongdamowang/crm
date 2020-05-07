@@ -27,7 +27,7 @@
                 auto-complete="on"
                 placeholder="请输入用户名"
                 @keyup.enter.native="handleLogin"
-              ></el-input>
+              />
             </el-form-item>
 
             <el-form-item prop="password">
@@ -166,7 +166,7 @@ export default {
   },
   mounted() { },
   methods: {
-      
+
     getAuthCode: function() {
       //   const verification = this.loginForm.telephone
 
@@ -221,6 +221,14 @@ export default {
 $dark_gray: #ccc;
 $light_gray: #333;
 $login_theme: #00aaee;
+
+// /deep/ .el-input__inner {
+//   background-color: rgba(255, 255, 255, 0.2) !important;
+// }
+
+// /deep/.el-tabs__nav-wrap::after {
+//   background-color: rgba(255, 255, 255, 0.2) !important;
+// }
 
 /deep/ input {
   border: 0 none;
@@ -288,7 +296,7 @@ $login_theme: #00aaee;
   .right {
     position: absolute;
     width: 400px;
-    background-color: #fff;
+    background-color: rgba(255, 255, 255, 1);
     display: flex;
     align-items: center;
     flex-direction: column;
