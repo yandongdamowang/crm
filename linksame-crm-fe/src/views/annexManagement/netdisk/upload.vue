@@ -155,8 +155,8 @@ export default {
     localUpload() {
       console.log(123, this.fileRemark)
       this.versionData === undefined
-        ? this.uploadAction = process.env.BASE_API + `/file/upload?folderId=${this.folderId}&typeId=${this.fileTypeId}`
-        : this.uploadAction = process.env.BASE_API + `/file/changeVersion?fileId=${this.versionData.fileId}&folderId=${this.versionData.folderId}&fileRemark=${this.fileRemark}`
+        ? this.uploadAction = process.env.BASE_API + `file/upload?folderId=${this.folderId}&typeId=${this.fileTypeId}`
+        : this.uploadAction = process.env.BASE_API + `file/changeVersion?fileId=${this.versionData.fileId}&folderId=${this.versionData.folderId}&fileRemark=${this.fileRemark}`
 
       this.dialogLocalStatus = true
       console.log('上传地址', this.uploadAction)
