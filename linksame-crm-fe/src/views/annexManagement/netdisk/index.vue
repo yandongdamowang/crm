@@ -7,133 +7,144 @@
       </span>
     </div>
 
-    <div class="ls-tree-l">
-      <div class="ls-tree-search">
-        <el-button type="primary" @click="createFolder(folderCreateNameInner,0)">创建</el-button>
-        <el-input v-model="folderCreateNameInner" placeholder="请输入内容" style="width:200px" />
-      </div>
+    <el-row :gutter="30">
+      <el-col :span="6">
+        <div class="ls-tree-l">
+          <div class="ls-tree-search">
+            <el-button type="primary" @click="createFolder(folderCreateNameInner,0)">创建</el-button>
+            <el-input v-model="folderCreateNameInner" placeholder="请输入内容" style="width:200px" />
+          </div>
 
-      <div class="ls-tree-content">
-        <el-tree
-          ref="tree"
-          :data="folderListData"
-          :props="defaultProps"
-          :filter-node-method="filterNode"
-          class="filter-tree"
-          default-expand-all
-          @node-click="handleNodeClick"
-          @node-contextmenu="handleContextmenu"
-        >
-          <!-- <template slot-scope="scope">{{ scope.row }}</template> -->
-          <span slot-scope="{node,data}">
-            <span style="color:black">
-              <!-- <i class="el-icon-folder" /> -->
-              <img src="@/assets/filetype/folder.png" alt />
-              {{ data.folderName }}
-            </span>
-          </span>
-        </el-tree>
-      </div>
+          <div class="ls-tree-content">
+            <el-tree
+              ref="tree"
+              :data="folderListData"
+              :props="defaultProps"
+              :filter-node-method="filterNode"
+              :default-expand-all="false"
+              class="filter-tree"
+              @node-click="handleNodeClick"
+              @node-contextmenu="handleContextmenu"
+            >
+              <!-- <template slot-scope="scope">{{ scope.row }}</template> -->
+              <span slot-scope="{node,data}">
+                <span style="color:black">
+                  <!-- <i class="el-icon-folder" /> -->
+                  <img src="@/assets/filetype/folder.png" alt >
+                  {{ data.folderName }}
+                </span>
+              </span>
+            </el-tree>
+          </div>
 
-      <div v-if="tmDisplay" id="perTreeMenu" :style="{...rightMenu}" class="tree_menu">
-        <ul>
-          <li>
-            <span @click="dialogRenameStatus = true">重命名</span>
-          </li>
-          <li>
-            <span @click="dialogMoveStatus = true ">移动</span>
-          </li>
+          <div v-if="tmDisplay" id="perTreeMenu" :style="{...rightMenu}" class="tree_menu">
+            <ul>
+              <li>
+                <span @click="dialogRenameStatus = true">重命名</span>
+              </li>
+              <li>
+                <span @click="dialogMoveStatus = true ">移动</span>
+              </li>
 
-          <li>
-            <span @click="dialogCreateStatus = true">创建</span>
-          </li>
-          <li>
-            <span @click="deleteFolder ">删除</span>
-          </li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="ls-tree-r">
-      <div class="ls-tree-r-header">
-        <Upload :key="menuKey" :folder-id="folderSelect.folderId" @uploadStatus="uploadStatus" />
-        <el-button @click="renameFile">重命名</el-button>
-        <el-button @click="dialogMoveFileStatus = true">移 动</el-button>
-        <el-button @click="deleteFile">删 除</el-button>
-      </div>
-
-      <el-dialog :visible.sync="dialogMoveFileStatus" title="移动附件" width="30%">
-        <el-tree
-          ref="tree"
-          :data="folderListData"
-          :props="defaultProps"
-          :filter-node-method="filterNode"
-          style="margin:20px 0 0 0"
-          class="filter-tree"
-          default-expand-all
-          @node-click="handleNodeMoveFileClick"
-        >
-          <span slot-scope="{node,data}">
-            <span style="color:black">
-              <img src="@/assets/filetype/folder.png" />
-              {{ data.folderName }}
-            </span>
-          </span>
-        </el-tree>
-
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="dialogMoveFileStatus = false">取 消</el-button>
-          <el-button type="primary" @click="moveFile">确 定</el-button>
-        </span>
-      </el-dialog>
-
-      <el-dialog :visible.sync="dialogRenameFileStatus" title="重命名" width="50%">
-        <el-input v-model="fileRenameOld" :disabled="true" placeholder="请输入内容" style="width:300px" />
-        <span>重命名</span>
-        <el-input v-model="fileRenameNew" placeholder="请输入内容" style="width:300px" />
-
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="dialogRenameStatus = false">取 消</el-button>
-          <el-button type="primary" @click="renameFileCommit">确 定</el-button>
-        </span>
-      </el-dialog>
-
-      <div class="ls-tree-r-content">
-        <el-table
-          :data="fileTableData"
-          border
-          style="height: 92%"
-          @selection-change="handleSelectionChange"
-        >
-          >
-          <el-table-column type="selection" width="55" />
-          <el-table-column fixed prop="oldName" label="文件名">
-            <template slot-scope="scope">
-              <span @click="retriveFileDetail(scope.row)">{{ scope.row.oldName }}</span>
-            </template>
-          </el-table-column>
-
-          <el-table-column prop="compositionName" label="附件类型文件名" />
-
-          <el-table-column prop="size" label="大小" width="100" />
-          <el-table-column prop="createTime" label="更新时间" width="200" />
-
-          <el-table-column prop="createUserName" label="上传者" width="100" />
-        </el-table>
-
-        <div class="ls-pagination">
-          <el-pagination
-            :current-page="pageCurrent"
-            :page-sizes="[2, 10, 20]"
-            :page-size="pageSize"
-            :total="pageTotal"
-            layout="total, sizes, prev, pager, next, jumper"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-          />
+              <li>
+                <span @click="dialogCreateStatus = true">创建</span>
+              </li>
+              <li>
+                <span @click="deleteFolder ">删除</span>
+              </li>
+            </ul>
+          </div>
         </div>
-      </div>
-    </div>
+      </el-col>
+
+      <el-col :span="18">
+        <div class="ls-tree-r">
+          <div class="ls-tree-r-header">
+            <Upload :key="menuKey" :folder-id="folderSelect.folderId" @uploadStatus="uploadStatus" />
+            <el-button @click="renameFile">重命名</el-button>
+            <el-button @click="dialogMoveFileStatus = true">移 动</el-button>
+            <el-button @click="deleteFile">删 除</el-button>
+          </div>
+
+          <el-dialog :visible.sync="dialogMoveFileStatus" title="移动附件" width="30%">
+            <el-tree
+              ref="tree"
+              :data="folderListData"
+              :props="defaultProps"
+              :filter-node-method="filterNode"
+              :default-expand-all="false"
+              style="margin:20px 0 0 0"
+              class="filter-tree"
+              @node-click="handleNodeMoveFileClick"
+            >
+              <span slot-scope="{node,data}">
+                <span style="color:black">
+                  <img src="@/assets/filetype/folder.png" >
+                  {{ data.folderName }}
+                </span>
+              </span>
+            </el-tree>
+
+            <span slot="footer" class="dialog-footer">
+              <el-button @click="dialogMoveFileStatus = false">取 消</el-button>
+              <el-button type="primary" @click="moveFile">确 定</el-button>
+            </span>
+          </el-dialog>
+
+          <el-dialog :visible.sync="dialogRenameFileStatus" title="重命名" width="50%">
+            <el-input
+              v-model="fileRenameOld"
+              :disabled="true"
+              placeholder="请输入内容"
+              style="width:300px"
+            />
+            <span>重命名</span>
+            <el-input v-model="fileRenameNew" placeholder="请输入内容" style="width:300px" />
+
+            <span slot="footer" class="dialog-footer">
+              <el-button @click="dialogRenameStatus = false">取 消</el-button>
+              <el-button type="primary" @click="renameFileCommit">确 定</el-button>
+            </span>
+          </el-dialog>
+
+          <div class="ls-tree-r-content">
+            <el-table
+              :data="fileTableData"
+              border
+              style="height: 92%"
+              @selection-change="handleSelectionChange"
+            >
+              >
+              <el-table-column type="selection" width="55" />
+              <el-table-column fixed prop="oldName" label="文件名">
+                <template slot-scope="scope">
+                  <span @click="retriveFileDetail(scope.row)">{{ scope.row.oldName }}</span>
+                </template>
+              </el-table-column>
+
+              <el-table-column prop="compositionName" label="附件类型文件名" />
+
+              <el-table-column prop="size" label="大小" width="100" />
+              <el-table-column prop="createTime" label="更新时间" width="200" />
+
+              <el-table-column prop="createUserName" label="上传者" width="100" />
+            </el-table>
+
+            <div class="ls-pagination">
+              <el-pagination
+                :current-page="pageCurrent"
+                :page-sizes="[2, 10, 20]"
+                :page-size="pageSize"
+                :total="pageTotal"
+                layout="total, sizes, prev, pager, next, jumper"
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+              />
+            </div>
+          </div>
+        </div>
+      </el-col>
+    </el-row>
 
     <el-dialog :visible.sync="dialogCreateStatus" title="创建文件夹" width="15%">
       <el-input v-model="folderCreateNameOut" placeholder="请输入内容" style="width:200px" />
@@ -158,14 +169,13 @@
         :data="folderListData"
         :props="defaultProps"
         :filter-node-method="filterNode"
-        :default-expand-all="false"
         style="margin:20px 0 0 0"
         class="filter-tree"
         @node-click="handleNodeMoveClick"
       >
         <span slot-scope="{node,data}">
           <span style="color:black">
-            <img src="@/assets/filetype/folder.png" />
+            <img src="@/assets/filetype/folder.png" >
             {{ data.folderName }}
           </span>
         </span>
@@ -197,15 +207,15 @@
       <div style="padding: 30px">
         <div class="ls-drawertitle">
           <div class="ls-drawertitle-l">
-            {{ '导航' }}
+            所属文件夹：/{{ filePath }}/{{ fileSelect.compositionName }}
             <!-- <tag-index :placement="'bottom'" :task-data="taskData"> -->
-            <span>
+            <!-- <span>
               <tag-index :placement="'bottom'">
                 <div slot="editIndex">
                   <span>标签</span>
                 </div>
               </tag-index>
-            </span>
+            </span>-->
           </div>
 
           <!-- <div class="particulars-priority-copy">
@@ -351,15 +361,19 @@
               :color="activity.color"
           :size="activity.size"-->
           <el-tab-pane label="历史版本" name="second">
+            <!-- {{ historyVersionData }} -->
             <el-timeline>
               <el-timeline-item
                 v-for="(activity, index) in historyVersionData"
                 :key="index"
                 :timestamp="activity.createTime"
               >
-                备注：{{ activity.fileRemark }}
-                <div>文件名：</div>
-                <div type="primary" @click="moveFolder">确 定</div>
+                <!-- {{ activity }} -->
+                <div>文件名：{{ activity.oldName }}</div>
+                <div>附件名：{{ activity.compositionName }}</div>
+                <div>文件版本：{{ activity.fileVersion }}</div>
+                <div>备注：{{ activity.fileRemark }}</div>
+                <!-- <div type="primary" @click="moveFolder">确 定</div> -->
               </el-timeline-item>
             </el-timeline>
           </el-tab-pane>
@@ -450,6 +464,7 @@ export default {
       fileRenameNew: undefined,
       fileMovefolderId: undefined,
       fileDetailLogTable: [],
+      filePath: '',
       tmDisplay: false,
       rightMenu: {},
       filterText: '',
@@ -569,7 +584,8 @@ export default {
 
 
     uploadStatus(status) {
-      console.log(status)
+      console.log('关闭弹窗', status)
+      this.retriveFileList()
     },
 
 
@@ -588,20 +604,21 @@ export default {
 
 
     createFolder(folderCreateName, folderCreateNamePid) {
-      this.$request
-        .post(`/folder/createFolder?folderName=${folderCreateName}&folderCode=CONTRACTUAL&folderPid=${folderCreateNamePid}&batchId=${this.batchId}`)
-        .then(res => {
-          console.log(res)
-          this.folderName = ''
-          this.folderListData = res.data
+      folderCreateName === undefined ? this.$message.error('请输入文件名')
+        : this.$request
+          .post(`/folder/createFolder?folderName=${folderCreateName}&folderCode=CONTRACTUAL&folderPid=${folderCreateNamePid}&batchId=${this.batchId}`)
+          .then(res => {
+            console.log(res)
+            this.folderName = ''
+            this.folderListData = res.data
 
-          this.dialogCreateStatus = false
-          this.folderCreateNameOut = ''
-          this.folderCreateNameInner = ''
-          this.retriveFolderList()
-        }).catch(e => {
-          console.log('retriveFolderList err', e)
-        })
+            this.dialogCreateStatus = false
+            this.folderCreateNameOut = ''
+            this.folderCreateNameInner = ''
+            this.retriveFolderList()
+          }).catch(e => {
+            console.log('retriveFolderList err', e)
+          })
     },
 
 
@@ -671,6 +688,12 @@ export default {
           this.drawer = true
           this.fileSelect = res.data
           this.historyVersionData = res.data.historyFileList
+          this.$request
+            .post(`/file/queryFolderPathById?fileId=${row.fileId}`)
+            .then(res => {
+              console.log('文件路径', res.data)
+              this.filePath = res.data
+            })
           this.retriveFileDetailLog()
         }).catch(e => {
           console.log('/file/getFileList err', e)
@@ -883,8 +906,9 @@ export default {
 .ls-tree-l {
   background: white;
   height: calc(100% - 40px);
-  width: 20%;
+  width: 100%;
   float: left;
+
   overflow: hidden;
   margin: 0px 10px 0 10px;
   padding: 20px 20px 10px 20px;
@@ -901,7 +925,8 @@ export default {
 .ls-tree-r {
   background: white;
   float: right;
-  width: 78%;
+
+  width: 100%;
   height: calc(100% - 40px);
   margin: 0px 10px 0 0px;
   .ls-tree-r-header {

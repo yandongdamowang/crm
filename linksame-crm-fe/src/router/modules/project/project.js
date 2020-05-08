@@ -76,16 +76,6 @@ const recycleRouter = {
     fontSize: '18px'
   }
 }
-// // 附件
-// const annexRouter = {
-//   path: 'annex',
-//   component: () => import('@/views/projectManagement/annex/Main'),
-//   meta: {
-//     icon: 'schedule',
-//     title: '附件',
-//     fontSize: '14px'
-//   }
-// }
 
 // 其他
 const otherRouter = {

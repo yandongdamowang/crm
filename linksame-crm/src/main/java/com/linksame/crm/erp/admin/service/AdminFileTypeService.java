@@ -29,8 +29,7 @@ public class AdminFileTypeService {
     public R queryList(BasePageRequest<AdminFileType> basePageRequest){
         JSONObject jsonObject = basePageRequest.getJsonObject();
         Kv kv = Kv.by("typeName", jsonObject.getString("typeName"))
-                .set("typeCode", jsonObject.getString("typeCode"))
-                .set("createUserId", BaseUtil.getUser().getUserId());
+                .set("typeCode", jsonObject.getString("typeCode"));
         if (basePageRequest.getPageType() == 0) {
             List<Record> records = Db.find(Db.getSqlPara("admin.type.queryList", kv));
             return R.ok().put("data", records);

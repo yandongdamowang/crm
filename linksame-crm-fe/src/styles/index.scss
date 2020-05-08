@@ -259,6 +259,11 @@ div[lazy='loading'] {
 
   .ls-drawertitle-l {
     float: left;
+
+    width: 80%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
   .ls-drawertitle-r {
     float: right;

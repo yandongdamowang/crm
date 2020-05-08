@@ -15,7 +15,7 @@ const annexRouter = {
     {
       path: 'netdisk', // 工作台
       //   hidden: true,
-      component: () => import('@/views/annexManagement/netdisk/Main'),
+      component: () => import('@/views/annexManagement/netdisk/index'),
       meta: {
         title: '网盘',
         icon: 'product'
@@ -25,7 +25,7 @@ const annexRouter = {
     {
       path: 'type',
       //   hidden: true,
-      component: () => import('@/views/annexManagement/type/Main'),
+      component: () => import('@/views/annexManagement/type/index'),
       meta: {
         title: '附件类型',
         icon: 'tag'
@@ -35,7 +35,7 @@ const annexRouter = {
     {
       path: 'recycle',
       //   hidden: true,
-      component: () => import('@/views/annexManagement/recycle/Main'),
+      component: () => import('@/views/annexManagement/recycle/index'),
       meta: {
         title: '回收站',
         icon: 'recycle'
