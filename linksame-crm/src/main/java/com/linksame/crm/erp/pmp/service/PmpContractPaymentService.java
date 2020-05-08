@@ -106,9 +106,11 @@ public class PmpContractPaymentService {
 
         if (basePageRequest.getPageType() == 0){
             List<Record> records = Db.find(Db.getSqlPara("pmp.contractPayment.queryAdvanceList", kv));
+            records.forEach(record -> record.set("totalPayment",Db.queryBigDecimal("SELECT SUM(pcpr.practica_advanced)  FROM pmp_contract_payment_record pcpr LEFT JOIN pmp_contract pc ON pcpr.contract_id = pc.contract_id WHERE pc.contract_id = ?", record.getLong("contract_id"))));
             return R.ok().put("data",records);
         }else {
             Page<Record> paginate = Db.paginate(basePageRequest.getPage(), basePageRequest.getLimit(), Db.getSqlPara("pmp.contractPayment.queryAdvanceList", kv));
+            paginate.getList().forEach(record -> record.set("totalPayment",Db.queryBigDecimal("SELECT SUM(pcpr.practica_advanced)  FROM pmp_contract_payment_record pcpr LEFT JOIN pmp_contract pc ON pcpr.contract_id = pc.contract_id WHERE pc.contract_id = ?", record.getLong("contract_id"))));
             return R.ok().put("data", paginate);
         }
     }
@@ -116,8 +118,7 @@ public class PmpContractPaymentService {
     public R queryAdvanceBybillId(Long billId) {
         Kv kv = Kv.by("billId", billId).set("orderBy","1");
         Record first = Db.findFirst(Db.getSqlPara("pmp.contractPayment.queryAdvanceList", kv));
-        BigDecimal aLong = Db.queryBigDecimal("SELECT SUM(pcpr.practica_advanced)  FROM pmp_contract_payment_record pcpr LEFT JOIN pmp_contract pc ON pcpr.contract_id = pc.contract_id WHERE pc.contract_id = ?", first.getLong("contract_id"));
-        return R.ok().put("data", first).put("totalPayment",aLong);
+        return R.ok().put("data", first);
     }
 
     public R setPriority(long billId, String priority) {
