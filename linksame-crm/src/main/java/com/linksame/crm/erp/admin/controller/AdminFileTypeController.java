@@ -3,6 +3,7 @@ package com.linksame.crm.erp.admin.controller;
 import com.jfinal.aop.Inject;
 import com.jfinal.core.Controller;
 import com.jfinal.core.paragetter.Para;
+import com.linksame.crm.common.annotation.Permissions;
 import com.linksame.crm.common.config.paragetter.BasePageRequest;
 import com.linksame.crm.erp.admin.entity.AdminFileType;
 import com.linksame.crm.erp.admin.service.AdminFileTypeService;
@@ -43,6 +44,7 @@ public class AdminFileTypeController extends Controller {
     @ApiImplicitParams({
             @ApiImplicitParam(name="adminFileType", description="文件类型对象")
     })
+    @Permissions({"file:typeManage:edit"})
     public void setType(@Para("") AdminFileType adminFileType){
         renderJson(adminFileTypeService.setType(adminFileType));
     }
@@ -55,6 +57,7 @@ public class AdminFileTypeController extends Controller {
     @ApiImplicitParams({
             @ApiImplicitParam(name="typeId", description="文件类型ID")
     })
+    @Permissions({"file:typeManage:delete"})
     public void delType(Integer typeId){
         renderJson(AdminFileType.dao.deleteById(typeId) ? R.ok() : R.error());
     }
