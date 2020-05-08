@@ -242,13 +242,13 @@ public class TaskController extends Controller{
     }
 
     /**
-     * 根据任务名称模糊搜索任务列表
+     * 根据条件查询任务列表
      */
-    @ApiOperation(methods= RequestMethod.POST, description="根据任务名称模糊搜索任务列表")
+    @ApiOperation(methods= RequestMethod.POST, description="根据条件查询任务列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name="basePageRequest", description="请求对象")
     })
-    public void queryTaskByName(BasePageRequest basePageRequest){
-        renderJson(taskService.queryTaskByName(basePageRequest));
+    public void queryList(BasePageRequest<Task> basePageRequest){
+        renderJson(taskService.queryList(basePageRequest));
     }
 }
