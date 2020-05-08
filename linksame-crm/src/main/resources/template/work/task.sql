@@ -100,7 +100,54 @@
       #end
       order by a.create_time desc
   #end
-  #sql("queryTaskByName")
-    select * from task where name like concat('%', #para(taskName),'%') and ishidden = 0
+
+  #sql("queryList")
+    select a.*,b.realname as mainRealname from task a
+	    left join admin_user b on a.main_user_id = b.user_id
+        where 1=1
+        #if(taskName)
+            and a.name like concat('%', #para(taskName),'%')
+        #end
+        #if(mainUserId)
+            and a.main_user_id = #para(mainUserId)
+        #end
+        #if(ownerUserId)
+            and find_in_set(#para(ownerUserId), a.owner_user_id)
+        #end
+        #if(status)
+            and a.status = #para(status)
+        #end
+        #if(classId)
+            and a.class_id = #para(classId)
+        #end
+        #if(labelId)
+            and find_in_set(#para(labelId), a.label_id)
+        #end
+        #if(pid)
+            and a.pid = #para(pid)
+        #end
+        #if(priority)
+            and a.priority = #para(priority)
+        #end
+        #if(workId)
+            and a.work_id = #para(workId)
+        #end
+        #if(sprintId)
+            and a.sprint_id = #para(sprintId)
+        #end
+        #if(isArchive)
+            and a.is_archive = #para(isArchive)
+        #end
+        #if(batchId)
+            and a.batch_id = #para(batchId)
+        #end
+        #if(createUserId)
+            and a.create_user_id = #para(createUserId)
+        #end
+        #if(orderBy == 1)
+           order by a.start_time asc
+        #else
+            order by a.start_time desc
+        #end
   #end
 #end
