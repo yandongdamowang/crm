@@ -198,4 +198,18 @@ public abstract class BasePmpContractPayment<M extends BasePmpContractPayment<M>
         return getLong("owner_user_id");
     }
 
+    public void setRemark(String remark) {
+        set("remark", remark);
+    }
+
+    public String getRemark() {
+        return getStr("remark");
+    }
+    public void setApplicantCompany(String applicantCompany) {
+        set("applicant_company", applicantCompany);
+    }
+
+    public String getApplicantCompany() {
+        return getStr("applicant_company");
+    }
 }

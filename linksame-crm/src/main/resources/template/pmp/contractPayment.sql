@@ -31,9 +31,10 @@
     #end
 
     #sql("queryAdvanceList")
-        select pcp.*,pc.contract_number,pc.customer_id,pc.money as contractMoney,pc.proprietor,cc.customer_name
+        select pcp.*,pc.contract_number,pc.customer_id,pc.money as contractMoney,pc.proprietor,cc.customer_name,au.realname owner_user_name
         from  pmp_contract as pc left join pmp_contract_payment AS pcp on pcp.contract_id = pc.contract_id
         left join crm_customer AS cc on cc.customer_id = pc.customer_id
+				LEFT JOIN admin_user as au  on au.user_id = pcp.owner_user_id
         where pcp.is_deleted = '0'
             and pcp.trade_status <> '1'
             #if(billId)

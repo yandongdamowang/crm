@@ -87,7 +87,7 @@ public class PmpContractPaymentController extends Controller {
 
         pmpContractPayment.setUpdateTime(new Date(System.currentTimeMillis()));
         boolean update = pmpContractPayment.update();
-        renderJson();
+        renderJson(update?R.ok():R.error());
 
     }
     /**
