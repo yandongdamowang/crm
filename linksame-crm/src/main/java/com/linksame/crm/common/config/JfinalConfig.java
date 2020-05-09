@@ -63,8 +63,8 @@ public class JfinalConfig extends JFinalConfig {
             me.setBaseDownloadPath(BaseConstant.UPLOAD_PATH);
         }*/
         me.setJsonFactory(new ErpJsonFactory());
-        //限制上传100M
-        me.setMaxPostSize(104857600);
+        //上传文件大小限制, 客户需求1个G以上, 设置为2G超出int值限制, 取int最大值
+        me.setMaxPostSize(2147483647);
         //jfinal Can not get javax.tools.JavaCompiler, check whether "tools.jar" is in the environment variable CLASSPATH
         //添加注入Proxy动态代理配置(4.6之前配置方式)
         me.setProxyFactory(new CglibProxyFactory());
@@ -100,13 +100,19 @@ public class JfinalConfig extends JFinalConfig {
         ParaProcessorBuilder.me.regist(Map.class, MapParaGetter.class, null);
         // 配置 druid 数据库连接池插件
         DruidPlugin druidPlugin = createDruidPlugin();
-        druidPlugin.setInitialSize(0);
+        druidPlugin.setInitialSize(15);
         druidPlugin.setMinIdle(0);
         druidPlugin.setMaxActive(2000);
-        druidPlugin.setTimeBetweenEvictionRunsMillis(5000);
         druidPlugin.setValidationQuery("select 1");
-        druidPlugin.setTimeBetweenEvictionRunsMillis(60000);
-        druidPlugin.setMinEvictableIdleTimeMillis(30000);
+        //连接Idle最小连接30分钟，每15分钟检查一次
+        druidPlugin.setTimeBetweenEvictionRunsMillis(900000);
+        druidPlugin.setMinEvictableIdleTimeMillis(1800000);
+        //连接超时设置
+        druidPlugin.setMaxWait(600000);
+        //每次连接操作数据库时，检测：该连接的有效性
+        druidPlugin.setTestOnBorrow(true);
+        druidPlugin.setTestOnReturn(false);
+        druidPlugin.setTestWhileIdle(true);
         me.add(druidPlugin);
         // 配置ActiveRecord插件
         ActiveRecordPlugin arp = new ActiveRecordPlugin(druidPlugin);
@@ -128,13 +134,12 @@ public class JfinalConfig extends JFinalConfig {
         //swagger配置
         me.add(new SwaggerPlugin(new SwaggerDoc().setBasePath("/").setHost(BaseConstant.SWAGGER_PATH).setSwagger("2.0")
                 .setInfo(new SwaggerApiInfo(BaseConstant.SWAGGER_DESCRIPTION, "1.0", BaseConstant.SWAGGER_TITLE, ""))));
-
         //model映射
         _MappingKit.mapping(arp);
     }
 
     public static DruidPlugin createDruidPlugin() {
-        return new DruidPlugin(prop.get("mysql.jdbcUrl"), prop.get("mysql.user"), prop.get("mysql.password").trim()).setInitialSize(1).setMinIdle(1).setMaxActive(2000).setTimeBetweenEvictionRunsMillis(5000).setValidationQuery("select 1").setTimeBetweenEvictionRunsMillis(60000).setMinEvictableIdleTimeMillis(30000).setFilters("stat,wall");
+        return new DruidPlugin(prop.get("mysql.jdbcUrl"), prop.get("mysql.user"), prop.get("mysql.password").trim()).setFilters("stat,wall");
     }
 
     /**

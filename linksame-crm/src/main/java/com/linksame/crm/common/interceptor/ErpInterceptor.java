@@ -7,9 +7,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;
 import com.jfinal.core.Controller;
+import com.jfinal.kit.StrKit;
 import com.jfinal.log.Log;
 import com.jfinal.plugin.activerecord.Record;
 import com.linksame.crm.common.annotation.HttpEnum;
+import com.linksame.crm.common.annotation.NotBlank;
 import com.linksame.crm.common.annotation.NotNullValidate;
 import com.linksame.crm.common.annotation.RequestBody;
 import com.linksame.crm.common.config.redis.RedisManager;
@@ -37,7 +39,11 @@ public class ErpInterceptor implements Interceptor {
                 }
                 BaseUtil.setUser(adminUser);
                 //数据非空验证
-                if(!this.notNullValidate(invocation)){
+                /*if(!this.notNullValidate(invocation)){
+                    return;
+                }*/
+                //新增数据非空校验
+                if(!this.notBlank(invocation)){
                     return;
                 }
                 this.modelToJson(invocation);
@@ -54,6 +60,23 @@ public class ErpInterceptor implements Interceptor {
         } finally {
             BaseUtil.removeThreadLocal();
         }
+    }
+
+    //非空校验
+    public boolean notBlank(Invocation inv){
+        NotBlank annotation = inv.getMethod().getAnnotation(NotBlank.class);
+        if (annotation != null && annotation.value().length > 0) {
+            Controller controller = inv.getController();
+            for (String name : annotation.value()) {
+                // 判断是否为空
+                String para = controller.getPara(name);
+                if (StrKit.isBlank(para)) {
+                    controller.renderJson(R.error("参数" + name + "不允许为空"));
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**
