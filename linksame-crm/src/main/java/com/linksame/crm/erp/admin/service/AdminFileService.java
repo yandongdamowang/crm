@@ -65,7 +65,6 @@ public class AdminFileService {
      * @param file      文件
      * @return
      */
-    @Before(Tx.class)
     public R sysUpload(UploadFile file) {
         String url = "";
         try{
@@ -91,29 +90,23 @@ public class AdminFileService {
      * @param batchId 批次ID
      */
     @Before(Tx.class)
-    public R upload(UploadFile file, AdminFile adminFile) {
+    public R upload(AdminFile adminFile) {
         String compositionName;
         if(adminFile.getFolderId() == null){
             return R.error("folderId参数不允许为空");
         }
         try{
-            //上传文件至minio服务器
-            AdminFile resultFile = MinioServicce.uploadFile(file);
-            //插入数据到文件表中
-            adminFile.setFileName(resultFile.getFileName());
-            adminFile.setSize(file.getFile().length());
-            adminFile.setBucketName(resultFile.getBucketName());
-            adminFile.setOldName(resultFile.getOldName());
-            adminFile.setBatchId(adminFile.getBatchId());
-            adminFile.setCreateTime(new Date());
-            adminFile.setCreateUserId(BaseUtil.getUser().getUserId());
-
             //如果是图片类型,通过文件名请求minio,获取访问路径
             String suffix = FileUtil.extName(adminFile.getFileName());
             //文件格式校验
             if(StringUtils.isEmpty(suffix) || suffix.length()<3 || !suffix.matches("[a-zA-Z]+") || suffix.indexOf(" ") != -1){
                 return R.error("请上传格式正确的文件");
             }
+
+            //插入数据到文件表中
+            adminFile.setBatchId(adminFile.getBatchId());
+            adminFile.setCreateTime(new Date());
+            adminFile.setCreateUserId(BaseUtil.getUser().getUserId());
             adminFile.setSuffix(suffix);
 
             //文件格式处理
@@ -130,7 +123,7 @@ public class AdminFileService {
                 generateFile.update();
             }
 
-            return R.ok().put("batchId", adminFile.getBatchId()).put("fileName",adminFile.getFileName()).put("oldName",adminFile.getOldName()).put("compositionName",adminFile.getCompositionName()).put("path", adminFile.getPath()).put("size",file.getFile().length()/1000+"KB").put("fileId",adminFile.getFileId());
+            return R.ok().put("batchId", adminFile.getBatchId()).put("fileName",adminFile.getFileName()).put("oldName",adminFile.getOldName()).put("compositionName",adminFile.getCompositionName()).put("path", adminFile.getPath()).put("size",adminFile.getSize()/1000+"KB").put("fileId",adminFile.getFileId());
         } catch (RuntimeException e) {
             throw new RuntimeException("上传文件至Minio服务器出现异常");
         }
@@ -161,30 +154,11 @@ public class AdminFileService {
     }
 
     /**
-     * 批量上传附件
-     * @param files         文件集合
-     * @param adminFile     文件对象
-     * @param workId        项目ID
-     * @return
-     */
-    @Before(Tx.class)
-    public R batchUpload(List<UploadFile> files, AdminFile adminFile){
-        if(CollectionUtil.isEmpty(files)){
-            return R.error("文件数据不允许为空");
-        }
-        for(UploadFile file : files){
-            upload(file, adminFile);
-        }
-        return R.ok();
-    }
-
-    /**
      * 附件更新版本
      * @param file      文件
      * @param adminFile 附件对象
      * @return
      */
-    @Before(Tx.class)
     public R changeVersion(UploadFile file, AdminFile adminFile) {
         String compositionName;
         if(adminFile.getFolderId() == null){
@@ -193,22 +167,26 @@ public class AdminFileService {
         try{
             //上传文件至minio服务器
             AdminFile resultFile = MinioServicce.uploadFile(file);
+
+            //如果是图片类型,通过文件名请求minio,获取访问路径
+            String suffix = FileUtil.extName(resultFile.getFileName());
+            //文件格式校验
+            if(StringUtils.isEmpty(suffix) || suffix.length()<3 || !suffix.matches("[a-zA-Z]+") || suffix.indexOf(" ") != -1){
+                return R.error("请上传格式正确的文件");
+            }
+
             //插入数据到文件表中
             adminFile.setBucketName(resultFile.getBucketName());
             adminFile.setOldName(resultFile.getOldName());
             adminFile.setBatchId(adminFile.getBatchId());
             adminFile.setCreateTime(new Date());
             adminFile.setCreateUserId(BaseUtil.getUser().getUserId());
-            //如果是图片类型,通过文件名请求minio,获取访问路径
-            String suffix = FileUtil.extName(resultFile.getFileName());
-            if(suffix.equalsIgnoreCase("gif") || suffix.equalsIgnoreCase("png")
-                    || suffix.equalsIgnoreCase("jpg") || suffix.equalsIgnoreCase("jpeg")) {
-                String path = MinioServicce.getImgUrl(resultFile.getFileName(), suffix);
-                adminFile.setPath(path);
-                adminFile.setFileType("img");
-            }
             adminFile.setFileName(resultFile.getFileName());
             adminFile.setSize(file.getFile().length());
+
+            //文件格式处理
+            adminFile = withSuffixByFile(adminFile);
+
             //获取附件数据
             AdminFile historyFile = AdminFile.dao.findById(adminFile.getFileId());
             adminFile.setHistoryFileId(historyFile.getHistoryFileId());

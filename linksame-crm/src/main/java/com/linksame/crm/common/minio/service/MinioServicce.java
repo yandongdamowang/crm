@@ -51,20 +51,37 @@ public class MinioServicce {
      */
     public static AdminFile uploadFile(UploadFile file) {
         AdminFile adminFile = new AdminFile();
+        FileInputStream bi = null;
         try {
-            FileInputStream inputStream = new FileInputStream(file.getFile());
+            //计时开始
+            long startTime = System.currentTimeMillis();
+            bi = new FileInputStream(file.getFile());
+
             //重新命名文件名，采用uuid,避免文件名中带有‘-’导致解析出错
             String newFileName = IdUtil.simpleUUID() + StrUtil.DOT + FileUtil.extName(file.getOriginalFileName());
             //将文件上传到minio-oss服务器中
-            MinioFactory.getMinioClient().putObject(BaseConstant.BUCKET_NAME, newFileName, inputStream, file.getContentType());
+            MinioFactory.getMinioClient().putObject(BaseConstant.BUCKET_NAME, newFileName, bi, file.getContentType());
             //返回桶名、新文件名，旧文件名
             adminFile.setBucketName(BaseConstant.BUCKET_NAME);
             adminFile.setFileName(newFileName);
             adminFile.setOldName(file.getOriginalFileName());
-            LogKit.info("上传成功,文件名: " + newFileName);
+
+            //计时结束
+            long endTime = System.currentTimeMillis();
+
+            LogKit.info("上传成功,文件名: " + newFileName + ", 执行时间：" + (endTime - startTime) + "ms");
         } catch (Exception e) {
             LogKit.error("上传文件失败!");
+        } finally {
+            if (bi != null) {
+                try {
+                    bi.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
+
         return adminFile;
     }
 

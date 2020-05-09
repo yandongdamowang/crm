@@ -1,6 +1,8 @@
 package com.linksame.crm.erp.admin.controller;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.jfinal.core.paragetter.Para;
+import com.jfinal.upload.UploadFile;
 import com.linksame.crm.common.annotation.Permissions;
 import com.linksame.crm.common.config.paragetter.BasePageRequest;
 import com.linksame.crm.common.minio.service.MinioServicce;
@@ -45,7 +47,14 @@ public class AdminFileController extends Controller {
             @ApiImplicitParam(name="adminFile", description="附件对象")
     })
     public void upload(@Para("") AdminFile adminFile) {
-        renderJson(adminFileService.upload(getFile("file"),adminFile));
+        //上传文件至minio服务器
+        AdminFile resultFile = MinioServicce.uploadFile(getFile("file"));
+        adminFile.setBucketName(resultFile.getBucketName());
+        adminFile.setFileName(resultFile.getFileName());
+        adminFile.setOldName(resultFile.getOldName());
+        adminFile.setSize(getFile("file").getFile().length());
+
+        renderJson(adminFileService.upload(adminFile));
     }
 
     /**
@@ -56,7 +65,19 @@ public class AdminFileController extends Controller {
             @ApiImplicitParam(name="files", description="附件集合")
     })
     public void batchUpload(@Para("") AdminFile adminFile){
-        renderJson(adminFileService.batchUpload(getFiles("files"),adminFile));
+        if(CollectionUtil.isEmpty(getFiles("files"))){
+            renderJson(R.error("文件数据不允许为空"));
+        }
+        for(UploadFile file : getFiles("files")){
+            //上传文件至minio服务器
+            AdminFile resultFile = MinioServicce.uploadFile(file);
+            adminFile.setBucketName(resultFile.getBucketName());
+            adminFile.setFileName(resultFile.getFileName());
+            adminFile.setOldName(resultFile.getOldName());
+            adminFile.setSize(file.getFile().length());
+            adminFileService.upload(adminFile);
+        }
+        renderJson(R.ok());
     }
 
     /**
