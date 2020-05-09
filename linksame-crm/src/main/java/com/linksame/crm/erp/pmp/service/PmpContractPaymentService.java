@@ -1,5 +1,6 @@
 package com.linksame.crm.erp.pmp.service;
 
+import cn.hutool.core.util.IdUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.aop.Inject;
 import com.jfinal.kit.Kv;
@@ -10,6 +11,7 @@ import com.linksame.crm.common.config.paragetter.BasePageRequest;
 import com.linksame.crm.erp.crm.common.CrmEnum;
 import com.linksame.crm.erp.crm.service.CrmRecordService;
 import com.linksame.crm.erp.pmp.common.PmpInterface;
+import com.linksame.crm.erp.pmp.entity.PmpContract;
 import com.linksame.crm.erp.pmp.entity.PmpContractPayment;
 import com.linksame.crm.erp.pmp.entity.PmpContractPaymentRecord;
 import com.linksame.crm.utils.R;
@@ -221,5 +223,35 @@ public class PmpContractPaymentService {
 
     public R update(PmpContractPayment bills) {
         return bills.update() ? R.ok() : R.error();
+    }
+
+    public R confirmPayment(Long billId) {
+        PmpContractPayment byId = PmpContractPayment.dao.findById(billId);
+        PmpContract byId1 = PmpContract.dao.findById(byId.getContractId());
+        if (byId.getCheckStatus() != 1){
+            return R.error("审批过程中,无法直接付款");
+        }
+        byId.setpracticalMoney(byId.getMoney());
+        byId.setTradeStatus(PmpInterface.contractPayment.trade.stats.OK);
+        byId.setPracticalCostPercentage(byId.getCostPercentage());
+        PmpContractPaymentRecord pmpContractPaymentRecord = new PmpContractPaymentRecord();
+        pmpContractPaymentRecord.setPaymentClause(byId.getPaymentName());
+        pmpContractPaymentRecord.setCustomerid(byId1.getCustomerId());
+        pmpContractPaymentRecord.setContractId(byId.getContractId());
+        pmpContractPaymentRecord.setAdvanceRatio(byId.getCostPercentage());
+        pmpContractPaymentRecord.setAmountAdvanced(byId.getMoney());
+        pmpContractPaymentRecord.setPracticaAdvanced(byId.getMoney());
+        pmpContractPaymentRecord.setPracticalRatio(byId.getCostPercentage());
+        pmpContractPaymentRecord.setPaymentTime(new Date(System.currentTimeMillis()));
+        pmpContractPaymentRecord.setPaymentType("支付宝");
+        pmpContractPaymentRecord.setResponsiblePerson("经办人");
+        pmpContractPaymentRecord.setRemark(byId.getRemark());
+        pmpContractPaymentRecord.setUpdateTime(new Date(System.currentTimeMillis()));
+        pmpContractPaymentRecord.setCreateTime(new Date(System.currentTimeMillis()));
+        pmpContractPaymentRecord.setPlannedPaymentTime(byId.getPaymentNode());
+        pmpContractPaymentRecord.setDeduction(byId.getPracticalMoney().subtract(byId.getMoney()));
+        pmpContractPaymentRecord.setBatchId(IdUtil.simpleUUID());
+        pmpContractPaymentRecord.save();
+        return R.ok();
     }
 }

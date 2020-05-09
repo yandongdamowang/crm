@@ -148,4 +148,12 @@ public class PmpContractPaymentController extends Controller {
         JSONObject jsonObject = JSON.parseObject(getRawData());
         renderJson(pmpContractPaymentService.paymentReport(jsonObject));
     }
+    /**
+     *
+     *  付款记录报表
+     */
+    public void confirmPayment(){
+        Long billId = getLong("billId");//账单ID
+        renderJson(pmpContractPaymentService.confirmPayment(billId));
+    }
 }

@@ -54,12 +54,12 @@ public abstract class BasePmpContractPayment<M extends BasePmpContractPayment<M>
         return getStr("payment_clause");
     }
 
-    public void setCostPercentage(Long costPercentage) {
+    public void setCostPercentage(Integer costPercentage) {
         set("cost_percentage", costPercentage);
     }
 
-    public Long getCostPercentage() {
-        return getLong("cost_percentage");
+    public Integer getCostPercentage() {
+        return getInt("cost_percentage");
     }
 
     public void setMoney(java.math.BigDecimal money) {
@@ -158,12 +158,12 @@ public abstract class BasePmpContractPayment<M extends BasePmpContractPayment<M>
         return getStr("batch_id");
     }
 
-    public void setPracticalCostPercentage(Long practicalCostPercentage) {
+    public void setPracticalCostPercentage(Integer practicalCostPercentage) {
         set("practical_cost_percentage", practicalCostPercentage);
     }
 
-    public Long getPracticalCostPercentage() {
-        return getLong("practical_cost_percentage");
+    public Integer getPracticalCostPercentage() {
+        return getInt("practical_cost_percentage");
     }
 
     public void setpracticalMoney(java.math.BigDecimal practicalMoney) {
