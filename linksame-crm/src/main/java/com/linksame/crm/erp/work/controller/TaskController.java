@@ -6,6 +6,8 @@ import com.jfinal.core.Controller;
 import com.jfinal.core.paragetter.Para;
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
+import com.linksame.crm.common.annotation.NotBlank;
+import com.linksame.crm.common.annotation.NotNullValidate;
 import com.linksame.crm.common.annotation.Permissions;
 import com.linksame.crm.common.config.paragetter.BasePageRequest;
 import com.linksame.crm.common.constant.BaseConstant;
@@ -49,6 +51,7 @@ public class TaskController extends Controller{
             @ApiImplicitParam(name="taskClass", description="任务分类对象")
     })
     @Permissions({"project:taskManage:saveClass"})
+    @NotBlank({ "name", "workId" })
     public void setTaskClass(@Para("") WorkTaskClass taskClass){
         renderJson(taskService.setTaskClass(taskClass));
     }
@@ -80,6 +83,7 @@ public class TaskController extends Controller{
             @ApiImplicitParam(name="contractIds", description="合同编号(逗号分隔)")
     })
     @Permissions({"project:taskManage:save"})
+    @NotBlank({ "name" })
     public void setTask(@Para("") Task task){
         boolean oaAuth = false;
         boolean workAuth = false;
@@ -242,13 +246,13 @@ public class TaskController extends Controller{
     }
 
     /**
-     * 根据任务名称模糊搜索任务列表
+     * 根据条件查询任务列表
      */
-    @ApiOperation(methods= RequestMethod.POST, description="根据任务名称模糊搜索任务列表")
+    @ApiOperation(methods= RequestMethod.POST, description="根据条件查询任务列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name="basePageRequest", description="请求对象")
     })
-    public void queryTaskByName(BasePageRequest basePageRequest){
-        renderJson(taskService.queryTaskByName(basePageRequest));
+    public void queryList(BasePageRequest<Task> basePageRequest){
+        renderJson(taskService.queryList(basePageRequest));
     }
 }

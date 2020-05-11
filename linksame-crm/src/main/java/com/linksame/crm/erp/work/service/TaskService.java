@@ -3,6 +3,7 @@ package com.linksame.crm.erp.work.service;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.utils.StringUtils;
 import com.jfinal.aop.Before;
 import com.jfinal.aop.Inject;
@@ -572,12 +573,38 @@ public class TaskService{
     }
 
     /**
-     * 根据任务名称模糊搜索任务列表
-     * @param basePageRequest  任务名关键字
+     * 根据条件查询任务列表
+     * @param basePageRequest
      * @return
      */
-    public R queryTaskByName(BasePageRequest basePageRequest){
-        Page<Record> recordList = Db.paginate(basePageRequest.getPage(), basePageRequest.getLimit(), Db.getSqlPara("work.task.queryTaskByName", Kv.by("taskName", basePageRequest.getJsonObject().getString("taskName"))));
-        return R.ok().put("data", recordList);
+    public R queryList(BasePageRequest<Task> basePageRequest){
+        JSONObject jsonObject = basePageRequest.getJsonObject();
+        Kv kv= Kv.by("taskName", jsonObject.getString("taskName"))
+                .set("mainUserId", jsonObject.getString("mainUserId"))
+                .set("ownerUserId", jsonObject.getString("ownerUserId"))
+                .set("status", jsonObject.getString("status"))
+                .set("classId", jsonObject.getString("classId"))
+                .set("labelId", jsonObject.getString("labelId"))
+                .set("pid", jsonObject.getString("pid"))
+                .set("priority", jsonObject.getString("priority"))
+                .set("workId", jsonObject.getString("workId"))
+                .set("sprintId", jsonObject.getString("sprintId"))
+                .set("isArchive", jsonObject.getString("isArchive"))
+                .set("batchId", jsonObject.getString("batchId"))
+                .set("orderBy", jsonObject.getInteger("orderBy"));
+
+        //如果有ifUser参数且等于0, 则根据当前用户查询, 否则查询全部
+        if(jsonObject.getInteger("ifUser") != null){
+            if(jsonObject.getInteger("ifUser") == 0){
+                kv.set("createUserId", BaseUtil.getUser().getUserId());
+            }
+        }
+        if(basePageRequest.getPageType() == 0){
+            List<Record> recordList = Db.find(Db.getSqlPara("work.task.queryList", kv));
+            return R.ok().put("data", recordList);
+        } else {
+            Page<Record> pageList = Db.paginate(basePageRequest.getPage(), basePageRequest.getLimit(), Db.getSqlPara("work.task.queryList", kv));
+            return R.ok().put("data", pageList);
+        }
     }
 }

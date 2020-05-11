@@ -209,4 +209,13 @@ public abstract class BaseTask<M extends BaseTask<M>> extends Model<M> implement
 		return getInt("is_archive");
 	}
 
+	//冲刺ID
+	public void setSprintId(java.lang.Integer sprintId) {
+		set("sprint_id", sprintId);
+	}
+
+	public java.lang.Integer getSprintId() {
+		return getInt("sprint_id");
+	}
+
 }
