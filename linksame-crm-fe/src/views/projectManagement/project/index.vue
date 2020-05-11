@@ -92,7 +92,7 @@
 
 <script>
 import TaskBoard from './components/taskBoard'
-import TimeBoard from './components/timeBoard'
+import TimeBoard from './components/TimeBoard'
 
 import Attachment from './components/attachment'
 import TaskStatistical from './components/taskStatistical'
@@ -120,7 +120,7 @@ export default {
     ProjectSettings,
     TaskScreening,
     Members,
-    MembersDep,
+    MembersDep
 
   },
 

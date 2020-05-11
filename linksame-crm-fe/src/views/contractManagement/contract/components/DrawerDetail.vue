@@ -3,7 +3,7 @@
     <div class="ls-drawertitle">
       <div class="ls-drawertitle-l">{{ pmpContractData.contractNumber }}</div>
       <div class="ls-drawertitle-r">
-        <span>
+        <!-- <span>
           <i class="el-icon-edit" />
         </span>&nbsp;&nbsp;&nbsp;
         <span>
@@ -40,7 +40,7 @@
               </el-upload>
             </el-dropdown-item>
           </el-dropdown-menu>
-        </el-dropdown>
+        </el-dropdown>-->
 
         <el-dropdown class="ls-drawertitle-dropdown">
           <span>
@@ -147,7 +147,8 @@
           <div>操作记录</div>
         </el-tab-pane>
         <el-tab-pane label="审批记录" name="fifth">
-          <div style="height: 300px;">
+          123
+          <!-- <div style="height: 300px;">
             <el-steps :active="1" direction="vertical">
               <el-step title="发起审批" />
               <el-step title="审批节点1" />
@@ -160,7 +161,7 @@
               <el-step title="审批节点3" description="
                 待处理" />
             </el-steps>
-          </div>
+          </div>-->
         </el-tab-pane>
       </el-tabs>
     </div>

@@ -1,50 +1,36 @@
 <template>
   <div class="edit-index">
-    <el-popover
-      :placement="placement"
-      :width="popoverWidth"
-      v-model="tagShow"
-      trigger="click">
-      <div
-        v-if="tagContent == 0"
-        class="tag-popover-box">
+    <el-popover :placement="placement" :width="popoverWidth" v-model="tagShow" trigger="click">
+      <div v-if="tagContent == 0" class="tag-popover-box">
         <div class="tag-top">
           <span>选择标签</span>
-          <span
-            class="el-icon-close rt cursor-pointer"
-            @click="tagShow = false"/>
+          <span class="el-icon-close rt cursor-pointer" @click="tagShow = false" />
         </div>
         <el-input
           v-model="tagInputChange"
           placeholder="搜索标签"
           prefix-icon="el-icon-search"
-          size="small"/>
+          size="small"
+        />
         <div class="tag-content">
           <div
             v-for="(item, index) in particularsTagList"
             :key="index"
             class="tag-list"
-            @click="tagBtn(item, particularsTagList)">
-            <i
-              :style="{ 'color': item.color}"
-              class="wukong wukong-black-label"/>
+            @click="tagBtn(item, particularsTagList)"
+          >
+            <i :style="{ 'color': item.color}" class="wukong wukong-black-label" />
             <span class="item-label">{{ item.name }}</span>
-            <span
-              v-if="item.check"
-              class="el-icon-check rt"/>
+            <span v-if="item.check" class="el-icon-check rt" />
           </div>
         </div>
         <div class="tag-footer">
-          <p
-            class="footer-row cursor-pointer"
-            @click="createTagFun">
-            <span class="el-icon-plus"/>
+          <p class="footer-row cursor-pointer" @click="createTagFun">
+            <span class="el-icon-plus" />
             <span>创建新标签</span>
           </p>
-          <p
-            class="footer-row cursor-pointer"
-            @click="managementTag">
-            <span class="el-icon-setting"/>
+          <p class="footer-row cursor-pointer" @click="managementTag">
+            <span class="el-icon-setting" />
             <span>标签管理</span>
           </p>
         </div>
@@ -59,7 +45,8 @@
         @close="tagClose"
         @tagCreateSubmit="tagCreateSubmit"
         @tagCancel="tagCancel"
-        @back="back"/>
+        @back="back"
+      />
       <!-- 标签管理 -->
       <editTag
         v-else-if="tagContent == 2"
@@ -67,7 +54,8 @@
         @back="back"
         @close="tagClose"
         @editBtn="editBtn"
-        @deleteBtn="deleteBtn"/>
+        @deleteBtn="deleteBtn"
+      />
       <!-- 标签管理 - 编辑 -->
       <new-tag
         v-else-if="tagContent == 3"
@@ -78,11 +66,10 @@
         @close="tagClose"
         @tagCreateSubmit="tagCreateSubmit"
         @tagCancel="tagCancel"
-        @back="back"/>
-      <span
-        slot="reference"
-        @click="referenceFun">
-        <slot name="editIndex"/>
+        @back="back"
+      />
+      <span slot="reference" @click="referenceFun">
+        <slot name="editIndex" />
       </span>
     </el-popover>
   </div>
@@ -178,6 +165,7 @@ export default {
       if (value.check) {
         workTaskSaveAPI({
           taskId: this.taskData.taskId,
+          name: this.taskData.name,
           labelId: labelIds
             .map(item => {
               return item.labelId
@@ -196,6 +184,7 @@ export default {
       } else {
         workTaskSaveAPI({
           taskId: this.taskData.taskId,
+          name: this.taskData.name,
           labelId: labelIds
             .map(item => {
               return item.labelId

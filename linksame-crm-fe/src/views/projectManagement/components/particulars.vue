@@ -1,20 +1,28 @@
 <template>
   <transition name="slide-fade">
-    <el-card
-      v-loading="loading"
-      :style="{ 'z-index': zIndex }"
-      class="particulars-common"
-    >
+    <el-card v-loading="loading" :style="{ 'z-index': zIndex }" class="particulars-common">
       <!-- 头部信息 -->
-      <div
-        v-if="taskData"
-        slot="header"
-        class="clear-fix"
-      >
-        <div
-          v-if="taskData && taskData.workName"
-          class="work-name"
-        >{{ taskData.workName }}</div>
+      <!-- {{ taskData }} -->
+      <div v-if="taskData" slot="header" class="clear-fix">
+        <!-- <div v-if="taskData && taskData.workName" class="work-name">{{ taskData.workName }} </div> -->
+        <div v-if="taskData && taskData.workName" class="work-name">
+          <!-- <el-page-header :content="taskData.workName" @back="goBack" /> -->
+          <!-- <span v-if="taskData.pid == 0">{{ taskData.workName }}</span>-->
+          <!-- <span v-if="taskData.pid != 0"> -->
+          {{ taskData.workName }}
+          <!-- </span> -->
+        </div>
+
+        <div v-else class="work-name">
+          <!-- <el-button
+            type="primary"
+            class="border-radius"
+            size="mini"
+            @click="editSubTask(taskData.pid)"
+          >返回</el-button>-->
+          <el-page-header :content="taskData.name" @back="editSubTask(taskData.pid)" />
+        </div>
+
         <div class="img-box-grop">
           <div>
             <el-popover
@@ -29,7 +37,9 @@
                   :key="index"
                   @click="priorityBtn(item, taskData.priority)"
                 >
-                  <span :style="{'border-color': item.color, 'background': item.id == taskData.priority ? item.color: 'transparent', 'color': item.id == taskData.priority ? '#fff': item.color}">{{ item.label }}</span>
+                  <span
+                    :style="{'border-color': item.color, 'background': item.id == taskData.priority ? item.color: 'transparent', 'color': item.id == taskData.priority ? '#fff': item.color}"
+                  >{{ item.label }}</span>
                 </p>
               </div>
               <span slot="reference">
@@ -39,32 +49,24 @@
             </el-popover>
           </div>
           <div>
-            <tag-index
-              :placement="'bottom'"
-              :task-data="taskData"
-            >
+            <tag-index :placement="'bottom'" :task-data="taskData">
               <div slot="editIndex">
                 <i class="wukong wukong-label" />
                 <span>标签</span>
               </div>
             </tag-index>
           </div>
-          <div
-            v-if="taskData.pid == 0"
-            @click="addSubtasksBtn"
-          >
+          <div v-if="taskData.pid == 0" @click="addSubtasksBtn">
             <i class="wukong wukong-sub-task" />
             <span>子任务</span>
           </div>
           <div>
-
             <el-dropdown>
               <span class="el-dropdown-link">
                 <i class="wukong wukong-file" />
                 <span>附件</span>
               </span>
               <el-dropdown-menu slot="dropdown">
-
                 <el-upload
                   :http-request="httpRequest"
                   class="upload-demo"
@@ -72,9 +74,7 @@
                   multiple
                   list-type="picture"
                 >
-
                   <span>本地上传</span>
-
                 </el-upload>
               </el-dropdown-menu>
 
@@ -102,132 +102,76 @@
                     <span>网盘上传</span>
                   </el-upload>
                 </el-dropdown-item>
-
               </el-dropdown-menu>
-
             </el-dropdown>
-
           </div>
           <div v-if="taskData.ishidden != 1">
-            <el-popover
-              placement="bottom"
-              width="80"
-              trigger="click"
-            >
+            <el-popover placement="bottom" width="80" trigger="click">
               <div class="more-btn-group">
-
-                <p>设置任务提醒</p>
-                <p>设置重复提醒</p>
+                <p @click="createReminder">设置任务提醒</p>
+                <!-- <p>设置重复提醒</p>
                 <p>设置前置任务</p>
                 <p>设置后置任务</p>
                 <p>共享任务</p>
                 <p>从网盘选取附件</p>
                 <p>移动任务</p>
-                <p>拷贝任务</p>
-                <p
-                  v-if="taskData.isArchive != 1 && taskData.ishidden != 1"
-                  @click="moreArchive"
-                >归 档</p>
-                <p
-                  v-if="taskData.ishidden != 1"
-                  @click="moreDelete"
-                >删 除</p>
-                <p>打印</p>
+                <p>拷贝任务</p>-->
+                <p v-if="taskData.isArchive != 1 && taskData.ishidden != 1" @click="moreArchive">归 档</p>
+                <p v-if="taskData.ishidden != 1" @click="moreDelete">删 除</p>
               </div>
               <span slot="reference">
-                <img src="@/assets/img/task_ellipsis.png">
+                <img src="@/assets/img/task_ellipsis.png" />
               </span>
             </el-popover>
           </div>
           <div class="task-close-img">
-            <img
-              src="@/assets/img/task_close.png"
-              @click="closeBtn"
-            >
+            <img src="@/assets/img/task_close.png" @click="closeBtn" />
           </div>
         </div>
       </div>
-      <div
-        v-if="taskData"
-        class="body-content"
-      >
+      <div v-if="taskData" class="body-content">
         <!-- 归档 -->
         <div
           v-if="taskData.isArchive == 1 && taskData.ishidden != 1"
           class="particulars-extraContent"
         >
           <span class="text">该任务已于 {{ taskData.archiveTime }} 被归档。</span>
-          <el-button
-            type="primary"
-            class="border-radius"
-            size="mini"
-            @click="activateTask"
-          >激活</el-button>
+          <el-button type="primary" class="border-radius" size="mini" @click="activateTask">激活</el-button>
         </div>
         <!-- 回收站 -->
-        <div
-          v-if="taskData.ishidden == 1"
-          class="particulars-extraContent"
-        >
+        <div v-if="taskData.ishidden == 1" class="particulars-extraContent">
           <span class="text">该任务已于 {{ taskData.hiddenTime }} 被放入回收站。</span>
-          <el-button
-            type="primary"
-            class="border-radius"
-            size="mini"
-            @click="recoverTask"
-          >恢 复</el-button>
-          <el-button
-            type="text"
-            @click="thoroughDeleteTask"
-          >彻底删除</el-button>
+          <el-button type="primary" class="border-radius" size="mini" @click="recoverTask">恢 复</el-button>
+          <el-button type="text" @click="thoroughDeleteTask">彻底删除</el-button>
         </div>
         <div class="card-content-box">
           <div class="card-content">
             <div class="card-content-row margin-bottom-15">
-              <el-checkbox
-                v-model="taskData.checked"
-                @change="titleCheckbox"
-              />
+              <el-checkbox v-model="taskData.checked" @change="titleCheckbox" />
               <div class="priority-data-name">
                 <div
                   v-show="!nameVinput"
                   :style="{'text-decoration': taskData.checked ? 'line-through' : 'none'}"
                   class="title-text"
-                >{{ taskData.name }}
+                >
+                  {{ taskData.name }}
                   <span
                     class="el-icon-edit-outline"
                     @click="nameVinput = true, taskDataName = taskData.name"
                   />
                 </div>
-                <div
-                  v-show="nameVinput"
-                  class="show-input"
-                >
-                  <el-input
-                    v-model="taskDataName"
-                    :maxlength="50"
-                    size="medium"
-                  />
+                <div v-show="nameVinput" class="show-input">
+                  <el-input v-model="taskDataName" :maxlength="50" size="medium" />
                   <div class="btn-box">
-                    <el-button
-                      type="primary"
-                      size="mini"
-                      @click="nameVShow(taskDataName)"
-                    >保 存</el-button>
-                    <el-button
-                      size="mini"
-                      @click="nameVinput = false"
-                    >取 消</el-button>
+                    <el-button type="primary" size="mini" @click="nameVShow(taskDataName)">保 存</el-button>
+                    <el-button size="mini" @click="nameVinput = false">取 消</el-button>
                   </div>
                 </div>
               </div>
               <div class="card-row-right">
                 <flexbox class="text-right">
-                  <div class="color-label user-name-label"> 负责人： </div>
-                  <div
-                    v-if="taskData.mainUser"
-                    class="bg-position"
-                  >
+                  <div class="color-label user-name-label">负责人：</div>
+                  <div v-if="taskData.mainUser" class="bg-position">
                     <el-tooltip
                       placement="bottom"
                       effect="light"
@@ -246,16 +190,12 @@
                     <img
                       src="@/assets/img/delete_task.png"
                       class="el-icon-close"
-                      alt=""
+                      alt
                       @click="editMainUser('')"
-                    >
+                    />
                   </div>
                   <template v-else>
-                    <el-popover
-                      placement="bottom"
-                      width="280"
-                      trigger="click"
-                    >
+                    <el-popover placement="bottom" width="280" trigger="click">
                       <xh-user
                         ref="xhuser"
                         :info-request="ownerListRequest"
@@ -263,19 +203,13 @@
                         radio
                         @changeCheckout="editMainUser"
                       />
-                      <i
-                        slot="reference"
-                        class="wukong wukong-addition-task"
-                      />
+                      <i slot="reference" class="wukong wukong-addition-task" />
                     </el-popover>
                   </template>
                 </flexbox>
               </div>
             </div>
-            <div
-              v-if="taskData.labelList"
-              class="card-content-row  margin-bottom-25"
-            >
+            <div v-if="taskData.labelList" class="card-content-row margin-bottom-25">
               <div class="particulars-priority-copy">
                 <template v-show="taskData.labelList.length != 0">
                   <span
@@ -283,45 +217,15 @@
                     :style="{'background': item.color ? item.color : '#ccc'}"
                     :key="index"
                     class="item-color"
-                  >
-                    {{ item.labelName }}
-                  </span>
+                  >{{ item.labelName }}</span>
                 </template>
                 <div class="add-tag">
-                  <tag-index
-                    :placement="'right'"
-                    :task-data="taskData"
-                  >
+                  <tag-index :placement="'right'" :task-data="taskData">
                     <div slot="editIndex">
                       <span class="el-icon-plus" />
                       <span class="label">标签</span>
                     </div>
                   </tag-index>
-                </div>
-              </div>
-              <div class="card-row-right">
-                <div class="text-right">
-                  <span class="color-label">开始日期 - 截止日期 </span>
-                  <div class="time-top">
-                    <el-date-picker
-                      ref="endTime"
-                      :class="{ 'no-time-top': !taskData.stopTime }"
-                      v-model="taskData.stopTime"
-                      :clearable="false"
-                      type="date"
-                      format="yyyy-MM-dd"
-                      value-format="yyyy-MM-dd"
-                      placeholder=""
-                      @change="endTimeChange"
-                    />
-                    <img
-                      v-if="taskData.stopTime"
-                      src="@/assets/img/delete_task.png"
-                      class="el-icon-close time-top-close"
-                      alt=""
-                      @click.stop="deleteTimeTop(taskData.stopTime)"
-                    >
-                  </div>
                 </div>
               </div>
             </div>
@@ -332,16 +236,9 @@
                   class="description-content"
                   @click="addDescriptionShow = true; addDescriptionTextarea = taskData.description"
                 >{{ taskData.description }}</div>
-                <div
-                  v-else
-                  class="no-description"
-                >
+                <div v-else class="no-description">
                   <span class="color-label">暂无描述</span>
-                  <el-button
-                    type="text"
-                    icon="el-icon-plus"
-                    @click="addDescriptionShow = true"
-                  >添加描述</el-button>
+                  <el-button type="text" icon="el-icon-plus" @click="addDescriptionShow = true">添加描述</el-button>
                 </div>
               </div>
               <div v-show="addDescriptionShow">
@@ -352,16 +249,8 @@
                   placeholder="请输入内容"
                 />
                 <div class="btn-box">
-                  <el-button
-                    type="primary"
-                    size="mini"
-                    @click="addDescriptionSubmit"
-                  >保 存</el-button>
-                  <el-button
-                    type="text"
-                    size="mini"
-                    @click="addDescriptionShow = false"
-                  >取 消</el-button>
+                  <el-button type="primary" size="mini" @click="addDescriptionSubmit">保 存</el-button>
+                  <el-button type="text" size="mini" @click="addDescriptionShow = false">取 消</el-button>
                 </div>
               </div>
             </div>
@@ -369,12 +258,9 @@
               <flexbox>
                 <div class="color-label participant">
                   <i class="wukong wukong-user" />
-                  <span>参与人： </span>
+                  <span>参与人：</span>
                 </div>
-                <div
-                  v-if="taskData.ownerUserList"
-                  class="participant-class"
-                >
+                <div v-if="taskData.ownerUserList" class="participant-class">
                   <span
                     v-for="(item, index) in taskData.ownerUserList"
                     :key="index"
@@ -399,7 +285,7 @@
                       src="@/assets/img/delete_task.png"
                       class="el-icon-close"
                       @click="deleteOwnerList(item, index)"
-                    >
+                    />
                   </span>
                 </div>
                 <members-dep
@@ -410,13 +296,83 @@
                   :user-params="{ workId: workId }"
                   @popoverSubmit="editOwnerList"
                 >
-                  <i
-                    slot="membersDep"
-                    class="wukong wukong-addition-task"
-                  />
+                  <i slot="membersDep" class="wukong wukong-addition-task" />
                 </members-dep>
               </flexbox>
             </div>
+
+            <!-- <div class="card-row-right"> -->
+            <div class="card-content-row card-content-row-column">
+              <div class="text-right">
+                <span class="color-label">开始日期</span>
+                <!-- {{ taskData.startTime }} -->
+                <span class="time-top">
+                  <el-date-picker
+                    ref="endTime"
+                    :class="{ 'no-time-top': !taskData.startTime }"
+                    v-model="taskData.startTime"
+                    :clearable="false"
+                    type="date"
+                    format="yyyy-MM-dd"
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                    placeholder
+                    @change="startTimeChange"
+                  />
+                  <!-- src="@/assets/img/delete_task.png" -->
+                  <!-- <i
+                    v-if="taskData.startTime"
+                    class="el-icon-delete"
+                    alt
+                    @click.stop="deleteTimeTop(taskData.startTime)"
+                  />-->
+                </span>
+
+                <span class="color-label">截止日期</span>
+
+                <span class="time-top">
+                  <el-date-picker
+                    ref="endTime"
+                    :class="{ 'no-time-top': !taskData.stopTime }"
+                    v-model="taskData.stopTime"
+                    :clearable="false"
+                    type="date"
+                    format="yyyy-MM-dd"
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                    placeholder
+                    @change="endTimeChange"
+                  />
+
+                  <!-- <img
+                    v-if="taskData.stopTime"
+                    src="@/assets/img/delete_task.png"
+                    class="el-icon-close time-top-close"
+                    alt
+                    @click.stop="deleteTimeTop(taskData.stopTime)"
+                  />-->
+                  <i
+                    v-if="taskData.startTime"
+                    class="el-icon-delete"
+                    alt
+                    @click.stop="deleteTimeTop(taskData.startTime)"
+                  />
+                </span>
+              </div>
+            </div>
+
+            <div class="card-content-row card-content-row-column">
+              <div class="color-label participant">
+                <i class="el-icon-odometer" />
+                <span>状态</span>
+              </div>
+              <el-select v-model="modelData.status" placeholder="请选择" @change="updateStatus">
+                <el-option :label="'待处理'" :value="0" />
+                <el-option :label="'处理中'" :value="1" />
+                <el-option :label="'延期'" :value="2" />
+                <el-option :label="'归档'" :value="3" />
+                <el-option :label="'已完成'" :value="5" />
+              </el-select>
+            </div>
+
             <div class="card-content-row card-content-row-column margin-bottom-30">
               <span class="color-label participant">
                 <i class="wukong wukong-relevance" />
@@ -432,24 +388,26 @@
                 @checkInfos="checkInfos"
               />
             </div>
-            <div
-              v-if="taskData.pid == 0"
-              class="card-content-row card-content-row-column"
-            >
+            <!-- <div v-if="taskData.pid == 0" class="card-content-row card-content-row-column"> -->
+            <div class="card-content-row card-content-row-column">
               <div class="display-flex sub-task margin-bottom-7">
                 <span class="color-label participant">
                   <i class="wukong wukong-sub-task" />
                   <span>子任务</span>
                 </span>
                 <template v-if="taskData.childTask.length != 0">
-                  <span class="color-label sub-task-progress"> ({{ subTaskProgress }}/{{ taskData.childTask.length }}) </span>
+                  <span
+                    class="color-label sub-task-progress"
+                  >({{ subTaskProgress }}/{{ taskData.childTask.length }})</span>
                   <el-progress
                     :percentage="subTaskProgress/taskData.childTask.length*100"
                     :stroke-width="10"
                   />
                 </template>
                 <template v-else>
-                  <span class="color-label sub-task-progress"> ({{ subTaskProgress }}/{{ taskData.childTask.length }}) </span>
+                  <span
+                    class="color-label sub-task-progress"
+                  >({{ subTaskProgress }}/{{ taskData.childTask.length }})</span>
                   <el-progress :percentage="0" />
                 </template>
               </div>
@@ -459,33 +417,19 @@
                   :key="index"
                   class="card-related-matters subtasks-box"
                 >
-                  <div
-                    v-if="!item.showEdit"
-                    class="show-edit"
-                  >
-                    <div
-                      style="display: inline-block;"
-                      @click.stop
-                    >
-                      <el-checkbox
-                        v-model="item.checked"
-                        @change="subtasksCheckbox(item, $event)"
-                      />
+                  <div v-if="!item.showEdit" class="show-edit">
+                    <div style="display: inline-block;" @click.stop>
+                      <el-checkbox v-model="item.checked" @change="subtasksCheckbox(item, $event)" />
                     </div>
                     <span
                       :style="{'text-decoration': item.checked ? 'line-through' : 'none'}"
                       class="item-name"
+                      @click="editSubTask(item.taskId)"
                     >{{ item.name }}</span>
                     <!-- 编辑和删除 -->
                     <div class="edit-del-box">
-                      <i
-                        class="wukong wukong-edit-task"
-                        @click="editSubTask(item)"
-                      />
-                      <i
-                        class="wukong wukong-delete-task"
-                        @click="deleteSubTask(item)"
-                      />
+                      <!-- <i class="wukong wukong-edit-task" @click="editSubTask(item.taskId)" /> -->
+                      <i class="wukong wukong-delete-task" @click="deleteSubTask(item)" />
                     </div>
                     <div class="rt">
                       <flexbox class="rt-box">
@@ -516,11 +460,7 @@
                   />
                 </div>
               </template>
-              <div
-                v-if="addSubtasks"
-                class="add-subtasks"
-                @click="addSubtasks = false"
-              >
+              <div v-if="addSubtasks" class="add-subtasks" @click="addSubtasks = false">
                 <span class="el-icon-plus" />
                 <span>添加子任务</span>
               </div>
@@ -531,10 +471,7 @@
                 @on-handle="handleSubTasksBlock"
               />
             </div>
-            <div
-              v-if="fileList.length != 0"
-              class="card-content-row card-content-row-column"
-            >
+            <div v-if="fileList.length != 0" class="card-content-row card-content-row-column">
               <span class="color-label participant class-file">
                 <i class="wukong wukong-file" />
                 <span>附件</span>
@@ -558,27 +495,13 @@
         <div class="card-footers">
           <div class="footer-title">
             <span @click="footerTitle(0)">
-              <i
-                v-if="isComment"
-                class="wukong wukong-comment-task"
-                style="color: #3E84E9;"
-              />
-              <i
-                v-else
-                class="wukong wukong-comment-task"
-              />
-              <span
-                :style="{'color': isComment ? '#3E84E9' : '#666'}"
-                class="cursor-pointer"
-              >评论</span>
+              <i v-if="isComment" class="wukong wukong-comment-task" style="color: #3E84E9;" />
+              <i v-else class="wukong wukong-comment-task" />
+              <span :style="{'color': isComment ? '#3E84E9' : '#666'}" class="cursor-pointer">评论</span>
             </span>
             <span class="title-border" />
             <span @click="footerTitle(1)">
-              <i
-                v-if="isComment"
-                class="wukong wukong-activity-task"
-                style="font-size: 18px;"
-              />
+              <i v-if="isComment" class="wukong wukong-activity-task" style="font-size: 18px;" />
               <i
                 v-else
                 class="wukong wukong-activity-task"
@@ -591,15 +514,9 @@
               >活动</span>
             </span>
           </div>
-          <div
-            v-loading="commentsLoading"
-            class="footer-content-box"
-          >
+          <div v-loading="commentsLoading" class="footer-content-box">
             <div class="footer-content">
-              <div
-                v-if="commentsActivities"
-                class="add-comments"
-              >
+              <div v-if="commentsActivities" class="add-comments">
                 <div class="footer-img">
                   <div
                     v-photo="userInfo"
@@ -609,11 +526,7 @@
                   />
                 </div>
                 <div class="comments-con">
-                  <div
-                    v-clickoutside="commentsSubmit"
-                    v-if="addComments"
-                    class="comments-box"
-                  >
+                  <div v-clickoutside="commentsSubmit" v-if="addComments" class="comments-box">
                     <el-input
                       ref="commentsTextareaRef"
                       :rows="4"
@@ -635,31 +548,16 @@
                           slot="reference"
                           src="@/assets/img/smiling_face.png"
                           class="smiling-img"
-                        >
+                        />
                       </el-popover>
-                      <el-button
-                        type="primary"
-                        class="rt"
-                        @click="commentsSub"
-                      >发布</el-button>
+                      <el-button type="primary" class="rt" @click="commentsSub">发布</el-button>
                     </div>
                   </div>
-                  <div
-                    v-else
-                    class="footer-bg"
-                    @click="addCommentsClick"
-                  >添加评论</div>
+                  <div v-else class="footer-bg" @click="addCommentsClick">添加评论</div>
 
                   <!-- 评论 -->
-                  <div
-                    v-if="replyList && replyList.length != 0"
-                    class="discuss"
-                  >
-                    <div
-                      v-for="(discussItem, k) in replyList"
-                      :key="k"
-                      class="discuss-list"
-                    >
+                  <div v-if="replyList && replyList.length != 0" class="discuss">
+                    <div v-for="(discussItem, k) in replyList" :key="k" class="discuss-list">
                       <div
                         v-photo="discussItem.user"
                         v-lazy:background-image="$options.filters.filterUserLazyImg(discussItem.user.img)"
@@ -678,7 +576,7 @@
                       </p>
 
                       <!-- <p class="discuss-content"
-                         v-html="emoji(discussItem.reply_content)"></p> -->
+                      v-html="emoji(discussItem.reply_content)"></p>-->
 
                       <div
                         v-if="discussItem.childCommentList && discussItem.childCommentList.length > 0"
@@ -698,7 +596,9 @@
                           <span class="name">{{ childDiscussItem.user.realname }}</span>
                           <span class="time">{{ childDiscussItem.createTime }}</span>
                           <div class="rt">
-                            <span @click="discussDelete(childDiscussItem, discussItem.childCommentList, k)">删除</span>
+                            <span
+                              @click="discussDelete(childDiscussItem, discussItem.childCommentList, k)"
+                            >删除</span>
                             <span @click="discussBtn(discussItem, k)">回复</span>
                           </div>
                           <p class="reply-title">
@@ -715,10 +615,7 @@
                       </div>
 
                       <!-- 评论 -- 回复  -->
-                      <div
-                        v-if="discussItem.show"
-                        class="comment-box"
-                      >
+                      <div v-if="discussItem.show" class="comment-box">
                         <el-input
                           ref="childCommentsTextareaRef"
                           :rows="2"
@@ -740,7 +637,7 @@
                               slot="reference"
                               src="@/assets/img/smiling_face.png"
                               class="smiling-img"
-                            >
+                            />
                           </el-popover>
                           <div class="btn-box">
                             <el-button
@@ -756,10 +653,7 @@
                   </div>
                 </div>
               </div>
-              <div
-                v-else
-                class="activity-box"
-              >
+              <div v-else class="activity-box">
                 <template v-if="activityList.length != 0">
                   <flexbox
                     v-for="(item, index) in activityList"
@@ -784,10 +678,7 @@
         </div>
         <slot />
       </div>
-      <div
-        v-if="taskData && taskData.createUser"
-        class="tip"
-      >
+      <div v-if="taskData && taskData.createUser" class="tip">
         <span>{{ taskData.createUser.realname }} 创建于 {{ taskData.createTime }}</span>
       </div>
 
@@ -796,11 +687,46 @@
         :crm-type="relatedCRMType"
         :id="relatedID"
       />
+
+      <!-- :before-close="handleClose" -->
+      <!-- <el-drawer :append-to-body="true" :visible.sync="innerDrawer" title="我是里面的">
+        <p>_(:зゝ∠)_</p>
+      </el-drawer>-->
+      <!-- 详情 -->
+      <particulars
+        v-if="innerDrawer"
+        ref="particulars"
+        :id="modelData.subTaskId"
+        :detail-index="-1"
+        :detail-section="-1"
+        @on-handle="detailHandle"
+        @close="closeBtn"
+      />
+
+      <el-dialog :visible.sync="dialogReminder" :modal="false" title="任务提醒设置" width="30%">
+        <el-form :inline="true">
+          <el-form-item label="提醒规则">
+            <el-select v-model="modelData.reminder" placeholder="活动区域">
+              <el-option label="任务截止前" value="shanghai" />
+              <el-option label="自定义时间" value="beijing" />
+            </el-select>
+          </el-form-item>
+        </el-form>
+
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogReminder = false">取 消</el-button>
+          <el-button type="primary" @click="dialogReminder = false">确 定</el-button>
+        </span>
+      </el-dialog>
     </el-card>
   </transition>
 </template>
 
 <script type="text/javascript">
+
+
+
+
 import xss from 'xss'
 import {
   workTaskSaveAPI,
@@ -834,8 +760,13 @@ import CRMFullScreenDetail from '@/views/customermanagement/components/CRMFullSc
 import { mapGetters } from 'vuex'
 import { getMaxIndex } from '@/utils'
 
+
+
+
 export default {
+  name: 'Particulars',
   components: {
+    particulars: () => import('./particulars'),
     membersDep,
     emoji,
     relatedBusiness,
@@ -856,6 +787,15 @@ export default {
   },
   data() {
     return {
+      modelData: {
+        status: undefined,
+        subTaskId: undefined,
+        reminder: undefined
+      },
+      innerDrawer: false,
+      dialogReminder: false,
+
+
       zIndex: getMaxIndex(),
       // 评论 - 活动
       // 评论 - 活动显示的内容
@@ -963,6 +903,18 @@ export default {
     }
   },
   methods: {
+
+    detailHandle() {
+      console.log(123)
+    },
+
+    goBack(val) {
+      console.log('返回', val)
+      this.innerDrawer = false
+      this.editSubTask(val.pid)
+    },
+
+
     initInfo() {
       this.taskData = null
       this.subTaskProgress = 0
@@ -978,6 +930,8 @@ export default {
       this.activityList = []
       this.fileList = []
     },
+
+
     // 基础详情
     getDetail() {
       this.loading = true
@@ -985,7 +939,7 @@ export default {
         .then(res => {
           const taskData = res.data
           taskData.checked = taskData.status == 5
-
+          this.modelData.status = res.data.status
           if (taskData.childTask) {
             for (const item of taskData.childTask) {
               if (item.status == 5) {
@@ -1040,6 +994,7 @@ export default {
     titleCheckbox(val) {
       this.taskData.checked = val
       workTaskSaveAPI({
+        name: this.taskData.name,
         taskId: this.id,
         status: this.taskData.checked ? 5 : 1
       })
@@ -1083,6 +1038,7 @@ export default {
       this.taskData.priority = value.id
       workTaskSaveAPI({
         taskId: this.id,
+        name: this.taskData.name,
         priority: value.id
       })
         .then(res => {
@@ -1200,6 +1156,7 @@ export default {
       })
       workTaskSaveAPI({
         taskId: val.taskId,
+        name: this.taskData.name,
         status: e ? 5 : 1
       })
         .then(res => {})
@@ -1231,6 +1188,7 @@ export default {
     editOwnerList(users, dep) {
       workTaskSaveAPI({
         taskId: this.id,
+        name: this.taskData.name,
         ownerUserId: users
           .map(item => {
             return item.userId
@@ -1246,6 +1204,7 @@ export default {
     deleteOwnerList(item, index) {
       workTaskSaveAPI({
         taskId: this.id,
+        name: this.taskData.name,
         ownerUserId: this.taskData.ownerUserList
           .filter(userItem => {
             return userItem.userId != item.userId
@@ -1264,6 +1223,7 @@ export default {
     editMainUser(val) {
       workTaskSaveAPI({
         taskId: this.id,
+        name: this.taskData.name,
         mainUserId: val ? val.data[0].userId : ''
       })
         .then(res => {
@@ -1301,10 +1261,31 @@ export default {
         })
         .catch(() => {})
     },
+
+    // 截至日期API
+    startTimeChange(val) {
+      workTaskSaveAPI({
+        startTime: val,
+        taskId: this.id,
+        name: this.taskData.name
+      })
+        .then(res => {
+          this.$emit('on-handle', {
+            type: 'change-stop-time',
+            value: val,
+            index: this.detailIndex,
+            section: this.detailSection
+          })
+        })
+        .catch(() => {})
+    },
+
+
     // 截至日期API
     endTimeChange(val) {
       workTaskSaveAPI({
         stopTime: val,
+        name: this.taskData.name,
         taskId: this.id
       })
         .then(res => {
@@ -1321,6 +1302,7 @@ export default {
     addDescriptionSubmit() {
       workTaskSaveAPI({
         taskId: this.id,
+        name: this.taskData.name,
         description: this.addDescriptionTextarea
       })
         .then(res => {
@@ -1539,17 +1521,8 @@ export default {
           })
         })
     },
-    editSubTask(val) {
-      this.subTaskID = val.taskId
-      const dataList = this.taskData.childTask
-      for (const i in dataList) {
-        if (dataList[i].taskId == val.taskId) {
-          this.$set(dataList[i], 'showEdit', true)
-        } else {
-          this.$set(dataList[i], 'showEdit', false)
-        }
-      }
-    },
+
+
     handleSubTasksBlock(data, item) {
       if (data.type == 'edit') {
         this.$set(item, 'showEdit', false)
@@ -1588,9 +1561,12 @@ export default {
     deleteTimeTop() {
       workTaskSaveAPI({
         taskId: this.id,
-        stopTime: ''
+        name: this.taskData.name,
+        stopTime: '',
+        startTime: ''
       })
         .then(res => {
+          this.$set(this.taskData, 'startTime', '')
           this.$set(this.taskData, 'stopTime', '')
         })
         .catch(() => {})
@@ -1674,11 +1650,63 @@ export default {
             message: '已取消删除'
           })
         })
+    },
+
+
+
+    updateStatus() {
+      this.$request({
+        url: 'task/setTask',
+        method: 'post',
+        data: {
+          name: this.taskData.name,
+          taskId: this.id,
+          status: this.modelData.status
+        }
+        // headers: {
+        //   'Content-Type': 'application/json;charset=UTF-8'
+        // }
+      }).then(res => {
+        console.log(res)
+      }).catch(e => {
+        console.log(e)
+      })
+    },
+
+    editSubTask(val) {
+      console.log('子任务', val)
+
+      this.innerDrawer = true
+      this.modelData.subTaskId = val
+    //   this.subTaskID = val.taskId
+    //   const dataList = this.taskData.childTask
+    //   for (const i in dataList) {
+    //     if (dataList[i].taskId == val.taskId) {
+    //       this.$set(dataList[i], 'showEdit', true)
+    //     } else {
+    //       this.$set(dataList[i], 'showEdit', false)
+    //     }
+    //   }
+    },
+    createReminder() {
+      console.log(123)
+      this.dialogReminder = true
     }
+
   }
 }
 </script>
 <style lang="scss" scoped>
+/deep/ .el-input__inner {
+  background-color: rgb(245, 247, 250);
+  border: 0px;
+  border-radius: 1px;
+  height: 40px;
+  line-height: 40px;
+  color: #3e84e9;
+  padding: 0 0 0 30px;
+}
+
 .wukong {
   vertical-align: middle;
   color: #666;
@@ -1978,7 +2006,7 @@ export default {
           }
         }
         .particulars-priority-copy {
-          flex: 1;
+          flex: 0.7;
           white-space: normal;
           .item-color {
             padding: 0 10px;
@@ -2155,6 +2183,10 @@ export default {
           }
           .item-name {
             padding-left: 5px;
+          }
+          .item-name:hover {
+            padding-left: 5px;
+            color: #3e84e9;
           }
         }
         .subtasks-box:hover {

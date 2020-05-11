@@ -136,12 +136,12 @@ export default {
           icon: 'contract'
         })
       }
-        tempsItems.push({
-          title: '附件管理',
-          type: 6,
-          path: '/annex',
-          icon: 'task'
-        })
+      tempsItems.push({
+        title: '附件管理',
+        type: 6,
+        path: '/annex',
+        icon: 'task'
+      })
       //   {
       //     title: '附件管理',
       //     type: 5,

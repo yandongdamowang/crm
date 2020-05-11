@@ -49,8 +49,8 @@
             >{{ scope.row.contractNumber }}</el-button>
           </template>
         </el-table-column>
-        <el-table-column prop="paymentClause" label="款项" />
-        <el-table-column prop="supplierId" label="客户/承包商" />
+        <el-table-column prop="paymentName" label="款项" />
+        <el-table-column prop="customerName" label="客户/承包商" />
         <el-table-column prop="money" label="预付金额" />
         <el-table-column prop="costPercentage" label="预付比例" width="150" />
         <el-table-column prop="paymentNode" label="计划付款时间" width="150" />
@@ -93,17 +93,164 @@
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="dialogPaymentApply(scope.row)">申请付款</el-button>
 
-            <el-button type="text" size="small" @click>确认收款</el-button>
+            <el-button type="text" size="small" @click="dialogPaymentCommit(scope.row)">确认收款</el-button>
           </template>
         </el-table-column>
       </el-table>
 
       <!-- 弹框 -->
       <el-dialog :visible.sync="dialogVisible" :title="dialogTitle" :width="dialogwidth">
-        <component ref="child" :is="dialogComponents" />
+        <!-- <component ref="child" :is="dialogComponents" :dialog-data="dialogData" /> -->
+        <el-form ref="form" label-width="120px">
+          <el-divider content-position="left">基本信息</el-divider>
+
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="合同编号：">
+                <div>{{ dialogData.contractNumber }}</div>
+              </el-form-item>
+
+              <el-form-item label="计划付款日期：">
+                <div>{{ dialogData.paymentNode }}</div>
+              </el-form-item>
+            </el-col>
+
+            <el-col :span="8">
+              <el-form-item label="款项 ：">
+                <div>{{ dialogData.paymentName }}</div>
+              </el-form-item>
+
+              <el-form-item label="承包商：">
+                <div>{{ dialogData.customerName }}</div>
+              </el-form-item>
+            </el-col>
+
+            <el-col :span="8">
+              <el-form-item label="预付金额：">
+                <div>{{ dialogData.money }}</div>
+              </el-form-item>
+
+              <el-form-item label="业主：">
+                <div>{{ dialogData.proprietor }}</div>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-divider content-position="left">申请金额</el-divider>
+
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="合同金额 ：">
+                <div>{{ dialogData.contractMoney }}</div>
+              </el-form-item>
+
+              <el-form-item label="本次申请金额：">
+                <el-input v-model="formData.appliedAmountBefore" placeholder="请输入内容" />
+              </el-form-item>
+            </el-col>
+
+            <el-col :span="12">
+              <el-form-item label="申请付款时间 ：">
+                <div>待开发</div>
+              </el-form-item>
+
+              <el-form-item label="累计付款金额：">{{ appliedAmount }} {{ dialogData.totalPayment }}</el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row>
+            <el-col :span="24">
+              <el-form-item label="申请原因概述：">
+                <el-input
+                  v-model="formData.pmpContractPayment.remark"
+                  type="textarea"
+                  placeholder="请输入内容"
+                />
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-divider content-position="left">信息审核</el-divider>
+
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="申请单位：">
+                <el-input
+                  v-model="formData.pmpContractPayment.applicantCompany"
+                  placeholder="请输入内容"
+                />
+              </el-form-item>
+
+              <el-form-item label="审批人：">
+                <el-select v-model="formData.checkUserId" placeholder="请选择">
+                  <el-option
+                    v-for="(item,index) in dialogUserData"
+                    :key="index"
+                    :label="item.realname"
+                    :value="item.userId "
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+
+            <el-col :span="8">
+              <el-form-item label="项目负责人：">
+                <div>{{ dialogData.ownerUserName }}</div>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
 
         <span slot="footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="commitData">确 定</el-button>
+        </span>
+      </el-dialog>
+
+      <el-dialog
+        :visible.sync="dialogPaymentCommitStatus"
+        :title="dialogTitle"
+        :width="dialogwidth"
+      >
+        <!-- <component ref="child" :is="dialogComponents" :dialog-data="dialogData" /> -->
+        <el-form ref="form" label-width="120px">
+          <el-divider content-position="left">基本信息</el-divider>
+
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="合同编号：">
+                <div>{{ dialogData.contractNumber }}</div>
+              </el-form-item>
+
+              <el-form-item label="计划付款日期：">
+                <div>{{ dialogData.paymentNode }}</div>
+              </el-form-item>
+            </el-col>
+
+            <el-col :span="8">
+              <el-form-item label="款项 ：">
+                <div>{{ dialogData.paymentName }}</div>
+              </el-form-item>
+
+              <el-form-item label="承包商：">
+                <div>{{ dialogData.customerName }}</div>
+              </el-form-item>
+            </el-col>
+
+            <el-col :span="8">
+              <el-form-item label="预付金额：">
+                <div>{{ dialogData.money }}</div>
+              </el-form-item>
+
+              <el-form-item label="业主：">
+                <div>{{ dialogData.proprietor }}</div>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+
+        <span slot="footer">
+          <el-button @click="dialogPaymentCommitStatus = false">取 消</el-button>
           <el-button type="primary" @click="commitData">确 定</el-button>
         </span>
       </el-dialog>
@@ -141,8 +288,8 @@ import { prepaymentBillList } from '@/api/contractManagement/prepaymentBill'
 export default {
   name: 'ContractIndex',
   components: {
-    DialogPaymentApply: () => import('./components/DialogPaymentApply'),
-    DialogCreate: () => import('./components/DialogCreate'),
+    // DialogPaymentApply: () => import('./components/DialogPaymentApply'),
+    // DialogCreate: () => import('./components/DialogCreate'),
     DrawerDetail: () => import('./components/DrawerDetail')
   },
 
@@ -152,26 +299,43 @@ export default {
       dialogTitle: '',
       dialogwidth: '',
       dialogVisible: false,
+      dialogPaymentCommitStatus: false,
       drawerComponents: '',
       drawer: false,
       drawerTitle: '',
       drawerData: '',
+      dialogData: '',
+      dialogUserData: '',
 
       pageCurrent: 1,
       pageTotal: 1,
       pageSize: 10,
 
       prepaymentBillListData: [],
+
       grep: '',
       search: {
         contractNumber: '',
         supplierId: ''
       },
+
+      formData: {
+        appliedAmountBefore: 0,
+        'pmpContractPayment': {
+          'billId': '',
+          'ownerUserId': '',
+          'remark': '',
+          'applicantCompany': ''
+        },
+        'checkUserId': undefined
+      },
       deleteData: undefined
     }
   },
   computed: {
-
+    appliedAmount() {
+      return this.formData.appliedAmountBefore
+    }
   },
   mounted() {
     this.retrivePrepaymentBillList()
@@ -209,6 +373,12 @@ export default {
 
         })
     },
+
+
+
+
+
+
     searchReset() {
       this.search = {
         contractNumber: '',
@@ -217,23 +387,114 @@ export default {
       this.retrivePrepaymentBillList()
     },
 
+
     commitData() {
-      this.$refs.child.createContact()
-      this.dialogVisible = false
+      this.$request({
+        url: `/examineRecord/addExamine`,
+        method: 'post',
+        data: {
+          'pmpContractPayment': {
+          //  预付款ID
+            'billId': this.dialogData.billId,
+            //   负责人ID
+            'ownerUserId': this.dialogData.ownerUserId,
+            //   累计付款金额
+            'appliedAmount': parseInt(this.appliedAmount),
+            'remark': this.formData.pmpContractPayment.remark,
+            // 申请单位
+            'applicantCompany': this.formData.pmpContractPayment.applicantCompany
+          },
+          'checkUserId': this.formData.checkUserId
+        },
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8'
+        }})
+        .then(res => {
+          console.log(res)
+          this.formData = {
+            appliedAmountBefore: 0,
+            'pmpContractPayment': {
+              'billId': '',
+              'ownerUserId': '',
+              'remark': '',
+              'applicantCompany': ''
+            },
+            'checkUserId': undefined
+          }
+          this.dialogVisible = false
+        })
+        .catch(() => {
+          this.formData = {
+            appliedAmountBefore: 0,
+            'pmpContractPayment': {
+              'billId': '',
+              'ownerUserId': '',
+              'remark': '',
+              'applicantCompany': ''
+            },
+            'checkUserId': undefined
+          }
+          this.dialogVisible = false
+        })
     },
 
-    dialogPaymentApply() {
+    dialogPaymentApply(row) {
       this.dialogVisible = true
       this.dialogTitle = '申请付款'
-      this.dialogComponents = 'DialogPaymentApply'
+      this.dialogwidth = '50%'
+
+      console.log(row)
+
+      this.$request({
+        url: `/system/user/queryUserList`,
+        method: 'post',
+        data: {
+          roleId: 8,
+          pageType: 0
+        }})
+        .then(res => {
+          console.log('审批人', res.data)
+          this.dialogUserData = res.data
+          //   this.prepaymentBillListData = res.data.list
+        })
+        .catch(() => {
+
+        })
+
+      this.$request({
+        url: `/pmpContractPayment/queryAdvanceBybillId`,
+        method: 'post',
+        data: {
+          'billId': row.billId
+        },
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8'
+        }}).then(res => {
+        console.log('预付款详情', res)
+        this.dialogData = res.data
+        //   this.prepaymentBillListData = res.data.list
+        //   this.pageTotal = res.data.totalRow
+        // this.dialogVisible = false
+        //   this.prepaymentBillListSubData = res.data.list
+      })
+        .catch((e) => {
+          console.log(e)
+        })
+    },
+
+    dialogPaymentCommit(row) {
+      this.dialogPaymentCommitStatus = true
+      this.dialogTitle = '确认收款'
       this.dialogwidth = '50%'
     },
-    dialogCreate() {
-      this.dialogVisible = true
-      this.dialogTitle = '新建合同'
-      this.dialogComponents = 'DialogCreate'
-      this.dialogwidth = '90%'
-    },
+
+    // dialogCreate() {
+    //   this.dialogVisible = true
+    //   this.dialogTitle = '新建合同'
+    //   this.dialogComponents = 'DialogCreate'
+    //   this.dialogwidth = '90%'
+    // },
+
     drawerDetail(row) {
       this.drawer = true
       //   this.drawerTitle = row.contractNumber

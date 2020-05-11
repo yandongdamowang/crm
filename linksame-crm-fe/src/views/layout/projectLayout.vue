@@ -1,34 +1,29 @@
 <template>
   <el-container>
     <el-header class="nav-container">
-      <navbar
-        :nav-index="2"
-        @nav-items-click="navClick"/>
+      <navbar :nav-index="2" @nav-items-click="navClick" />
     </el-header>
     <el-container>
-      <el-aside
-        width="auto"
-        class="aside-container">
+      <el-aside width="auto" class="aside-container">
         <sidebar
           :items="sidebarItems"
           :create-button-title="permissonProject ? '创建项目' : ''"
           create-button-icon="el-icon-plus"
           main-router="project"
-          @quicklyCreate="quicklyCreate"/>
+          @quicklyCreate="quicklyCreate"
+        />
       </el-aside>
       <el-main id="project-main-container">
-        <app-main/>
+        <app-main />
       </el-main>
     </el-container>
-    <add-project
-      v-if="isCreate"
-      @close="isCreate = false"/>
+    <add-project v-if="isCreate" @close="isCreate = false" />
   </el-container>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import { childrenMenu } from '@/router/modules/project/project'
+import { childrenMenu } from '@/router/modules/project/index'
 import { Navbar, Sidebar, AppMain } from './components'
 import { workIndexWorkListAPI } from '@/api/projectManagement/task'
 import { workTasklableIndexAPI } from '@/api/projectManagement/tag'

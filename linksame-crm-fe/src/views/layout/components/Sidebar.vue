@@ -1,5 +1,30 @@
 <template>
   <div class="container">
+    <!-- <div
+      :style="{ 'padding-top': createButtonTitle != '' ? '40px' : '25px', 'background-color':backgroundColor }"
+      class="create-button-container"
+    >
+      <el-popover
+        v-if="createButtonTitle != ''"
+        :offset="addOffset"
+        :visible-arrow="false"
+        placement="right"
+        popper-class="no-padding-popover"
+        trigger="hover"
+      >
+        <slot name="add" />
+        <div
+          slot="reference"
+          :style="{ 'background-color': createButtonBackgroundColor }"
+          class="create-button"
+          @click="quicklyCreate"
+        >
+          <div v-show="!buttonNameCollapse" class="button-name">{{ createButtonTitle }}</div>
+          <div v-show="!buttonNameCollapse" class="button-line" />
+          <i :class="createButtonIcon" class="button-mark" />
+        </div>
+      </el-popover>
+    </div>-->
 
     <el-menu
       :default-active="activeIndex"
@@ -10,11 +35,7 @@
       class="el-menu-vertical"
     >
       <template v-for="(item, index) in getShowMenu(items)">
-        <router-link
-          v-if="!item.children"
-          :key="index"
-          :to="getFullPath(item.path)"
-        >
+        <router-link v-if="!item.children" :key="index" :to="getFullPath(item.path)">
           <el-menu-item
             :index="getFullPath(item.path)"
             :class="{'menu-item-select': activeIndex == getFullPath(item.path)}"
@@ -26,22 +47,11 @@
               class="wukong"
             />
             <span slot="title">{{ item.meta.title }}</span>
-            <el-badge
-              v-if="item.meta.num && item.meta.num > 0"
-              :max="99"
-              :value="item.meta.num"
-            />
+            <el-badge v-if="item.meta.num && item.meta.num > 0" :max="99" :value="item.meta.num" />
           </el-menu-item>
         </router-link>
-        <el-submenu
-          v-else
-          :key="index"
-          :index="getFullPath(item.path)"
-        >
-          <template
-            v-if="!item.hidden"
-            slot="title"
-          >
+        <el-submenu v-else :key="index" :index="getFullPath(item.path)">
+          <template v-if="!item.hidden" slot="title">
             <i
               :class="'wukong-' + item.meta.icon"
               :style="{fontSize: item.meta.fontSize || '16px'}"
@@ -58,25 +68,19 @@
               :index="getFullPath(subitem.path)"
               :class="{'menu-item-select': activeIndex == getFullPath(subitem.path) }"
               class="menu-item-defalt"
-            >
-              {{ subitem.meta.title }}
-            </el-menu-item>
+            >{{ subitem.meta.title }}</el-menu-item>
           </router-link>
         </el-submenu>
       </template>
     </el-menu>
-    <div
-      style="{ 'background-color':'rgb(0,21,41)' }"
-      class="sidebar-bottom"
-    >
-
+    <div style="{ 'background-color':'rgb(0,21,41)' }" class="sidebar-bottom">
       <div class="sidebar-container">
         <img
           class="collapse-button"
           src="@/assets/img/collapse_white.png"
-          alt=""
+          alt
           @click="toggleSideBarClick"
-        >
+        />
       </div>
     </div>
   </div>

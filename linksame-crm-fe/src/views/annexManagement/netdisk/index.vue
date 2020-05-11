@@ -30,7 +30,7 @@
               <span slot-scope="{node,data}">
                 <span style="color:black">
                   <!-- <i class="el-icon-folder" /> -->
-                  <img src="@/assets/filetype/folder.png" alt >
+                  <img src="@/assets/filetype/folder.png" alt />
                   {{ data.folderName }}
                 </span>
               </span>
@@ -79,7 +79,7 @@
             >
               <span slot-scope="{node,data}">
                 <span style="color:black">
-                  <img src="@/assets/filetype/folder.png" >
+                  <img src="@/assets/filetype/folder.png" />
                   {{ data.folderName }}
                 </span>
               </span>
@@ -102,7 +102,7 @@
             <el-input v-model="fileRenameNew" placeholder="请输入内容" style="width:300px" />
 
             <span slot="footer" class="dialog-footer">
-              <el-button @click="dialogRenameStatus = false">取 消</el-button>
+              <el-button @click="dialogRenameFileStatus = false">取 消</el-button>
               <el-button type="primary" @click="renameFileCommit">确 定</el-button>
             </span>
           </el-dialog>
@@ -118,7 +118,28 @@
               <el-table-column type="selection" width="55" />
               <el-table-column fixed prop="oldName" label="文件名">
                 <template slot-scope="scope">
-                  <span @click="retriveFileDetail(scope.row)">{{ scope.row.oldName }}</span>
+                  <span @click="retriveFileDetail(scope.row)">
+                    <img v-if="scope.row.suffix == 'pdf'" src="@/assets/filetype/pdf.png" />
+                    <img v-else-if="scope.row.suffix == 'dwg'" src="@/assets/filetype/dwg.png" />
+                    <img
+                      v-else-if="scope.row.suffix == 'zip' || scope.row.suffix == 'rar'"
+                      src="@/assets/filetype/zip.png"
+                    />
+                    <img
+                      v-else-if="scope.row.suffix == 'xls' || scope.row.suffix == 'xlsx'"
+                      src="@/assets/filetype/excel.png"
+                    />
+                    <img
+                      v-else-if="scope.row.suffix == 'png' || scope.row.suffix == 'jpg' "
+                      src="@/assets/filetype/jpg.png"
+                    />
+                    <img
+                      v-else-if="scope.row.suffix == 'docx' || scope.row.suffix == 'doc'"
+                      src="@/assets/filetype/word.png"
+                    />
+                    <img v-else src="@/assets/filetype/unknown.png" />
+                    {{ scope.row.oldName }}
+                  </span>
                 </template>
               </el-table-column>
 
@@ -175,7 +196,7 @@
       >
         <span slot-scope="{node,data}">
           <span style="color:black">
-            <img src="@/assets/filetype/folder.png" >
+            <img src="@/assets/filetype/folder.png" />
             {{ data.folderName }}
           </span>
         </span>
@@ -204,7 +225,7 @@
     </el-dialog>
 
     <el-drawer :visible.sync="drawer" :with-header="false" :destroy-on-close="true" size="70%">
-      <div style="padding: 30px">
+      <div style="padding: 30px;  ">
         <div class="ls-drawertitle">
           <div class="ls-drawertitle-l">
             所属文件夹：/{{ filePath }}/{{ fileSelect.compositionName }}
@@ -238,59 +259,6 @@
           </div>-->
 
           <div class="ls-drawertitle-r">
-            <!-- <span>
-            <i class="el-icon-edit" />
-          </span>&nbsp;&nbsp;&nbsp;
-          <span>
-            <i class="el-icon-folder-opened" />
-          </span>
-            &nbsp;&nbsp;&nbsp;-->
-            <!-- <el-dropdown class="ls-drawertitle-dropdown">
-            <span>
-              <i class="el-icon-upload2" />
-            </span>
-            &nbsp;&nbsp;&nbsp;
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>
-                <el-upload
-                  ref="upload"
-                  :auto-upload="false"
-                  :on-success="submitUploadSuccess"
-                  :on-error="submitUploadError"
-                  action="https://jsonplaceholder.typicode.com/posts/"
-                >
-                  <div slot="trigger" size="small" type="primary">本地上传</div>
-                </el-upload>
-              </el-dropdown-item>
-
-              <el-dropdown-item>
-                <el-upload
-                  ref="upload"
-                  :auto-upload="false"
-                  :on-success="submitUploadSuccess"
-                  :on-error="submitUploadError"
-                  action="https://jsonplaceholder.typicode.com/posts/"
-                >
-                  <div size="small" type="primary" @click="submitUpload">网盘上传</div>
-                </el-upload>
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-
-          <el-dropdown class="ls-drawertitle-dropdown">
-            <span>
-              <i class="el-icon-more" />
-            </span>
-
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>转 移</el-dropdown-item>
-              <el-dropdown-item>
-                <span @click="deleteContract">删 除</span>
-              </el-dropdown-item>
-            </el-dropdown-menu>
-            </el-dropdown>-->
-
-            <!-- <el-button type="primary" @click="updateVersion">更换版本</el-button> -->
             <Upload
               :key="menuKey"
               :folder-id="folderSelect.folderId"
@@ -311,7 +279,7 @@
             <i class="el-icon-notebook-1" />&nbsp;&nbsp;&nbsp;基本信息
           </div>
 
-          <el-form ref="form" label-width="120px" label-position="left">
+          <el-form ref="form" label-position="left">
             <el-row>
               <el-col :span="8">
                 <el-form-item label="创建人：">
@@ -346,7 +314,46 @@
           </el-form>
         </div>
 
-        <related-business :all-data="allData" :margin-left="'0'" @checkInfos="checkInfos" />
+        <!-- <related-business :all-data="allData" :margin-left="'0'" @checkInfos="checkInfos" /> -->
+
+        <div class="ls-drawerform">
+          <div class="ls-drawerform-header">
+            <i class="el-icon-notebook-1" />&nbsp;&nbsp;&nbsp;关联
+          </div>
+
+          <el-collapse v-model="activeCollapse" accordion>
+            <el-collapse-item
+              v-if="fileSelect.taskList !== undefined && fileSelect.taskList!== null && fileSelect.taskList.length>0 "
+              title="关联任务"
+              name="1"
+            >
+              <div v-for="(item,index) in fileSelect.taskList" :key="index">任务名称：{{ item.name }}</div>
+            </el-collapse-item>
+
+            <el-collapse-item
+              v-if="fileSelect.taskList !== undefined && fileSelect.taskList!== null && fileSelect.taskList.length>0 "
+              title="关联合同"
+              name="2"
+            >
+              <div
+                v-for="(item,index) in fileSelect.contractList"
+                :key="index"
+              >合同名称：{{ item.contractName }}</div>
+            </el-collapse-item>
+          </el-collapse>
+        </div>
+
+        <!-- <div class="ls-drawerform">
+          <div class="ls-drawerform-header">
+            <i class="el-icon-notebook-1" />&nbsp;&nbsp;&nbsp;关联任务
+          </div>
+
+          <el-table :data="fileSelect.taskList" border style="width: 100%">
+            <el-table-column prop="name" label="任务名称" width />
+            <el-table-column prop="startTime" label="任务开始时间" width="300" />
+            <el-table-column prop="stopTime" label="任务结束时间" width="300" />
+          </el-table>
+        </div>-->
 
         <el-tabs v-model="activeName" @tab-click="handleClick">
           <el-tab-pane label="操作日志" name="first">
@@ -384,47 +391,26 @@
 </template>
 
 <script>
-//  <el-form ref="form" label-width="80px">
-//     <el-form-item label="">
-//       <el-input v-model="fileSelect.createName"></el-input>
-//     </el-form-item>
-//  </el-form>
+
 import TagIndex from '@/views/projectManagement/components/tag/tagIndex'
 
 
 export default {
   name: 'App',
   components: {
-    Upload: () => import('./upload'),
-    relatedBusiness: () => import('@/components/relatedBusiness'),
+    Upload: () => import('./components/Upload'),
+
     TagIndex
   },
 
   data() {
     return {
       menuKey: 1,
+      activeCollapse: '1',
       historyVersionData: [
-        //       {
-        //     content: '支持使用图标',
-        //     timestamp: '2018-04-12 20:46',
-        //     size: 'large',
-        //     type: 'primary',
-        //     icon: 'el-icon-more'
-        //   }, {
-        //     content: '支持自定义颜色',
-        //     timestamp: '2018-04-03 20:46',
-        //     color: '#0bbd87'
-        //   }, {
-        //     content: '支持自定义尺寸',
-        //     timestamp: '2018-04-03 20:46',
-        //     size: 'large'
-        //   }, {
-        //     content: '默认样式的节点',
-        //     timestamp: '2018-04-03 20:46'
-        //   }
       ],
 
-      downloadAction: process.env.BASE_API + `/file/downFile?fileId=72`,
+      //   downloadAction: process.env.BASE_API + `/file/downFile?fileId=72`,
       activeName: 'first',
       pageCurrent: 1,
       pageSize: 10,
@@ -623,15 +609,31 @@ export default {
 
 
     deleteFolder() {
-      this.$request
-        .post(`/folder/deleteFolder?folderId=${this.folderSelect.folderId}`)
-        .then(res => {
-          console.log('删除文件夹', res)
+      this.$confirm('此操作将删除该文件夹, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$request
+          .post(`/folder/deleteFolder?folderId=${this.folderSelect.folderId}`)
+          .then(res => {
+            console.log('删除文件夹', res)
 
-          this.retriveFolderList()
-        }).catch(e => {
-          console.log('删除文件夹 err', e)
+            this.retriveFolderList()
+          }).catch(e => {
+            console.log('删除文件夹 err', e)
+          })
+
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
         })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     },
 
     moveFolder() {
@@ -791,6 +793,7 @@ export default {
     // },
 
     downloadFile() {
+      console.log(123, this.fileRowData)
       if (this.fileRowData.fileId == null) {
         alert(123)
       } else {
@@ -805,34 +808,7 @@ export default {
             var downloadElement = document.createElement('a')
             var href = window.URL.createObjectURL(blob) // 创建下载的链接
             downloadElement.href = href
-            downloadElement.download = 'xxx.xlsx' // 下载后文件名
-            document.body.appendChild(downloadElement)
-            downloadElement.click() // 点击下载
-            document.body.removeChild(downloadElement) // 下载完成移除元素
-            window.URL.revokeObjectURL(href) // 释放掉blob对象
-          // this.fileDetailLogTable = res.data.list
-          }).catch(e => {
-            console.log('/file/getFileList err', e)
-          })
-      }
-    },
-
-    downloadMultiFile() {
-      if (this.fileRowData.fileId == null) {
-        alert(123)
-      } else {
-        this.$request({
-          method: 'post',
-          url: `/file/downFile?fileId=${this.fileRowData.fileId}`,
-          responseType: 'blob'
-        })
-          .then(res => {
-            console.log('下载文件', res)
-            var blob = new Blob([res.data], { type: res.headers['content-type'] })
-            var downloadElement = document.createElement('a')
-            var href = window.URL.createObjectURL(blob) // 创建下载的链接
-            downloadElement.href = href
-            downloadElement.download = 'xxx.xlsx' // 下载后文件名
+            downloadElement.download = this.fileRowData.compositionName // 下载后文件名
             document.body.appendChild(downloadElement)
             downloadElement.click() // 点击下载
             document.body.removeChild(downloadElement) // 下载完成移除元素
@@ -843,6 +819,33 @@ export default {
           })
       }
     }
+
+    // downloadMultiFile() {
+    //   if (this.fileRowData.fileId == null) {
+    //     alert(123)
+    //   } else {
+    //     this.$request({
+    //       method: 'post',
+    //       url: `/file/downFile?fileId=${this.fileRowData.fileId}`,
+    //       responseType: 'blob'
+    //     })
+    //       .then(res => {
+    //         console.log('下载文件', res)
+    //         var blob = new Blob([res.data], { type: res.headers['content-type'] })
+    //         var downloadElement = document.createElement('a')
+    //         var href = window.URL.createObjectURL(blob) // 创建下载的链接
+    //         downloadElement.href = href
+    //         downloadElement.download = 'xxx.xlsx' // 下载后文件名
+    //         document.body.appendChild(downloadElement)
+    //         downloadElement.click() // 点击下载
+    //         document.body.removeChild(downloadElement) // 下载完成移除元素
+    //         window.URL.revokeObjectURL(href) // 释放掉blob对象
+    //       // this.fileDetailLogTable = res.data.list
+    //       }).catch(e => {
+    //         console.log('/file/getFileList err', e)
+    //       })
+    //   }
+    // }
 
 
 

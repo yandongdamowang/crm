@@ -3,21 +3,10 @@
     <div class="ls-drawertitle">
       <div class="ls-drawertitle-l">{{ pmpPrepaymentData.contractNumber }}</div>
       <div class="ls-drawertitle-r">
-        <span>
+        <!-- <span>
           <i class="el-icon-edit" />
-        </span>&nbsp;&nbsp;&nbsp;
-        <span>
-          <el-dropdown class="ls-drawertitle-dropdown" @command="handleCommand">
-            <span>
-              <i class="el-icon-folder-opened" />
-            </span>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item :command="1">高</el-dropdown-item>
-              <el-dropdown-item :command="2">中</el-dropdown-item>
-              <el-dropdown-item :command="3">低</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-        </span>
+        </span>&nbsp;&nbsp;&nbsp;-->
+        <span />
         &nbsp;&nbsp;&nbsp;
         <!-- <el-dropdown class="ls-drawertitle-dropdown">
           <span>
@@ -57,7 +46,22 @@
           </span>
 
           <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>
+              <el-dropdown class="ls-drawertitle-dropdown" @command="handleCommand">
+                <span>
+                  <!-- <i class="el-icon-folder-opened" /> -->
+                  优先级
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="1">高</el-dropdown-item>
+                  <el-dropdown-item :command="2">中</el-dropdown-item>
+                  <el-dropdown-item :command="3">低</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </el-dropdown-item>
+
             <el-dropdown-item>转 移</el-dropdown-item>
+
             <el-dropdown-item>
               <span @click="deleteContract">删 除</span>
             </el-dropdown-item>
