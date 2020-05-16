@@ -6,7 +6,7 @@ stages:
 
  
 variables:
-  IMAGES: ${DOCKER_REGISTRY}/${CI_PROJECT_PATH}
+  IMAGES: harbor.ls.com/${CI_PROJECT_PATH}
   PRO_PATH: "linksame-crm"
   SON_URL: "http://sonarqube.ls.com"
   SON_LOGIN: "4e2f1c34bd0fe46df653806a0aa89deea4d92d5f"
