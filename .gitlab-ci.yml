@@ -1,0 +1,61 @@
+# 本次构建的阶段：build package
+stages:
+ - build
+ - package
+ - deploy
+
+
+variables:
+  IMAGES: harbor.ls.com/${CI_PROJECT_PATH}
+  PRO_PATH: "linksame-crm"
+  SON_URL: "http://sonarqube.ls.com"
+  SON_LOGIN: "4e2f1c34bd0fe46df653806a0aa89deea4d92d5f"
+  PROJECTKEY: "operation-pro-crm:crm"
+
+  # 镜像：地址
+# 构建 Job
+build:
+  stage: build
+  image: ranmufei/maven:latest
+  script:
+  - echo "=============== 环境变量输出 ==============="
+  - echo "镜像：$IMAGES"
+  - echo "代码质量检查"
+  #- cd ${PRO_PATH} && sh ./sonar.sh
+# 打包
+package:
+  image: ranmufei/maven:latest
+  stage: package
+  script:
+  - echo "=============== 	开始   ==============="
+  - cd ${PRO_PATH}
+
+  - echo "===================打包========================="
+  - mvn package -Dmaven.test.skip=true
+  - cd target/crm-release/ && ls  -all
+
+  artifacts:
+      name:  "${CI_JOB_NAME}_${CI_COMMIT_REF_NAME}"
+      paths:
+       - ${PRO_PATH}/target/*
+# 部署
+deploy:
+  stage: deploy
+  script:
+  - echo "----------		打包结果 ma ster ---------------------"
+  - ls -all
+  - cd ${PRO_PATH} && ls -all
+  - echo "======			执行docker 打包 ====="
+  - docker build -t ${IMG} .
+  #- docker images|grep ${PRO_PATH}
+  - docker login harbor.ls.com -u admin -p Harbor12345
+  - docker push ${IMG}
+  - echo "================执行部署================="
+  - cd ../ && chmod +x ./install.sh && sh ./install.sh ${IMG}
+ 
+before_script:
+  - export DATATIME=$(date +"%Y-%m-%d-%H%M%S")
+  - export hi="ranmufei"
+  - export IMG=${IMAGES}:${DATATIME}
+ 
+ 

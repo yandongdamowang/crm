@@ -1,0 +1,55 @@
+HELP.md
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+.idea
+*.class
+*.iml
+target
+test
+
+
+### IntelliJ IDEA ###
+.idea
+/.idea/
+/src/test/
+*.iws
+*.iml
+*.ipr
+.idea
+*.class
+*.iml
+target
+test
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/nbdist/
+/.nb-gradle/
+/build/
+
+
+### VS Code ###
+.vscode/
+fitmgr/fitmgr-visual/fitmgr-codegen/src/main/resources/generator.properties
+fitmgr/fitmgr-gateway/logs/fitmgr-gateway/error.log
+fitmgr/fitmgr-gateway/logs/fitmgr-gateway/debug.log
+fitmgr/fitmgr-gateway/logs/error.log
+fitmgr/fitmgr-gateway/logs/debug.log
+fitmgr/fitmgr-config/logs/fitmgr-config/error.log
+fitmgr/fitmgr-config/logs/fitmgr-config/debug.log
+fitmgr/fitmgr-config/logs/error.log
+fitmgr/fitmgr-config/logs/debug.log
+.log
+target
+test
+*.log
