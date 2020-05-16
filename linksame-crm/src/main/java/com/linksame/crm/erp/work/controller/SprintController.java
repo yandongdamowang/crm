@@ -48,6 +48,7 @@ public class SprintController extends Controller {
     @ApiImplicitParams({
             @ApiImplicitParam(name="TaskSprint", description="任务冲刺对象")
     })
+    @NotBlank({"aimsName"})
     public void setSprint(@Para("") TaskSprint taskSprint){
         renderJson(sprintService.setSprint(taskSprint));
     }

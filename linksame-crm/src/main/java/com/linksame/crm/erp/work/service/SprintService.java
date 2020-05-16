@@ -59,10 +59,28 @@ public class SprintService {
                     adminUserList.add(user);
                 }
                 e.set("mainUserList", adminUserList);
+                //查询关联活跃冲刺任务数量
+                Integer taskCount = Db.queryInt("select count(*) as count from task where sprint_id = ?", e.getInt("sprint_id"));
+                e.set("taskCount", taskCount);
             });
             return R.ok().put("data", recordList);
         } else {
             Page<Record> pageList = Db.paginate(basePageRequest.getPage(), basePageRequest.getLimit(), Db.getSqlPara("task.sprint.queryList", kv));
+            pageList.getList().forEach(e->{
+                List<AdminUser> adminUserList = new ArrayList<>();
+                //读取任务冲刺关联的任务数据
+                List<Record> taskList = Db.find("select * from task where sprint_id = ? and ishidden = 0", e.getInt("sprint_id"));
+                for(Record task : taskList){
+                    //读取任务负责人数据
+                    AdminUser user = AdminUser.dao.findById(task.getInt("main_user_id"));
+                    adminUserList.add(user);
+                }
+                e.set("mainUserList", adminUserList);
+                //查询关联活跃冲刺任务数量
+                Integer taskCount = Db.queryInt("select count(*) as count from task where sprint_id = ?", e.getInt("sprint_id"));
+                e.set("taskCount", taskCount);
+            });
+
             return R.ok().put("data", pageList);
         }
     }

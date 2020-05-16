@@ -27,6 +27,14 @@ public abstract class BaseTaskSprint<M extends BaseTaskSprint<M>> extends Model<
 		return getStr("name");
 	}
 
+	public void setAimsName(String aimsName) {
+		set("aims_name", aimsName);
+	}
+
+	public String getAimsName() {
+		return getStr("aims_name");
+	}
+
 	public void setCreateUserId(Long createUserId) {
 		set("create_user_id", createUserId);
 	}
