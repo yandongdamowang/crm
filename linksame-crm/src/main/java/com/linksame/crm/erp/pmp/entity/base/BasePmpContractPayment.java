@@ -30,12 +30,12 @@ public abstract class BasePmpContractPayment<M extends BasePmpContractPayment<M>
         return getLong("contract_id");
     }
 
-    public void setProjectId(Long projectId) {
+    public void setProjectId(Integer projectId) {
         set("project_id", projectId);
     }
 
-    public Long getProjectId() {
-        return getLong("project_id");
+    public Integer getProjectId() {
+        return getInt("project_id");
     }
 
     public void setPaymentName(String paymentName) {
@@ -46,20 +46,20 @@ public abstract class BasePmpContractPayment<M extends BasePmpContractPayment<M>
         return getStr("payment_name");
     }
 
-    public void setPaymentClause(String paymentClause) {
+    public void setPaymentClause(Integer paymentClause) {
         set("payment_clause", paymentClause);
     }
 
-    public String getPaymentClause() {
-        return getStr("payment_clause");
+    public Integer getPaymentClause() {
+        return getInt("payment_clause");
     }
 
-    public void setCostPercentage(Long costPercentage) {
+    public void setCostPercentage(Integer costPercentage) {
         set("cost_percentage", costPercentage);
     }
 
-    public Long getCostPercentage() {
-        return getLong("cost_percentage");
+    public Integer getCostPercentage() {
+        return getInt("cost_percentage");
     }
 
     public void setMoney(java.math.BigDecimal money) {
@@ -158,12 +158,12 @@ public abstract class BasePmpContractPayment<M extends BasePmpContractPayment<M>
         return getStr("batch_id");
     }
 
-    public void setPracticalCostPercentage(Long practicalCostPercentage) {
+    public void setPracticalCostPercentage(Integer practicalCostPercentage) {
         set("practical_cost_percentage", practicalCostPercentage);
     }
 
-    public Long getPracticalCostPercentage() {
-        return getLong("practical_cost_percentage");
+    public Integer getPracticalCostPercentage() {
+        return getInt("practical_cost_percentage");
     }
 
     public void setpracticalMoney(java.math.BigDecimal practicalMoney) {

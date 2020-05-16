@@ -3,6 +3,7 @@ package com.linksame.crm.erp.admin.controller;
 import com.jfinal.aop.Inject;
 import com.jfinal.core.Controller;
 import com.jfinal.core.paragetter.Para;
+import com.linksame.crm.common.annotation.NotBlank;
 import com.linksame.crm.common.annotation.Permissions;
 import com.linksame.crm.erp.admin.entity.AdminFileFolder;
 import com.linksame.crm.erp.admin.service.AdminFileFolderService;
@@ -32,6 +33,7 @@ public class AdminFileFolderController extends Controller {
     @ApiImplicitParams({
             @ApiImplicitParam(name="adminFileFolder", description="文件夹对象(第一层文件夹folderPid可传0, 不可传空字符串)")
     })
+    @NotBlank({ "folderName" })
     @Permissions({"file:folderManage:create"})
     public void createFolder(@Para("") AdminFileFolder adminFileFolder){
         renderJson(adminFileFolderService.createFolder(adminFileFolder));
@@ -56,6 +58,7 @@ public class AdminFileFolderController extends Controller {
             @ApiImplicitParam(name="folderId", description="文件夹编号"),
             @ApiImplicitParam(name="folderName", description="文件夹名称")
     })
+    @NotBlank({ "folderName" })
     @Permissions({"file:folderManage:rename"})
     public void renameFolder(@Para("") AdminFileFolder adminFileFolder){
         renderJson(adminFileFolder.update() ? R.ok() : R.error());

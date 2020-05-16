@@ -47,12 +47,12 @@ public abstract class BasePmpContractPaymentRecord<M extends BasePmpContractPaym
         return getStr("payment_number");
     }
 
-    public void setSupplierId(java.lang.Long supplierId) {
-        set("supplier_id", supplierId);
+    public void setCustomerid(java.lang.Integer customerid) {
+        set("customer_id", customerid);
     }
 
-    public java.lang.Long getSupplierId() {
-        return getLong("supplier_id");
+    public java.lang.Integer getCustomerid() {
+        return getInt("customer_id");
     }
 
     public void setContractId(java.lang.Long contractId) {

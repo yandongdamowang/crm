@@ -1,5 +1,6 @@
 package com.linksame.crm.erp.work.entity.base;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jfinal.plugin.activerecord.IBean;
 import com.jfinal.plugin.activerecord.Model;
 
@@ -35,6 +36,15 @@ public abstract class BaseTaskRemind<M extends BaseTaskRemind<M>> extends Model<
 		return getInt("remind_type");
 	}
 
+	public void setRemindContent(String remindContent) {
+		set("remind_content", remindContent);
+	}
+
+	public String getRemindContent() {
+		return getStr("remind_content");
+	}
+
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public void setRemindTime(java.util.Date remindTime) {
 		set("remind_time", remindTime);
 	}

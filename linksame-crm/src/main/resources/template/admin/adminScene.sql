@@ -123,7 +123,11 @@
           #end
           `z`.*
         FROM
-        `crm_#(realm)` as `a`
+        #if(realm == contract)
+            `pmp_#(realm)` as `a`
+        #else
+          `crm_#(realm)` as `a`
+        #end
         #if(label==3)
           LEFT JOIN `crm_customer` `d` ON `a`.`customer_id` = `d`.`customer_id`
         #elseif(label==4)

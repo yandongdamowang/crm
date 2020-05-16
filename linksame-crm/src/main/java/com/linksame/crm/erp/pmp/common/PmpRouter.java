@@ -14,7 +14,9 @@ public class PmpRouter extends Routes {
     public void config() {
         addInterceptor(new PmpInterceptor());
         add("/pmpContract", PmpContractController.class);
+        add("/pmpBusiness", PmpBusinessController.class);
         add("/pmpContractPayment", PmpContractPaymentController.class);
+        add("/pmpContractTemplate", PmpContractTemplateController.class);
         add("/pmpContractPaymentRecord", PmpContractPaymentRecordController.class);
         add("/pmpReceivableRecords", PmpReceivableRecordsController.class);
     }

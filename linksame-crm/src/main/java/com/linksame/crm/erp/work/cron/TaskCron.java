@@ -10,6 +10,6 @@ public class TaskCron implements Runnable {
 
     @Override
     public void run() {
-        Db.update("update task set status = 2 where stop_time < now() and status = 1");
+        Db.update("update task set status = 2 where stop_time < now() and status in(0,1)");
     }
 }
