@@ -1,5 +1,6 @@
 package com.linksame.crm.erp.work.service;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.utils.StringUtils;
 import com.jfinal.aop.Before;
@@ -13,11 +14,11 @@ import com.linksame.crm.erp.admin.entity.AdminUser;
 import com.linksame.crm.erp.work.entity.Task;
 import com.linksame.crm.erp.work.entity.TaskSprint;
 import com.linksame.crm.utils.BaseUtil;
+import com.linksame.crm.utils.DateUtil;
 import com.linksame.crm.utils.R;
 import org.elasticsearch.common.inject.Inject;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -83,6 +84,13 @@ public class SprintService {
             taskSprint.setCreateTime(new Date());
             bol = taskSprint.save();
         } else {
+            //如果设置状态为开启冲刺, 必须其他冲刺任务不为开启状态
+            if(taskSprint.getStatus() != null && taskSprint.getStatus() == 1 ){
+                Integer count = Db.queryInt("select count(*) from task_sprint where status = 1 and is_del = 0");
+                if(count > 0){
+                    return R.error("已有其他进行中的冲刺任务, 设置失败");
+                }
+            }
             //编辑
             bol = taskSprint.update();
         }
@@ -137,5 +145,45 @@ public class SprintService {
             });
         }
         return bol ? R.ok() : R.error();
+    }
+
+    /**
+     * 查询任务冲刺数据详情(根据各状态组装list返回页面)
+     * @param sprintId
+     * @return
+     */
+    public R querySprintInfo(Integer sprintId){
+        List<Map<String, Object>> resultList = new ArrayList<>();
+        //1. 查询冲刺任务数据, 获取该任务开始时间与截止时间
+        TaskSprint taskSprint = TaskSprint.dao.findById(sprintId);
+        //开始时间
+        String startDatetime = DateUtil.dateToStrLong(taskSprint.getStartTime());
+        //截止时间
+        String endDatetime = DateUtil.dateToStrLong(taskSprint.getEndTime());
+        List<String> dayList = DateUtil.getDays(startDatetime, endDatetime);
+        //遍历日期节点, 查询与该日期匹配的截止日期任务
+        for(String dateStr : dayList){
+            Map<String, Object> map = new HashMap<>();
+            Integer expectCount = 0;
+            Integer remainingCount = 0;
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(DateUtil.strToDate(dateStr));
+            //获取该日期的起始时间
+            Calendar startResult = DateUtil.getStartDate(cal);
+            String startDateStr = DateUtil.dateToStrLong(startResult.getTime());
+            //获取该日期的结束时间
+            Calendar endResult = DateUtil.getEndDate(cal);
+            String endDateStr = DateUtil.dateToStrLong(endResult.getTime());
+            //获取该时间区间状态为完成的任务----期望值
+            expectCount = Db.queryInt("select count(*) as count from task where stop_time BETWEEN ? and ? and status = 5", startDateStr, endDateStr);
+            map.put("date", dateStr);
+            map.put("expectCount", expectCount);
+            //获取剩余值
+            remainingCount = Db.queryInt("select count(*) as count from task where stop_time BETWEEN ? and ? and status in (0,1,2)", startDateStr, endDateStr);
+            map.put("remainingCount", remainingCount);
+            resultList.add(map);
+        }
+
+        return R.ok().put("data", resultList);
     }
 }

@@ -30,12 +30,12 @@ public abstract class BasePmpContractPayment<M extends BasePmpContractPayment<M>
         return getLong("contract_id");
     }
 
-    public void setProjectId(Long projectId) {
+    public void setProjectId(Integer projectId) {
         set("project_id", projectId);
     }
 
-    public Long getProjectId() {
-        return getLong("project_id");
+    public Integer getProjectId() {
+        return getInt("project_id");
     }
 
     public void setPaymentName(String paymentName) {
@@ -46,12 +46,12 @@ public abstract class BasePmpContractPayment<M extends BasePmpContractPayment<M>
         return getStr("payment_name");
     }
 
-    public void setPaymentClause(String paymentClause) {
+    public void setPaymentClause(Integer paymentClause) {
         set("payment_clause", paymentClause);
     }
 
-    public String getPaymentClause() {
-        return getStr("payment_clause");
+    public Integer getPaymentClause() {
+        return getInt("payment_clause");
     }
 
     public void setCostPercentage(Integer costPercentage) {

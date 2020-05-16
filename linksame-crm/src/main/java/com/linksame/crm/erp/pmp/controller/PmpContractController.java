@@ -10,9 +10,11 @@ import com.jfinal.core.Controller;
 import com.jfinal.core.paragetter.Para;
 import com.linksame.crm.common.annotation.Permissions;
 import com.linksame.crm.common.config.paragetter.BasePageRequest;
+import com.linksame.crm.erp.pmp.entity.PmpBusiness;
 import com.linksame.crm.erp.pmp.entity.PmpContract;
 import com.linksame.crm.erp.pmp.entity.PmpContractPayment;
 import com.linksame.crm.erp.pmp.service.PmpContractService;
+import com.linksame.crm.erp.work.entity.Task;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -36,7 +38,6 @@ public class PmpContractController extends Controller {
     @Inject
     private PmpContractService pmpContractService;
 
-
     /**
      *
      *  新增合同
@@ -49,13 +50,23 @@ public class PmpContractController extends Controller {
         boolean notEmpty = StrUtil.isNotEmpty(pmpContract.getBatchId());
         pmpContract.setBatchId(notEmpty ? pmpContract.getBatchId() : IdUtil.simpleUUID());
         List<PmpContractPayment> pmpContractPayments = new ArrayList<>();
+        List<Task> tasklist = new ArrayList<>();
         JSONArray pmpContractPayments2 = jsonObject.getJSONArray("pmpContractPayments");
+        JSONArray tasks = jsonObject.getJSONArray("tasks");
+        if (tasks != null) {
+            for (Object o : tasks) {
+                Task task = JSON.parseObject(o.toString(), Task.class);
+                task.setWorkId(pmpContract.getProjectId());
+                task.setClassId(pmpContract.getMilestoneNodes());
+                tasklist.add(task);
+            }
+        }
         for (Object o : pmpContractPayments2) {
             PmpContractPayment pmpContractPayment = JSON.parseObject(o.toString(), PmpContractPayment.class);
             pmpContractPayment.setBatchId(StrUtil.isNotEmpty(pmpContract.getBatchId()) ? pmpContract.getBatchId() : IdUtil.simpleUUID());
             pmpContractPayments.add(pmpContractPayment);
         }
-        renderJson(pmpContractService.add(pmpContract,pmpContractPayments));
+        renderJson(pmpContractService.add(pmpContract,pmpContractPayments,tasklist));
 
     }
     /**

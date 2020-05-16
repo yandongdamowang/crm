@@ -9,6 +9,7 @@ import com.aliyuncs.utils.StringUtils;
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Page;
 import com.linksame.crm.common.config.paragetter.BasePageRequest;
+import com.linksame.crm.common.constant.BaseConstant;
 import com.linksame.crm.common.minio.service.MinioServicce;
 import com.linksame.crm.erp.admin.entity.*;
 import com.linksame.crm.erp.work.entity.Work;
@@ -19,6 +20,9 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.jfinal.upload.UploadFile;
+import io.minio.Result;
+import io.minio.messages.DeleteError;
+
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -92,9 +96,6 @@ public class AdminFileService {
     @Before(Tx.class)
     public R upload(AdminFile adminFile) {
         String compositionName;
-        if(adminFile.getFolderId() == null){
-            return R.error("folderId参数不允许为空");
-        }
         try{
             //如果是图片类型,通过文件名请求minio,获取访问路径
             String suffix = FileUtil.extName(adminFile.getFileName());
@@ -159,30 +160,21 @@ public class AdminFileService {
      * @param adminFile 附件对象
      * @return
      */
-    public R changeVersion(UploadFile file, AdminFile adminFile) {
+    public R changeVersion(AdminFile adminFile) {
         String compositionName;
-        if(adminFile.getFolderId() == null){
-            return R.error("folderId参数不允许为空");
-        }
         try{
-            //上传文件至minio服务器
-            AdminFile resultFile = MinioServicce.uploadFile(file);
-
             //如果是图片类型,通过文件名请求minio,获取访问路径
-            String suffix = FileUtil.extName(resultFile.getFileName());
+            String suffix = FileUtil.extName(adminFile.getFileName());
             //文件格式校验
             if(StringUtils.isEmpty(suffix) || suffix.length()<3 || !suffix.matches("[a-zA-Z]+") || suffix.indexOf(" ") != -1){
                 return R.error("请上传格式正确的文件");
             }
 
             //插入数据到文件表中
-            adminFile.setBucketName(resultFile.getBucketName());
-            adminFile.setOldName(resultFile.getOldName());
             adminFile.setBatchId(adminFile.getBatchId());
             adminFile.setCreateTime(new Date());
             adminFile.setCreateUserId(BaseUtil.getUser().getUserId());
-            adminFile.setFileName(resultFile.getFileName());
-            adminFile.setSize(file.getFile().length());
+            adminFile.setSuffix(suffix);
 
             //文件格式处理
             adminFile = withSuffixByFile(adminFile);
@@ -212,7 +204,7 @@ public class AdminFileService {
             adminFileLog.setRemake(adminFile.getFileRemark());
             saveFileLog(adminFileLog);
 
-            return R.ok().put("batchId", adminFile.getBatchId()).put("fileName",adminFile.getFileName()).put("oldName",adminFile.getOldName()).put("compositionName",adminFile.getCompositionName()).put("path", adminFile.getPath()).put("size",file.getFile().length()/1000+"KB").put("fileId",adminFile.getFileId());
+            return R.ok().put("batchId", adminFile.getBatchId()).put("fileName",adminFile.getFileName()).put("oldName",adminFile.getOldName()).put("compositionName",adminFile.getCompositionName()).put("path", adminFile.getPath()).put("size",adminFile.getSize()/1000+"KB").put("fileId",adminFile.getFileId());
         } catch (RuntimeException e) {
             throw new RuntimeException("上传文件至Minio服务器出现异常");
         }
@@ -507,14 +499,9 @@ public class AdminFileService {
         List<String> fileNames = Db.query(Db.getSql("admin.file.queryFileNameByBatchId"), batchId);
         //数据库根据批次ID删除文件数据
         Db.deleteById("admin_file", "batch_id", batchId);
-        //Minio服务器根据文件名称删除文件数据
-        fileNames.forEach(ivan->{
-            try {
-                MinioServicce.removeFile(ivan);
-            } catch (Exception e) {
-                throw new RuntimeException("通过批次ID删除文件出现异常");
-            }
-        });
+        //Minio服务器根据文件名称批量删除文件数据
+        MinioServicce.batchRemoveFile(fileNames);
+
         return R.ok();
     }
 

@@ -13,6 +13,7 @@ import live.autu.plugin.jfinal.swagger.annotation.ApiImplicitParams;
 import live.autu.plugin.jfinal.swagger.annotation.ApiOperation;
 import live.autu.plugin.jfinal.swagger.config.RequestMethod;
 import javax.servlet.http.HttpServletResponse;
+import java.io.InputStream;
 import java.util.Map;
 
 /**
@@ -70,4 +71,16 @@ public class MinioController extends Controller {
     }
 
 
+
+    /**
+     * 断点续传测试
+     */
+    public void uploadFileByHttp(){
+        String fileName = getPara("fileName");
+        UploadFile file = getFile("file");
+        //接着上传
+        MinioServicce.putObject(fileName, file,10L, 40L);
+
+        renderNull();
+    }
 }

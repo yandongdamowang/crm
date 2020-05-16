@@ -6,11 +6,10 @@ import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
+import com.linksame.crm.common.annotation.NotBlank;
 import com.linksame.crm.erp.admin.entity.AdminFileFolder;
 import com.linksame.crm.utils.BaseUtil;
 import com.linksame.crm.utils.R;
-
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -27,6 +26,7 @@ public class AdminFileFolderService {
      * @param adminFileFolder   文件对象
      * @return
      */
+    @NotBlank({ "folderName" })
     public R createFolder(AdminFileFolder adminFileFolder){
         adminFileFolder.setCreateUserId(BaseUtil.getUser().getUserId());
         adminFileFolder.setCreateTime(new Date());

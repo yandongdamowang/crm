@@ -101,12 +101,14 @@ public class TaskService{
             task.setUpdateTime(new Date());
             bol = getWorkTaskLog(task, user.getUserId());
         }
-        //设置任务关联业务
-        if(taskRelation.getBusinessIds() != null || taskRelation.getContactsIds() != null || taskRelation.getContractIds() != null || taskRelation.getCustomerIds() != null){
-            Db.deleteById("task_relation", "task_id", task.getTaskId());
-            taskRelation.setCreateTime(DateUtil.date());
-            taskRelation.setTaskId(task.getTaskId());
-            taskRelation.save();
+        if (taskRelation != null) {
+            //设置任务关联业务
+            if (taskRelation.getBusinessIds() != null || taskRelation.getContactsIds() != null || taskRelation.getContractIds() != null || taskRelation.getCustomerIds() != null) {
+                Db.deleteById("task_relation", "task_id", task.getTaskId());
+                taskRelation.setCreateTime(DateUtil.date());
+                taskRelation.setTaskId(task.getTaskId());
+                taskRelation.save();
+            }
         }
         task.getMainUserId();
         oaActionRecordService.addRecord(task.getTaskId(), OaEnum.TASK_TYPE_KEY.getTypes(), task.getUpdateTime() == null ? 1 : 2, oaActionRecordService.getJoinIds(user.getUserId(), getJoinUserIds(task)), oaActionRecordService.getJoinIds(Long.valueOf(user.getDeptId()), ""));
@@ -213,7 +215,7 @@ public class TaskService{
                 String[] contractIds = relation.getStr("contract_ids").split(",");
                 for(String contractId : contractIds){
                     if(StrUtil.isNotBlank(contractId)){
-                        Record contract = Db.findFirst("select contract_id,name from crm_contract  where contract_id = ?", contractId);
+                        Record contract = Db.findFirst("select contract_id,contract_name from pmp_contract  where contract_id = ?", contractId);
                         if(contract != null){
                             contractList.add(contract);
                         }

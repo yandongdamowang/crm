@@ -3,6 +3,7 @@ package com.linksame.crm.erp.admin.controller;
 import cn.hutool.core.collection.CollectionUtil;
 import com.jfinal.core.paragetter.Para;
 import com.jfinal.upload.UploadFile;
+import com.linksame.crm.common.annotation.NotBlank;
 import com.linksame.crm.common.annotation.Permissions;
 import com.linksame.crm.common.config.paragetter.BasePageRequest;
 import com.linksame.crm.common.minio.service.MinioServicce;
@@ -46,6 +47,7 @@ public class AdminFileController extends Controller {
             @ApiImplicitParam(name="file", description="附件"),
             @ApiImplicitParam(name="adminFile", description="附件对象")
     })
+    @NotBlank({ "folderId" })
     public void upload(@Para("") AdminFile adminFile) {
         //上传文件至minio服务器
         AdminFile resultFile = MinioServicce.uploadFile(getFile("file"));
@@ -88,9 +90,17 @@ public class AdminFileController extends Controller {
             @ApiImplicitParam(name="file", description="附件"),
             @ApiImplicitParam(name="adminFile", description="附件对象")
     })
+    @NotBlank({ "folderId" })
     @Permissions({"file:fileManage:changeVersion"})
     public void changeVersion(@Para("") AdminFile adminFile){
-        renderJson(adminFileService.changeVersion(getFile("file"),adminFile));
+        //上传文件至minio服务器
+        AdminFile resultFile = MinioServicce.uploadFile(getFile("file"));
+        adminFile.setBucketName(resultFile.getBucketName());
+        adminFile.setFileName(resultFile.getFileName());
+        adminFile.setOldName(resultFile.getOldName());
+        adminFile.setSize(getFile("file").getFile().length());
+
+        renderJson(adminFileService.changeVersion(adminFile));
     }
 
     /**

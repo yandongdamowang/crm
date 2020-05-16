@@ -13,7 +13,7 @@ public enum CrmEnum {
     CRM_RECEIVABLES("crm_receivables",7,"回款"),
     CRM_RECEIVABLES_PLAN("crm_receivables_plan",8,"回款计划"),
     CRM_CUSTOMER_POOL("crm_customer_pool",9,"客户公海"),
-    PMP_PAYMENT("pmp_contract_payment",10,"付款"),
+    PMP_PAYMENT("pmp_contract_payment",10,"预付付款"),
     CRM_NULL("NULL",0,"NULL")
     ;
 

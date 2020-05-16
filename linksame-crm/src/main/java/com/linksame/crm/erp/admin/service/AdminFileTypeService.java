@@ -5,6 +5,7 @@ import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
+import com.linksame.crm.common.annotation.NotBlank;
 import com.linksame.crm.common.config.paragetter.BasePageRequest;
 import com.linksame.crm.erp.admin.entity.AdminFileType;
 import com.linksame.crm.utils.BaseUtil;
@@ -44,6 +45,7 @@ public class AdminFileTypeService {
      * @param adminFileType 文件类型对象
      * @return
      */
+    @NotBlank({ "typeName", "typeCode" })
     public R setType(AdminFileType adminFileType){
         boolean bol = true;
         if(adminFileType.getTypeId() == null){

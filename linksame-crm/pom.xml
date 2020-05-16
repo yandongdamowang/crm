@@ -58,6 +58,13 @@
             <version>3.0.10</version>
         </dependency>
 
+        <!--邮件插件-->
+        <dependency>
+            <groupId>cn.fsdev</groupId>
+            <artifactId>jfinal-mail-plugin</artifactId>
+            <version>3.0</version>
+        </dependency>
+
         <!-- dom4j -->
         <dependency>
             <groupId>dom4j</groupId>

@@ -17,8 +17,11 @@
             prr.collection_account,
             prr.collection_number,
             prr.collecting_time,
-            prr.agent
-        from pmp_receivable_records as prr
+            prr.agent,
+            au.realname agentRealname,
+            cc.contractor_name
+        from pmp_receivable_records as prr LEFT JOIN admin_user as au on prr.agent = au.user_id
+            LEFT JOIN crm_customer as cc on cc.customer_id = cc.customer_id
             where 1 = 1
             #if(paymentMethod)
                 and prr.payment_method = #para(contractId)

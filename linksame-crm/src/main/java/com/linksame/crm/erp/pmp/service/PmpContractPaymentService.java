@@ -8,6 +8,7 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.linksame.crm.common.config.paragetter.BasePageRequest;
+import com.linksame.crm.erp.admin.service.AdminExamineRecordService;
 import com.linksame.crm.erp.crm.common.CrmEnum;
 import com.linksame.crm.erp.crm.service.CrmRecordService;
 import com.linksame.crm.erp.pmp.common.PmpInterface;
@@ -82,15 +83,17 @@ public class PmpContractPaymentService {
                                 "and pcp.status = '1' " +
                                 "and pcp.trade_form = "+PmpInterface.contractPayment.trade.form.EXPENF+" " +
                                 "and pcp.trade_status = "+PmpInterface.contractPayment.trade.stats.TRADING, contractPayment.getContractId()).forEach(contractPayment1 -> {
+                    //新
                     Integer paymentStage1 = contractPayment.getPaymentStage();
+                    //旧
                     Integer paymentStage = contractPayment1.getPaymentStage();
                     boolean equals = paymentStage1.equals(paymentStage);
-                    boolean b = (paymentStage1 + 1) == paymentStage;
-                    if (equals || b){
+                    if (equals){
                         //修改后的
                         contractPayment1.setCostPercentage(contractPayment.getCostPercentage());
                         contractPayment1.setMoney(contractPayment.getMoney());
                         contractPayment1.setUpdateTime(new Date(System.currentTimeMillis()));
+                        crmRecordService.updateRecord(contractPayment1,contractPayment,CrmEnum.PMP_PAYMENT);
                         contractPayment1.update();
                     }
                 });
@@ -108,11 +111,23 @@ public class PmpContractPaymentService {
 
         if (basePageRequest.getPageType() == 0){
             List<Record> records = Db.find(Db.getSqlPara("pmp.contractPayment.queryAdvanceList", kv));
-            records.forEach(record -> record.set("totalPayment",Db.queryBigDecimal("SELECT SUM(pcpr.practica_advanced)  FROM pmp_contract_payment_record pcpr LEFT JOIN pmp_contract pc ON pcpr.contract_id = pc.contract_id WHERE pc.contract_id = ?", record.getLong("contract_id"))));
+            records.forEach(record -> {
+                BigDecimal contract_id = Db.queryBigDecimal("SELECT SUM(pcpr.practica_advanced)  FROM pmp_contract_payment_record pcpr LEFT JOIN pmp_contract pc ON pcpr.contract_id = pc.contract_id WHERE pc.contract_id = ?", record.getLong("contract_id"));
+                if (contract_id == null){
+                    contract_id = new BigDecimal(0);
+                }
+                record.set("totalPayment",contract_id);
+            });
             return R.ok().put("data",records);
         }else {
             Page<Record> paginate = Db.paginate(basePageRequest.getPage(), basePageRequest.getLimit(), Db.getSqlPara("pmp.contractPayment.queryAdvanceList", kv));
-            paginate.getList().forEach(record -> record.set("totalPayment",Db.queryBigDecimal("SELECT SUM(pcpr.practica_advanced)  FROM pmp_contract_payment_record pcpr LEFT JOIN pmp_contract pc ON pcpr.contract_id = pc.contract_id WHERE pc.contract_id = ?", record.getLong("contract_id"))));
+            paginate.getList().forEach(record -> {
+                BigDecimal contract_id = Db.queryBigDecimal("SELECT SUM(pcpr.practica_advanced)  FROM pmp_contract_payment_record pcpr LEFT JOIN pmp_contract pc ON pcpr.contract_id = pc.contract_id WHERE pc.contract_id = ?", record.getLong("contract_id"));
+                if (contract_id == null){
+                    contract_id = new BigDecimal(0);
+                }
+                record.set("totalPayment",contract_id);
+            });
             return R.ok().put("data", paginate);
         }
     }
@@ -120,6 +135,11 @@ public class PmpContractPaymentService {
     public R queryAdvanceBybillId(Long billId) {
         Kv kv = Kv.by("billId", billId).set("orderBy","1");
         Record first = Db.findFirst(Db.getSqlPara("pmp.contractPayment.queryAdvanceList", kv));
+        BigDecimal contract_id = Db.queryBigDecimal("SELECT SUM(pcpr.practica_advanced)  FROM pmp_contract_payment_record pcpr LEFT JOIN pmp_contract pc ON pcpr.contract_id = pc.contract_id WHERE pc.contract_id = ?", first.getLong("contract_id"));
+        if (contract_id == null){
+            contract_id = new BigDecimal(0);
+        }
+        first.set("totalPayment",contract_id);
         return R.ok().put("data", first);
     }
 

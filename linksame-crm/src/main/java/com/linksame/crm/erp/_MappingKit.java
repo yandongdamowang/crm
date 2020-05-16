@@ -83,6 +83,8 @@ public class _MappingKit {
         arp.addMapping("pmp_contract_payment", "bill_id", PmpContractPayment.class);
         arp.addMapping("pmp_contract_payment_record", "payment_record_id", PmpContractPaymentRecord.class);
 		arp.addMapping("pmp_receivable_records", "receivable_records_id", PmpReceivableRecords.class);
+		arp.addMapping("pmp_contract_template", "template_id", PmpContractTemplate.class);
+		arp.addMapping("pmp_business", "business_id", PmpBusiness.class);
 	}
 }
 
