@@ -96,8 +96,8 @@
         #if(workId)
             and a.work_id = #para(workId)
         #end
-        #if(oldName)
-            and a.old_name like concat('%', #para(oldName), '%')
+        #if(compositionName)
+            and a.composition_name like concat('%', #para(compositionName), '%')
         #end
         #if(delFlag)
             and a.del_flag = #para(delFlag)

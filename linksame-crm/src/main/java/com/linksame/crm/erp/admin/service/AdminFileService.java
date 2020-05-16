@@ -42,7 +42,7 @@ public class AdminFileService {
     public R getFileList(BasePageRequest basePageRequest){
         JSONObject jsonObject = basePageRequest.getJsonObject();
         Kv kv= Kv.by("batchId", jsonObject.getString("batchId"))
-                .set("oldName", jsonObject.getString("oldName"))
+                .set("compositionName", jsonObject.getString("compositionName"))
                 .set("folderId", jsonObject.getInteger("folderId"))
                 .set("labelId", jsonObject.getInteger("labelId"))
                 .set("workId", jsonObject.getInteger("workId"))

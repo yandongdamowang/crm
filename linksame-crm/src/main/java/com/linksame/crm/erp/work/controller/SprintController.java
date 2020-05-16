@@ -66,7 +66,7 @@ public class SprintController extends Controller {
     /**
      * 根据各状态查询数量
      */
-    public void qeuryCount(){
+    public void queryCount(){
         List<Record> countList = Db.find("select count(*) as taskCount from task_sprint where is_del = 0 GROUP BY status ORDER BY status");
         if(CollectionUtil.isEmpty(countList)){
             renderJson(R.error("未查询到数据"));
