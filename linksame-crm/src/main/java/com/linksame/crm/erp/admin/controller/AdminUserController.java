@@ -52,6 +52,13 @@ public class AdminUserController extends Controller {
         String status = getPara("status");
         renderJson(adminUserService.setUserStatus(ids,status));
     }
+    /**
+     * @author hmb
+     * 查询在线离线率
+     */
+    public void onlineOfflineRate(){
+        renderJson(adminUserService.onlineOfflineRate());
+    }
 
     /**
      * @author hmb
