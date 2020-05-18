@@ -82,7 +82,7 @@
               <el-tag type="warning">待交易</el-tag>
             </span>
             <span v-else-if="scope.row.tradeStatus == '3'">
-              <el-tag type="danger">带审批</el-tag>
+              <el-tag type="danger">待审批</el-tag>
             </span>
             <span v-else-if="scope.row.tradeStatus == '4'">
               <el-tag type="info">延期</el-tag>
@@ -93,7 +93,7 @@
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="dialogPaymentApply(scope.row)">申请付款</el-button>
 
-            <el-button type="text" size="small" @click="dialogPaymentCommit(scope.row)">确认收款</el-button>
+            <el-button type="text" size="small" @click="dialogPaymentCommit(scope.row)">确认付款</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -151,10 +151,10 @@
 
             <el-col :span="12">
               <el-form-item label="申请付款时间 ：">
-                <div>待开发</div>
+                <div>{{ dialogData.paymentNode }}</div>
               </el-form-item>
 
-              <el-form-item label="累计付款金额：">{{ appliedAmount }} {{ dialogData.totalPayment }}</el-form-item>
+              <el-form-item label="累计付款金额：">{{ appliedAmount }}</el-form-item>
             </el-col>
           </el-row>
 
@@ -207,12 +207,12 @@
         </span>
       </el-dialog>
 
-      <el-dialog
+      <!-- <el-dialog
         :visible.sync="dialogPaymentCommitStatus"
         :title="dialogTitle"
         :width="dialogwidth"
       >
-        <!-- <component ref="child" :is="dialogComponents" :dialog-data="dialogData" /> -->
+
         <el-form ref="form" label-width="120px">
           <el-divider content-position="left">基本信息</el-divider>
 
@@ -253,7 +253,7 @@
           <el-button @click="dialogPaymentCommitStatus = false">取 消</el-button>
           <el-button type="primary" @click="commitData">确 定</el-button>
         </span>
-      </el-dialog>
+      </el-dialog>-->
 
       <el-drawer
         :title="drawerTitle"
@@ -264,7 +264,12 @@
         @open="drawerDetail()"
       >
         <keep-alive :include="[]">
-          <component :is="drawerComponents" :drawer-data="drawerData" @drawerStatus="drawerStatus" />
+          <component
+            :is="drawerComponents"
+            :row-data="rowData"
+            :drawer-data="drawerData"
+            @drawerStatus="drawerStatus"
+          />
         </keep-alive>
       </el-drawer>
 
@@ -291,6 +296,7 @@ export default {
     // DialogPaymentApply: () => import('./components/DialogPaymentApply'),
     // DialogCreate: () => import('./components/DialogCreate'),
     DrawerDetail: () => import('./components/DrawerDetail')
+
   },
 
   data() {
@@ -306,7 +312,7 @@ export default {
       drawerData: '',
       dialogData: '',
       dialogUserData: '',
-
+      rowData: '',
       pageCurrent: 1,
       pageTotal: 1,
       pageSize: 10,
@@ -334,7 +340,7 @@ export default {
   },
   computed: {
     appliedAmount() {
-      return this.formData.appliedAmountBefore
+      return parseInt(this.formData.appliedAmountBefore) + parseInt(this.dialogData.totalPayment == null ? 0 : this.dialogData.totalPayment)
     }
   },
   mounted() {
@@ -390,7 +396,9 @@ export default {
 
     commitData() {
       this.$request({
-        url: `/examineRecord/addExamine`,
+        // url: `/examineRecord/addExamine`,
+
+        url: `/pmpContractPayment/requestPayment`,
         method: 'post',
         data: {
           'pmpContractPayment': {
@@ -410,7 +418,8 @@ export default {
           'Content-Type': 'application/json;charset=UTF-8'
         }})
         .then(res => {
-          console.log(res)
+          console.log('提交申请付款', res)
+          this.$message.success('提交申请付款成功')
           this.formData = {
             appliedAmountBefore: 0,
             'pmpContractPayment': {
@@ -483,9 +492,37 @@ export default {
     },
 
     dialogPaymentCommit(row) {
-      this.dialogPaymentCommitStatus = true
-      this.dialogTitle = '确认收款'
-      this.dialogwidth = '50%'
+      console.log(row)
+      this.$confirm('此操作将确认收款, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$request({
+          url: `/pmpContractPayment/confirmPayment`,
+          method: 'post',
+          data: {
+            'billId': row.billId
+          },
+          headers: {
+            'Content-Type': 'application/json;charset=UTF-8'
+          }}).then(res => {
+          console.log('确认收款', res)
+
+          this.$message({
+            type: 'success',
+            message: `${res.msg}`
+          })
+        })
+          .catch((e) => {
+            console.log(e)
+          })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消确认收款'
+        })
+      })
     },
 
     // dialogCreate() {
@@ -501,6 +538,7 @@ export default {
       this.drawerComponents = 'DrawerDetail'
       //   console.log('drawerDetailr', row)
       this.drawerData = row.billId
+      this.rowData = row
     }
 
   }

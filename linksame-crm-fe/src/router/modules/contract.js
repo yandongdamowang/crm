@@ -13,7 +13,7 @@ const contractRouter = {
   },
   children: [
     {
-      path: 'workbench', // 工作台
+      path: 'workbench',
       component: () => import('@/views/contractManagement/workbench/Main'),
       meta: {
         requiresAuth: false,
@@ -22,9 +22,9 @@ const contractRouter = {
       }
     },
     {
-      path: 'contract', // 工作台
-      //   hidden: true,
-      component: () => import('@/views/contractManagement/contract/Main'),
+      path: 'contract',
+
+      component: () => import('@/views/contractManagement/contract/index'),
       meta: {
         title: '合同',
         icon: 'schedule'
@@ -33,7 +33,7 @@ const contractRouter = {
     {
       path: 'prepayment',
       hidden: true,
-      component: () => import('@/views/contractManagement/prepaymentBill/Main'),
+      component: () => import('@/views/contractManagement/prepaymentBill/index'),
       meta: {
         title: '预付款账单',
         icon: 'log'
@@ -42,7 +42,7 @@ const contractRouter = {
     {
       path: 'payment',
       hidden: true,
-      component: () => import('@/views/contractManagement/paymentBill/Main'),
+      component: () => import('@/views/contractManagement/paymentBill/index'),
       meta: {
         title: '付款账单',
         icon: 'log'
@@ -51,7 +51,7 @@ const contractRouter = {
     {
       path: 'rebate',
       hidden: true,
-      component: () => import('@/views/contractManagement/rebateBill/Main'),
+      component: () => import('@/views/contractManagement/rebateBill/index'),
       meta: {
         title: '回款账单',
         icon: 'log'

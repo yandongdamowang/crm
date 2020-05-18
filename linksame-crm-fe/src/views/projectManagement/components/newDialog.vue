@@ -6,6 +6,7 @@
       :show-close="false"
       :close-on-click-modal="false"
       :before-close="handleClose"
+      :modal="false"
       title="新建任务"
       width="700px"
     >
@@ -24,6 +25,7 @@
             v-model="formData[item.field]"
             type="textarea"
           />
+
           <el-date-picker
             v-else-if="item.type == 'time'"
             v-model="formData[item.field]"
@@ -39,6 +41,7 @@
               <el-radio :label="0">无</el-radio>
             </el-radio-group>
           </div>
+
           <div v-else-if="item.type == 'popover'" class="type-popover">
             <el-popover placement="bottom-end" width="280" trigger="click">
               <xh-user
@@ -59,8 +62,22 @@
               </div>
             </el-popover>
           </div>
+
           <el-input v-else v-model="formData[item.field]" />
         </el-form-item>
+
+        <el-form-item label="关联冲刺任务">
+          <el-select v-model="modelData.sprintId" placeholder="请选择">
+            <!-- <el-option label="item.label" value="item.value" /> -->
+            <el-option
+              v-for="(item,index) in taskSprintData"
+              :key="index"
+              :label="item.name"
+              :value="item.sprintId"
+            />
+          </el-select>
+        </el-form-item>
+
         <related-business :all-data="allData" :margin-left="'0'" @checkInfos="checkInfos" />
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -110,6 +127,10 @@ export default {
       callback()
     }
     return {
+      modelData: {
+        sprintId: undefined
+      },
+      taskSprintData: [],
       loading: false,
       formData: {
         priority: 0
@@ -142,6 +163,14 @@ export default {
 
   watch: {
     visible(value) {
+      this.$request
+        .post(`/taskSprint/queryList?pageType=0`)
+        .then(res => {
+          console.log('冲刺列表', res)
+          this.taskSprintData = res.data
+        }).catch(e => {
+          console.log(e)
+        })
       if (value) {
         if (this.action.type == 'create') {
           if (this.action.data) {
@@ -164,7 +193,16 @@ export default {
     }
   },
 
+  mounted() {
+    // this.retriveTaskSprintList()
+  },
+
   methods: {
+    // retriveTaskSprintList() {
+
+    // },
+
+
     /**
      * 关闭窗口
      */
@@ -203,7 +241,8 @@ export default {
               : '',
             contractIds: this.relevanceAll.contractIds
               ? ',' + this.relevanceAll.contractIds.join(',') + ','
-              : ''
+              : '',
+            sprintId: this.modelData.sprintId
           }
 
           if (this.params) {

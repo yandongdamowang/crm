@@ -1,6 +1,16 @@
 <template>
   <div class="my-task">
-    <div class="my-task-header">我的任务</div>
+    <!-- <div class="ls-header">
+      合同管理
+      <div class="ls-header-r">
+        <el-select v-model="grep" placeholder="选择项目">
+          <el-option label="项目一" value="shanghai" />
+          <el-option label="项目二" value="beijing" />
+        </el-select>
+      </div>
+    </div>-->
+
+    <div class="my-task-header" />
     <div class="my-task-body">
       <div v-loading="loading" v-scrollx="{ ignoreClass :['ignoreClass']}" class="content-box">
         <div v-for="(item, index) in taskList" :key="index" class="board-column">
@@ -188,9 +198,9 @@ export default {
       event.stopPropagation()
     }
 
-    document
-      .getElementById('project-main-container')
-      .addEventListener('click', this.taskShowHandle, false)
+    // document
+    //   .getElementById('project-main-container')
+    //   .addEventListener('click', this.taskShowHandle, false)
   },
 
   methods: {
@@ -415,7 +425,7 @@ export default {
   height: 100%;
   overflow: hidden;
   .my-task-header {
-    height: 60px;
+    height: 10px;
     line-height: 60px;
     position: relative;
     z-index: 100;

@@ -1,18 +1,33 @@
 <template>
   <div style="height:100%">
-    <div class="ls-header">
-      网盘管理
-      <span class="grep">
-        <!-- 1 -->
-      </span>
+    <div v-if="title == undefined" class="ls-header">
+      <el-row :gutter="100">
+        <el-col :span="18">网盘管理</el-col>
+
+        <el-col :span="6">
+          <!-- <el-button circle icon="el-icon-refresh-right" /> -->
+        </el-col>
+      </el-row>
     </div>
 
-    <el-row :gutter="30">
+    <el-row :gutter="20">
       <el-col :span="6">
         <div class="ls-tree-l">
           <div class="ls-tree-search">
-            <el-button type="primary" @click="createFolder(folderCreateNameInner,0)">创建</el-button>
-            <el-input v-model="folderCreateNameInner" placeholder="请输入内容" style="width:200px" />
+            <el-row :gutter="100">
+              <el-col :span="16">
+                <el-button type="primary" @click="createFolder(folderCreateNameInner,0)">创建文件夹</el-button>
+              </el-col>
+
+              <el-col :span="4">
+                <el-button circle icon="el-icon-refresh-right" @click=" retriveFolderList()" />
+              </el-col>
+            </el-row>
+            <el-input
+              v-model="folderCreateNameInner"
+              placeholder="请输入创建文件夹名"
+              style="margin: 10px 10px 0 0"
+            />
           </div>
 
           <div class="ls-tree-content">
@@ -40,15 +55,15 @@
           <div v-if="tmDisplay" id="perTreeMenu" :style="{...rightMenu}" class="tree_menu">
             <ul>
               <li>
+                <span @click="dialogCreateStatus = true">创建子文件夹</span>
+              </li>
+              <li>
                 <span @click="dialogRenameStatus = true">重命名</span>
               </li>
               <li>
                 <span @click="dialogMoveStatus = true ">移动</span>
               </li>
 
-              <li>
-                <span @click="dialogCreateStatus = true">创建</span>
-              </li>
               <li>
                 <span @click="deleteFolder ">删除</span>
               </li>
@@ -57,10 +72,17 @@
         </div>
       </el-col>
 
-      <el-col :span="18">
+      <el-col :span="17">
         <div class="ls-tree-r">
           <div class="ls-tree-r-header">
-            <Upload :key="menuKey" :folder-id="folderSelect.folderId" @uploadStatus="uploadStatus" />
+            <el-button type="primary">
+              <Upload
+                :key="menuKey"
+                :folder-id="folderSelect.folderId"
+                @uploadStatus="uploadStatus"
+              />
+            </el-button>
+
             <el-button @click="renameFile">重命名</el-button>
             <el-button @click="dialogMoveFileStatus = true">移 动</el-button>
             <el-button @click="deleteFile">删 除</el-button>
@@ -183,7 +205,7 @@
         style="width:200px"
       />
       <span>移动至</span>
-      <el-input v-model="folderSelect.folderMoveName" placeholder="请输入内容" style="width:200px" />
+      <!-- <el-input v-model="folderSelect.folderMoveName" placeholder="请输入内容" style="width:200px" /> -->
 
       <el-tree
         ref="tree"
@@ -263,6 +285,7 @@
               :key="menuKey"
               :folder-id="folderSelect.folderId"
               :version-data="versionData"
+              :project-id="workIdUpload"
               @uploadStatus="uploadStatus"
             />
             <el-button type="primary" @click="downloadFile">下 载</el-button>
@@ -403,6 +426,11 @@ export default {
     TagIndex
   },
 
+  props: {
+    workId: [String, Number]
+
+  },
+
   data() {
     return {
       menuKey: 1,
@@ -454,41 +482,54 @@ export default {
       tmDisplay: false,
       rightMenu: {},
       filterText: '',
+      //   workId: undefined,
       folderListData: [],
       defaultProps: {
         children: 'list',
         label: 'folderName'
       },
-      versionData: {}
+      versionData: {},
+      workIdUpload: '',
+      title: undefined
     }
   },
+
+
+
   watch: {
     filterText(val) {
       this.$refs.tree.filter(val)
+    },
+    workId() {
+      this.retriveFolderList()
     }
   },
+
   created() {
     this.retriveFolderList()
   },
 
   mounted() {
-
+    console.log(this.workId)
+    this.title = this.workId
   },
 
 
   methods: {
 
-    getDetail() {
-      this.$request.post('/work/getWorkById', {
-        workId: this.$route.params.id
-      })
-        .then(res => {
-          this.batchId = res.data.batchId
-          //   console.log('batchId', this.batchId)
-          this.retriveFolderList()
-        })
-        .catch(() => {})
-    },
+    // getDetail() {
+    //   this.$request.post('/work/getWorkById', {
+    //     workId: this.$route.params.id
+    //   })
+    //     .then(res => {
+    //       this.batchId = res.data.batchId
+    //       this.retriveFolderList()
+    //     })
+    //     .catch(() => {})
+    // },
+
+
+
     checkInfos(val) {
       this.relevanceAll = val
       console.log('checkInfos', val)
@@ -508,9 +549,11 @@ export default {
     handleNodeClick(data) {
       ++this.menuKey
       console.log('选中的文件夹', data)
+      //   console.log('workId', this.workId)
       this.folderSelect.batchId = data.batchId
       this.folderSelect.folderId = data.folderId
       this.folderSelect.folderUploadPid = data.folderId
+      this.workIdUpload = this.workId
       this.retriveFileList()
     },
 
@@ -519,7 +562,8 @@ export default {
       console.log('选中移动的文件夹', data)
       this.folderMoveName = data.folderName
       this.folderSelect.batchId = data.batchId
-      this.folderSelect.folderMovePid = data.folderPid
+      //   this.folderSelect.folderMovePid = data.folderPid
+      this.folderSelect.folderMovePid = data.folderId
     },
     handleNodeMoveFileClick(data) {
       console.log('选中移动的文件', data)
@@ -639,8 +683,11 @@ export default {
     moveFolder() {
       this.$request
         .post(`/folder/mobileFolder?folderId=${this.folderSelect.folderId}&folderPid=${this.folderSelect.folderMovePid}`)
+        // .post(`/folder/mobileFolder?folderId=${this.folderSelect.folderId}&folderPid=${this.folderSelect.folderId}`)
         .then(res => {
           console.log('移动文件夹', res)
+          this.$message.success('移动成功')
+          this.dialogMoveStatus = false
           this.retriveFolderList()
         }).catch(e => {
           console.log('移动文件夹 err', e)
@@ -665,8 +712,9 @@ export default {
 
     // &batchId=${this.folderSelect.batchId}
     retriveFileList() {
+      this.workId == undefined ? this.workId = '' : this.workId
       this.$request
-        .post(`/file/getFileList?folderId=${this.folderSelect.folderId}&delFlag=0&orderBy=2,`, {
+        .post(`/file/getFileList?folderId=${this.folderSelect.folderId}&workId=${this.workId}&delFlag=0&orderBy=2`, {
           page: this.pageCurrent,
           limit: this.papgeSize
         })
@@ -910,7 +958,6 @@ export default {
   background: white;
   height: calc(100% - 40px);
   width: 100%;
-  float: left;
 
   overflow: hidden;
   margin: 0px 10px 0 10px;
@@ -927,7 +974,6 @@ export default {
 
 .ls-tree-r {
   background: white;
-  float: right;
 
   width: 100%;
   height: calc(100% - 40px);
@@ -936,7 +982,7 @@ export default {
     width: 100%;
     height: 60px;
     line-height: 60px;
-    margin: 10px 10px 0 20px;
+    margin: 0px 10px 0 10px;
   }
   .ls-tree-r-content {
     height: calc(100% - 80px);

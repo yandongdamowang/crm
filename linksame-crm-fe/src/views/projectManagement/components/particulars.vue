@@ -5,11 +5,11 @@
       <!-- {{ taskData }} -->
       <div v-if="taskData" slot="header" class="clear-fix">
         <!-- <div v-if="taskData && taskData.workName" class="work-name">{{ taskData.workName }} </div> -->
-        <div v-if="taskData && taskData.workName" class="work-name">
+        <div v-if="taskData && taskData.pid == 0" class="work-name">
           <!-- <el-page-header :content="taskData.workName" @back="goBack" /> -->
           <!-- <span v-if="taskData.pid == 0">{{ taskData.workName }}</span>-->
           <!-- <span v-if="taskData.pid != 0"> -->
-          {{ taskData.workName }}
+          {{ taskData.name }}
           <!-- </span> -->
         </div>
 
@@ -60,7 +60,7 @@
             <i class="wukong wukong-sub-task" />
             <span>子任务</span>
           </div>
-          <div>
+          <!-- <div>
             <el-dropdown>
               <span class="el-dropdown-link">
                 <i class="wukong wukong-file" />
@@ -104,18 +104,14 @@
                 </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-          </div>
+          </div>-->
           <div v-if="taskData.ishidden != 1">
             <el-popover placement="bottom" width="80" trigger="click">
               <div class="more-btn-group">
-                <p @click="createReminder">设置任务提醒</p>
-                <!-- <p>设置重复提醒</p>
-                <p>设置前置任务</p>
-                <p>设置后置任务</p>
-                <p>共享任务</p>
-                <p>从网盘选取附件</p>
-                <p>移动任务</p>
-                <p>拷贝任务</p>-->
+                <p @click="dialogReminder = true">设置任务提醒</p>
+                <p @click="createReminder">设置任务依赖</p>
+                <p @click="createReminder">设置任务关联</p>
+
                 <p v-if="taskData.isArchive != 1 && taskData.ishidden != 1" @click="moreArchive">归 档</p>
                 <p v-if="taskData.ishidden != 1" @click="moreDelete">删 除</p>
               </div>
@@ -364,7 +360,14 @@
                 <i class="el-icon-odometer" />
                 <span>状态</span>
               </div>
-              <el-select v-model="modelData.status" placeholder="请选择" @change="updateStatus">
+
+              <!-- el-icon-price-tag -->
+              <el-select
+                v-model="modelData.status"
+                class="crm-status"
+                placeholder="请选择"
+                @change="updateStatus"
+              >
                 <el-option :label="'待处理'" :value="0" />
                 <el-option :label="'处理中'" :value="1" />
                 <el-option :label="'延期'" :value="2" />
@@ -703,7 +706,53 @@
         @close="closeBtn"
       />
 
-      <el-dialog :visible.sync="dialogReminder" :modal="false" title="任务提醒设置" width="30%">
+      <el-dialog :visible.sync="dialogReminder" :modal="false" title="任务提醒设置" width="50%">
+        <el-form :inline="true">
+          <el-form-item>
+            <div slot="label">
+              提醒规则
+              <el-button icon="el-icon-plus" circle @click="handleReminder('add')" />
+            </div>
+
+            <div v-for="(item,index) in remindList" :key="index">
+              <el-select v-model="item.remindType" placeholder="活动区域">
+                <el-option label="任务截止前" value="1" />
+                <el-option label="自定义时间" value="2" />
+              </el-select>
+
+              <el-date-picker
+                v-model="item.remindTime"
+                type="datetime"
+                placeholder="选择日期时间"
+                default-time="12:00:00"
+                value-format="yyyy-MM-dd HH:mm:ss"
+              />
+              <el-select v-model="item.remindUserId" multiple placeholder="请选择提醒人员">
+                <el-option
+                  v-for="item in ownerRoleList"
+                  :key="item.value"
+                  :label="item.realname"
+                  :value="item.userId"
+                />
+              </el-select>
+              {{ remindUserId }}
+              <el-button
+                type="danger"
+                icon="el-icon-delete"
+                circle
+                @click="handleReminder('delete',index)"
+              />
+            </div>
+          </el-form-item>
+        </el-form>
+
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogReminder = false">取 消</el-button>
+          <el-button type="primary" @click="createReminder">确 定</el-button>
+        </span>
+      </el-dialog>
+
+      <!-- <el-dialog :visible.sync="dialogReminder" :modal="false" title="任务依赖设置" width="30%">
         <el-form :inline="true">
           <el-form-item label="提醒规则">
             <el-select v-model="modelData.reminder" placeholder="活动区域">
@@ -718,6 +767,22 @@
           <el-button type="primary" @click="dialogReminder = false">确 定</el-button>
         </span>
       </el-dialog>
+
+      <el-dialog :visible.sync="dialogReminder" :modal="false" title="任务关联设置" width="30%">
+        <el-form :inline="true">
+          <el-form-item label="提醒规则">
+            <el-select v-model="modelData.reminder" placeholder="活动区域">
+              <el-option label="任务截止前" value="shanghai" />
+              <el-option label="自定义时间" value="beijing" />
+            </el-select>
+          </el-form-item>
+        </el-form>
+
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogReminder = false">取 消</el-button>
+          <el-button type="primary" @click="dialogReminder = false">确 定</el-button>
+        </span>
+      </el-dialog>-->
     </el-card>
   </transition>
 </template>
@@ -792,6 +857,24 @@ export default {
         subTaskId: undefined,
         reminder: undefined
       },
+      remindUserId: undefined,
+      'remindList': [
+        {
+          'remindUserId': '3,4',
+          'remindType': '1',
+          'remindContent': '您的任务即将延期, 请抓紧!',
+          'taskId': this.taskId,
+          'remindTime': '2020-05-12 09:29:00'
+        },
+        {
+          'remindUserId': '3,4',
+          'remindType': '2',
+          'remindContent': '您的任务已经延期!',
+          'taskId': this.taskId,
+          'remindTime': '2020-05-12 09:26:00'
+        }
+      ],
+
       innerDrawer: false,
       dialogReminder: false,
 
@@ -851,7 +934,8 @@ export default {
       activityList: [],
       fileList: [],
       // 评论列表
-      replyList: []
+      replyList: [],
+      ownerRoleList: []
     }
   },
   computed: {
@@ -887,6 +971,8 @@ export default {
     }
   },
   mounted() {
+    console.log('任务 ID', this.id)
+
     if (this.appendToBody) {
       document.body.appendChild(this.$el)
     }
@@ -932,6 +1018,19 @@ export default {
     },
 
 
+    retriveOwnerRoleList() {
+    //   console.log(this.taskData.workId)
+      this.$request.post('/work/queryOwnerRoleList', {
+        workId: this.taskData.workId
+      }).then(res => {
+        console.log('角色列表', res)
+        this.ownerRoleList = res.data
+      }).catch(e => {
+        console.log(e)
+      })
+    },
+
+
     // 基础详情
     getDetail() {
       this.loading = true
@@ -960,6 +1059,7 @@ export default {
             customer: taskData.customerList || []
           }
           this.taskData = taskData
+          this.retriveOwnerRoleList()
           this.loading = false
         })
         .catch(() => {
@@ -1689,22 +1789,35 @@ export default {
     //   }
     },
     createReminder() {
-      console.log(123)
-      this.dialogReminder = true
+      this.dialogReminder = false
+      console.log(this.remindList)
+    },
+    handleReminder(type, index) {
+      console.log(type)
+      console.log(index)
+      type == 'delete' ? this.remindList.splice(index, 1) : this.remindList.push({
+        'remindUserId': '3,4',
+        'remindType': '2',
+        'remindContent': '您的任务已经延期!',
+        'taskId': this.taskId,
+        'remindTime': '2020-05-12 09:26:00'
+      })
     }
 
   }
 }
 </script>
 <style lang="scss" scoped>
-/deep/ .el-input__inner {
-  background-color: rgb(245, 247, 250);
-  border: 0px;
-  border-radius: 1px;
-  height: 40px;
-  line-height: 40px;
-  color: #3e84e9;
-  padding: 0 0 0 30px;
+.crm-status {
+  /deep/ .el-input__inner {
+    background-color: rgb(245, 247, 250);
+    border: 0px;
+    border-radius: 1px;
+    height: 40px;
+    line-height: 40px;
+    color: #3e84e9;
+    padding: 0 0 0 30px;
+  }
 }
 
 .wukong {

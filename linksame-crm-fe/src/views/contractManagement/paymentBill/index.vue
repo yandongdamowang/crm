@@ -40,7 +40,6 @@
         border
         height="80%"
         style="margin: 20px 0 0 0"
-        @selection-change="selectTable"
       >
         <!-- style="width: 100%; margin:20px 0 0 0" -->
 
@@ -79,24 +78,28 @@
         />
       </div>
 
-      <el-dialog :visible.sync="dialogVisible" :title="dialogTitle" :width="dialogwidth">
+      <!-- <el-dialog :visible.sync="dialogVisible" :title="dialogTitle" :width="dialogwidth">
         <component ref="child" :is="dialogComponents" />
 
         <span slot="footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
           <el-button type="primary" @click="commitData">确 定</el-button>
         </span>
-      </el-dialog>
+      </el-dialog>-->
 
       <el-drawer
         :title="drawerTitle"
         :with-header="false"
         :visible.sync="drawer"
-        :destroy-on-close="true"
         size="70%"
         @open="drawerDetail()"
       >
-        <component :is="drawerComponents" :drawer-data="drawerData" />
+        <component
+          :is="drawerComponents"
+          :drawer-data="drawerData"
+          :row-data="rowData"
+          @drawerStatus="drawerStatus"
+        />
       </el-drawer>
     </div>
   </div>
@@ -107,8 +110,8 @@ import { paymentBillList } from '@/api/contractManagement/paymentBill'
 export default {
   name: 'ContractIndex',
   components: {
-    DialogPaymentApply: () => import('./components/DialogPaymentApply'),
-    DialogCreate: () => import('./components/DialogCreate'),
+    // DialogPaymentApply: () => import('./components/DialogPaymentApply'),
+    // DialogCreate: () => import('./components/DialogCreate'),
     DrawerDetail: () => import('./components/DrawerDetail')
   },
 
@@ -122,6 +125,8 @@ export default {
       drawer: false,
       drawerTitle: '',
       drawerData: '',
+      rowData: '',
+
       pageCurrent: 1,
       pageTotal: 1,
       pageSize: 10,
@@ -153,7 +158,9 @@ export default {
       this.retrivePaymentBillList()
     },
 
-
+    drawerStatus(status) {
+      this.drawer = status
+    },
 
     retrivePaymentBillList() {
       paymentBillList({
@@ -186,24 +193,12 @@ export default {
       this.dialogVisible = false
     },
 
-    dialogPaymentApply() {
-      this.dialogVisible = true
-      this.dialogTitle = '申请付款'
-      this.dialogComponents = 'DialogPaymentApply'
-      this.dialogwidth = '50%'
-    },
-    dialogCreate() {
-      this.dialogVisible = true
-      this.dialogTitle = '新建合同'
-      this.dialogComponents = 'DialogCreate'
-      this.dialogwidth = '90%'
-    },
+
     drawerDetail(row) {
       this.drawer = true
-      //   this.drawerTitle = row.contractName
       this.drawerComponents = 'DrawerDetail'
-      console.log('drawerDetail', row)
       this.drawerData = row.paymentRecordId
+      this.rowData = row
     }
 
   }

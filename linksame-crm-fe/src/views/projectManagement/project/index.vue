@@ -63,7 +63,7 @@
           <el-tab-pane label="里程碑看板" name="task-board" />
           <el-tab-pane label="时间轴看板" name="time-board" />
 
-          <el-tab-pane label="附件" name="annex" />
+          <el-tab-pane label="附件" name="Netdisk" />
           <el-tab-pane label="任务统计" name="task-statistical" />
           <el-tab-pane label="归档任务" name="archiving-task" />
         </el-tabs>
@@ -101,6 +101,7 @@ import ProjectSettings from './components/projectSettings'
 import TaskScreening from './components/taskScreening'
 import Members from './components/members'
 import MembersDep from '@/components/selectEmployee/membersDep'
+import Netdisk from '@/views/annexManagement/netdisk/index'
 
 import {
   workWorkReadAPI,
@@ -112,6 +113,7 @@ import {
 
 export default {
   components: {
+    Netdisk,
     TaskBoard,
     TimeBoard,
     Attachment,

@@ -3,43 +3,6 @@
     <div class="ls-drawertitle">
       <div class="ls-drawertitle-l">{{ pmpPrepaymentData.contractNumber }}</div>
       <div class="ls-drawertitle-r">
-        <!-- <span>
-          <i class="el-icon-edit" />
-        </span>&nbsp;&nbsp;&nbsp;-->
-        <span />
-        &nbsp;&nbsp;&nbsp;
-        <!-- <el-dropdown class="ls-drawertitle-dropdown">
-          <span>
-            <i class="el-icon-upload2" />
-          </span>
-          &nbsp;&nbsp;&nbsp;
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>
-              <el-upload
-                ref="upload"
-                :auto-upload="false"
-                :on-success="submitUploadSuccess"
-                :on-error="submitUploadError"
-                action="https://jsonplaceholder.typicode.com/posts/"
-              >
-                <div slot="trigger" size="small" type="primary">本地上传</div>
-              </el-upload>
-            </el-dropdown-item>
-
-            <el-dropdown-item>
-              <el-upload
-                ref="upload"
-                :auto-upload="false"
-                :on-success="submitUploadSuccess"
-                :on-error="submitUploadError"
-                action="https://jsonplaceholder.typicode.com/posts/"
-              >
-                <div size="small" type="primary" @click="submitUpload">网盘上传</div>
-              </el-upload>
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>-->
-
         <el-dropdown class="ls-drawertitle-dropdown">
           <span>
             <i class="el-icon-more" />
@@ -60,10 +23,14 @@
               </el-dropdown>
             </el-dropdown-item>
 
-            <el-dropdown-item>转 移</el-dropdown-item>
+            <!-- <el-dropdown-item>转 移</el-dropdown-item> -->
+            <el-dropdown-item>
+              <Upload v-if="batchId != ''" :key="menuKey" :batch-id="batchId" />
+            </el-dropdown-item>
+            <!-- @uploadStatus="uploadStatus" -->
 
             <el-dropdown-item>
-              <span @click="deleteContract">删 除</span>
+              <!-- <span @click="deleteContract">删 除</span> -->
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -146,31 +113,78 @@
       <div class="ls-drawerform-header">
         <i class="el-icon-paperclip" />&nbsp;&nbsp;&nbsp;关联业务
       </div>
-    </div>
-    <div class="ls-drawerbox">
-      <el-tab-pane label="操作记录" name="fourth">
-        <div>操作记录</div>
-      </el-tab-pane>
 
-      <el-tab-pane label="附件" name="second">
-        <div>附件</div>
-      </el-tab-pane>
+      <div class="ls-drawerform-header">
+        <i class="el-icon-paperclip" />
+        &nbsp;&nbsp;&nbsp;附件
+        <el-tabs v-model="activeName">
+          <el-tab-pane label="附件" name="annex">
+            <el-table :data="fileTableData" style="height: 92%">
+              >
+              <el-table-column fixed prop="oldName" label="文件名">
+                <template slot-scope="scope">
+                  <span @click="retriveFileDetail(scope.row)">
+                    <img v-if="scope.row.suffix == 'pdf'" src="@/assets/filetype/pdf.png" />
+                    <img v-else-if="scope.row.suffix == 'dwg'" src="@/assets/filetype/dwg.png" />
+                    <img
+                      v-else-if="scope.row.suffix == 'zip' || scope.row.suffix == 'rar'"
+                      src="@/assets/filetype/zip.png"
+                    />
+                    <img
+                      v-else-if="scope.row.suffix == 'xls' || scope.row.suffix == 'xlsx'"
+                      src="@/assets/filetype/excel.png"
+                    />
+                    <img
+                      v-else-if="scope.row.suffix == 'png' || scope.row.suffix == 'jpg' "
+                      src="@/assets/filetype/jpg.png"
+                    />
+                    <img
+                      v-else-if="scope.row.suffix == 'docx' || scope.row.suffix == 'doc'"
+                      src="@/assets/filetype/word.png"
+                    />
+                    <img v-else src="@/assets/filetype/unknown.png" />
+                    {{ scope.row.oldName }}
+                  </span>
+                </template>
+              </el-table-column>
 
-      <el-tab-pane label="审批记录" name="fifth">
-        <div style="height: 300px;">
-          <el-steps :active="1" direction="vertical">
-            <el-step title="发起审批" />
-            <el-step title="审批节点1" />
-            <el-step
-              title="审批节点2"
-              description="
-                  创建人：王某某
-                  审批类型：付款申请"
-            />
-            <el-step title="审批节点3" description="待处理" />
-          </el-steps>
-        </div>
-      </el-tab-pane>
+              <el-table-column prop="compositionName" label="附件类型文件名" />
+
+              <el-table-column prop="size" label="大小" width="100" />
+
+              <el-table-column prop="createUserName" label="上传者" width="100" />
+            </el-table>
+
+            <div class="ls-pagination">
+              <el-pagination
+                :current-page="pageCurrent"
+                :page-sizes="[2, 10, 20]"
+                :page-size="pageSize"
+                :total="pageTotal"
+                layout="total, sizes, prev, pager, next, jumper"
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+              />
+            </div>
+          </el-tab-pane>
+
+          <el-tab-pane label="操作记录" name="record">
+            <el-table :data="recordTableData" style="width: 100%">
+              <el-table-column prop="createTime" label="操作时间" />
+              <el-table-column prop="content" label="记录" />
+              <el-table-column prop="realname" label="操作人员" />
+            </el-table>
+          </el-tab-pane>
+
+          <el-tab-pane label="审批记录" name="approve">
+            <el-table :data="examineTableData" style="width: 100%">
+              <el-table-column prop="realname" label="审核人" />
+              <el-table-column prop="remarks" label="备注" />
+              <el-table-column prop="examineTime" label="审核时间" />
+            </el-table>
+          </el-tab-pane>
+        </el-tabs>
+      </div>
     </div>
   </div>
 </template>
@@ -180,10 +194,15 @@ import { prepaymentBillDetail, prepaymentSetPriority } from '@/api/contractManag
 export default {
   name: 'DialogPayment',
   components: {
+    Upload: () => import('@/views/annexManagement/netdisk/components/Upload')
   },
   props: {
     drawerData: {
       type: Number,
+      default: undefined
+    },
+    rowData: {
+      type: Object,
       default: undefined
     },
     drawerStatus: {
@@ -194,14 +213,16 @@ export default {
 
   data() {
     return {
+      menuKey: 1,
+      pageCurrent: 1,
+      pageSize: 10,
+      pageTotal: 0,
       pmpPrepaymentData: {},
-      activeName: 'first',
-
-      gridData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }],
+      recordTableData: [],
+      fileTableData: [],
+      activeName: 'annex',
+      batchId: '',
+      examineTableData: [],
       formData: {
         a: '',
         b: '',
@@ -215,13 +236,34 @@ export default {
 
 
   mounted() {
-    console.log(111, this.drawerData)
+    console.log(123, this.rowData)
     this.retrivePrepaymentBillDetail(this.drawerData)
+    this.retriveRecordDetail()
+    this.retriveExamineDetail()
+    ++this.menuKey
   },
   methods: {
     closeDrawer() {
       this.$emit('drawerStatus', false)
     },
+
+
+    uploadStatus(status) {
+      console.log('关闭弹窗', status)
+    },
+
+
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`)
+      this.pageCurrent = val
+      this.retriveFileList()
+    },
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`)
+      this.pageSize = val
+      this.retriveFileList()
+    },
+
 
     handleCommand(command) {
       prepaymentSetPriority({
@@ -238,46 +280,24 @@ export default {
     //   this.$message('click on item ' + command)
     },
 
-    submitUploadSuccess() {
-      alert(123)
+
+
+
+    retriveFileList() {
+      this.$request
+        .post(`/file/getFileList?batchId=${this.batchId}&delFlag=0&orderBy=2`, {
+          page: this.pageCurrent,
+          limit: this.papgeSize
+        })
+        .then(res => {
+          console.log('查询附件文件', res)
+          this.fileTableData = res.data.list
+          this.pageTotal = res.data.totalRow
+        }).catch(e => {
+          console.log('/file/getFileList err', e)
+        })
     },
-    submitUploadError() {
-      alert(456)
-    },
 
-    deleteContract() {
-    //   console.log(123, this.drawerData)
-    //   this.$confirm('此操作将永久删除该合同, 是否继续?', '提示', {
-    //     confirmButtonText: '确定',
-    //     cancelButtonText: '取消',
-    //     type: 'warning'
-
-    //   }).then(() => {
-    //     contactDelete({
-    //       contractIds: this.drawerData
-    //     // ...this.search
-    //     })
-    //       .then(res => {
-    //         this.$message({
-    //           type: 'success',
-    //           message: '删除成功!'
-    //         })
-    //         console.log(res)
-
-    //         this.$router.push('/contract/contract')
-    //         //   this.contactListData = res.data.list
-    //         //   this.contactListSubData = res.data.list
-    //       })
-    //       .catch(() => {
-
-    //       })
-    //   }).catch(() => {
-    //     this.$message({
-    //       type: 'info',
-    //       message: '已取消操作'
-    //     })
-    //   })
-    },
 
     retrivePrepaymentBillDetail() {
       prepaymentBillDetail({
@@ -286,11 +306,40 @@ export default {
         .then(res => {
           this.pmpPrepaymentData = res.data
           //   this.contactListSubData = res.data.list
-          console.log('prepaymentBillDetail', this.pmpPrepaymentData)
+          this.batchId = this.pmpPrepaymentData.batchId
+          this.retriveFileList()
+          console.log('预付款账单详情', this.pmpPrepaymentData)
+        })
+        .catch((e) => {
+          console.log(e)
+        })
+    },
+
+    retriveRecordDetail() {
+      this.$request.post('/CrmRecord/queryRecordList', {
+        actionId: this.drawerData,
+        types: 10
+      })
+        .then(res => {
+          console.log('操作记录', res)
+          this.recordTableData = res.data
         })
         .catch(() => {
 
         })
+    },
+    retriveExamineDetail() {
+      this.rowData.examineRecordId == null
+        ? this.$request.post('/examineRecord/queryExamineLogList', {
+          recordId: this.rowData.examineRecordId
+        })
+          .then(res => {
+            console.log('审批记录', res)
+            this.examineTableData = res.data
+          })
+          .catch(() => {
+
+          }) : this.$message.error('examineRecordId 为 null')
     }
 
 

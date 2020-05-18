@@ -20,6 +20,14 @@ const workbenchRouter = {
       }
     },
     {
+      name: 'activeSprint',
+      path: 'activeSprint',
+      component: () => import('@/views/projectManagement/activeSprint/index'),
+      meta: {
+        title: '活跃冲刺'
+      }
+    },
+    {
       path: 'task-calendars',
       component: () => import('@/views/projectManagement/calendars/index'),
       meta: {
@@ -28,8 +36,8 @@ const workbenchRouter = {
     },
 
     {
-      name: 'project',
-      path: 'project',
+      name: 'allProject',
+      path: 'allProject',
       component: () => import('@/views/dashboard/project/index'),
       meta: {
         title: '全部项目'
@@ -91,48 +99,75 @@ export const childrenMenu = [
     path: 'workbench',
     meta: {
       icon: 'workbench',
-      title: '工作台'
+      title: '任务管理'
     },
     children: [
       {
         name: 'my-task',
         path: 'my-task',
-        component: () => import('@/views/projectManagement/task/index'),
+
         meta: {
           title: '我的任务'
         }
       },
       {
+        name: 'activeSprint',
+        path: 'activeSprint',
+
+        meta: {
+          title: '活跃冲刺'
+        }
+      },
+
+      {
         path: 'task-calendars',
-        component: () => import('@/views/projectManagement/calendars/index'),
+
         meta: {
           title: '任务日历'
         }
       }
     ]
   },
+
   {
-    path: 'dashboard',
+    name: 'allProject',
+    path: 'allProject',
     meta: {
-      icon: 'workbench',
-      title: '大屏'
-    },
-    children: [
-      {
-        name: 'project',
-        path: 'project',
-        meta: {
-          title: '全部项目'
-        }
-      },
-      {
-        path: 'participate',
-        meta: {
-          title: '我参与的'
-        }
-      }
-    ]
+      icon: 'contract',
+      title: '全部项目'
+    }
   },
+
+  {
+    path: 'project',
+    meta: {
+      icon: 'project',
+      title: '项目'
+    },
+    children: []
+  },
+  //   {
+  //     path: 'dashboard',
+  //     meta: {
+  //       icon: 'workbench',
+  //       title: '大屏'
+  //     },
+  //     children: [
+  //       {
+  //         name: 'project',
+  //         path: 'project',
+  //         meta: {
+  //           title: '全部项目'
+  //         }
+  //       },
+  //       {
+  //         path: 'participate',
+  //         meta: {
+  //           title: '我参与的'
+  //         }
+  //       }
+  //     ]
+  //   },
 
   {
     path: 'statistics',
@@ -159,14 +194,7 @@ export const childrenMenu = [
       fontSize: '18px'
     }
   },
-  {
-    path: 'project',
-    meta: {
-      icon: 'project',
-      title: '项目'
-    },
-    children: []
-  },
+
   {
     path: 'tag',
     meta: {

@@ -1,26 +1,42 @@
 <template>
   <div class="ls-upload">
     <span>
-      <el-button
-        type="primary"
-        @click="dialogLocalStatus = true"
-      >{{ versionData === undefined? '上传文件' :'替换版本' }}</el-button>
+      <span @click="dialogLocalStatus = true">{{ versionData === undefined? '上传文件' :'替换版本' }}</span>
     </span>
 
     <el-dialog
       :visible.sync="dialogLocalStatus"
       :append-to-body="true"
       title="本地上传"
-      width="30%"
+      width="40%"
       @close="dialogClose"
     >
-      <el-form ref="form" label-width="80px">
+      <el-form ref="form" label-width="120px">
+        <el-tree
+          ref="tree"
+          :data="folderListData"
+          :props="defaultProps"
+          :default-expand-all="false"
+          style="margin: 0 0 20px 30px"
+          @node-click="handleNodeClick"
+        >
+          <!-- <template slot-scope="scope">{{ scope.row }}</template> -->
+          <span slot-scope="{node,data}">
+            <span style="color:black">
+              <!-- <i class="el-icon-folder" /> -->
+              <img src="@/assets/filetype/folder.png" alt />
+              {{ data.folderName }}
+            </span>
+          </span>
+        </el-tree>
+        <el-form-item label="选择文件夹：">{{ folderName }}</el-form-item>
+
         <el-form-item v-if="versionData != undefined" label="版本备注：">
           <el-input v-model="fileRemark" placeholder="请输入备注" />
           <!-- {{ fileRemark }} -->
         </el-form-item>
 
-        <el-form-item label="文件类型：">
+        <el-form-item label="选择文件类型：">
           <el-select v-model="fileTypeId" placeholder="请选择文件类型" @change="selectChanged">
             <el-option
               v-for="(item,index) in fileTypeList"
@@ -32,23 +48,26 @@
           <!-- {{ fileTypeId }} -->
         </el-form-item>
 
-        <el-upload
-          :headers="uploadHeaders"
-          :action="uploadAction"
-          :before-upload="beforeUpload"
-          :on-success="onSuccess"
-          class="upload-demo"
-          drag
-          multiple
-        >
-          <i class="el-icon-upload" />
-          <div class="el-upload__text">
-            将文件拖到此处，或
-            <em>点击上传</em>
-          </div>
+        <el-form-item label="上传文件：">
+          <el-upload
+            :headers="uploadHeaders"
+            :action="uploadAction"
+            :before-upload="beforeUpload"
+            :on-success="onSuccess"
+            class="upload-demo"
+            drag
+            multiple
+          >
+            <i class="el-icon-upload" />
+            <div class="el-upload__text">
+              将文件拖到此处，或
+              <em>点击上传</em>
+            </div>
 
-          <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
-        </el-upload>
+            <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
+          </el-upload>
+        </el-form-item>
+
         <!--
         <el-upload
           :headers="uploadHeaders"
@@ -71,14 +90,6 @@
         </span>-->
       </el-form>
     </el-dialog>
-
-    <!-- <el-dialog :visible.sync="dialogNetdiskStatus" title="网盘上传" width="30%">
-      <el-upload :headers="uploadHeaders" :action="uploadAction" class="upload-demo" drag multiple>
-        <i class="el-icon-upload" />
-        <div class="el-upload__text">
-          将文件拖到此处，或
-          <em>点击上传</em>
-    </div>-->
   </div>
 </template>
 
@@ -98,12 +109,20 @@ export default {
       type: Object,
       default: undefined
     },
+
+    projectId: {
+      type: Number,
+      default: undefined
+    },
+
+
     folderId: {
       type: Number,
       default: undefined
     },
+
     batchId: {
-      type: Number,
+      type: String,
       default: undefined
     }
 
@@ -111,8 +130,14 @@ export default {
 
   data() {
     return {
+      folderListData: [],
+      defaultProps: {
+        children: 'list',
+        label: 'folderName'
+      },
       dialogLocalStatus: false,
       dialogNetdiskStatus: false,
+      folderName: '',
       fileTypeId: undefined,
       fileTypeList: [],
       fileRemark: undefined,
@@ -135,11 +160,24 @@ export default {
 
   mounted() {
     console.log('versionData', this.versionData)
+    console.log('batchId', this.batchId)
+    this.retriveFolderList()
     this.retriveTypeList()
   },
 
 
   methods: {
+    handleNodeClick(data) {
+    //   ++this.menuKey
+      console.log('选中的文件夹', data)
+      //   console.log('workId', this.workId)
+      //   this.folderSelect.batchId = data.batchId
+      this.folderId = data.folderId
+      this.folderName = data.folderName
+      //   this.folderSelect.folderUploadPid = data.folderId
+      //   this.workIdUpload = this.workId
+      this.retriveFileList()
+    },
 
     retriveTypeList() {
       this.$request
@@ -153,10 +191,11 @@ export default {
     },
 
     localUpload() {
-      console.log(123, this.fileRemark)
+      console.log('workID', this.$route.params.id)
+
       this.versionData === undefined
-        ? this.uploadAction = process.env.BASE_API + `file/upload?folderId=${this.folderId}&typeId=${this.fileTypeId}`
-        : this.uploadAction = process.env.BASE_API + `file/changeVersion?fileId=${this.versionData.fileId}&folderId=${this.versionData.folderId}&fileRemark=${this.fileRemark}`
+        ? this.uploadAction = process.env.BASE_API + `file/upload?folderId=${this.folderId}&typeId=${this.fileTypeId}&workId=${this.$route.params.id}&batchId=${this.batchId}`
+        : this.uploadAction = process.env.BASE_API + `file/changeVersion?fileId=${this.versionData.fileId}&folderId=${this.versionData.folderId}&fileRemark=${this.fileRemark}&workId=${this.$route.params.id}&batchId=${this.batchId}`
 
       this.dialogLocalStatus = true
       console.log('上传地址', this.uploadAction)
@@ -188,8 +227,18 @@ export default {
       this.$message.success('上传成功')
       this.fileRemark = undefined
       this.fileTypeId = undefined
-    }
+    },
 
+    retriveFolderList() {
+      this.$request
+        .post(`/folder/queryFolder`)
+        .then(res => {
+          console.log(res)
+          this.folderListData = res.data
+        }).catch(e => {
+          console.log('retriveFolderList err', e)
+        })
+    }
 
 
 
@@ -248,16 +297,7 @@ export default {
     // },
 
 
-    // retriveFolderList() {
-    //   this.$request
-    //     .post(`/folder/queryFolder?batchId=${this.batchId}`)
-    //     .then(res => {
-    //       console.log(res)
-    //       this.folderListData = res.data
-    //     }).catch(e => {
-    //       console.log('retriveFolderList err', e)
-    //     })
-    // },
+
 
     // createFolder() {
     //   this.$request
