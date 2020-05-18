@@ -1,5 +1,8 @@
 package com.linksame.crm.erp.work.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.jfinal.aop.Inject;
 import com.jfinal.core.Controller;
 import com.jfinal.core.paragetter.Para;
@@ -33,7 +36,8 @@ public class RemindController extends Controller {
     })
     @Permissions({"project:taskManage:saveRemind"})
     public void setRemind(@Para("") TaskRemind taskRemind){
-        renderJson(remindService.setRemind(taskRemind));
+        JSONObject jsonObject = JSON.parseObject(getRawData());
+        renderJson(remindService.setRemind(jsonObject));
     }
 
     /**

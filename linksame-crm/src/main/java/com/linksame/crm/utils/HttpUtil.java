@@ -1,7 +1,6 @@
 package com.linksame.crm.utils;
 
 import com.alibaba.fastjson.JSONObject;
-import com.linksame.crm.erp.admin.service.AdminSmsService;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
@@ -15,14 +14,6 @@ import java.util.Map;
  * @Description http请求工具
  */
 public class HttpUtil {
-
-    public static void main(String[] args){
-        AdminSmsService adminSmsService = new AdminSmsService();
-        Integer smsNum = (Integer)adminSmsService.queryBal().get("data");
-        if(smsNum > 0){
-            System.out.println(smsNum);
-        }
-    }
 
     /**
      * 向指定URL发送GET方法的请求

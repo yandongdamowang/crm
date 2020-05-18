@@ -61,7 +61,7 @@ public class AdminExamineRecordController extends Controller {
         PmpContract pmpContract = null;
         PmpContractPayment pmpContractPayment = null;
         if (type != null && type.equals(2)){
-            pmpContractPayment = PmpContractPayment.dao.findFirst("select * from pmp_contract_payment  where contract_id = ?",Id);;
+            pmpContractPayment = PmpContractPayment.dao.findFirst("select * from pmp_contract_payment  where bill_id = ?",Id);;
             Id = pmpContractPayment.getContractId();
         }
         pmpContract = PmpContract.dao.findById(Id);
@@ -80,7 +80,8 @@ public class AdminExamineRecordController extends Controller {
             crmRecordService.updateRecord(new PmpContract().dao().findById(Id), pmpContract, CrmEnum.CRM_CONTRACT);
             pmpContract.setUpdateTime(new Date(System.currentTimeMillis()));
             boolean save = pmpContract.update();
-            renderJson(save ? R.ok() : R.error());
+            Integer id = map.get("id");
+            renderJson(save ? R.ok(id+"") : R.error());
         }else if (type != null && type.equals(2)){
             if (map.get("status") == 0) {
                 renderJson(R.error("没有启动的审核步骤，不能添加！"));
@@ -96,7 +97,8 @@ public class AdminExamineRecordController extends Controller {
 
             pmpContractPayment.setUpdateTime(new Date(System.currentTimeMillis()));
             boolean update = pmpContractPayment.update();
-            renderJson(update ? R.ok() : R.error());
+            Integer id = map.get("id");
+            renderJson(update ? R.ok(id+"") : R.error());
         }
     }
     /**

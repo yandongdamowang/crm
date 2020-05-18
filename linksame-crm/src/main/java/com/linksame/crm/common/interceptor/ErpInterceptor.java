@@ -68,7 +68,7 @@ public class ErpInterceptor implements Interceptor {
         if (annotation != null && annotation.value().length > 0) {
             Controller controller = inv.getController();
             for (String name : annotation.value()) {
-                // 判断是否为空
+                //判断是否为空
                 String para = controller.getPara(name);
                 if (StrKit.isBlank(para)) {
                     controller.renderJson(R.error("参数" + name + "不允许为空"));

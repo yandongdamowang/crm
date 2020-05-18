@@ -16,8 +16,11 @@ import com.linksame.crm.erp.crm.common.CrmEnum;
 import com.linksame.crm.erp.crm.entity.CrmContract;
 import com.linksame.crm.erp.crm.service.CrmRecordService;
 import com.linksame.crm.erp.pmp.common.PmpInterface;
+import com.linksame.crm.erp.pmp.entity.PmpBusiness;
 import com.linksame.crm.erp.pmp.entity.PmpContract;
 import com.linksame.crm.erp.pmp.entity.PmpContractPayment;
+import com.linksame.crm.erp.work.entity.Task;
+import com.linksame.crm.erp.work.service.TaskService;
 import com.linksame.crm.utils.BaseUtil;
 import com.linksame.crm.utils.R;
 
@@ -39,12 +42,14 @@ public class PmpContractService {
     @Inject
     private CrmRecordService crmRecordService;
     @Inject
+    private TaskService taskService;
+    @Inject
     private PmpContractPaymentService pmpContractPaymentService;
     @Inject
     private AdminExamineRecordService examineRecordService;
 
     @Before(Tx.class)
-    public R add(PmpContract pmpContract,List<PmpContractPayment> pmpContractPayments) {
+    public R add(PmpContract pmpContract,List<PmpContractPayment> pmpContractPayments,List<Task> tasks) {
         if (!Db.tx(() -> {
             pmpContract.setCreationTime(new Date(System.currentTimeMillis()));
             pmpContract.setUpdateTime(new Date(System.currentTimeMillis()));
@@ -65,14 +70,25 @@ public class PmpContractService {
                         && contractPayment.getPaymentNode() != null
                         && contractPayment.getPaymentName() != null
                         && contractPayment.getCostPercentage() != null) {
+                    tasks.forEach(task -> {
+                        if (contractPayment.getPaymentClause() != null && contractPayment.getPaymentClause().equals(task.getTaskId())){
+                            task.setTaskId(null);
+                            R r = taskService.setTask(task, null);
+                            System.out.println(r);
+                            Kv data = (Kv)r.get("data");
+                            Integer taskId = data.getInt("task_id");
+                            task.setTaskId(taskId);
+                            contractPayment.setPaymentClause(taskId);
+                        }
+                    });
                     money1 = money1.add(contractPayment.getMoney());
                     contractPayment.setContractId(pmpContract.getLong("contract_id"));
-                    contractPayment.setProjectId(pmpContract.getLong("project_id"));
+                    contractPayment.setProjectId(pmpContract.getInt("project_id"));
                     contractPayment.setTradeForm(PmpInterface.contractPayment.trade.form.EXPENF);
                     contractPayment.setTradeStatus(PmpInterface.contractPayment.trade.stats.TRADING);
                     contractPayment.setCreationTime(new Date(System.currentTimeMillis()));
                     contractPayment.setpracticalMoney(new BigDecimal(0));
-                    contractPayment.setPracticalCostPercentage(0L);
+                    contractPayment.setPracticalCostPercentage(0);
                     contractPayment.save();
                     Long billId = contractPayment.getLong("bill_id");
                     crmRecordService.addRecord(billId.intValue()  , CrmEnum.PMP_PAYMENT);
@@ -83,8 +99,11 @@ public class PmpContractService {
             if (money.compareTo(money1) != 0) {
                 return false;
             }
-            //保存 附件
-
+            tasks.forEach(task -> {
+                if (task.getTaskId() != null){
+                    R r = taskService.setTask(task, null);
+                }
+            });
             return true;
         })) return R.error();
         return R.ok();
@@ -101,10 +120,6 @@ public class PmpContractService {
         return R.ok().put("pmpContract",pmpContract);
     }
 
-    private final String PAYMENTRATION = "paymentRatio"; //支付比例
-    private final String PAYMENTAMOUNT = "paymentAmount";//支付金额
-    private final String CUMULATIVEPAYMENTRATION = "cumulativePaymentRatio";//累计比例
-    private final String CUMULATIVEPAYMENT = "cumulativepayment";//累计金额
     public R queryList(BasePageRequest basePageRequest) {
         JSONObject jsonObject = basePageRequest.getJsonObject();
         Kv kv= Kv.by("contractNumber", jsonObject.getString("contractNumber"))
@@ -122,6 +137,10 @@ public class PmpContractService {
         }
     }
 
+    private final String PAYMENTRATION = "paymentRatio"; //支付比例
+    private final String PAYMENTAMOUNT = "paymentAmount";//支付金额
+    private final String CUMULATIVEPAYMENTRATION = "cumulativePaymentRatio";//累计比例
+    private final String CUMULATIVEPAYMENT = "cumulativepayment";//累计金额
     /**
      * 装载账单
      * @param records 合同集合
@@ -137,9 +156,9 @@ public class PmpContractService {
                 int monthValue = paymentNode.getMonthValue();
                 if (billDetails.get(year+"年"+monthValue+"月")!=null){
                     Map<String, Object> bill = billDetails.get(year + "年" + monthValue + "月");
-                    Long paymentRatio = (Long)bill.get(PAYMENTRATION);
+                    Integer paymentRatio = (Integer)bill.get(PAYMENTRATION);
                     BigDecimal paymentAmount = (BigDecimal)bill.get(PAYMENTAMOUNT);
-                    Long cumulativepaymentRatio = (Long)bill.get(CUMULATIVEPAYMENTRATION);
+                    Integer cumulativepaymentRatio = (Integer)bill.get(CUMULATIVEPAYMENTRATION);
                     BigDecimal cumulativepayment = (BigDecimal)bill.get(CUMULATIVEPAYMENT);
                     bill.put(PAYMENTRATION,contractPayment.getCostPercentage()+paymentRatio);
                     bill.put(PAYMENTAMOUNT,contractPayment.getMoney().add(paymentAmount));
@@ -159,34 +178,61 @@ public class PmpContractService {
             record.set("billList",billDetails);
         });
         List<String> keys = new ArrayList<>(set);
-        Collections.sort(keys);
-        System.out.println(keys);
-        for (String key : keys) {
-            records.forEach(record -> {
-                Map<String,Map<String,Object>> billLists = record.get("billList");
-                Map<String, Object> stringObjectMap = billLists.get(key);
-                if (stringObjectMap != null){
-                    return;
-                }else {
-                    Map<String, Object> bill = new HashMap();
-                    bill.put(PAYMENTRATION,0);
-                    bill.put(PAYMENTAMOUNT,new BigDecimal(0));
-                    bill.put(CUMULATIVEPAYMENTRATION,0);
-                    bill.put(CUMULATIVEPAYMENT,new BigDecimal(0));
-                    billLists.put(key,bill);
-                }
-            });
-        }
-        records.forEach(record -> {
-            Map<String, Object> billList = record.get("billList");
-            Map<String, Object> collect = billList.entrySet().stream()
-                    .sorted(Map.Entry.comparingByKey())
-                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue
-                            , (oldValue, newValue) -> oldValue, LinkedHashMap::new));
-            record.set("billList",collect);
+        Collections.sort(keys, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                int len1 = o1.length();
+                int len2 = o2.length();
+                if(len1!=len2)
+                    return len1-len2;
+                else
+                    return o1.compareTo(o2);
+
+            }
         });
+        System.out.println(keys);
+        for (Record record : records) {
+            Map<String, Map<String, Object>> billLists = record.get("billList");
+            Map<String,Map<String,Object>> map  = new LinkedHashMap<>();
+            Integer cumulativepaymentRatios = 0;
+            BigDecimal cumulativepayments = new BigDecimal(0);
+            for (String s : keys) {
+                Map<String, Object> stringObjectMap1 = billLists.get(s);
+
+                if (stringObjectMap1 == null) {
+                    Map<String, Object> bill = new HashMap();
+                    bill.put(PAYMENTRATION, 0);
+                    bill.put(PAYMENTAMOUNT, new BigDecimal(0));
+                    bill.put(CUMULATIVEPAYMENTRATION, cumulativepaymentRatios);
+                    bill.put(CUMULATIVEPAYMENT, cumulativepayments);
+                    map.put(s, bill);
+                } else {
+                    Integer paymentRatio = (Integer) stringObjectMap1.get(PAYMENTRATION);
+                    BigDecimal paymentAmount = (BigDecimal) stringObjectMap1.get(PAYMENTAMOUNT);
+                    cumulativepaymentRatios = cumulativepaymentRatios += paymentRatio;
+                    cumulativepayments = paymentAmount.add(cumulativepayments);
+                    Map<String, Object> bill = new HashMap();
+                    bill.put(PAYMENTRATION, paymentRatio);
+                    bill.put(PAYMENTAMOUNT, paymentAmount);
+                    bill.put(CUMULATIVEPAYMENTRATION, cumulativepaymentRatios);
+                    bill.put(CUMULATIVEPAYMENT, cumulativepayments);
+                    map.put(s, bill);
+                }
+            }
+            record.set("billList", map);
+        }
+
+//        records.forEach(record -> {
+//            Map<String, Object> billList = record.get("billList");
+//            Map<String, Object> collect = billList.entrySet().stream()
+//                    .sorted(Map.Entry.comparingByKey())
+//                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue
+//                            , (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+//            record.set("billList",collect);
+//        });
         System.out.println(records);
     }
+
 
     @Before(Tx.class)
     public R update(JSONObject object) {

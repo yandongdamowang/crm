@@ -1,8 +1,9 @@
 #namespace("pmp.contractPaymentRecord")
     #sql("queryList")
         select
-            pcpr.* ,pc.contract_number
+            pcpr.* ,pc.contract_number,cc.contractor_name
         from pmp_contract_payment_record as pcpr left join pmp_contract as pc on pcpr.contract_id = pc.contract_id
+        left join crm_customer as cc on pc.customer_id = cc.customer_id
             where 1 = 1 and
             #if(contractNumber)
                 and pc.contract_number like concat('%', #para(contractNumber), '%')
@@ -10,8 +11,8 @@
             #if(paymentNumber)
                 and pcpr.payment_number like concat('%', #para(paymentNumber), '%')
             #end
-            #if(supplierId)
-                and pcpr.supplier_id = #para(supplierId)
+            #if(customerId)
+                and pcpr.customer_id = #para(customerId)
             #end
             #if(startTime)
                 pcpr.payment_time between DATE_FORMAT(#para(startTime), '%Y-%m-%d') and DATE_FORMAT(#para(endTime), '%Y-%m-%d')
@@ -26,9 +27,9 @@
 
     #sql("queryById")
         select
-            pcpr.*,pc.contract_number,pc.money,pc.customer_id,pc.proprietor , ccr.customer_name
-        from pmp_contract as pc join pmp_contract_payment_record as pcpr on pcpr.contract_id = pc.contract_id
-				JOIN crm_customer AS ccr ON pc.customer_id = ccr.customer_id
+            pcpr.*,pc.contract_number,pc.money,pc.customer_id,pc.proprietor , cc.customer_name
+        from pmp_contract_payment_record as pcpr left join pmp_contract as pc on pcpr.contract_id = pc.contract_id
+        left join crm_customer as cc on pc.customer_id = cc.customer_id
             where 1 = 1
             #if(paymentRecordId)
                 and pcpr.payment_record_id = #para(paymentRecordId)

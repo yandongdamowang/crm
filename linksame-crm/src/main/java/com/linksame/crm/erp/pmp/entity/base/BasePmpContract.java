@@ -22,6 +22,13 @@ public abstract class BasePmpContract<M extends BasePmpContract<M>> extends Mode
     public Long getContractId() {
         return getLong("contract_id");
     }
+    public void setContractType(Long contractType) {
+        set("contract_type", contractType);
+    }
+
+    public Long getContractType() {
+        return getLong("contract_type");
+    }
 
     public void setContractNumber(String contractIdNumber) {
         set("contract_number", contractIdNumber);
@@ -47,12 +54,12 @@ public abstract class BasePmpContract<M extends BasePmpContract<M>> extends Mode
         return getStr("purchase_order_number");
     }
 
-    public void setMilestoneNodes(Long milestoneNodes) {
+    public void setMilestoneNodes(Integer milestoneNodes) {
         set("milestone_nodes", milestoneNodes);
     }
 
-    public Long getMilestoneNodes() {
-        return getLong("milestone_nodes");
+    public Integer getMilestoneNodes() {
+        return getInt("milestone_nodes");
     }
 
     public void setContractName(String contractName) {
@@ -79,12 +86,12 @@ public abstract class BasePmpContract<M extends BasePmpContract<M>> extends Mode
         return getInt("status");
     }
 
-    public void setProjectId(Long projectId) {
+    public void setProjectId(Integer projectId) {
         set("project_id", projectId);
     }
 
-    public Long getProjectId() {
-        return getLong("project_id");
+    public Integer getProjectId() {
+        return getInt("project_id");
     }
 
     public void setRequiredSigningTime(Date requiredSigningTime) {

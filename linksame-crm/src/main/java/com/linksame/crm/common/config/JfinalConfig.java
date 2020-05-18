@@ -15,6 +15,7 @@ import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.plugin.druid.DruidStatViewHandler;
 import com.jfinal.render.RenderManager;
 import com.jfinal.template.Engine;
+import com.jfplugin.mail.MailPlugin;
 import com.linksame.crm.common.config.cache.CaffeineCache;
 import com.linksame.crm.common.config.druid.DruidConfig;
 import com.linksame.crm.common.config.json.ErpJsonFactory;
@@ -131,6 +132,8 @@ public class JfinalConfig extends JFinalConfig {
         me.add(redisPlugin);
         //cron定时器
         me.add(new Cron4jPlugin(PropKit.use("config/cron4j.txt")));
+        //邮件发送
+        me.add(new MailPlugin("mail",PropKit.use("mail.properties").getProperties()));
         //swagger配置
         me.add(new SwaggerPlugin(new SwaggerDoc().setBasePath("/").setHost(BaseConstant.SWAGGER_PATH).setSwagger("2.0")
                 .setInfo(new SwaggerApiInfo(BaseConstant.SWAGGER_DESCRIPTION, "1.0", BaseConstant.SWAGGER_TITLE, ""))));

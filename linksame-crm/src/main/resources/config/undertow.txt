@@ -32,7 +32,7 @@ undertow.ssl.keyStorePassword=123456
 # 别名配置，一般不使用
 undertow.ssl.keyAlias=demo
 # 热加载前缀
-undertow.hotSwapClassPrefix=live.autu.plugin.jfinal.swagger
+undertow.hotSwapClassPrefix=live.autu.plugin.jfinal.swagger,com.jfplugin.mail
 
 
 

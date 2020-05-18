@@ -1,10 +1,18 @@
 package com.linksame.crm.erp.work.service;
 
+import cn.hutool.core.collection.CollectionUtil;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jfinal.aop.Before;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
+import com.jfinal.plugin.activerecord.tx.Tx;
 import com.linksame.crm.erp.admin.entity.AdminUser;
 import com.linksame.crm.erp.work.entity.TaskRemind;
 import com.linksame.crm.utils.R;
+
+import java.util.List;
 
 /**
  * @author Ivan
@@ -15,17 +23,24 @@ public class RemindService {
 
     /**
      * 新增/修改任务提醒数据
-     * @param taskRemind    任务提醒对象
-     * @return  true/false
+     * @param jsonObject    json对象
      */
-    public R setRemind(TaskRemind taskRemind) {
-        boolean bol;
-        if (taskRemind.getRemindId() == null) {
-            bol = taskRemind.save();
-        } else {
-            bol = taskRemind.update();
+    @Before(Tx.class)
+    public R setRemind(JSONObject jsonObject) {
+        JSONArray remindJsonArr = jsonObject.getJSONArray("remindList");
+        if(remindJsonArr.size() == 0 || CollectionUtil.isEmpty(remindJsonArr)){
+            return R.error("remindList参数不允许为空");
         }
-        return bol ? R.ok() : R.error();
+        for(int i=0;i<remindJsonArr.size();i++){
+            ObjectMapper objectMapper = new ObjectMapper();
+            TaskRemind taskRemind = objectMapper.convertValue(remindJsonArr.get(i), TaskRemind.class);
+            if (taskRemind.getRemindId() == null) {
+                taskRemind.save();
+            } else {
+                taskRemind.update();
+            }
+        }
+        return R.ok();
     }
 
     /**

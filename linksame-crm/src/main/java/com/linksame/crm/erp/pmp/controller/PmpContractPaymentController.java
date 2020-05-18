@@ -83,7 +83,7 @@ public class PmpContractPaymentController extends Controller {
         } else {
             pmpContractPayment.setCheckStatus(0);
         }
-        crmRecordService.updateRecord(new PmpContractPayment().dao().findById(pmpContractPayment.getContractId()), pmpContractPayment, CrmEnum.PMP_PAYMENT);
+        crmRecordService.updateRecord(new PmpContractPayment().dao().findById(pmpContractPayment.getBillId()), pmpContractPayment, CrmEnum.PMP_PAYMENT);
 
         pmpContractPayment.setUpdateTime(new Date(System.currentTimeMillis()));
         boolean update = pmpContractPayment.update();
@@ -147,5 +147,15 @@ public class PmpContractPaymentController extends Controller {
         String rawData = getRawData();
         JSONObject jsonObject = JSON.parseObject(getRawData());
         renderJson(pmpContractPaymentService.paymentReport(jsonObject));
+    }
+    /**
+     *
+     *  付款记录报表
+     */
+    public void confirmPayment(){
+        String rawData = getRawData();
+        JSONObject jsonObject = JSON.parseObject(getRawData());
+        Long billId = jsonObject.getLong("billId");
+        renderJson(pmpContractPaymentService.confirmPayment(billId));
     }
 }

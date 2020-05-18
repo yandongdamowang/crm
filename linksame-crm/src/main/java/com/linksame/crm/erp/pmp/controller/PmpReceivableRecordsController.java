@@ -51,8 +51,8 @@ public class PmpReceivableRecordsController extends Controller {
      */
     @Permissions({"project:collectionRecord:save"})
     public void addOrUpdate(){
-        PmpReceivableRecords pmpContract = JSON.parseObject(getRawData(),PmpReceivableRecords.class);
-        renderJson(pmpReceivableRecordsServer.addOrUpdate(pmpContract));
+        PmpReceivableRecords pmpReceivableRecords = JSON.parseObject(getRawData(),PmpReceivableRecords.class);
+        renderJson(pmpReceivableRecordsServer.addOrUpdate(pmpReceivableRecords));
     }
 
     /**
