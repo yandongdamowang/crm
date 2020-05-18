@@ -99,6 +99,9 @@ public class TaskService{
             saveWorkTaskLog(workTaskLog);
         }else{
             task.setUpdateTime(new Date());
+            if(task.getStatus() == 5){
+                task.setCoTime(new Date());
+            }
             bol = getWorkTaskLog(task, user.getUserId());
         }
         if (taskRelation != null) {

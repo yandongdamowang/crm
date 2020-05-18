@@ -90,7 +90,7 @@ public class TaskController extends Controller{
         if(task.getPid() != null && task.getPid() != 0){
             oaAuth = AuthUtil.isOaAuth(OaEnum.TASK_TYPE_KEY.getTypes(), task.getPid());
         }
-        if(task.getWorkId() != null){
+        if(task.getWorkId() != null && task.getWorkId() != 0){
             Integer isOpen = new Work().findById(task.getWorkId()).getIsOpen();
             workAuth = isOpen == 0 && ! AuthUtil.isWorkAuth(task.getWorkId().toString(), "task:save");
         }
@@ -113,7 +113,6 @@ public class TaskController extends Controller{
         String contractIds = getPara("contractIds");
         TaskRelation taskRelation = new TaskRelation();
         if(customerIds != null || contactsIds != null || businessIds != null || contractIds != null){
-
             taskRelation.setBusinessIds(TagUtil.fromString(businessIds));
             taskRelation.setContactsIds(TagUtil.fromString(contactsIds));
             taskRelation.setContractIds(TagUtil.fromString(contractIds));
