@@ -18,6 +18,7 @@ public class PmpRouter extends Routes {
         add("/pmpContractPayment", PmpContractPaymentController.class);
         add("/pmpContractTemplate", PmpContractTemplateController.class);
         add("/pmpContractPaymentRecord", PmpContractPaymentRecordController.class);
+        add("/PmpContractCardinalNumber", PmpContractCardinalNumberController.class);
         add("/pmpReceivableRecords", PmpReceivableRecordsController.class);
     }
 }

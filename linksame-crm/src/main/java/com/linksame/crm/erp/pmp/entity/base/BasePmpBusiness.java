@@ -10,11 +10,11 @@ import com.jfinal.plugin.activerecord.Model;
 public abstract class BasePmpBusiness<M extends BasePmpBusiness<M>> extends Model<M> implements IBean {
 
     public void setBusinessId(java.lang.Long businessId) {
-        set("business_Id", businessId);
+        set("business_id", businessId);
     }
 
     public java.lang.Long getBusinessId() {
-        return getLong("business_Id");
+        return getLong("business_id");
     }
 
     public void setObjectId(java.lang.Long objectId) {
@@ -25,21 +25,20 @@ public abstract class BasePmpBusiness<M extends BasePmpBusiness<M>> extends Mode
         return getLong("object_id");
     }
 
-    public void setObjectType(java.lang.Integer objectType) {
-        set("object_type", objectType);
-    }
-
-    public java.lang.Integer getObjectType() {
-        return getInt("object_type");
-    }
-
-
     public void setCorrelationId(java.lang.Long correlationId) {
         set("correlation_id", correlationId);
     }
 
     public java.lang.Long getCorrelationId() {
         return getLong("correlation_id");
+    }
+
+    public void setObjectType(java.lang.Integer objectType) {
+        set("object_type", objectType);
+    }
+
+    public java.lang.Integer getObjectType() {
+        return getInt("object_type");
     }
 
     public void setCorrelationType(java.lang.Integer correlationType) {
