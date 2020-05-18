@@ -171,19 +171,20 @@ public class SprintService {
      * @return
      */
     public R querySprintInfo(Integer sprintId){
-        List<Map<String, Object>> resultList = new ArrayList<>();
-        //1. 查询冲刺任务数据, 获取该任务开始时间与截止时间
+        //查询冲刺任务数据, 获取该任务开始时间与截止时间
         TaskSprint taskSprint = TaskSprint.dao.findById(sprintId);
         //开始时间
         String startDatetime = DateUtil.dateToStrLong(taskSprint.getStartTime());
         //截止时间
         String endDatetime = DateUtil.dateToStrLong(taskSprint.getEndTime());
         List<String> dayList = DateUtil.getDays(startDatetime, endDatetime);
+        //定义
+        List<String> dateList = new ArrayList<>();
+        List<Integer> expectList = new ArrayList<>();
+        List<Integer> remainingList = new ArrayList<>();
+
         //遍历日期节点, 查询与该日期匹配的截止日期任务
         for(String dateStr : dayList){
-            Map<String, Object> map = new HashMap<>();
-            Integer expectCount = 0;
-            Integer remainingCount = 0;
             Calendar cal = Calendar.getInstance();
             cal.setTime(DateUtil.strToDate(dateStr));
             //获取该日期的起始时间
@@ -193,15 +194,18 @@ public class SprintService {
             Calendar endResult = DateUtil.getEndDate(cal);
             String endDateStr = DateUtil.dateToStrLong(endResult.getTime());
             //获取该时间区间状态为完成的任务----期望值
-            expectCount = Db.queryInt("select count(*) as count from task where stop_time BETWEEN ? and ? and status = 5", startDateStr, endDateStr);
-            map.put("date", dateStr);
-            map.put("expectCount", expectCount);
+            Integer expectCount = Db.queryInt("select count(*) as count from task where stop_time BETWEEN ? and ? and status = 5", startDateStr, endDateStr);
             //获取剩余值
-            remainingCount = Db.queryInt("select count(*) as count from task where stop_time BETWEEN ? and ? and status in (0,1,2)", startDateStr, endDateStr);
-            map.put("remainingCount", remainingCount);
-            resultList.add(map);
+            Integer remainingCount = Db.queryInt("select count(*) as count from task where stop_time BETWEEN ? and ? and status in (0,1,2)", startDateStr, endDateStr);
+            dateList.add(dateStr);
+            expectList.add(expectCount);
+            remainingList.add(remainingCount);
         }
+        Record record = new Record();
+        record.set("dateList", dateList);
+        record.set("expectList", expectList);
+        record.set("remainingList", remainingList);
 
-        return R.ok().put("data", resultList);
+        return R.ok().put("data", record);
     }
 }

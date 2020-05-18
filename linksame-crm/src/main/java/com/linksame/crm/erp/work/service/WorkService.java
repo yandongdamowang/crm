@@ -291,7 +291,7 @@ public class WorkService{
         //遍历出父id等于参数的id，add进子节点集合
         for (Record mu : itemList) {
             //查询预付款表, 是否存在关联该任务的数据, 并set关联数据
-            Record contractPayment = Db.findFirst("select * from pmp_contract_payment where payment_clause = ? and status = 1 and is_deleted = 0 and trade_status = 1", mu.getInt("task_id"));
+            Record contractPayment = Db.findFirst("select * from pmp_contract_payment where payment_clause = ? and status = 1 and is_deleted = 0", mu.getInt("task_id"));
             if(contractPayment != null){
                 mu.set("contractPayment", contractPayment);
             } else {
