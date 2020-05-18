@@ -251,7 +251,7 @@ public class PmpContractPaymentService {
         if (byId.getCheckStatus() != 1){
             return R.error("审批过程中,无法直接付款");
         }
-        byId.setpracticalMoney(byId.getMoney());
+        byId.setPracticalMoney(byId.getMoney());
         byId.setTradeStatus(PmpInterface.contractPayment.trade.stats.OK);
         byId.setPracticalCostPercentage(byId.getCostPercentage());
         PmpContractPaymentRecord pmpContractPaymentRecord = new PmpContractPaymentRecord();

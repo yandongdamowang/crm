@@ -15,146 +15,139 @@ import java.util.Date;
 @SuppressWarnings("serial")
 public abstract class BasePmpContract<M extends BasePmpContract<M>> extends Model<M> implements IBean {
 
-    public void setContractId(Long contractId) {
+    public void setContractId(java.lang.Long contractId) {
         set("contract_id", contractId);
     }
 
-    public Long getContractId() {
+    public java.lang.Long getContractId() {
         return getLong("contract_id");
     }
-    public void setContractType(Long contractType) {
-        set("contract_type", contractType);
+
+    public void setContractNumber(java.lang.String contractNumber) {
+        set("contract_number", contractNumber);
     }
 
-    public Long getContractType() {
-        return getLong("contract_type");
-    }
-
-    public void setContractNumber(String contractIdNumber) {
-        set("contract_number", contractIdNumber);
-    }
-
-    public String getContractNumber() {
+    public java.lang.String getContractNumber() {
         return getStr("contract_number");
     }
 
-    public void setFileNumber(String fileNumber) {
+    public void setFileNumber(java.lang.String fileNumber) {
         set("file_number", fileNumber);
     }
 
-    public String getFileNumber() {
+    public java.lang.String getFileNumber() {
         return getStr("file_number");
     }
 
-    public void setPurchaseOrderNumber(String purchaseOrderNumber) {
+    public void setPurchaseOrderNumber(java.lang.String purchaseOrderNumber) {
         set("purchase_order_number", purchaseOrderNumber);
     }
 
-    public String getPurchaseOrderNumber() {
+    public java.lang.String getPurchaseOrderNumber() {
         return getStr("purchase_order_number");
     }
 
-    public void setMilestoneNodes(Integer milestoneNodes) {
+    public void setMilestoneNodes(java.lang.Integer milestoneNodes) {
         set("milestone_nodes", milestoneNodes);
     }
 
-    public Integer getMilestoneNodes() {
+    public java.lang.Integer getMilestoneNodes() {
         return getInt("milestone_nodes");
     }
 
-    public void setContractName(String contractName) {
+    public void setContractName(java.lang.String contractName) {
         set("contract_name", contractName);
     }
 
-    public String getContractName() {
+    public java.lang.String getContractName() {
         return getStr("contract_name");
     }
 
-    public void setDrpNumber(String drpNumber) {
+    public void setDrpNumber(java.lang.String drpNumber) {
         set("drp_number", drpNumber);
     }
 
-    public String getDrpNumber() {
+    public java.lang.String getDrpNumber() {
         return getStr("drp_number");
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(java.lang.Integer status) {
         set("status", status);
     }
 
-    public Integer getStatus() {
+    public java.lang.Integer getStatus() {
         return getInt("status");
     }
 
-    public void setProjectId(Integer projectId) {
+    public void setProjectId(java.lang.Integer projectId) {
         set("project_id", projectId);
     }
 
-    public Integer getProjectId() {
+    public java.lang.Integer getProjectId() {
         return getInt("project_id");
     }
 
-    public void setRequiredSigningTime(Date requiredSigningTime) {
+    public void setRequiredSigningTime(java.util.Date requiredSigningTime) {
         set("required_signing_time", requiredSigningTime);
     }
 
-    public Date getRequiredSigningTime() {
+    public java.util.Date getRequiredSigningTime() {
         return get("required_signing_time");
     }
 
-    public void setActualSigningTime(Date actualSigningTime) {
+    public void setActualSigningTime(java.util.Date actualSigningTime) {
         set("actual_signing_time", actualSigningTime);
     }
 
-    public Date getActualSigningTime() {
+    public java.util.Date getActualSigningTime() {
         return get("actual_signing_time");
     }
 
-    public void setPurchaseTime(Date purchaseTime) {
+    public void setPurchaseTime(java.util.Date purchaseTime) {
         set("purchase_time", purchaseTime);
     }
 
-    public Date getPurchaseTime() {
+    public java.util.Date getPurchaseTime() {
         return get("purchase_time");
     }
 
-    public void setBeginTime(Date beginTime) {
+    public void setBeginTime(java.util.Date beginTime) {
         set("begin_time", beginTime);
     }
 
-    public Date getBeginTime() {
+    public java.util.Date getBeginTime() {
         return get("begin_time");
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(java.util.Date endTime) {
         set("end_time", endTime);
     }
 
-    public Date getEndTime() {
+    public java.util.Date getEndTime() {
         return get("end_time");
     }
 
-    public void setCreationTime(Date creationTime) {
+    public void setCreationTime(java.util.Date creationTime) {
         set("creation_time", creationTime);
     }
 
-    public Date getCreationTime() {
+    public java.util.Date getCreationTime() {
         return get("creation_time");
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(java.util.Date updateTime) {
         set("update_time", updateTime);
     }
 
-    public Date getUpdateTime() {
+    public java.util.Date getUpdateTime() {
         return get("update_time");
     }
 
-    public void setIsDeleted(String isDeleted) {
+    public void setIsDeleted(java.lang.String isDeleted) {
         set("is_deleted", isDeleted);
     }
 
-    public String getIsDeleted() {
+    public java.lang.String getIsDeleted() {
         return getStr("is_deleted");
     }
 
@@ -166,102 +159,84 @@ public abstract class BasePmpContract<M extends BasePmpContract<M>> extends Mode
         return get("money");
     }
 
-    public void setContractPurchaseStartTime(Date contractPurchaseStartTime) {
+    public void setContractPurchaseStartTime(java.util.Date contractPurchaseStartTime) {
         set("contract_purchase_start_time", contractPurchaseStartTime);
     }
 
-    public Date getContractPurchaseStartTime() {
+    public java.util.Date getContractPurchaseStartTime() {
         return get("contract_purchase_start_time");
     }
 
-    public void setContractPurchaseEndTime(Date contractPurchaseEndTime) {
+    public void setContractPurchaseEndTime(java.util.Date contractPurchaseEndTime) {
         set("contract_purchase_end_time", contractPurchaseEndTime);
     }
 
-    public Date getContractPurchaseEndTime() {
+    public java.util.Date getContractPurchaseEndTime() {
         return get("contract_purchase_end_time");
     }
 
-    public void setBatchId(String batchId) {
+    public void setBatchId(java.lang.String batchId) {
         set("batch_id", batchId);
     }
 
-    public String getBatchId() {
+    public java.lang.String getBatchId() {
         return getStr("batch_id");
     }
 
-    public void setCheckStatus(Integer checkStatus) {
-        set("check_status", checkStatus);
-    }
-
-    public Integer getCheckStatus() {
-        return getInt("check_status");
-    }
-
-    public void setExamineRecordId(Integer examineRecordId) {
-        set("examine_record_id", examineRecordId);
-    }
-
-    public Integer getExamineRecordId() {
-        return getInt("examine_record_id");
-    }
-    public void setCreateUserId(Long createUserId) {
+    public void setCreateUserId(java.lang.Long createUserId) {
         set("create_user_id", createUserId);
     }
 
-    public Long getCreateUserId() {
+    public java.lang.Long getCreateUserId() {
         return getLong("create_user_id");
     }
 
-    public void setOwnerUserId(Long ownerUserId) {
+    public void setOwnerUserId(java.lang.Long ownerUserId) {
         set("owner_user_id", ownerUserId);
     }
 
-    public Long getOwnerUserId() {
+    public java.lang.Long getOwnerUserId() {
         return getLong("owner_user_id");
     }
 
-
-    public void setCustomerId(Integer customerId) {
+    public void setCustomerId(java.lang.Integer customerId) {
         set("customer_id", customerId);
     }
 
-    public Integer getCustomerId() {
+    public java.lang.Integer getCustomerId() {
         return getInt("customer_id");
     }
 
-
-    public void setContactsId(Integer contactsId) {
+    public void setContactsId(java.lang.Integer contactsId) {
         set("contacts_id", contactsId);
     }
 
-    public Integer getContactsId() {
+    public java.lang.Integer getContactsId() {
         return getInt("contacts_id");
     }
 
-
-    public void setCompanyUserId(Integer companyUserId) {
+    public void setCompanyUserId(java.lang.Integer companyUserId) {
         set("company_user_id", companyUserId);
     }
 
-    public Integer getCompanyUserId() {
+    public java.lang.Integer getCompanyUserId() {
         return getInt("company_user_id");
     }
 
-    public void setRoUserId(String roUserId) {
-        set("ro_user_id", roUserId);
+    public void setProprietor(java.lang.String proprietor) {
+        set("proprietor", proprietor);
     }
 
-    public String getRoUserId() {
-        return getStr("ro_user_id");
+    public java.lang.String getProprietor() {
+        return getStr("proprietor");
     }
 
-    public void setRwUserId(String rwUserId) {
-        set("rw_user_id", rwUserId);
+    public void setContractType(java.lang.Long contractType) {
+        set("contract_type", contractType);
     }
 
-    public String getRwUserId() {
-        return getStr("rw_user_id");
+    public java.lang.Long getContractType() {
+        return getLong("contract_type");
     }
 
 }

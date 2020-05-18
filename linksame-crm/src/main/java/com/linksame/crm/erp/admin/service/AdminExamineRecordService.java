@@ -8,8 +8,6 @@ import com.linksame.crm.erp.admin.entity.*;
 import com.linksame.crm.erp.admin.entity.*;
 import com.linksame.crm.erp.crm.entity.CrmContract;
 import com.linksame.crm.erp.crm.entity.CrmReceivables;
-import com.linksame.crm.erp.pmp.entity.PmpContract;
-import com.linksame.crm.erp.pmp.entity.PmpContractPayment;
 import com.linksame.crm.utils.BaseUtil;
 import com.linksame.crm.utils.R;
 import com.jfinal.aop.Before;
@@ -24,7 +22,6 @@ import java.util.*;
 public class AdminExamineRecordService {
     /**
      * 第一次添加审核记录和审核日志 type 1 合同 2 回款 userId:授权审批人
-     * Integer type, Long userId, Long ownerUserId, Integer recordId,Integer status
      */
     @Before(Tx.class)
     public Map<String, Integer> saveExamineRecord(Integer type, Long userId, Long ownerUserId, Integer recordId,Integer status) {
@@ -90,7 +87,7 @@ public class AdminExamineRecordService {
                     if (r == null || r.getLong("user_id") == null){
                         examineLog.setExamineUser(BaseConstant.SUPER_ADMIN_USER_ID);
                     }else {
-                    examineLog.setExamineUser(r.getLong("user_id"));}
+                        examineLog.setExamineUser(r.getLong("user_id"));}
                     examineLog.setRecordId(examineRecord.getRecordId());
                     examineLog.setIsRecheck(0);
                     examineLog.save();
@@ -132,14 +129,7 @@ public class AdminExamineRecordService {
      */
     @Before(Tx.class)
     public R auditExamine(Integer recordId, Integer status, String remarks, Integer id, Long nextUserId, Long ownerUserId) {
-        /**
-         *Integer recordId = getInt("recordId");//recordId:审核记录id
-         *Integer status = getInt("status");//审核状态 0 未审核 1 审核通过 2 审核拒绝 3 审核中 4 已撤回
-         *Integer id = getInt("id");// id:审核对象的id（合同或者回款的id）
-         *String remarks = get("remarks");//remarks:审核备注
-         *Long nextUserId = getLong("nextUserId");//下一审批人
-         *Long ownerUserId = getLong("ownerUserId");//审批负责人
-         */
+
         //当前审批人
         Long auditUserId = BaseUtil.getUser().getUserId();
 
@@ -161,9 +151,9 @@ public class AdminExamineRecordService {
         //查询审批流程
         AdminExamine examine = AdminExamine.dao.findById(examineRecord.getExamineId());
         if (examine.getCategoryType() == 1) {
-            ownerUserId = Long.valueOf(PmpContract.dao.findById(id).getOwnerUserId());
+            ownerUserId = Long.valueOf(CrmContract.dao.findById(id).getOwnerUserId());
         } else {
-            ownerUserId = Long.valueOf(PmpContractPayment.dao.findById(id).getOwnerUserId());
+            ownerUserId = Long.valueOf(CrmReceivables.dao.findById(id).getOwnerUserId());
         }
         //查询当前审批步骤
         AdminExamineStep examineStep = AdminExamineStep.dao.findById(examineRecord.getExamineStepId());
@@ -194,10 +184,10 @@ public class AdminExamineRecordService {
 
             if (examine.getCategoryType() == 1) {
                 //合同
-                Db.update(Db.getSql("pmp.contract.updateCheckStatusById"),status,id);
+                Db.update(Db.getSql("crm.contract.updateCheckStatusById"),status,id);
             } else {
                 //回款
-                Db.update(Db.getSql("pmp.contractPayment.updateCheckStatusById"),status,id);
+                Db.update(Db.getSql("crm.receivables.updateCheckStatusById"),status,id);
             }
         } else if (status == 4) {
             //先查询该审批流程的审批步骤的第一步
@@ -227,18 +217,18 @@ public class AdminExamineRecordService {
             examineLog.save();
             if (examine.getCategoryType() == 1) {
                 //合同
-                PmpContract contract = PmpContract.dao.findById(id);
+                CrmContract contract = CrmContract.dao.findById(id);
                 if (contract.getCheckStatus() == 1) {
                     return R.error("该合同已审核通过，不能撤回！");
                 }
-                Db.update(Db.getSql("pmp.contract.updateCheckStatusById"),4,id);
+                Db.update(Db.getSql("crm.contract.updateCheckStatusById"),4,id);
             } else {
                 //回款
-                PmpContractPayment pmpContractPayment = PmpContractPayment.dao.findById(id);
-                if (pmpContractPayment.getCheckStatus() == 1) {
-                    return R.error("该付款已审核通过，不能撤回！");
+                CrmReceivables receivables = CrmReceivables.dao.findById(id);
+                if (receivables.getCheckStatus() == 1) {
+                    return R.error("该回款已审核通过，不能撤回！");
                 }
-                Db.update(Db.getSql("pmp.contractPayment.updateCheckStatusById"),4,id);
+                Db.update(Db.getSql("crm.receivables.updateCheckStatusById"),4,id);
             }
         } else {
             //审核通过
@@ -275,11 +265,11 @@ public class AdminExamineRecordService {
                         examineRecord.setExamineStatus(3);
                         if (examine.getCategoryType() == 1) {
                             //合同
-                            Db.update(Db.getSql("pmp.contract.updateCheckStatusById"),3,id);
+                            Db.update(Db.getSql("crm.contract.updateCheckStatusById"),3,id);
 
                         } else {
                             //回款
-                            Db.update(Db.getSql("pmp.contractPayment.updateCheckStatusById"),3,id);
+                            Db.update(Db.getSql("crm.receivables.updateCheckStatusById"),3,id);
 
                         }
                     }
@@ -348,21 +338,21 @@ public class AdminExamineRecordService {
                         // AdminExamineLog examineLog = new AdminExamineLog();
                         if (examine.getCategoryType() == 1) {
                             //合同
-                            Db.update(Db.getSql("pmp.contract.updateCheckStatusById"),3,id);
+                            Db.update(Db.getSql("crm.contract.updateCheckStatusById"),3,id);
                         } else {
                             //回款
-                            Db.update(Db.getSql("pmp.contractPayment.updateCheckStatusById"),3,id);
+                            Db.update(Db.getSql("crm.receivables.updateCheckStatusById"),3,id);
                         }
                     } else {
                         //没有下一审批流程步骤
                         if (examine.getCategoryType() == 1) {
                             //合同
-                            Db.update(Db.getSql("pmp.contract.updateCheckStatusById"),1,id);
-                            PmpContract contract = PmpContract.dao.findById(id);
+                            Db.update(Db.getSql("crm.contract.updateCheckStatusById"),1,id);
+                            CrmContract contract = CrmContract.dao.findById(id);
                             Db.update(Db.getSql("crm.customer.updateDealStatusById"),"1",contract.getCustomerId());
                         } else {
                             //回款
-                            Db.update(Db.getSql("pmp.contractPayment.updateCheckStatusById"),1,id);
+                            Db.update(Db.getSql("crm.receivables.updateCheckStatusById"),1,id);
                         }
 
                     }
@@ -383,21 +373,21 @@ public class AdminExamineRecordService {
                     examineLog.save();
                     if (examine.getCategoryType() == 1) {
                         //合同
-                        Db.update(Db.getSql("pmp.contract.updateCheckStatusById"),3,id);
+                        Db.update(Db.getSql("crm.contract.updateCheckStatusById"),3,id);
                     } else {
                         //回款
-                        Db.update(Db.getSql("pmp.contractPayment.updateCheckStatusById"),3,id);
+                        Db.update(Db.getSql("crm.receivables.updateCheckStatusById"),3,id);
                     }
                 } else {
                     //没有下一审批人
                     if (examine.getCategoryType() == 1) {
                         //合同
-                        Db.update(Db.getSql("pmp.contract.updateCheckStatusById"),1,id);
-                        PmpContract contract = PmpContract.dao.findById(id);
+                        Db.update(Db.getSql("crm.contract.updateCheckStatusById"),1,id);
+                        CrmContract contract = CrmContract.dao.findById(id);
                         Db.update(Db.getSql("crm.customer.updateDealStatusById"),1,contract.getCustomerId());
                     } else {
                         //回款
-                        Db.update(Db.getSql("pmp.contractPayment.updateCheckStatusById"),1,id);
+                        Db.update(Db.getSql("crm.receivables.updateCheckStatusById"),1,id);
                     }
                 }
 
@@ -489,13 +479,13 @@ public class AdminExamineRecordService {
             jsonObject.put("examineType", 1);
             //固定审批
             List<Record> steps = Db.find("select * from admin_examine_step where  examine_id = ? ORDER BY step_num", adminExamine.getExamineId());
-               //上一审核步骤
-                Long lsatuUserId = null;
+            //上一审核步骤
+            Long lsatuUserId = null;
             for (Record step: steps) {
                 List<Record> logs ;
                 if (step.getInt("step_type") == 1) {
                     //负责人主管
-                     logs = Db.find(Db.getSql("admin.examineLog.queryUserByRecordIdAndStepIdAndStatus"), recordId, step.getInt("step_id"));
+                    logs = Db.find(Db.getSql("admin.examineLog.queryUserByRecordIdAndStepIdAndStatus"), recordId, step.getInt("step_id"));
                     if (logs.size() == 1){
                         if (logs.get(0).getInt("user_id")==null){
                             logs = null;
@@ -526,7 +516,7 @@ public class AdminExamineRecordService {
                     }
                 } else if (step.getInt("step_type") == 2 || step.getInt("step_type") == 3) {
                     //先判断是否已经审核过
-                   logs = Db.find(Db.getSql("admin.examineLog.queryUserByRecordIdAndStepIdAndStatus"), recordId, step.getInt("step_id"));
+                    logs = Db.find(Db.getSql("admin.examineLog.queryUserByRecordIdAndStepIdAndStatus"), recordId, step.getInt("step_id"));
                     if (logs != null && logs.size() != 0) {
                         //已经创建审核日志
                         int status = 0;
