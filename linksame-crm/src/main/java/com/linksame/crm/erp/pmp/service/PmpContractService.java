@@ -49,7 +49,7 @@ public class PmpContractService {
     private AdminExamineRecordService examineRecordService;
 
     @Before(Tx.class)
-    public R add(PmpContract pmpContract,List<PmpContractPayment> pmpContractPayments,List<Task> tasks) {
+    public R add(PmpContract pmpContract,List<PmpContractPayment> pmpContractPayments,List<Task> tasks,List<PmpBusiness> businesses) {
         if (!Db.tx(() -> {
             pmpContract.setCreationTime(new Date(System.currentTimeMillis()));
             pmpContract.setUpdateTime(new Date(System.currentTimeMillis()));
@@ -63,6 +63,12 @@ public class PmpContractService {
             crmRecordService.addRecord(i  , CrmEnum.CRM_CONTRACT);
             BigDecimal money = pmpContract.getMoney();
             BigDecimal money1 = new BigDecimal(0);
+            tasks.forEach(fTask -> {
+                R r = taskService.setTask(fTask, null);
+                Kv data = (Kv)r.get("data");
+                Integer taskId = data.getInt("task_id");
+                fTask.setTaskId(taskId);
+            });
             //保存 合同
             //保存付款单
             for (PmpContractPayment contractPayment : pmpContractPayments) {
@@ -70,16 +76,21 @@ public class PmpContractService {
                         && contractPayment.getPaymentNode() != null
                         && contractPayment.getPaymentName() != null
                         && contractPayment.getCostPercentage() != null) {
-                    tasks.forEach(task -> {
-                        if (contractPayment.getPaymentClause() != null && contractPayment.getPaymentClause().equals(task.getTaskId())){
-                            task.setTaskId(null);
-                            R r = taskService.setTask(task, null);
-                            System.out.println(r);
-                            Kv data = (Kv)r.get("data");
-                            Integer taskId = data.getInt("task_id");
-                            task.setTaskId(taskId);
-                            contractPayment.setPaymentClause(taskId);
-                        }
+                    tasks.forEach(fTask -> {
+                        fTask.getTasks().forEach(sTask1 -> {
+                            sTask1.setPid(fTask.getTaskId());
+                            if (contractPayment.getPaymentClause() != null && contractPayment.getPaymentClause().equals(sTask1.getTaskId())){
+                                sTask1.setTaskId(null);
+                                R r = taskService.setTask(sTask1, null);
+                                System.out.println(r);
+                                Kv data = (Kv)r.get("data");
+                                Integer taskId = data.getInt("task_id");
+                                sTask1.setTaskId(taskId);
+                                contractPayment.setPaymentClause(taskId);
+                            }else {
+                                R r = taskService.setTask(sTask1, null);
+                            }
+                        });
                     });
                     money1 = money1.add(contractPayment.getMoney());
                     contractPayment.setContractId(pmpContract.getLong("contract_id"));
@@ -98,6 +109,12 @@ public class PmpContractService {
             }
             if (money.compareTo(money1) != 0) {
                 return false;
+            }
+            for (PmpBusiness business : businesses) {
+                // 关联业务
+                business.setObjectId(contractId);
+                business.setObjectType(CrmEnum.CRM_CONTRACT.getType());
+                boolean save = business.save();
             }
             tasks.forEach(task -> {
                 if (task.getTaskId() != null){
