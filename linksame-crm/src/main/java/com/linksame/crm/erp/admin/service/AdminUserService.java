@@ -210,7 +210,7 @@ public class AdminUserService {
             String password = BaseUtil.sign(adminUser.getUsername() + pwd, adminUser.getSalt());
             Db.update("update admin_user set password = ? where user_id = ?", password, id);
             BaseUtil.userExit(adminUser.getUserId(),null);
-            RedisManager.getRedis().del(BaseConstant.LOGIN_SUCCESS+adminUser.getUsername()+adminUser.getPassword());
+            RedisManager.getRedis().del(BaseConstant.LOGIN_SUCCESS+adminUser.getUsername());
         }
         return R.ok();
     }

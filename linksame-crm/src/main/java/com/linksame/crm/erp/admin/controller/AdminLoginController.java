@@ -19,6 +19,8 @@ import com.jfinal.aop.Inject;
 import com.jfinal.core.Controller;
 import com.jfinal.log.Log;
 import com.jfinal.plugin.activerecord.Db;
+
+import javax.servlet.http.HttpServletRequest;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
@@ -84,7 +86,7 @@ public class AdminLoginController extends Controller{
             user.update();
             user.setRoles(adminRoleService.queryRoleIdsByUserId(user.getUserId()));
             redis.setex(token, 3600, user);
-            redis.setex(BaseConstant.LOGIN_SUCCESS+username+password, 3600, user);
+            redis.setex(BaseConstant.LOGIN_SUCCESS+username, 3600, user);
             Integer type=getParaToInt("type",1);
             BaseUtil.setToken(user.getUserId(),token,type);
             user.remove("password", "salt");
@@ -137,7 +139,7 @@ public class AdminLoginController extends Controller{
         user.update();
         user.setRoles(adminRoleService.queryRoleIdsByUserId(user.getUserId()));
         redis.setex(token, 3600, user);
-        redis.setex(BaseConstant.LOGIN_SUCCESS+user.getUsername()+user.getPassword(), 3600, user);
+        redis.setex(BaseConstant.LOGIN_SUCCESS+user.getUsername(), 3600, user);
         Integer type = getParaToInt("type", 1);
         BaseUtil.setToken(user.getUserId(), token, type);
         renderJson(R.ok().put("Admin-Token", token).put("user", user).put("auth", adminRoleService.auth(user.getUserId())));
@@ -148,15 +150,16 @@ public class AdminLoginController extends Controller{
      * 退出登录
      */
     public void logout(){
-        AdminUser user = AdminUser.dao.findFirst(Db.getSql("admin.user.queryByUserName"), BaseUtil.getUser().getUsername().trim());
-        String username = user.getUsername();
-        String password = user.getPassword();
         String token = BaseUtil.getToken(getRequest());
+        AdminUser o = (AdminUser)RedisManager.getRedis().get(token);
+        String username = o.getUsername();
+        String password = o.getPassword();
+        Object o1 = RedisManager.getRedis().get(BaseConstant.LOGIN_SUCCESS + username);
         if(! StrUtil.isEmpty(token)){
             RedisManager.getRedis().del(token);
             removeCookie("Admin-Token");
+            RedisManager.getRedis().del(BaseConstant.LOGIN_SUCCESS+username);
         }
-        RedisManager.getRedis().del(BaseConstant.LOGIN_SUCCESS+username+password);
         renderJson(R.ok());
     }
 
