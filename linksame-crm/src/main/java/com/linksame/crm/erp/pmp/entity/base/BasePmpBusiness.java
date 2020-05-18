@@ -9,7 +9,7 @@ import com.jfinal.plugin.activerecord.Model;
 @SuppressWarnings("serial")
 public abstract class BasePmpBusiness<M extends BasePmpBusiness<M>> extends Model<M> implements IBean {
 
-    public void setContractType(java.lang.Long businessId) {
+    public void setBusinessId(java.lang.Long businessId) {
         set("business_Id", businessId);
     }
 
@@ -25,7 +25,7 @@ public abstract class BasePmpBusiness<M extends BasePmpBusiness<M>> extends Mode
         return getLong("object_id");
     }
 
-    public void setObjectTypee(java.lang.Integer objectType) {
+    public void setObjectType(java.lang.Integer objectType) {
         set("object_type", objectType);
     }
 
