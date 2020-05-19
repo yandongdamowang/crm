@@ -15,6 +15,7 @@ import com.linksame.crm.erp.pmp.common.PmpInterface;
 import com.linksame.crm.erp.pmp.entity.PmpContract;
 import com.linksame.crm.erp.pmp.entity.PmpContractPayment;
 import com.linksame.crm.erp.pmp.entity.PmpContractPaymentRecord;
+import com.linksame.crm.erp.work.entity.Task;
 import com.linksame.crm.utils.R;
 
 import java.math.BigDecimal;
@@ -246,31 +247,38 @@ public class PmpContractPaymentService {
     }
 
     public R confirmPayment(Long billId) {
-        PmpContractPayment byId = PmpContractPayment.dao.findById(billId);
-        PmpContract byId1 = PmpContract.dao.findById(byId.getContractId());
-        if (byId.getCheckStatus() != 1){
-            return R.error("审批过程中,无法直接付款");
+
+        PmpContractPayment contractPayment = PmpContractPayment.dao.findById(billId);
+//        PmpContract byId1 = PmpContract.dao.findById(byId.getContractId());
+//        if (byId.getCheckStatus() != 1){
+//            return R.error("审批过程中,无法直接付款");
+//        }
+        Integer paymentClause = contractPayment.getPaymentClause();
+        Task byId = Task.dao.findById(paymentClause);
+        if (byId.getStatus() != 5){
+            return R.error("有任务未完成,请完成任务后付款,或者申请付款!");
         }
-        byId.setPracticalMoney(byId.getMoney());
-        byId.setTradeStatus(PmpInterface.contractPayment.trade.stats.OK);
-        byId.setPracticalCostPercentage(byId.getCostPercentage());
+        contractPayment.setPracticalMoney(contractPayment.getMoney());
+        contractPayment.setTradeStatus(PmpInterface.contractPayment.trade.stats.OK);
+        contractPayment.setPracticalCostPercentage(contractPayment.getCostPercentage());
+        contractPayment.update();
         PmpContractPaymentRecord pmpContractPaymentRecord = new PmpContractPaymentRecord();
-        pmpContractPaymentRecord.setPaymentClause(byId.getPaymentName());
-        pmpContractPaymentRecord.setCustomerid(byId1.getCustomerId());
-        pmpContractPaymentRecord.setContractId(byId.getContractId());
-        pmpContractPaymentRecord.setAdvanceRatio(byId.getCostPercentage());
-        pmpContractPaymentRecord.setAmountAdvanced(byId.getMoney());
-        pmpContractPaymentRecord.setPracticaAdvanced(byId.getMoney());
-        pmpContractPaymentRecord.setPracticalRatio(byId.getCostPercentage());
-        pmpContractPaymentRecord.setPaymentTime(new Date(System.currentTimeMillis()));
-        pmpContractPaymentRecord.setPaymentType("支付宝");
-        pmpContractPaymentRecord.setResponsiblePerson("经办人");
-        pmpContractPaymentRecord.setRemark(byId.getRemark());
-        pmpContractPaymentRecord.setUpdateTime(new Date(System.currentTimeMillis()));
-        pmpContractPaymentRecord.setCreateTime(new Date(System.currentTimeMillis()));
-        pmpContractPaymentRecord.setPlannedPaymentTime(byId.getPaymentNode());
-        pmpContractPaymentRecord.setDeduction(byId.getPracticalMoney().subtract(byId.getMoney()));
-        pmpContractPaymentRecord.setBatchId(IdUtil.simpleUUID());
+        pmpContractPaymentRecord.setPaymentClause(contractPayment.getPaymentName());//款项名称
+        pmpContractPaymentRecord.setCustomerId(contractPayment.getCustomerId()); //供应商
+        pmpContractPaymentRecord.setContractId(contractPayment.getContractId());//合同
+        pmpContractPaymentRecord.setAdvanceRatio(contractPayment.getCostPercentage());//预付款比例
+        pmpContractPaymentRecord.setAmountAdvanced(contractPayment.getMoney());//预付款金额
+        pmpContractPaymentRecord.setPracticaAdvanced(contractPayment.getMoney());//实际付款金额
+        pmpContractPaymentRecord.setPracticalRatio(contractPayment.getCostPercentage());//实际付款比例
+        pmpContractPaymentRecord.setPaymentTime(new Date(System.currentTimeMillis()));//付款时间
+        pmpContractPaymentRecord.setPaymentType("支付宝");//付款方式
+        pmpContractPaymentRecord.setResponsiblePerson("经办人");//经办人/负责人
+        pmpContractPaymentRecord.setRemark(contractPayment.getRemark());//备注
+        pmpContractPaymentRecord.setUpdateTime(new Date(System.currentTimeMillis()));//更新时间
+        pmpContractPaymentRecord.setCreateTime(new Date(System.currentTimeMillis()));//创建时间
+        pmpContractPaymentRecord.setPlannedPaymentTime(contractPayment.getPaymentNode());//计划付款时间
+        pmpContractPaymentRecord.setDeduction(contractPayment.getPracticalMoney().subtract(contractPayment.getMoney()));//扣款金额
+        pmpContractPaymentRecord.setBatchId(IdUtil.simpleUUID());//批次ID
         pmpContractPaymentRecord.save();
         return R.ok();
     }
