@@ -230,4 +230,19 @@ public abstract class BasePmpContractPayment<M extends BasePmpContractPayment<M>
         return getLong("cardinal_number_id");
     }
 
+    public void setRoUserId(String roUserId) {
+        set("ro_user_id", roUserId);
+    }
+
+    public String getRoUserId() {
+        return getStr("ro_user_id");
+    }
+
+    public void setRwUserId(String rwUserId) {
+        set("rw_user_id", rwUserId);
+    }
+
+    public String getRwUserId() {
+        return getStr("rw_user_id");
+    }
 }
