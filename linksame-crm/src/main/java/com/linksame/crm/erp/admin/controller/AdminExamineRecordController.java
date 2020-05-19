@@ -65,7 +65,7 @@ public class AdminExamineRecordController extends Controller {
             auth = AuthUtil.isCrmAuth(CrmEnum.CRM_CONTRACT,id);
         }else {
             id = Db.queryInt("select bill_id from `pmp_contract_payment` where examine_record_id = ?",recordId);
-            auth = AuthUtil.isCrmAuth(CrmEnum.CRM_RECEIVABLES,id);
+            auth = AuthUtil.isCrmAuth(CrmEnum.PMP_PAYMENT,id);
         }
         return auth;
     }

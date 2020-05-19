@@ -2,11 +2,13 @@ package com.linksame.crm.erp.pmp.service;
 
 import cn.hutool.core.util.IdUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.jfinal.aop.Before;
 import com.jfinal.aop.Inject;
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
+import com.jfinal.plugin.activerecord.tx.Tx;
 import com.linksame.crm.common.config.paragetter.BasePageRequest;
 import com.linksame.crm.erp.admin.service.AdminExamineRecordService;
 import com.linksame.crm.erp.crm.common.CrmEnum;
@@ -33,6 +35,8 @@ import java.util.stream.Collectors;
  **/
 public class PmpContractPaymentService {
 
+    @Inject
+    private AdminExamineRecordService examineRecordService;
 
     @Inject
     private CrmRecordService crmRecordService;
@@ -281,5 +285,25 @@ public class PmpContractPaymentService {
         pmpContractPaymentRecord.setBatchId(IdUtil.simpleUUID());//批次ID
         pmpContractPaymentRecord.save();
         return R.ok();
+    }
+
+    @Before(Tx.class)
+    public R requestPayment(PmpContractPayment pmpContractPayment, Long checkUserId) {
+        Map<String, Integer> map = examineRecordService.saveExamineRecord(2, checkUserId, pmpContractPayment.getOwnerUserId(), null, null);
+        if (map.get("status") == 0) {
+            R.error("没有启动的审核步骤，不能添加！");
+        } else {
+            pmpContractPayment.setExamineRecordId(map.get("id"));
+        }
+        if (pmpContractPayment.getCheckStatus() != null && pmpContractPayment.getCheckStatus() == 5) {
+            pmpContractPayment.setCheckStatus(5);
+        } else {
+            pmpContractPayment.setCheckStatus(3);
+        }
+//        crmRecordService.updateRecord(new PmpContractPayment().dao().findById(pmpContractPayment.getBillId()), pmpContractPayment, CrmEnum.PMP_PAYMENT);
+
+        pmpContractPayment.setUpdateTime(new Date(System.currentTimeMillis()));
+        boolean update = pmpContractPayment.update();
+        return update ?R.ok(map.get("id").toString()):R.error();
     }
 }
