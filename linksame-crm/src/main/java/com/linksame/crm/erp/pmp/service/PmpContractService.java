@@ -77,6 +77,7 @@ public class PmpContractService {
             BigDecimal paymentMoney1 = new BigDecimal(0);
             Map<Integer, Integer> taskMap = new HashMap<>();
             tasks.forEach(task -> {
+                task.setTaskId(null);
                 R r = taskService.setTask(task, null);
                 Kv data = (Kv)r.get("data");
                 Integer taskId = data.getInt("task_id");
