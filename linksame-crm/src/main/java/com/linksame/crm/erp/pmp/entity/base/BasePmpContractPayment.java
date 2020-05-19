@@ -30,6 +30,14 @@ public abstract class BasePmpContractPayment<M extends BasePmpContractPayment<M>
         return getLong("contract_id");
     }
 
+    public void setCustomerId(java.lang.Integer customerId) {
+        set("customer_id", customerId);
+    }
+
+    public java.lang.Integer getCustomerId() {
+        return getInt("customer_id");
+    }
+
     public void setProjectId(java.lang.Integer projectId) {
         set("project_id", projectId);
     }

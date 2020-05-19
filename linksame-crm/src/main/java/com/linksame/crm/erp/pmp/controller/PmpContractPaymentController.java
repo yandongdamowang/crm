@@ -81,9 +81,9 @@ public class PmpContractPaymentController extends Controller {
         if (pmpContractPayment.getCheckStatus() != null && pmpContractPayment.getCheckStatus() == 5) {
             pmpContractPayment.setCheckStatus(5);
         } else {
-            pmpContractPayment.setCheckStatus(0);
+            pmpContractPayment.setCheckStatus(3);
         }
-        crmRecordService.updateRecord(new PmpContractPayment().dao().findById(pmpContractPayment.getBillId()), pmpContractPayment, CrmEnum.PMP_PAYMENT);
+//        crmRecordService.updateRecord(new PmpContractPayment().dao().findById(pmpContractPayment.getBillId()), pmpContractPayment, CrmEnum.PMP_PAYMENT);
 
         pmpContractPayment.setUpdateTime(new Date(System.currentTimeMillis()));
         boolean update = pmpContractPayment.update();
@@ -150,7 +150,7 @@ public class PmpContractPaymentController extends Controller {
     }
     /**
      *
-     *  付款记录报表
+     *  确认付款
      */
     public void confirmPayment(){
         String rawData = getRawData();
