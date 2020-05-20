@@ -297,7 +297,9 @@ public class WorkService{
             } else {
                 mu.set("contractPayment", new PmpContractPayment());
             }
-
+            //查询前置任务
+            List<Record> relyList = Db.find("select a.* from task a left join task_rely b on a.task_id = b.pre_task_id where b.task_id = ?", mu.getInt("task_id"));
+            mu.set("relyList", relyList);
             List<Record> childList = Db.find("select * from task where pid = ?", mu.getInt("task_id"));
             if(CollectionUtil.isNotEmpty(childList)){
                 mu.set("list", childList);
