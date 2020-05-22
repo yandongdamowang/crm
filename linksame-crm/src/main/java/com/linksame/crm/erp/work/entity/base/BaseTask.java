@@ -226,4 +226,12 @@ public abstract class BaseTask<M extends BaseTask<M>> extends Model<M> implement
 		return getInt("sprint_id");
 	}
 
+	public void setRepeatId(java.lang.Integer repeatId) {
+		set("repeat_id", repeatId);
+	}
+
+	public java.lang.Integer getRepeatId() {
+		return getInt("repeat_id");
+	}
+
 }
