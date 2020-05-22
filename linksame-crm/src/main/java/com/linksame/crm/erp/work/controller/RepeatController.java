@@ -21,9 +21,9 @@ public class RepeatController extends Controller {
      * 设置重复任务
      * @param taskRepeat
      */
-    @NotBlank({"taskId", "repeatType", "repeatInterval"})
+    @NotBlank({"taskId", "repeatType"})
     public void setRepeat(@Para("") TaskRepeat taskRepeat){
-        renderJson(taskRepeatService.setRepeat(taskRepeat));
+        renderJson(taskRepeatService.setRepeat(taskRepeat, getInt("taskId")));
     }
 
 }

@@ -67,12 +67,4 @@ public abstract class BaseTaskRepeat<M extends BaseTaskRepeat<M>> extends Model<
         return getStr("remark");
     }
 
-    public void setTaskId(Integer taskId) {
-        set("task_id", taskId);
-    }
-
-    public Integer getTaskId() {
-        return getInt("task_id");
-    }
-
 }
