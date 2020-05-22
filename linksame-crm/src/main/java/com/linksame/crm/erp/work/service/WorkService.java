@@ -300,6 +300,9 @@ public class WorkService{
             //查询前置任务
             List<Record> relyList = Db.find("select a.* from task a left join task_rely b on a.task_id = b.pre_task_id where b.task_id = ?", mu.getInt("task_id"));
             mu.set("relyList", relyList);
+            //查询重复任务数据
+            Record taskRepeat = Db.findFirst("select a.* from task_repeat a left join task b on a.repeat_id = b.repeat_id where b.task_id = ?", mu.getInt("task_id"));
+            mu.set("taskRepeat", taskRepeat);
             List<Record> childList = Db.find("select * from task where pid = ?", mu.getInt("task_id"));
             if(CollectionUtil.isNotEmpty(childList)){
                 mu.set("list", childList);

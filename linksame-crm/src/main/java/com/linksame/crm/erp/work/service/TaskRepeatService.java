@@ -5,9 +5,6 @@ import com.linksame.crm.erp.work.entity.Task;
 import com.linksame.crm.erp.work.entity.TaskRepeat;
 import com.linksame.crm.utils.DateUtil;
 import com.linksame.crm.utils.R;
-
-import java.lang.reflect.Array;
-import java.text.ParseException;
 import java.util.*;
 
 /**
@@ -21,13 +18,7 @@ public class TaskRepeatService {
      * 设置重复任务
      * @return
      */
-    public R setRepeat(TaskRepeat taskRepeat){
-        //获取任务数据
-        Task task = Task.dao.findById(taskRepeat.getTaskId());
-        if(task.getStartTime() == null){
-            return R.error("任务的开始时间未设置");
-        }
-
+    public R setRepeat(TaskRepeat taskRepeat, Integer taskId){
         //当类型为1,2,3时, 重复间隔不允许为空
         if(taskRepeat.getRepeatType() == 1 || taskRepeat.getRepeatType() == 2 || taskRepeat.getRepeatType() == 3){
             if(taskRepeat.getRepeatInterval() == null){
@@ -35,9 +26,14 @@ public class TaskRepeatService {
             }
         }
 
+        Integer Interval = 0;
+        //间隔初始化
+        if(taskRepeat.getRepeatInterval() != null){
+            Interval = taskRepeat.getRepeatInterval();
+        }
+
         if(taskRepeat.getRepeatType() == 1){    //按天
-            //间隔
-            taskRepeat.setRemark("间隔 " + taskRepeat.getRepeatInterval() + " 天, 进行重复");
+            taskRepeat.setRemark("间隔 " + Interval + " 天, 进行重复");
         } else if(taskRepeat.getRepeatType() == 2){     //按周
             //解析重复值, 数组字符串
             if(StringUtils.isEmpty(taskRepeat.getRepeatAttr())){
@@ -73,8 +69,7 @@ public class TaskRepeatService {
                     cnList.add("周日");
                 }
             }
-            //间隔
-            taskRepeat.setRemark("间隔" + taskRepeat.getRepeatInterval() + "周, " + "每" + cnList.toString() + "重复");
+            taskRepeat.setRemark("间隔" + Interval + "周, " + "每" + cnList.toString() + "重复");
         } else if(taskRepeat.getRepeatType() == 3){     //按月
             //解析重复值, 数组字符串
             if(StringUtils.isEmpty(taskRepeat.getRepeatAttr())){
@@ -85,8 +80,9 @@ public class TaskRepeatService {
             for(String attr : repeatAttr){
                 repeatDateList.add(attr);
             }
-            //间隔
-            taskRepeat.setRemark("间隔" + taskRepeat.getRepeatInterval() + "月, " + "每月" + repeatDateList.toString() + "日重复");
+            taskRepeat.setRemark("间隔" + Interval + "月, " + "每月" + repeatDateList.toString() + "日重复");
+        } else {
+            taskRepeat.setRemark("不重复");
         }
 
         //存储
@@ -97,6 +93,14 @@ public class TaskRepeatService {
             taskRepeat.setUpdateTime(new Date());
             taskRepeat.update();
         }
+
+        //获取任务数据, 新增重复任务关联
+        Task task = Task.dao.findById(taskId);
+        if(task == null){
+            return R.error("任务不存在");
+        }
+        task.setRepeatId(taskRepeat.getRepeatId());
+        task.update();
 
         return R.ok().put("repeatId", taskRepeat.getRepeatId());
     }

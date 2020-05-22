@@ -113,7 +113,6 @@ public class TaskService{
                     if(newTask == null){
                         return R.error("原任务数据不存在");
                     }
-
                     //获取重复任务
                     TaskRepeat taskRepeat = TaskRepeat.dao.findById(newTask.getRepeatId());
                     if(taskRepeat != null){
@@ -384,6 +383,8 @@ public class TaskService{
         List<Record> rearList = Db.find("select b.* from task_rely as a inner join task as b on a.task_id = b.task_id where a.pre_task_id = ?", taskId);
         //组装通用标签数据
         List<Record> commonLabelList = Db.find("select label_id,name as labelName,color from work_task_label where is_common = 1");
+        //组装重复任务数据
+        Record taskRepeat = Db.findFirst("select a.* from task_repeat a left join task b on a.repeat_id = b.repeat_id where b.task_id = ?", taskId);
 
         task.set("customerList", customerList)
                 .set("contactsList", contactsList)
@@ -393,7 +394,8 @@ public class TaskService{
                 .set("rearTaskList", rearList)
                 .set("commonLabelList", commonLabelList)
                 .set("labelList", labelList)
-                .set("ownerUserList", ownerUserList);
+                .set("ownerUserList", ownerUserList)
+                .set("taskRepeat", taskRepeat);
 
         return task;
     }
