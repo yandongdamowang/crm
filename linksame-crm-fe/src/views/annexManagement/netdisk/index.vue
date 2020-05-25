@@ -36,7 +36,7 @@
               :data="folderListData"
               :props="defaultProps"
               :filter-node-method="filterNode"
-              :default-expand-all="showTree"
+              :default-expand-all="true"
               class="filter-tree"
               @node-click="handleNodeClick"
               @node-contextmenu="handleContextmenu"
@@ -488,7 +488,7 @@ export default {
       search: {
         compositionName: ''
       },
-      showTree: false,
+      true: false,
       //   downloadAction: process.env.BASE_API + `/file/downFile?fileId=72`,
       activeName: 'first',
       pageCurrent: 1,
@@ -674,7 +674,7 @@ export default {
 
 
     retriveFolderList(status) {
-      if (status) { this.showTree = status }
+      if (status) { this.true = status }
       this.$request
         .post(`/folder/queryFolder`)
         .then(res => {

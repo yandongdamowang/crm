@@ -50,10 +50,10 @@
       <el-dialog :visible.sync="dialogCreate" title="新建类型" width="30%">
         <el-form ref="form" :model="form" label-width="80px">
           <el-form-item label="标签名称：">
-            <el-input v-model="form.typeName" placeholder="请输入文件类型" style="width:200px" />
+            <el-input v-model="form.typeName" placeholder="请输入" style="width:200px" />
           </el-form-item>
           <el-form-item label="标签颜色：">
-            <el-input v-model="form.typeCode" placeholder="请输入文件 Code" style="width:200px" />
+            <el-input v-model="form.typeCode" placeholder="请输入" style="width:200px" />
           </el-form-item>
         </el-form>
 

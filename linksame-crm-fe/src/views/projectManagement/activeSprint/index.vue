@@ -86,35 +86,35 @@
             <!-- justify="space-between" -->
             <el-row type="flex">
               <el-col :span="4" class="crm-doing-col">
-                <div class="crm-doing-header">Draggable 1</div>
-                <draggable :list="list1" class="list-group" group="people" @change="log">
+                <div class="crm-doing-header">未开始</div>
+                <draggable :list="notStarted" class="list-group" group="people" @change="log">
                   <div
-                    v-for="(element, index) in list1"
-                    :key="element.name"
+                    v-for="(element, index) in notStarted"
+                    :key="index"
                     class="crm-list-group-item"
-                  >{{ element.name }} {{ index }}</div>
+                  >{{ element.name }}</div>
                 </draggable>
               </el-col>
 
               <el-col :span="4" class="crm-doing-col">
-                <div class="crm-doing-header">Draggable 1</div>
-                <draggable :list="list2" class="list-group" group="people" @change="log">
+                <div class="crm-doing-header">进行中</div>
+                <draggable :list="processing" class="list-group" group="people" @change="log">
                   <div
-                    v-for="(element, index) in list2"
-                    :key="element.name"
+                    v-for="(element, index) in processing"
+                    :key="index"
                     class="crm-list-group-item"
-                  >{{ element.name }} {{ index }}</div>
+                  >{{ element.name }}</div>
                 </draggable>
               </el-col>
 
               <el-col :span="4" class="crm-doing-col">
-                <div class="crm-doing-header">Draggable 1</div>
-                <draggable :list="list3" class="list-group" group="people" @change="log">
+                <div class="crm-doing-header">已完成</div>
+                <draggable :list="completed" class="list-group" group="people" @change="log">
                   <div
-                    v-for="(element, index) in list3"
-                    :key="element.name"
+                    v-for="(element, index) in completed"
+                    :key="index"
                     class="crm-list-group-item"
-                  >{{ element.name }} {{ index }}</div>
+                  >{{ element.name }}</div>
                 </draggable>
               </el-col>
             </el-row>
@@ -229,6 +229,8 @@ import echarts from 'echarts'
 
 import draggable from 'vuedraggable'
 
+
+
 export default {
   name: 'App',
   components: {
@@ -255,23 +257,12 @@ export default {
         startTime: '',
         endTime: ''
       },
-      list1: [
-        { name: 'John', id: 1 },
-        { name: 'Joao', id: 2 },
-        { name: 'Jean', id: 3 },
-        { name: 'Gerard', id: 4 }
-      ],
-      list2: [
-        { name: 'Juan', id: 5 },
-        { name: 'Edgard', id: 6 },
-        { name: 'Johnson', id: 7 }
-      ],
-      list3: [
-        { name: 'Juan', id: 5 },
-        { name: 'Edgard', id: 6 },
-        { name: 'Johnson', id: 7 }
-      ]
+      notStartedList: [
 
+      ],
+      processingList: [
+      ],
+      completedList: []
     }
   },
 
@@ -293,6 +284,7 @@ export default {
   mounted() {
     this.retriveTaskSprintList()
     this.retriveActiveList()
+    this.retriveActiving()
     this.initAxisBurndown()
   },
 
@@ -318,10 +310,6 @@ export default {
 
 
 
-
-
-
-
     format(percentage) {
       const currentTime = moment(moment().format('YYYY-MM-DD HH:mm:ss')).diff(moment(this.activeSprint.endTime), 'days')
       const fullTime = moment(this.activeSprint.endTime).diff(moment(this.activeSprint.endTime), 'days')
@@ -333,6 +321,20 @@ export default {
         return `剩余 ${currentTime / fullTime} 天`
       }
     },
+
+    retriveActiving() {
+      this.$request
+        .post(`/taskSprint/queryCountAndTask`)
+        .then(res => {
+          console.log('进行中的冲刺', res)
+          this.notStarted = res.data.notStarted.notStartedList
+          this.processing = res.data.processing.processingList
+          this.completed = res.data.completed.completedList
+        }).catch(e => {
+          console.log(e)
+        })
+    },
+
 
 
     retriveTaskSprintList() {
@@ -466,7 +468,7 @@ export default {
 
     initAxis() {
       this.$request
-        .post(`/taskSprint/queryCount`)
+        .post(`/taskSprint/queryCountAndTask`)
         .then(res => {
           //   第一个就是待处理  第二个就是处理中  第三个是已完成
           console.log('任务个数', res)
@@ -502,9 +504,9 @@ export default {
                   show: false
                 },
                 data: [
-                  { value: res.data[0] == undefined ? 0 : res.data[0].taskCount, name: '待开始' },
-                  { value: res.data[1] == undefined ? 0 : res.data[1].taskCount, name: '进行中' },
-                  { value: res.data[2] == undefined ? 0 : res.data[2].taskCount, name: '已完成' }
+                  { value: res.data.notStarted.notStartedCount, name: '待开始' },
+                  { value: res.data.processing.processingList, name: '进行中' },
+                  { value: res.data.completed.completedCount, name: '已完成' }
                 ]
               }
             ]
@@ -733,7 +735,7 @@ export default {
 }
 
 .crm-doing {
-  //   width: 100%;
+  width: 100%;
   max-height: 100%;
   padding: 10px;
   vertical-align: top;
@@ -743,27 +745,27 @@ export default {
   position: relative;
 }
 .crm-doing-col {
-  border: 1px solid red;
-  margin: 20px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  margin: 0 20px 0 0px;
+  width: 250px;
 }
 .crm-list-group-item {
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-  padding: 10px 35px 0 10px;
-  margin-bottom: 10px;
-  margin-top: 1px;
-  margin-left: 1px;
+  padding: 50px 8px 0 10px;
+  margin: 10px 10px 10px 10px;
+  /* margin-bottom: 10px; */
+  /* margin-top: 1px; */
+  /* margin-left: 1px; */
+  height: 100px;
   border-radius: 3px;
   border-left: 2px solid transparent;
   cursor: pointer;
   overflow: hidden;
   position: relative;
-  //   width: 100%;
-  //   height: 100px;
-  //   border: 1px solid red;
-  //   margin: 20px;
 }
 .crm-doing-header {
-  padding: 10px 3px 17px 3px;
+  padding: 20px 0px 15px 15px;
   color: #333;
+  font-size: 18px;
 }
 </style>
