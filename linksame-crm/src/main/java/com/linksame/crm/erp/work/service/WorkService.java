@@ -201,7 +201,8 @@ public class WorkService{
 
         finalClassList.forEach(workClass -> {
             //查询条件设置(项目id,截止时间状态,负责人id,标签id,任务分类id)
-            Kv kv = Kv.by("workId", workId).set("stopTimeType", jsonObject.getInteger("stopTimeType"))
+            Kv kv = Kv.by("workId", workId)
+                    .set("stopTimeType", jsonObject.getInteger("stopTimeType"))
                     .set("userIds", jsonObject.getJSONArray("mainUserId"))
                     .set("labelIds", jsonObject.getJSONArray("labelId"))
                     .set("classId", workClass.getInt("classId"));

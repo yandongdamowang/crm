@@ -28,6 +28,7 @@ import live.autu.plugin.jfinal.swagger.annotation.ApiImplicitParams;
 import live.autu.plugin.jfinal.swagger.annotation.ApiOperation;
 import live.autu.plugin.jfinal.swagger.config.RequestMethod;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -253,5 +254,15 @@ public class TaskController extends Controller{
     })
     public void queryList(BasePageRequest<Task> basePageRequest){
         renderJson(taskService.queryList(basePageRequest));
+    }
+
+    /**
+     * 根据通用标签查询任务列表 ---- 周报
+     */
+    public void getWeekly(){
+        Integer workId = getInt("workId");
+        Date startTime = getDate("startTime");
+        Date stopTime = getDate("stopTime");
+        renderJson(taskService.getWeekly(workId, startTime, stopTime));
     }
 }

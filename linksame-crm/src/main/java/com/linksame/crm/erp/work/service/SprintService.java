@@ -217,21 +217,21 @@ public class SprintService {
         Record record = new Record();
         //组装未完成数据
         Integer notStartedCount = Db.queryInt("select count(*) from task a left join task_sprint b on a.sprint_id = b.sprint_id where a.`status` = 0 and a.ishidden = 0");
-        List<Record> notStartedList = Db.find("select a.* from task a left join task_sprint b on a.sprint_id = b.sprint_id where a.`status` = 0 and a.ishidden = 0");
+        List<Record> notStartedList = Db.find("select a.* from task a left join task_sprint b on a.sprint_id = b.sprint_id where b.`status` = 0 and b.is_del = 0 and a.ishidden = 0");
         Record notStarted = new Record();
         notStarted.set("notStartedCount", notStartedCount);
         notStarted.set("notStartedList", notStartedList);
         record.set("notStarted", notStarted);
         //组装进行中数据
         Integer processingCount = Db.queryInt("select count(*) from task a left join task_sprint b on a.sprint_id = b.sprint_id where a.`status` = 1 and a.ishidden = 0");
-        List<Record> processingList = Db.find("select a.* from task a left join task_sprint b on a.sprint_id = b.sprint_id where a.`status` = 1 and a.ishidden = 0");
+        List<Record> processingList = Db.find("select a.* from task a left join task_sprint b on a.sprint_id = b.sprint_id where b.`status` = 1 and b.is_del = 0 and a.ishidden = 0");
         Record processing = new Record();
         processing.set("processingCount", processingCount);
         processing.set("processingList", processingList);
         record.set("processing", processing);
         //组装已完成数据
         Integer completedCount = Db.queryInt("select count(*) from task a left join task_sprint b on a.sprint_id = b.sprint_id where a.`status` = 5 and a.ishidden = 0");
-        List<Record> completedList = Db.find("select a.* from task a left join task_sprint b on a.sprint_id = b.sprint_id where a.`status` = 5 and a.ishidden = 0");
+        List<Record> completedList = Db.find("select a.* from task a left join task_sprint b on a.sprint_id = b.sprint_id where b.`status` = 2 and b.is_del = 0 and a.ishidden = 0");
         Record completed = new Record();
         completed.set("completedCount", completedCount);
         completed.set("completedList", completedList);
