@@ -64,8 +64,8 @@ public class PmpContractController extends Controller {
                 System.out.println(task);
                 JSONObject jsonObject1 = JSON.parseObject(o.toString());
                 if (jsonObject1.get("task") != null) {
-                    List<Task> taskss = JSON.parseObject(jsonObject1.get("task").toString(), List.class);
-                    task.setTasks(taskss);
+                    List<Object> task1 = JSON.parseObject(jsonObject1.get("task").toString(), List.class);
+                    task.setTasks(task1);
                 }
                 tasklists.add(task);
             }

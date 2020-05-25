@@ -10,13 +10,13 @@ import java.util.List;
 @SuppressWarnings("serial")
 public class Task extends BaseTask<Task> {
 	public static final Task dao = new Task().dao();
-	private List<Task>  Tasks;
+	private List<Object>  Tasks;
 
-	public List<Task> getTasks() {
+	public List<Object> getTasks() {
 		return Tasks;
 	}
 
-	public void setTasks(List<Task> tasks) {
+	public void setTasks(List<Object> tasks) {
 		Tasks = tasks;
 	}
 }

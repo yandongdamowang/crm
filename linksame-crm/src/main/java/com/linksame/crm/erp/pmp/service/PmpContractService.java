@@ -76,26 +76,32 @@ public class PmpContractService {
             }
             BigDecimal paymentMoney1 = new BigDecimal(0);
             Map<Integer, Integer> taskMap = new HashMap<>();
-            tasks.forEach(task -> {
+            for (Task task : tasks) {
                 task.setTaskId(null);
+                if (task.getMainUserId() == null || task.getName() == null || task.getStartTime() == null){
+                    continue;
+                }
                 R r = taskService.setTask(task, null);
-                Kv data = (Kv)r.get("data");
+                Kv data = (Kv) r.get("data");
                 Integer taskId = data.getInt("task_id");
                 task.setTaskId(taskId);
-                task.getTasks().forEach(task1 -> {
+                List<Object> tasks1 = task.getTasks();
+                for (Object task1 : tasks1) {
+                    Task task2 = JSONObject.parseObject(task1.toString(), task.getClass());
+                    task2.setPid(taskId);
                     Integer taskIdOl = null;
-                    if (task1.getTaskId() != null){
-                        taskIdOl = task1.getTaskId();
-                        task1.setTaskId(null);
+                    if (task2.getTaskId() != null) {
+                        taskIdOl = task2.getTaskId();
+                        task2.setTaskId(null);
                     }
-                    R rs = taskService.setTask(task1, null);
-                    Kv datas = (Kv)rs.get("data");
+                    R rs = taskService.setTask(task2, null);
+                    Kv datas = (Kv) rs.get("data");
                     Integer taskIds = datas.getInt("task_id");
-                    if (taskIdOl != null){
-                        taskMap.put(taskIdOl,taskIds);
+                    if (taskIdOl != null) {
+                        taskMap.put(taskIdOl, taskIds);
                     }
-                });
-            });
+                }
+            }
             //保存账单
             for (PmpContractPayment pmpContractPayment : pmpContractPayments) {
                 Long cardinalNumberId = pmpContractPayment.getCardinalNumberId();
@@ -103,7 +109,7 @@ public class PmpContractService {
                 pmpContractPayment.getPaymentClause();//"+++++++++";
                 pmpContractPayment.setContractId(contractId);
                 pmpContractPayment.setProjectId(pmpContract.getProjectId());
-                paymentMoney1.add(pmpContractPayment.getMoney());
+                paymentMoney1 = paymentMoney1.add(pmpContractPayment.getMoney());
                 pmpContractPayment.setCreationTime(new Date(System.currentTimeMillis()));
                 pmpContractPayment.setUpdateTime(new Date(System.currentTimeMillis()));
                 pmpContractPayment.setTradeForm(PmpInterface.contractPayment.trade.form.EXPENF);
@@ -112,7 +118,8 @@ public class PmpContractService {
                 pmpContractPayment.setPracticalMoney(new BigDecimal(0));
                 pmpContractPayment.setOwnerUserId(pmpContract.getOwnerUserId());
                 pmpContractPayment.setCardinalNumberId(aLong);
-                pmpContractPayment.setPaymentClause(taskMap.get(pmpContractPayment.getPaymentClause()));
+                Integer integer = taskMap.get(pmpContractPayment.getPaymentClause());
+                pmpContractPayment.setPaymentClause(integer);
                 pmpContractPayment.save();
                 Long billId = pmpContractPayment.getLong("bill_id");
                 crmRecordService.addRecord(billId.intValue()  , CrmEnum.PMP_PAYMENT);
