@@ -81,15 +81,55 @@
             </el-collapse-item>
           </el-collapse>
         </el-tab-pane>
-        <el-tab-pane label="进行中的冲刺" name="second">进行中的冲刺</el-tab-pane>
+        <el-tab-pane label="进行中的冲刺" name="second">
+          <div class="crm-doing">
+            <!-- justify="space-between" -->
+            <el-row type="flex">
+              <el-col :span="4" class="crm-doing-col">
+                <div class="crm-doing-header">Draggable 1</div>
+                <draggable :list="list1" class="list-group" group="people" @change="log">
+                  <div
+                    v-for="(element, index) in list1"
+                    :key="element.name"
+                    class="crm-list-group-item"
+                  >{{ element.name }} {{ index }}</div>
+                </draggable>
+              </el-col>
+
+              <el-col :span="4" class="crm-doing-col">
+                <div class="crm-doing-header">Draggable 1</div>
+                <draggable :list="list2" class="list-group" group="people" @change="log">
+                  <div
+                    v-for="(element, index) in list2"
+                    :key="element.name"
+                    class="crm-list-group-item"
+                  >{{ element.name }} {{ index }}</div>
+                </draggable>
+              </el-col>
+
+              <el-col :span="4" class="crm-doing-col">
+                <div class="crm-doing-header">Draggable 1</div>
+                <draggable :list="list3" class="list-group" group="people" @change="log">
+                  <div
+                    v-for="(element, index) in list3"
+                    :key="element.name"
+                    class="crm-list-group-item"
+                  >{{ element.name }} {{ index }}</div>
+                </draggable>
+              </el-col>
+            </el-row>
+          </div>
+        </el-tab-pane>
 
         <el-tab-pane label="冲刺统计" name="third">
           <el-row :gutter="12">
             <el-col :span="8">
               <el-card shadow="hover" style="height:300px">
                 <div slot="header">
-                  <span>活跃的冲刺</span>
+                  <!-- <span>活跃的冲刺</span> -->
+                  <span>{{ activeSprint.name }}</span>
                 </div>
+                <!-- <div style="margin: 0 0 10px 0">冲刺任务: {{ activeSprint.name }}</div> -->
                 <div style="margin: 0 0 10px 0">参与人</div>
                 <el-avatar
                   v-for="(itemUser,index) in activeSprint.mainUserList"
@@ -99,8 +139,8 @@
                 >
                   <span style="font-size:10px">{{ itemUser.realname }}</span>
                 </el-avatar>
-                <div style="margin: 10px 0">共 24 个任务</div>
-                <div style="margin: 10px 0; font-weight:600">冲刺目标: {{ activeSprint.name }}</div>
+                <div style="margin: 10px 0">共 {{ activeSprint.taskCount }} 个任务</div>
+                <div style="margin: 10px 0; font-weight:600">冲刺目标: {{ activeSprint.aimsName }}</div>
                 <el-tag
                   type="info"
                   style="margin: 10px 0"
@@ -126,7 +166,10 @@
                 <div slot="header">
                   <span>距离冲刺结束</span>
                 </div>
-                <div id="axismainOver" style="width: 500px;height:200px;" />
+                <!-- <div id="axismainOver" style="width: 500px;height:200px;" /> -->
+                <div style="margin:40px 0 0 130px">
+                  <el-progress :percentage="25" :format="format" type="circle" />
+                </div>
               </el-card>
             </el-col>
           </el-row>
@@ -181,13 +224,15 @@
 
 <script>
 
-
+import moment from 'moment'
 import echarts from 'echarts'
+
+import draggable from 'vuedraggable'
 
 export default {
   name: 'App',
   components: {
-
+    draggable
 
   },
 
@@ -209,8 +254,24 @@ export default {
         name: '',
         startTime: '',
         endTime: ''
-      }
-    //   taskListData: {}
+      },
+      list1: [
+        { name: 'John', id: 1 },
+        { name: 'Joao', id: 2 },
+        { name: 'Jean', id: 3 },
+        { name: 'Gerard', id: 4 }
+      ],
+      list2: [
+        { name: 'Juan', id: 5 },
+        { name: 'Edgard', id: 6 },
+        { name: 'Johnson', id: 7 }
+      ],
+      list3: [
+        { name: 'Juan', id: 5 },
+        { name: 'Edgard', id: 6 },
+        { name: 'Johnson', id: 7 }
+      ]
+
     }
   },
 
@@ -237,6 +298,42 @@ export default {
 
 
   methods: {
+
+
+    add: function() {
+      this.list.push({ name: 'Juan' })
+    },
+    replace: function() {
+      this.list = [{ name: 'Edgard' }]
+    },
+    clone: function(el) {
+      return {
+        name: el.name + ' cloned'
+      }
+    },
+    log: function(evt) {
+      window.console.log(evt)
+    },
+
+
+
+
+
+
+
+
+    format(percentage) {
+      const currentTime = moment(moment().format('YYYY-MM-DD HH:mm:ss')).diff(moment(this.activeSprint.endTime), 'days')
+      const fullTime = moment(this.activeSprint.endTime).diff(moment(this.activeSprint.endTime), 'days')
+      console.log('距离时间', currentTime)
+      console.log('总时间', fullTime)
+      if (fullTime == 0) {
+        return `剩余 ${0} 天`
+      } else {
+        return `剩余 ${currentTime / fullTime} 天`
+      }
+    },
+
 
     retriveTaskSprintList() {
       const data = []
@@ -270,6 +367,7 @@ export default {
       this.retriveTaskSprintList()
       this.retriveActiveList()
       this.initAxis()
+    //   this.initAxisOver()
     },
 
     handleStartActive(sprintId) {
@@ -368,7 +466,7 @@ export default {
 
     initAxis() {
       this.$request
-        .post(`/taskSprint/qeuryCount`)
+        .post(`/taskSprint/queryCount`)
         .then(res => {
           //   第一个就是待处理  第二个就是处理中  第三个是已完成
           console.log('任务个数', res)
@@ -421,182 +519,134 @@ export default {
         })
     },
 
-    initAxisEnd() {
-      console.log('initAxis', this.echartXData)
-      //   console.log('initAxis', this.echartPrepaymentItemData)
-      var axisChart = echarts.init(document.getElementById('axismain'))
-      var option = {
-        tooltip: {
-          trigger: 'item',
-          formatter: '{a} <br/>{b}: {c} ({d}%)'
-        },
-        legend: {
-          orient: 'vertical',
-          left: 10,
-          data: ['待开始', '进行中', '已完成']
-        },
-        series: [
-          {
-            name: '任务状态',
-            type: 'pie',
-            radius: ['50%', '70%'],
-            avoidLabelOverlap: false,
-            label: {
-              show: false,
-              position: 'center'
-            },
-            emphasis: {
-              label: {
-                show: true,
-                fontSize: '24',
-                fontWeight: 'bold'
-              }
-            },
-            labelLine: {
-              show: false
-            },
-            data: [
-              { value: 335, name: '待开始' },
-              { value: 310, name: '进行中' },
-              { value: 234, name: '已完成' }
-            ]
-          }
-        ]
-      }
-
-
-      axisChart.setOption(option, true)
-      this.axisOption = option
-      this.axisChart = axisChart
-    },
 
 
     initAxisBurndown() {
       this.$request
-        .post(`/taskSprint/querySprintInfo？sprintId=1`)
+        .post(`/taskSprint/querySprintInfo?sprintId=1`)
         .then(res => {
-          console.log(res)
-        //   var axisChart = echarts.init(document.getElementById('axismainBurndown'))
-        //   var option = {
-        //     title: {
-        //       // 表格标题
-        //       //   text: '付款金额对比',
-        //       //   // 表格标题
-        //       //   textStyle: {
-        //       //     fontWeight: 'normal',
-        //       //     fontSize: 16
-        //       //   }
-        //     },
-        //     grid: {
-        //       top: '80px',
-        //       left: '10px',
-        //       //   right: '20px',
-        //       bottom: '10px',
-        //       containLabel: true,
-        //       borderColor: 'red'
-        //     },
+          console.log('燃尽图', res)
+          var axisChart = echarts.init(document.getElementById('axismainBurndown'))
+          var option = {
+            title: {
+              // 表格标题
+              //   text: '付款金额对比',
+              //   // 表格标题
+              //   textStyle: {
+              //     fontWeight: 'normal',
+              //     fontSize: 16
+              //   }
+            },
+            grid: {
+              top: '80px',
+              left: '10px',
+              //   right: '20px',
+              bottom: '10px',
+              containLabel: true,
+              borderColor: 'red'
+            },
 
-        //     // 设置折线图颜色
-        //     // color: ['red', 'pink', 'green'],
-        //     tooltip: {
-        //       trigger: 'axis',
-        //       axisPointer: {
-        //         // 坐标轴指示器，鼠标移上去的效果
-        //         // 'line' | 'shadow'
-        //         type: 'shadow'
-        //       }
-        //     },
+            // 设置折线图颜色
+            // color: ['red', 'pink', 'green'],
+            tooltip: {
+              trigger: 'axis',
+              axisPointer: {
+                // 坐标轴指示器，鼠标移上去的效果
+                // 'line' | 'shadow'
+                type: 'shadow'
+              }
+            },
 
-        //     // 设置图例
-        //     legend: {
-        //       // 必须和 series 的 name 一致
-        //       data: ['期望值', '剩余值'],
-        //       // 这个字段控制形状 类型包括 circle，rect ，roundRect，triangle，diamond，pin，arrow，none
-        //       icon: 'circle',
-        //       // 设置宽度
-        //       itemWidth: 10,
-        //       // 设置高度
-        //       itemHeight: 10,
-        //       // 设置间距
-        //       itemGap: 40
-        //     },
-
-
-        //     series: [
-        //       {
-        //         name: '预付款',
-        //         // 图表类型
-        //         // type: 'bar',
-        //         type: 'line',
-        //         yAxisIndex: 0,
-        //         // 设置颜色
-        //         color: '#0097F5',
-        //         // 图表数据
-        //         data: [1, 2, 3, 4, 5, 6]
-        //       },
-        //       {
-        //         name: '付款',
-        //         type: 'line',
-        //         yAxisIndex: 0,
-        //         color: '#52C41A',
-        //         data: [6, 5, 4, 3, 2, 1]
-        //       }
-        //     ],
+            // 设置图例
+            legend: {
+              // 必须和 series 的 name 一致
+              data: ['期望值', '剩余值'],
+              // 这个字段控制形状 类型包括 circle，rect ，roundRect，triangle，diamond，pin，arrow，none
+              icon: 'circle',
+              // 设置宽度
+              itemWidth: 10,
+              // 设置高度
+              itemHeight: 10,
+              // 设置间距
+              itemGap: 40
+            },
 
 
-        //     // X 轴设置
-        //     xAxis: [
-        //       {
-        //         type: 'category',
-        //         name: '时间',
-        //         data: this.echartXData,
-        //         axisTick: {
-        //           alignWithLabel: true,
-        //           lineStyle: { width: 0 }
-        //         },
-        //         axisLabel: {
-        //           color: '#BDBDBD'
-        //         },
-        //         // X 轴的轴线设置
-        //         axisLine: {
-        //           // 设置轴线的颜色
-        //           lineStyle: { color: '#BDBDBD' }
-        //         },
-        //         splitLine: {
-        //           show: false
-        //         }
-        //       }
-        //     ],
-        //     // Y 轴设置
-        //     yAxis: [
-        //       {
-        //         type: 'value',
-        //         // Y 轴的名字
-        //         name: '金额',
-        //         data: [],
-        //         axisTick: {
-        //           alignWithLabel: true,
-        //           lineStyle: { width: 0 }
-        //         },
-        //         axisLabel: {
-        //           color: '#BDBDBD',
-        //           formatter: '{value} 元'
-        //         },
-        //         // Y 轴的轴线设置
-        //         axisLine: {
-        //           lineStyle: { color: '#BDBDBD' }
-        //         },
-        //         splitLine: {
-        //           show: false
-        //         }
-        //       }
-        //     ]
+            series: [
+              {
+                name: '期望值',
+                // 图表类型
+                // type: 'bar',
+                type: 'line',
+                yAxisIndex: 0,
+                // 设置颜色
+                color: '#0097F5',
+                // 图表数据
+                data: res.data.expectList
+              },
+              {
+                name: '剩余值',
+                type: 'line',
+                yAxisIndex: 0,
+                color: '#52C41A',
+                data: res.data.remainingList
+              }
+            ],
 
-        //   }
 
-        //   axisChart.setOption(option, true)
-        //   this.axisOption = option
-        //   this.axisChart = axisChart
+            // X 轴设置
+            xAxis: [
+              {
+                type: 'category',
+                name: '时间',
+                data: res.data.dateList,
+                axisTick: {
+                  alignWithLabel: true,
+                  lineStyle: { width: 0 }
+                },
+                axisLabel: {
+                  color: '#BDBDBD'
+                },
+                // X 轴的轴线设置
+                axisLine: {
+                  // 设置轴线的颜色
+                  lineStyle: { color: '#BDBDBD' }
+                },
+                splitLine: {
+                  show: false
+                }
+              }
+            ],
+            // Y 轴设置
+            yAxis: [
+              {
+                type: 'value',
+                // Y 轴的名字
+                name: '任务数',
+                data: [],
+                axisTick: {
+                  alignWithLabel: true,
+                  lineStyle: { width: 0 }
+                },
+                axisLabel: {
+                  color: '#BDBDBD',
+                  formatter: '{value} 个'
+                },
+                // Y 轴的轴线设置
+                axisLine: {
+                  lineStyle: { color: '#BDBDBD' }
+                },
+                splitLine: {
+                  show: false
+                }
+              }
+            ]
+
+          }
+
+          axisChart.setOption(option, true)
+          this.axisOption = option
+          this.axisChart = axisChart
         }).catch(e => {
           console.log(e)
         })
@@ -632,6 +682,9 @@ export default {
   ul li:hover {
     background-color: #ebeef5;
   }
+}
+/deep/ path {
+  fill: transparent !important;
 }
 
 /deep/.el-tabs__nav-wrap::after {
@@ -677,5 +730,40 @@ export default {
   background: white;
   margin: 10px;
   padding: 20px 20px 20px 30px;
+}
+
+.crm-doing {
+  //   width: 100%;
+  max-height: 100%;
+  padding: 10px;
+  vertical-align: top;
+  border-radius: 4px;
+  background: #fff;
+  margin-right: 14px;
+  position: relative;
+}
+.crm-doing-col {
+  border: 1px solid red;
+  margin: 20px;
+}
+.crm-list-group-item {
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  padding: 10px 35px 0 10px;
+  margin-bottom: 10px;
+  margin-top: 1px;
+  margin-left: 1px;
+  border-radius: 3px;
+  border-left: 2px solid transparent;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  //   width: 100%;
+  //   height: 100px;
+  //   border: 1px solid red;
+  //   margin: 20px;
+}
+.crm-doing-header {
+  padding: 10px 3px 17px 3px;
+  color: #333;
 }
 </style>

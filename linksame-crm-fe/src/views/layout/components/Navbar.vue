@@ -99,13 +99,20 @@ export default {
       //   'bi',
       'manage',
       'oa',
+      'dashboard',
       'project'
     ]),
     items() {
       var tempsItems = []
+      tempsItems.push({
+        title: '总览',
+        type: 9,
+        path: '/dashboard',
+        icon: 'dashboard'
+      })
       if (this.oa) {
         tempsItems.push({
-          title: '办公管理',
+          title: '我的工作',
           type: 0,
           path: '/workbench',
           icon: 'workbench'

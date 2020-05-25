@@ -166,79 +166,10 @@
         </span>
       </el-dialog>
 
-      <el-dialog :visible.sync="dialogCreateStatus" :title="dialogTitle" :width="dialogwidth">
+      <el-dialog :visible.sync="dialogCreateStatus" :title="dialogTitle" fullscreen width="75%">
         <el-divider content-position="left">基本信息</el-divider>
         <el-form ref="form" :model="form" :inline="true" label-width="120px">
           <el-row>
-            <el-col :span="8">
-              <el-form-item label="所属合同类型">
-                <el-select v-model="form.pmpContract.contractType" placeholder="请选合同类型">
-                  <el-option
-                    v-for="(item,index) in contactTypeData"
-                    :key="index"
-                    :label="item.templateName"
-                    :value="item.templateId"
-                  />
-                </el-select>
-              </el-form-item>
-
-              <el-form-item label="合同名称">
-                <el-input v-model="form.pmpContract.contractName" placeholder="请输入合同名称" />
-              </el-form-item>
-
-              <el-form-item label="合同采购时间">
-                <el-date-picker
-                  v-model="form.pmpContract.contractPurchaseStartTime"
-                  type="date"
-                  value-format="yyyy-MM-dd"
-                  placeholder="选择日期"
-                  align="right"
-                />
-              </el-form-item>
-
-              <el-form-item label="合同开始日期">
-                <el-date-picker
-                  v-model="form.pmpContract.beginTime"
-                  type="date"
-                  value-format="yyyy-MM-dd"
-                  placeholder="选择日期"
-                  align="right"
-                />
-              </el-form-item>
-            </el-col>
-
-            <el-col :span="8">
-              <el-form-item label="里程碑">
-                <el-select v-model="form.pmpContract.milestoneNodes" placeholder="请选里程碑">
-                  <el-option
-                    v-for="(item,index) in milestoneData"
-                    :key="index"
-                    :label="item.className"
-                    :value="item.classId"
-                  />
-                </el-select>
-              </el-form-item>
-
-              <el-form-item label="承包商">
-                <el-select v-model="form.pmpContract.customerId" placeholder="请选合同承包商">
-                  <el-option
-                    v-for="(item,index) in customerData"
-                    :key="index"
-                    :label="item.customerName"
-                    :value="item.customerId"
-                  />
-                </el-select>
-              </el-form-item>
-
-              <el-form-item label="DRP采购单号">
-                <el-input v-model="form.pmpContract.drpNumber" placeholder="请输入单号" />
-              </el-form-item>
-
-              <el-form-item label="合同编号">
-                <el-input v-model="form.pmpContract.contractNumber" placeholder="请输入合同编号" />
-              </el-form-item>
-            </el-col>
-
             <el-col :span="8">
               <el-form-item label="选择项目">
                 <el-select
@@ -255,6 +186,54 @@
                 </el-select>
               </el-form-item>
 
+              <el-form-item label="合同类型">
+                <el-select v-model="form.pmpContract.contractType" placeholder="请选合同类型">
+                  <el-option
+                    v-for="(item,index) in contactTypeData"
+                    :key="index"
+                    :label="item.templateName"
+                    :value="item.templateId"
+                  />
+                </el-select>
+              </el-form-item>
+
+              <el-form-item label="合同采购时间">
+                <el-date-picker
+                  v-model="form.pmpContract.contractPurchaseStartTime"
+                  type="date"
+                  value-format="yyyy-MM-dd"
+                  placeholder="选择日期"
+                  align="right"
+                />
+              </el-form-item>
+
+              <el-form-item label="里程碑">
+                <el-select v-model="form.pmpContract.milestoneNodes" placeholder="请选里程碑">
+                  <el-option
+                    v-for="(item,index) in milestoneData"
+                    :key="index"
+                    :label="item.className"
+                    :value="item.classId"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+
+            <el-col :span="8">
+              <el-form-item label="合同名称">
+                <el-input v-model="form.pmpContract.contractName" placeholder="请输入合同名称" />
+              </el-form-item>
+
+              <el-form-item label="合同开始日期">
+                <el-date-picker
+                  v-model="form.pmpContract.beginTime"
+                  type="date"
+                  value-format="yyyy-MM-dd"
+                  placeholder="选择日期"
+                  align="right"
+                />
+              </el-form-item>
+
               <el-form-item label="经办人">
                 <el-select v-model="form.pmpContract.ownerUserId" placeholder="请选合同经办人">
                   <el-option
@@ -264,6 +243,23 @@
                     :value="item.parentId"
                   />
                 </el-select>
+              </el-form-item>
+
+              <el-form-item label="承包商">
+                <el-select v-model="form.pmpContract.customerId" placeholder="请选合同承包商">
+                  <el-option
+                    v-for="(item,index) in customerData"
+                    :key="index"
+                    :label="item.customerName"
+                    :value="item.customerId"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+
+            <el-col :span="8">
+              <el-form-item label="合同编号">
+                <el-input v-model="form.pmpContract.contractNumber" placeholder="请输入合同编号" />
               </el-form-item>
 
               <el-form-item label="合同结束日期">
@@ -276,24 +272,65 @@
                 />
               </el-form-item>
 
-              <el-form-item label="合同金额">
-                <el-input v-model="form.pmpContract.money" placeholder="请输入金额">
-                  <template slot="append">￥</template>
-                </el-input>
+              <el-form-item label="DRP采购单号">
+                <el-input v-model="form.pmpContract.drpNumber" placeholder="请输入单号" />
               </el-form-item>
             </el-col>
           </el-row>
         </el-form>
 
-        <el-divider content-position="left">支付方式</el-divider>
+        <el-divider content-position="left">合同金额</el-divider>
 
-        <!-- <el-button
-          type="primary"
-          circle
-          icon="el-icon-plus"
-          @click="detailpmpContractPayments('add')"
-        />-->
-        <el-button @click="detailpmpContractPayments('add')">增加付款方式</el-button>
+        <el-form ref="form" :model="form" :inline="true" label-width="120px">
+          <el-form-item label="合同总金额">
+            <el-input v-model="form.pmpContract.money" placeholder="请输入金额">
+              <template slot="append">￥</template>
+            </el-input>
+          </el-form-item>
+
+          <el-divider content-position="left">支付基数</el-divider>
+
+          <div v-for="(itemNumber,indexNumber) in form.contractCardinalNumbers" :key="indexNumber">
+            <el-form-item label>
+              <el-input
+                v-model="form.contractCardinalNumbers[indexNumber].cardinalNumberName"
+                placeholder="请输入基数名称"
+                style="width:300px"
+              />
+            </el-form-item>
+
+            <el-form-item label>
+              <el-input
+                v-model="form.contractCardinalNumbers[indexNumber].cardinalNumberMoney"
+                placeholder="请输入基数金额"
+                style="width:300px"
+                @input="computeCardinalNumber()"
+              >
+                <template slot="append">￥</template>
+              </el-input>
+            </el-form-item>
+
+            <el-form-item label>
+              <el-button
+                v-if="indexNumber == 0"
+                type="primary"
+                circle
+                icon="el-icon-plus"
+                @click="detailpmpCardinalNumber('add')"
+              />
+
+              <el-button
+                v-if="indexNumber != 0"
+                type="danger"
+                icon="el-icon-delete"
+                circle
+                @click="detailpmpCardinalNumber('delete',indexNumber)"
+              />
+            </el-form-item>
+          </div>
+        </el-form>
+
+        <el-divider content-position="left">支付方式</el-divider>
 
         <el-form
           v-for="(item,index) in form.pmpContractPayments"
@@ -304,9 +341,23 @@
           label-width="130px"
         >
           <el-row>
-            <el-col :span="24">
+            <el-col :span="24" class="crm-contract-form">
               <el-form-item label>
                 <el-input v-model="form.pmpContractPayments[index].paymentName" placeholder="款项" />
+              </el-form-item>
+
+              <el-form-item label>
+                <el-select
+                  v-model.number="form.pmpContractPayments[index].cardinalNumberId"
+                  placeholder="请选支付基数"
+                >
+                  <el-option
+                    v-for="(item,index) in form.contractCardinalNumbers"
+                    :key="index"
+                    :label="item.cardinalNumberName"
+                    :value="item.cardinalNumberIndexe"
+                  />
+                </el-select>
               </el-form-item>
 
               <el-form-item label>
@@ -323,7 +374,7 @@
                 <el-input
                   v-model="form.pmpContractPayments[index].money"
                   disabled
-                  placeholder="支付金额"
+                  placeholder="支付金额随比例变动"
                 >
                   <template slot="append">￥</template>
                 </el-input>
@@ -334,42 +385,70 @@
                   v-model="form.pmpContractPayments[index].paymentNode"
                   type="date"
                   value-format="yyyy-MM-dd"
-                  placeholder="选择日期"
+                  placeholder="支付时间"
                   align="right"
                 />
               </el-form-item>
+
+              <el-button
+                v-if="index == 0"
+                type="primary"
+                circle
+                icon="el-icon-plus"
+                @click="detailpmpContractPayments('add')"
+              />
+
+              <el-button
+                v-if="index != 0"
+                type="danger"
+                icon="el-icon-delete"
+                circle
+                @click="detailpmpContractPayments('delete',index)"
+              />
             </el-col>
           </el-row>
 
-          <el-row>
-            <el-col :span="24">
-              <el-form-item label>
-                <el-select placeholder="任务类型">
-                  <el-option
-                    v-for="(item,index) in taskTypeData"
-                    :key="index"
-                    :label="item.name"
-                    :value="item.id"
-                  />
-                </el-select>
-              </el-form-item>
+          <!-- <task style="height:900px" /> -->
+        </el-form>
 
-              <el-form-item label>
-                <el-input v-model="form.tasks[index].name" placeholder="任务名称" />
-              </el-form-item>
+        <el-divider content-position="left">任务模板</el-divider>
 
-              <el-form-item label>
+        <el-form ref="form" :model="form" :inline="true" label-width="120px">
+          <el-button type="text" @click="detailpmpTaskTemplate('add',index)">添加模板</el-button>
+          <el-card v-for="(item,index) in form.tasks" :key="index">
+            <div slot="header">
+              <el-input
+                v-model="form.tasks[index].name"
+                placeholder="请输入任务模板名"
+                style="width:300px"
+              />
+
+              <el-button type="text" @click="detailpmpTaskTemplate('delete',index)">删除模板</el-button>
+
+              <div style="float: right; padding: 3px 0">
                 <el-date-picker
                   v-model="form.tasks[index].starttime"
+                  style="width:150px"
                   type="date"
                   value-format="yyyy-MM-dd"
-                  placeholder="选择日期"
+                  placeholder="开始时间"
                   align="right"
                 />
-              </el-form-item>
 
-              <el-form-item label>
-                <el-select v-model="form.tasks[index].mainUserId" placeholder="负责人">
+                <el-date-picker
+                  v-model="form.tasks[index].stopTime"
+                  style="width:150px"
+                  type="date"
+                  value-format="yyyy-MM-dd"
+                  placeholder="截止时间"
+                  align="right"
+                />
+
+                <el-select
+                  v-model="form.tasks[index].mainUserId"
+                  placeholder="负责人"
+                  style="width:120px"
+                >
                   <el-option
                     v-for="(item,index) in ownerRoleData"
                     :key="index"
@@ -377,20 +456,101 @@
                     :value="item.userId"
                   />
                 </el-select>
-              </el-form-item>
+              </div>
+            </div>
 
-              <el-form-item label>
-                <el-button
-                  type="danger"
-                  icon="el-icon-delete"
-                  circle
-                  @click="detailpmpContractPayments('delete',index)"
-                />
-              </el-form-item>
-            </el-col>
-          </el-row>
+            <el-form ref="form" :model="form" :inline="true" label-width="130px">
+              <el-row>
+                <el-col :span="24">
+                  <div v-for="(itemTask,indexTask) in form.tasks[index].task" :key="indexTask">
+                    <el-form-item label>
+                      <el-input
+                        v-model="form.tasks[index].task[indexTask].name"
+                        placeholder="任务名称"
+                      />
+                    </el-form-item>
 
-          <!-- <task style="height:900px" /> -->
+                    <el-form-item label>
+                      <el-select
+                        v-model.number="form.tasks[index].task[indexTask].taskId"
+                        placeholder="绑定款项"
+                      >
+                        <el-option
+                          v-for="(item,index) in form.pmpContractPayments"
+                          :key="index"
+                          :label="item.paymentName"
+                          :value="item.paymentClause"
+                        />
+                      </el-select>
+                    </el-form-item>
+
+                    <el-form-item label>
+                      <el-date-picker
+                        v-model="form.tasks[index].task[indexTask].starttime"
+                        type="date"
+                        value-format="yyyy-MM-dd"
+                        placeholder="开始时间"
+                        align="right"
+                      />
+                    </el-form-item>
+
+                    <el-form-item label>
+                      <el-date-picker
+                        v-model="form.tasks[index].task[indexTask].stopTime"
+                        type="date"
+                        value-format="yyyy-MM-dd"
+                        placeholder="截止时间"
+                        align="right"
+                      />
+                    </el-form-item>
+
+                    <el-form-item label>
+                      <el-select
+                        v-model="form.tasks[index].task[indexTask].mainUserId"
+                        placeholder="负责人"
+                      >
+                        <el-option
+                          v-for="(item,index) in ownerRoleData"
+                          :key="index"
+                          :label="item.realname"
+                          :value="item.userId"
+                        />
+                      </el-select>
+                    </el-form-item>
+
+                    <el-button
+                      v-if="indexTask == 0"
+                      type="primary"
+                      circle
+                      icon="el-icon-plus"
+                      @click="detailpmpTask('add',index,indexTask)"
+                    />
+
+                    <el-button
+                      v-if="indexTask != 0"
+                      type="danger"
+                      icon="el-icon-delete"
+                      circle
+                      @click="detailpmpTask('delete',index,indexTask)"
+                    />
+                  </div>
+                </el-col>
+              </el-row>
+            </el-form>
+          </el-card>
+
+          <!-- <el-form-item label="合同总金额">
+            <el-input v-model="form.pmpContract.money" placeholder="请输入金额">
+              <template slot="append">￥</template>
+            </el-input>
+          </el-form-item>
+
+          <el-divider content-position="left">支付基数</el-divider>
+          <el-form-item label="支付基数">
+            <el-input v-model="form.pmpContract.money" placeholder="请输入金额">
+              <template slot="append">￥</template>
+            </el-input>
+          </el-form-item>-->
         </el-form>
 
         <el-divider content-position="left">关联业务</el-divider>
@@ -440,6 +600,8 @@ export default {
   data() {
     return {
       initId: 1,
+      initTaskId: 1,
+      initCardinalId: 1,
       allData: {},
       relevanceAll: {},
 
@@ -448,6 +610,7 @@ export default {
       customerData: [],
       userData: [],
       moneyMax: 0,
+      //   form: {},
       form: {
         'pmpContract': {
           'contractType': '',
@@ -462,16 +625,71 @@ export default {
           'drpNumber': '',
           'projectId': undefined,
           'milestoneNodes': undefined,
-          'money': undefined
+          'money': 0
         },
+        // 基数
+        'contractCardinalNumbers': [{
+          'cardinalNumberIndexe': 1,
+          'cardinalNumberName': '基数 ' + this.initCardinalId++,
+          'cardinalNumberPercentage': 30,
+          'cardinalNumberMoney': 0
+        }],
+
         'tasks': [{
-          'taskId': this.initId,
           'mainUserId': undefined,
-          'name': '',
-          'starttime': ''
+          'name': '采购任务',
+          'starttime': '',
+          'stopTime': '',
+          'task': [{
+            'taskId': undefined,
+            'mainUserId': undefined,
+            'name': '',
+            'starttime': '',
+            'stopTime': ''
+
+          }]
+        },
+        {
+          'mainUserId': undefined,
+          'name': '施工任务',
+          'starttime': '',
+          'stopTime': '',
+          'task': [{
+            'taskId': undefined,
+            'mainUserId': undefined,
+            'name': '',
+            'starttime': '',
+            'stopTime': ''
+          }]
+        },
+        {
+          'mainUserId': undefined,
+          'name': '设计任务',
+          'starttime': '',
+          'stopTime': '',
+          'task': [{
+            'taskId': undefined,
+            'mainUserId': undefined,
+            'name': '',
+            'starttime': '',
+            'stopTime': ''
+          }]
+        }, {
+          'mainUserId': undefined,
+          'name': '变更任务',
+          'starttime': '',
+          'stopTime': '',
+          'task': [{
+            'taskId': undefined,
+            'mainUserId': undefined,
+            'name': '',
+            'starttime': '',
+            'stopTime': ''
+          }]
         }],
         'pmpContractPayments': [{
-          'paymentName': '',
+          'cardinalNumberId': undefined,
+          'paymentName': '款项' + this.initId,
           'costPercentage': undefined,
           'money': undefined,
           'paymentClause': this.initId,
@@ -500,27 +718,13 @@ export default {
       projectData: [],
       ownerRoleData: [],
 
-      taskTypeData: [{
-        'id': 1,
-        'name': '采购'
-      }, {
-        'id': 2,
-        'name': '设计'
-      }, {
-        'id': 3,
-        'name': '变更'
-      }, {
-        'id': 4,
-        'name': '施工'
-      }
-      ],
       contactListSubData: [],
 
       pageCurrent: 1,
       pageTotal: 1,
       pageSize: 10,
 
-
+      value: '',
       grep: '',
       search: {
         contractNumber: '',
@@ -532,6 +736,16 @@ export default {
   computed: {
 
   },
+
+  watch: {
+    // watchCardinalNumber(val) {
+    //   console.log(123123)
+    // //   form.contractCardinalNumbers[indexNumber].cardinalNumberMoney
+    // }
+  },
+
+
+
   mounted() {
     this.retriveContactList()
     this.retriveCustomerList()
@@ -632,7 +846,25 @@ export default {
 
 
     computeMoney(data, index) {
-      this.form.pmpContractPayments[index].money = this.form.pmpContract.money * data / 100
+      // form.pmpContractPayments[index].cardinalNumberId
+      this.form.contractCardinalNumbers.forEach(item => {
+        if (item.cardinalNumberIndexe == this.form.pmpContractPayments[index].cardinalNumberId) {
+        //   console.log(111, item.cardinalNumberMoney)
+          this.form.pmpContractPayments[index].money = parseInt(item.cardinalNumberMoney) * data / 100
+        }
+      })
+    //   this.form.pmpContractPayments[index].money = this.form.pmpContract.money * data / 100
+    },
+
+
+    computeCardinalNumber() {
+      let all = 0
+      this.form.contractCardinalNumbers.forEach(item => {
+        all = all + parseInt(item.cardinalNumberMoney)
+      })
+      if (all > parseInt(this.form.pmpContract.money)) {
+        this.$message.error('支付基数不能大于合同总金额')
+      }
     },
 
 
@@ -664,6 +896,12 @@ export default {
 
         })
     },
+
+    // selectCardinalNumber() {
+    //     this.contractCardinalNumbers.forEach(item=>{
+
+    //     })
+    // },
 
 
 
@@ -707,22 +945,61 @@ export default {
 
 
     detailpmpContractPayments(pararm, index) {
-      console.log(pararm)
+    //   console.log(pararm)
       this.initId++
       pararm == 'delete' ? this.form.pmpContractPayments.splice(index, 1) : this.form.pmpContractPayments.push({
-        'paymentName': '',
+        'cardinalNumberId': undefined,
+        'paymentName': '款项' + this.initId,
         'costPercentage': undefined,
         'money': undefined,
         'paymentClause': this.initId,
         'paymentNode': ''
       })
-      pararm == 'delete' ? this.form.tasks.splice(index, 1) : this.form.tasks.push({
-        'taskId': this.initId,
-        'mainUserId': undefined,
-        'name': '',
-        'starttime': ''
+    },
+
+
+    detailpmpCardinalNumber(pararm, indexNumber) {
+    //   console.log(pararm)
+    //   this.initId++
+      pararm == 'delete' ? this.form.contractCardinalNumbers.splice(indexNumber, 1) : this.form.contractCardinalNumbers.push({
+        'cardinalNumberIndexe': this.initCardinalId++,
+        'cardinalNumberName': '基数 ' + this.initCardinalId++,
+        'cardinalNumberPercentage': 30,
+        'cardinalNumberMoney': 0
       })
     },
+
+    detailpmpTaskTemplate(pararm, index) {
+    //   console.log(pararm)
+    //   this.initId++
+      pararm == 'delete' ? this.form.tasks.splice(index, 1) : this.form.tasks.push({
+        'mainUserId': undefined,
+        'name': '',
+        'starttime': '',
+        'stopTime': '',
+        'task': [{
+          'taskId': undefined,
+          'mainUserId': undefined,
+          'name': '',
+          'starttime': '',
+          'stopTime': ''
+        }]
+      })
+    },
+
+
+    detailpmpTask(pararm, index, indexTask) {
+    //   console.log(pararm)
+    //   this.initId++
+      pararm == 'delete' ? this.form.tasks[index].task.splice(index, 1) : this.form.tasks[index].task.push({
+        'taskId': undefined,
+        'mainUserId': undefined,
+        'name': '',
+        'starttime': '',
+        'stopTime': ''
+      })
+    },
+
 
 
 
@@ -820,16 +1097,71 @@ export default {
           'drpNumber': '',
           'projectId': undefined,
           'milestoneNodes': undefined,
-          'money': undefined
+          'money': 0
         },
+        // 基数
+        'contractCardinalNumbers': [{
+          'cardinalNumberIndexe': 1,
+          'cardinalNumberName': '基数 ' + this.initCardinalId++,
+          'cardinalNumberPercentage': 30,
+          'cardinalNumberMoney': 0
+        }],
+
         'tasks': [{
-          'taskId': this.initId,
           'mainUserId': undefined,
-          'name': '',
-          'starttime': ''
+          'name': '采购任务',
+          'starttime': '',
+          'stopTime': '',
+          'task': [{
+            'taskId': undefined,
+            'mainUserId': undefined,
+            'name': '',
+            'starttime': '',
+            'stopTime': ''
+
+          }]
+        },
+        {
+          'mainUserId': undefined,
+          'name': '施工任务',
+          'starttime': '',
+          'stopTime': '',
+          'task': [{
+            'taskId': undefined,
+            'mainUserId': undefined,
+            'name': '',
+            'starttime': '',
+            'stopTime': ''
+          }]
+        },
+        {
+          'mainUserId': undefined,
+          'name': '设计任务',
+          'starttime': '',
+          'stopTime': '',
+          'task': [{
+            'taskId': undefined,
+            'mainUserId': undefined,
+            'name': '',
+            'starttime': '',
+            'stopTime': ''
+          }]
+        }, {
+          'mainUserId': undefined,
+          'name': '变更任务',
+          'starttime': '',
+          'stopTime': '',
+          'task': [{
+            'taskId': undefined,
+            'mainUserId': undefined,
+            'name': '',
+            'starttime': '',
+            'stopTime': ''
+          }]
         }],
         'pmpContractPayments': [{
-          'paymentName': '',
+          'cardinalNumberId': undefined,
+          'paymentName': '款项' + this.initId,
           'costPercentage': undefined,
           'money': undefined,
           'paymentClause': this.initId,
@@ -853,10 +1185,151 @@ export default {
     }
 
   }
+
+//   {
+// 	"pmpContract": {
+// 		"contractNumber": "智慧工地大门土方合同编号",
+// 		"fileNumber": "智慧工地大门土文件编号",
+// 		"contractName": "智慧工地大门土方合同名称",
+// 		"drpNumber": "DRP智慧工地大门土方采购单号",
+// 		"requiredSigningTime": "2020-05-03",
+// 		"actualSigningTime": "",
+// 		"purchaseTime": "2020-08-30",
+// 		"beginTime": "2020-05-02",
+// 		"endTime": "2020-12-30",
+// 		"money": 10000000,
+// 		"projectId": 1,
+// 		"milestoneNodes": 2,
+// 		"contractPurchaseStartTime": "2020-04-30",
+// 		"contractPurchaseEndTime": "2020-06-12",
+// 		"createUserId": 6,
+// 		"owner_userId": 6,
+// 		"customerId": 1,
+// 		"contactsId": 00000000001,
+// 		"companyUserId": 6,
+// 		"proprietor": "业主公司"
+// 	},
+// 	"contractCardinalNumbers": [{
+// 		"cardinalNumberIndexe": 1,
+// 		"cardinalNumberName": "基数1",
+// 		"cardinalNumberPercentage": 30,
+// 		"cardinalNumberMoney": 3000000
+// 	}, {
+// 		"cardinalNumberIndexe": 2,
+// 		"cardinalNumberName": "基数2",
+// 		"cardinalNumberPercentage": 70,
+// 		"cardinalNumberMoney": 7000000
+// 	}],
+// 	"pmpContractPayments": [{
+// 		"cardinalNumberId": 1,
+// 		"paymentName": "基数1第一款项",
+// 		"costPercentage": 50,
+// 		"money": 1500000,
+// 		"paymentStage": "1",
+// 		"paymentClause": 1,
+// 		"priority": 1,
+// 		"paymentNode": "2020-05-02",
+// 		"tradeStatus": "2"
+// 	}, {
+// 		"cardinalNumberId": 2,
+// 		"paymentName": "基数2第一款项",
+// 		"costPercentage": 5,
+// 		"money": 3500000,
+// 		"paymentStage": "1",
+// 		"paymentClause": 2,
+// 		"priority": 1,
+// 		"paymentNode": "",
+// 		"tradeStatus": "2"
+// 	}, {
+// 		"cardinalNumberId": 2,
+// 		"paymentName": "基数2第二款项",
+// 		"costPercentage": 5,
+// 		"money": 3500000,
+// 		"paymentStage": "1",
+// 		"paymentClause": 3,
+// 		"priority": 1,
+// 		"paymentNode": "2020-05-12",
+// 		"tradeStatus": "2"
+// 	}, {
+// 		"cardinalNumberId": 1,
+// 		"paymentName": "基数1第二款项",
+// 		"costPercentage": 50,
+// 		"money": 1500000,
+// 		"paymentStage": "2",
+// 		"paymentClause": 4,
+// 		"priority": 2,
+// 		"paymentNode": "2020-06-12",
+// 		"tradeStatus": "2"
+// 	}],
+// 	"tasks": [{
+// 		"mainUserId": 6,
+// 		"name": "采购任务",
+// 		"starttime": "2020-05-02",
+// 		"stopTime": "2020-06-03",
+// 		"task": [{
+// 			"mainUserId": 6,
+// 			"name": "采购任务1",
+// 			"starttime": "2020-05-13"
+// 		}, {
+// 			"taskId": 1,
+// 			"mainUserId": 6,
+// 			"name": "采购任务2",
+// 			"starttime": ""
+// 		}]
+// 	}, {
+// 		"mainUserId": 6,
+// 		"name": "施工任务",
+// 		"starttime": "",
+// 		"stopTime": "2020-08-03",
+// 		"task": [{
+// 			"mainUserId": 6,
+// 			"name": "施工任务1",
+// 			"starttime": "2020-07-13"
+// 		}, {
+// 			"taskId": 2,
+// 			"mainUserId": 6,
+// 			"name": "施工任务2",
+// 			"starttime": "2020-08-02"
+// 		}, {
+// 			"taskId": 2,
+// 			"mainUserId": 6,
+// 			"name": "施工任务3",
+// 			"starttime": "2020-08-02"
+// 		}]
+// 	}, {
+// 		"mainUserId": 6,
+// 		"name": "验收任务",
+// 		"starttime": "2020-05-02",
+// 		"stopTime": "2020-06-03",
+// 		"task": [{
+// 			"mainUserId": 6,
+// 			"name": "验收任务1",
+// 			"starttime": "2020-05-13"
+// 		}, {
+// 			"taskId": 4,
+// 			"mainUserId": 6,
+// 			"name": "验收任务2",
+// 			"starttime": ""
+// 		}]
+// 	}],
+// 	"businesss": [{
+// 		"objectType": "2",
+// 		"correlationId": 11111,
+// 		"correlationType": "1"
+// 	}, {
+// 		"objectType": "2",
+// 		"correlationId": 11111,
+// 		"correlationType": "1"
+// 	}],
+// 	"checkUserId": 5
+// }
 }
 </script>
 
 <style lang="scss" scoped>
+.crm-contract-form {
+}
+
 /deep/ .el-dialog__body {
   border: 1px solid rgb(233, 233, 233);
   padding: 30px 50px 30px 50px;
@@ -867,3 +1340,7 @@ export default {
   padding: 20px 50px 20px 50px;
 }
 </style>
+
+
+
+

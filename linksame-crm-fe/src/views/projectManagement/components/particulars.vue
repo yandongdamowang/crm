@@ -1095,6 +1095,7 @@ export default {
       this.taskData.checked = val
       workTaskSaveAPI({
         name: this.taskData.name,
+        workId: this.taskData.workId,
         taskId: this.id,
         status: this.taskData.checked ? 5 : 1
       })
@@ -1139,6 +1140,7 @@ export default {
       workTaskSaveAPI({
         taskId: this.id,
         name: this.taskData.name,
+        workId: this.taskData.workId,
         priority: value.id
       })
         .then(res => {
@@ -1257,6 +1259,7 @@ export default {
       workTaskSaveAPI({
         taskId: val.taskId,
         name: this.taskData.name,
+        workId: this.taskData.workId,
         status: e ? 5 : 1
       })
         .then(res => {})
@@ -1289,6 +1292,7 @@ export default {
       workTaskSaveAPI({
         taskId: this.id,
         name: this.taskData.name,
+        workId: this.taskData.workId,
         ownerUserId: users
           .map(item => {
             return item.userId
@@ -1305,6 +1309,7 @@ export default {
       workTaskSaveAPI({
         taskId: this.id,
         name: this.taskData.name,
+        workId: this.taskData.workId,
         ownerUserId: this.taskData.ownerUserList
           .filter(userItem => {
             return userItem.userId != item.userId
@@ -1323,6 +1328,7 @@ export default {
     editMainUser(val) {
       workTaskSaveAPI({
         taskId: this.id,
+        workId: this.taskData.workId,
         name: this.taskData.name,
         mainUserId: val ? val.data[0].userId : ''
       })
@@ -1345,6 +1351,7 @@ export default {
     // 编辑任务名
     nameVShow(val) {
       workTaskSaveAPI({
+        workId: this.taskData.workId,
         name: val,
         taskId: this.id
       })
@@ -1367,6 +1374,7 @@ export default {
       workTaskSaveAPI({
         startTime: val,
         taskId: this.id,
+        workId: this.taskData.workId,
         name: this.taskData.name
       })
         .then(res => {
@@ -1386,6 +1394,7 @@ export default {
       workTaskSaveAPI({
         stopTime: val,
         name: this.taskData.name,
+        workId: this.taskData.workId,
         taskId: this.id
       })
         .then(res => {
@@ -1402,6 +1411,7 @@ export default {
     addDescriptionSubmit() {
       workTaskSaveAPI({
         taskId: this.id,
+        workId: this.taskData.workId,
         name: this.taskData.name,
         description: this.addDescriptionTextarea
       })
@@ -1662,6 +1672,7 @@ export default {
       workTaskSaveAPI({
         taskId: this.id,
         name: this.taskData.name,
+        workId: this.taskData.workId,
         stopTime: '',
         startTime: ''
       })

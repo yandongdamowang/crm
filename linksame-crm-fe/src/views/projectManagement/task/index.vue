@@ -1,14 +1,14 @@
 <template>
   <div class="my-task">
-    <!-- <div class="ls-header">
-      合同管理
+    <div class="ls-header">
+      我的任务
       <div class="ls-header-r">
-        <el-select v-model="grep" placeholder="选择项目">
+        <!-- <el-select v-model="grep" placeholder="选择项目">
           <el-option label="项目一" value="shanghai" />
           <el-option label="项目二" value="beijing" />
-        </el-select>
+        </el-select>-->
       </div>
-    </div>-->
+    </div>
 
     <div class="my-task-header" />
     <div class="my-task-body">
@@ -425,7 +425,7 @@ export default {
   height: 100%;
   overflow: hidden;
   .my-task-header {
-    height: 10px;
+    // height: 10px;
     line-height: 60px;
     position: relative;
     z-index: 100;
@@ -436,7 +436,7 @@ export default {
 
 .my-task-body {
   padding-left: 15px;
-  height: calc(100% - 60px);
+  height: calc(100% - 80px);
   position: relative;
   overflow-y: hidden;
   overflow-x: auto;

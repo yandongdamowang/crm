@@ -4,7 +4,7 @@ import Layout from '@/views/layout/contractLayout'
 const contractRouter = {
   path: '/contract',
   component: Layout,
-  redirect: '/contract/workbench',
+  redirect: '/contract/contract',
   name: 'contract',
   hidden: true,
   meta: {
@@ -12,15 +12,15 @@ const contractRouter = {
     title: '合同管理'
   },
   children: [
-    {
-      path: 'workbench',
-      component: () => import('@/views/contractManagement/workbench/Main'),
-      meta: {
-        requiresAuth: false,
-        title: '仪表盘',
-        icon: 'dashboard'
-      }
-    },
+    // {
+    //   path: 'workbench',
+    //   component: () => import('@/views/contractManagement/workbench/Main'),
+    //   meta: {
+    //     requiresAuth: false,
+    //     title: '仪表盘',
+    //     icon: 'dashboard'
+    //   }
+    // },
     {
       path: 'contract',
 

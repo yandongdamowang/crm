@@ -9,7 +9,7 @@ const annexRouter = {
   hidden: true,
   meta: {
     // requiresAuth: false,
-    title: '网盘'
+    title: '网 盘'
   },
   children: [
     {
@@ -17,8 +17,17 @@ const annexRouter = {
       //   hidden: true,
       component: () => import('@/views/annexManagement/netdisk/index'),
       meta: {
-        title: '网盘',
+        title: '网 盘',
         icon: 'product'
+      }
+    },
+    {
+      path: 'mark', // 工作台
+      //   hidden: true,
+      component: () => import('@/views/annexManagement/mark/index'),
+      meta: {
+        title: '标 签',
+        icon: 'tag'
       }
     },
 
@@ -28,7 +37,7 @@ const annexRouter = {
       component: () => import('@/views/annexManagement/type/index'),
       meta: {
         title: '附件类型',
-        icon: 'tag'
+        icon: 'leads'
       }
     },
 

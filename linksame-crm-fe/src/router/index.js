@@ -13,6 +13,7 @@ import projectRouter from './modules/project/index'
 import { managerRouter } from './modules/manager'
 import personRouter from './modules/person'
 import annexRouter from './modules/annex'
+import dashboardRouter from './modules/dashboard'
 // import { biRouter } from './modules/business'
 
 /**
@@ -28,6 +29,11 @@ import annexRouter from './modules/annex'
   }
 **/
 export const constantRouterMap = [
+  {
+    path: '/',
+    redirect: '/dashboard/index',
+    hidden: true
+  },
   {
     path: '/login',
     component: () => import('@/views/login/index'),
@@ -59,7 +65,7 @@ export const asyncRouterMap = [
   workbenchRouter,
   customerRouter,
   //   biRouter,
-
+  dashboardRouter,
   annexRouter,
   managerRouter,
   contractRouter

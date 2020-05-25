@@ -32,6 +32,7 @@ const getters = {
   annexRouters: state => state.permission.annexRouters,
   biRouters: state => state.permission.biRouters,
   manageRouters: state => state.permission.manageRouters,
+  dashboardRouters: state => state.permission.dashboardRouters,
   // 客户管理信息
   messageNum: state => state.customer.messageNum,
   messageOANum: state => state.oa.messageOANum,

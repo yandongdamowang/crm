@@ -81,6 +81,10 @@ const permission = {
       name: 'oa',
       children: []
     },
+    dashboardRouters: {
+      name: 'dashboard',
+      children: []
+    },
     annexRouters: {
       name: 'annex',
       children: []
@@ -103,6 +107,8 @@ const permission = {
           state.manageRouters = element
         } else if (element.name == 'annex') {
           state.annexRouters = element
+        } else if (element.name == 'dashboard') {
+          state.dashboardRouters = element
         }
       }
     },

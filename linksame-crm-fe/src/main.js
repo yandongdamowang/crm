@@ -63,9 +63,12 @@ Vue.use(photo)
 import { emoji } from './utils/emoji'
 Vue.prototype.emoji = emoji
 
-import wlExplorer from 'wl-explorer'
-import 'wl-explorer/lib/wl-explorer.css'
-Vue.use(wlExplorer)
+// import wlExplorer from 'wl-explorer'
+// import 'wl-explorer/lib/wl-explorer.css'
+// Vue.use(wlExplorer)
+
+import vueKanban from 'vue-kanban'
+Vue.use(vueKanban)
 
 import request from '@/utils/request'
 Vue.prototype.$request = request

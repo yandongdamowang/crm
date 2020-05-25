@@ -36,7 +36,7 @@
               :data="folderListData"
               :props="defaultProps"
               :filter-node-method="filterNode"
-              :default-expand-all="false"
+              :default-expand-all="showTree"
               class="filter-tree"
               @node-click="handleNodeClick"
               @node-contextmenu="handleContextmenu"
@@ -58,14 +58,20 @@
                 <span @click="dialogCreateStatus = true">创建子文件夹</span>
               </li>
               <li>
-                <span @click="dialogRenameStatus = true">重命名</span>
+                <span
+                  @click="dialogRenameStatus = true"
+                >重命名&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
               </li>
               <li>
-                <span @click="dialogMoveStatus = true ">移动</span>
+                <span
+                  @click="dialogMoveStatus = true "
+                >移&nbsp;&nbsp;动&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
               </li>
 
               <li>
-                <span @click="deleteFolder ">删除</span>
+                <span
+                  @click="deleteFolder "
+                >删&nbsp;&nbsp;除 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
               </li>
             </ul>
           </div>
@@ -86,6 +92,15 @@
             <el-button @click="renameFile">重命名</el-button>
             <el-button @click="dialogMoveFileStatus = true">移 动</el-button>
             <el-button @click="deleteFile">删 除</el-button>
+
+            <span>
+              <el-input
+                v-model="search.compositionName"
+                placeholder="请输入搜索的文件名"
+                style="width: 200px"
+              />
+              <el-button icon="el-icon-search" circle @click="retriveFileList" />
+            </span>
           </div>
 
           <el-dialog :visible.sync="dialogMoveFileStatus" title="移动附件" width="30%">
@@ -250,7 +265,8 @@
       <div style="padding: 30px;  ">
         <div class="ls-drawertitle">
           <div class="ls-drawertitle-l">
-            所属文件夹：/{{ filePath }}/{{ fileSelect.compositionName }}
+            <!-- 所属文件夹：/{{ filePath }}/{{ fileSelect.compositionName }} -->
+            {{ fileSelect.compositionName }}
             <!-- <tag-index :placement="'bottom'" :task-data="taskData"> -->
             <!-- <span>
               <tag-index :placement="'bottom'">
@@ -281,14 +297,31 @@
           </div>-->
 
           <div class="ls-drawertitle-r">
-            <Upload
-              :key="menuKey"
-              :folder-id="folderSelect.folderId"
-              :version-data="versionData"
-              :project-id="workIdUpload"
-              @uploadStatus="uploadStatus"
-            />
-            <el-button type="primary" @click="downloadFile">下 载</el-button>
+            <el-dropdown class="ls-drawertitle-dropdown">
+              <span>
+                <i class="el-icon-more" />
+              </span>
+
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item>
+                  <span @click="dialogMark = true">设置标签</span>
+                </el-dropdown-item>
+
+                <el-dropdown-item>
+                  <Upload
+                    :key="menuKey"
+                    :folder-id="folderSelect.folderId"
+                    :version-data="versionData"
+                    :project-id="workIdUpload"
+                    @uploadStatus="uploadStatus"
+                  />
+                </el-dropdown-item>
+
+                <el-dropdown-item>
+                  <span @click="downloadFile">下 载</span>
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
 
             <span>丨</span>
             <span @click="drawer=false">
@@ -296,6 +329,14 @@
             </span>
           </div>
         </div>
+
+        <el-dialog :visible.sync="dialogMark" :modal="false" title="设置标签" width="30%">
+          <span>这是一段信息</span>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogMark = false">取 消</el-button>
+            <el-button type="primary" @click="dialogMark = false">确 定</el-button>
+          </span>
+        </el-dialog>
 
         <div class="ls-drawerform">
           <div class="ls-drawerform-header">
@@ -341,7 +382,7 @@
 
         <div class="ls-drawerform">
           <div class="ls-drawerform-header">
-            <i class="el-icon-notebook-1" />&nbsp;&nbsp;&nbsp;关联
+            <i class="el-icon-notebook-1" />&nbsp;&nbsp;&nbsp;附件关联
           </div>
 
           <el-collapse v-model="activeCollapse" accordion>
@@ -380,7 +421,7 @@
 
         <el-tabs v-model="activeName" @tab-click="handleClick">
           <el-tab-pane label="操作日志" name="first">
-            <el-table :data="fileDetailLogTable" border style="width: 100%">
+            <el-table :data="fileDetailLogTable" style="width: 100%">
               <el-table-column prop="content" label="操作记录" width />
               <el-table-column prop="createTime" label="操作时间" width="300" />
             </el-table>
@@ -392,20 +433,27 @@
           :size="activity.size"-->
           <el-tab-pane label="历史版本" name="second">
             <!-- {{ historyVersionData }} -->
-            <el-timeline>
+
+            <el-table :data="historyVersionData" style="width: 100%">
+              <el-table-column prop="oldName" label="文件名：" width />
+              <el-table-column prop="compositionName" label="附件名：" width="300" />
+              <el-table-column prop="fileVersion" label="文件版本：" width="300" />
+              <el-table-column prop="fileRemark" label="备注：" width="300" />
+            </el-table>
+
+            <!-- <el-timeline>
               <el-timeline-item
                 v-for="(activity, index) in historyVersionData"
                 :key="index"
                 :timestamp="activity.createTime"
-              >
-                <!-- {{ activity }} -->
+
                 <div>文件名：{{ activity.oldName }}</div>
                 <div>附件名：{{ activity.compositionName }}</div>
                 <div>文件版本：{{ activity.fileVersion }}</div>
                 <div>备注：{{ activity.fileRemark }}</div>
-                <!-- <div type="primary" @click="moveFolder">确 定</div> -->
+
               </el-timeline-item>
-            </el-timeline>
+            </el-timeline>-->
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -437,7 +485,10 @@ export default {
       activeCollapse: '1',
       historyVersionData: [
       ],
-
+      search: {
+        compositionName: ''
+      },
+      showTree: false,
       //   downloadAction: process.env.BASE_API + `/file/downFile?fileId=72`,
       activeName: 'first',
       pageCurrent: 1,
@@ -446,6 +497,7 @@ export default {
       allData: {},
       relevanceAll: {},
       drawer: false,
+      dialogMark: false,
       dialogCreateStatus: false,
       dialogMoveStatus: false,
       dialogRenameStatus: false,
@@ -621,11 +673,12 @@ export default {
 
 
 
-    retriveFolderList() {
+    retriveFolderList(status) {
+      if (status) { this.showTree = status }
       this.$request
         .post(`/folder/queryFolder`)
         .then(res => {
-          console.log(res)
+          console.log('文件夹列表', res)
           this.folderListData = res.data
         }).catch(e => {
           console.log('retriveFolderList err', e)
@@ -638,14 +691,14 @@ export default {
         : this.$request
           .post(`/folder/createFolder?folderName=${folderCreateName}&folderCode=CONTRACTUAL&folderPid=${folderCreateNamePid}&batchId=${this.batchId}`)
           .then(res => {
-            console.log(res)
+            // console.log(res)
             this.folderName = ''
             this.folderListData = res.data
 
             this.dialogCreateStatus = false
             this.folderCreateNameOut = ''
             this.folderCreateNameInner = ''
-            this.retriveFolderList()
+            this.retriveFolderList(true)
           }).catch(e => {
             console.log('retriveFolderList err', e)
           })
@@ -653,6 +706,7 @@ export default {
 
 
     deleteFolder() {
+      console.log(1233)
       this.$confirm('此操作将删除该文件夹, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -713,15 +767,22 @@ export default {
     // &batchId=${this.folderSelect.batchId}
     retriveFileList() {
       this.workId == undefined ? this.workId = '' : this.workId
+      this.folderSelect.folderId == undefined ? this.folderSelect.folderId = '' : this.folderSelect.folderId
       this.$request
-        .post(`/file/getFileList?folderId=${this.folderSelect.folderId}&workId=${this.workId}&delFlag=0&orderBy=2`, {
+        .post(`/file/getFileList`, {
+          ...this.search,
           page: this.pageCurrent,
+          delFlag: 0,
+          workId: this.workId,
+          folderId: this.folderSelect.folderId,
+          orderBy: 2,
           limit: this.papgeSize
         })
         .then(res => {
           console.log('查询附件文件', res)
           this.fileTableData = res.data.list
           this.pageTotal = res.data.totalRow
+          this.search.compositionName = ''
         }).catch(e => {
           console.log('/file/getFileList err', e)
         })

@@ -35,14 +35,14 @@ const workbenchRouter = {
       }
     },
 
-    {
-      name: 'allProject',
-      path: 'allProject',
-      component: () => import('@/views/dashboard/project/index'),
-      meta: {
-        title: '全部项目'
-      }
-    },
+    // {
+    //   name: 'allProject',
+    //   path: 'allProject',
+    //   component: () => import('@/views/dashboard/project/index'),
+    //   meta: {
+    //     title: '全部项目'
+    //   }
+    // },
     {
       path: 'participate',
       component: () => import('@/views/dashboard/participate/index'),
@@ -129,14 +129,14 @@ export const childrenMenu = [
     ]
   },
 
-  {
-    name: 'allProject',
-    path: 'allProject',
-    meta: {
-      icon: 'contract',
-      title: '全部项目'
-    }
-  },
+  //   {
+  //     name: 'allProject',
+  //     path: 'allProject',
+  //     meta: {
+  //       icon: 'contract',
+  //       title: '全部项目'
+  //     }
+  //   },
 
   {
     path: 'project',

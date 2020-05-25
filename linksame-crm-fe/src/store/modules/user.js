@@ -104,7 +104,7 @@ const user = {
                 delete: true
               }
             }
-            console.log(123, data)
+            // console.log(123, data)
             Lockr.set('Admin-Token', data['Admin-Token'])
             Lockr.set('loginUserInfo', data.user)
 
