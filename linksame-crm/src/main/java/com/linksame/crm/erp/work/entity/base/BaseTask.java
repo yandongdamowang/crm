@@ -121,6 +121,14 @@ public abstract class BaseTask<M extends BaseTask<M>> extends Model<M> implement
 		return get("stop_time");
 	}
 
+	public void setCoTime(java.util.Date coTime) {
+		set("co_time", coTime);
+	}
+
+	public java.util.Date getCoTime() {
+		return get("co_time");
+	}
+
 	public void setPriority(java.lang.Integer priority) {
 		set("priority", priority);
 	}
@@ -216,6 +224,14 @@ public abstract class BaseTask<M extends BaseTask<M>> extends Model<M> implement
 
 	public java.lang.Integer getSprintId() {
 		return getInt("sprint_id");
+	}
+
+	public void setRepeatId(java.lang.Integer repeatId) {
+		set("repeat_id", repeatId);
+	}
+
+	public java.lang.Integer getRepeatId() {
+		return getInt("repeat_id");
 	}
 
 }

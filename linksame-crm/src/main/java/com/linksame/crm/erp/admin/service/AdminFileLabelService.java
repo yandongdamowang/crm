@@ -67,7 +67,7 @@ public class AdminFileLabelService {
         } else {
             bol = adminFileLabel.update();
         }
-        return R.ok(bol ? R.ok() : R.error());
+        return R.ok(bol ? R.ok().put("fileLabelId", adminFileLabel.getFileLabelId()) : R.error());
     }
 
     /**

@@ -41,6 +41,10 @@ public class BaseConstant implements Serializable {
     public static final int AUTH_DATA_RECURSION_NUM = 20;
 
     /**
+     * 用户登录成功
+     */
+    public static final String LOGIN_SUCCESS = "LOGIN_SUCCESS";
+    /**
      * 用户登录错误缓存key
      */
     public static final String USER_LOGIN_ERROR_KEY = "LOGIN_ERROR_USER_";

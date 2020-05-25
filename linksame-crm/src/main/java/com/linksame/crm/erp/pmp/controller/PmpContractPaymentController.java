@@ -30,8 +30,6 @@ public class PmpContractPaymentController extends Controller {
     @Inject
     private PmpContractPaymentService pmpContractPaymentService;
 
-    @Inject
-    private AdminExamineRecordService examineRecordService;
 
     @Inject
     private CrmRecordService crmRecordService;
@@ -69,25 +67,11 @@ public class PmpContractPaymentController extends Controller {
      */
     public void requestPayment(){
         String data = getRawData();
-        Long checkUserId = getLong("checkUserId");//添加或者审核人
         JSONObject jsonObject1 = JSON.parseObject(data);
         PmpContractPayment pmpContractPayment = jsonObject1.getObject("pmpContractPayment",PmpContractPayment.class);
-        Map<String, Integer> map = examineRecordService.saveExamineRecord(2, checkUserId, pmpContractPayment.getOwnerUserId(), null, null);
-        if (map.get("status") == 0) {
-            renderJson(R.error("没有启动的审核步骤，不能添加！"));
-        } else {
-            pmpContractPayment.setExamineRecordId(map.get("id"));
-        }
-        if (pmpContractPayment.getCheckStatus() != null && pmpContractPayment.getCheckStatus() == 5) {
-            pmpContractPayment.setCheckStatus(5);
-        } else {
-            pmpContractPayment.setCheckStatus(0);
-        }
-        crmRecordService.updateRecord(new PmpContractPayment().dao().findById(pmpContractPayment.getBillId()), pmpContractPayment, CrmEnum.PMP_PAYMENT);
+        Long checkUserId = jsonObject1.getLong("checkUserId");
 
-        pmpContractPayment.setUpdateTime(new Date(System.currentTimeMillis()));
-        boolean update = pmpContractPayment.update();
-        renderJson(update?R.ok():R.error());
+        renderJson(pmpContractPaymentService.requestPayment(pmpContractPayment,checkUserId));
 
     }
     /**
@@ -150,7 +134,7 @@ public class PmpContractPaymentController extends Controller {
     }
     /**
      *
-     *  付款记录报表
+     *  确认付款
      */
     public void confirmPayment(){
         String rawData = getRawData();

@@ -78,6 +78,7 @@ public class _MappingKit {
 		arp.addMapping("task_remind", "remind_id", TaskRemind.class);
 		arp.addMapping("task_rely", "rely_id", TaskRely.class);
 		arp.addMapping("task_sprint", "sprint_id", TaskSprint.class);
+		arp.addMapping("task_repeat", "repeat_id", TaskRepeat.class);
 		arp.addMapping("crm_business_change", "change_id", CrmBusinessChange.class);
         arp.addMapping("pmp_contract", "contract_id", PmpContract.class);
         arp.addMapping("pmp_contract_payment", "bill_id", PmpContractPayment.class);
@@ -85,6 +86,7 @@ public class _MappingKit {
 		arp.addMapping("pmp_receivable_records", "receivable_records_id", PmpReceivableRecords.class);
 		arp.addMapping("pmp_contract_template", "template_id", PmpContractTemplate.class);
 		arp.addMapping("pmp_business", "business_id", PmpBusiness.class);
+		arp.addMapping("pmp_contract_cardinal_number", "cardinal_number_id", PmpContractCardinalNumber.class);
 	}
 }
 

@@ -14,6 +14,7 @@ import com.linksame.crm.erp.admin.entity.AdminMenu;
 import com.linksame.crm.erp.admin.entity.AdminUser;
 import com.linksame.crm.erp.admin.service.AdminFileService;
 import com.linksame.crm.erp.admin.service.AdminMenuService;
+import com.linksame.crm.erp.pmp.entity.PmpContractPayment;
 import com.linksame.crm.erp.work.entity.Task;
 import com.linksame.crm.erp.work.entity.Work;
 import com.linksame.crm.erp.work.entity.WorkTaskClass;
@@ -289,6 +290,19 @@ public class WorkService{
     private void recData(List<Record> itemList) {
         //遍历出父id等于参数的id，add进子节点集合
         for (Record mu : itemList) {
+            //查询预付款表, 是否存在关联该任务的数据, 并set关联数据
+            Record contractPayment = Db.findFirst("select * from pmp_contract_payment where payment_clause = ? and status = 1 and is_deleted = 0", mu.getInt("task_id"));
+            if(contractPayment != null){
+                mu.set("contractPayment", contractPayment);
+            } else {
+                mu.set("contractPayment", new PmpContractPayment());
+            }
+            //查询前置任务
+            List<Record> relyList = Db.find("select a.* from task a left join task_rely b on a.task_id = b.pre_task_id where b.task_id = ?", mu.getInt("task_id"));
+            mu.set("relyList", relyList);
+            //查询重复任务数据
+            Record taskRepeat = Db.findFirst("select a.* from task_repeat a left join task b on a.repeat_id = b.repeat_id where b.task_id = ?", mu.getInt("task_id"));
+            mu.set("taskRepeat", taskRepeat);
             List<Record> childList = Db.find("select * from task where pid = ?", mu.getInt("task_id"));
             if(CollectionUtil.isNotEmpty(childList)){
                 mu.set("list", childList);

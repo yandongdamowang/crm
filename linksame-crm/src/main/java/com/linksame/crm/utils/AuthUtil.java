@@ -48,10 +48,10 @@ public class AuthUtil {
                 tableParaMap.put("tableId", "business_id");
                 tableParaMap.put("realm","business");
                 break;
-            case CRM_RECEIVABLES:
-                tableParaMap.put("tableName", "crm_receivables");
-                tableParaMap.put("tableId", "receivables_id");
-                tableParaMap.put("realm","receivables");
+            case PMP_PAYMENT:
+                tableParaMap.put("tableName", "pmp_contract_payment");
+                tableParaMap.put("tableId", "bill_id");
+                tableParaMap.put("realm","contract_payment");
                 break;
             default:
                 return null;
@@ -75,7 +75,7 @@ public class AuthUtil {
         if(! equals && !contains){
             if(longs != null && longs.size() > 0){
                 authSql.append(" and (owner_user_id in (").append(StrUtil.join(",", longs)).append(")");
-                if("crm_customer".equals(tablePara.get("tableName")) || "crm_business".equals(tablePara.get("tableName")) || "pmp_contract".equals(tablePara.get("tableName"))){
+                if("crm_customer".equals(tablePara.get("tableName")) || "pmp_contract_payment".equals(tablePara.get("tableName")) || "pmp_contract".equals(tablePara.get("tableName"))){
                     authSql.append(" or ro_user_id like CONCAT('%,','").append(userId).append("',',%')").append(" or rw_user_id like CONCAT('%,','").append(userId).append("',',%')");
                 }
                 authSql.append(")");

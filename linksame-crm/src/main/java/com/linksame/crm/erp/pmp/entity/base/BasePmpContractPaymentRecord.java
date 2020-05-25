@@ -47,11 +47,11 @@ public abstract class BasePmpContractPaymentRecord<M extends BasePmpContractPaym
         return getStr("payment_number");
     }
 
-    public void setCustomerid(java.lang.Integer customerid) {
-        set("customer_id", customerid);
+    public void setCustomerId(java.lang.Integer customerId) {
+        set("customer_id", customerId);
     }
 
-    public java.lang.Integer getCustomerid() {
+    public java.lang.Integer getCustomerId() {
         return getInt("customer_id");
     }
 

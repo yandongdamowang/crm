@@ -210,6 +210,7 @@ public class AdminUserService {
             String password = BaseUtil.sign(adminUser.getUsername() + pwd, adminUser.getSalt());
             Db.update("update admin_user set password = ? where user_id = ?", password, id);
             BaseUtil.userExit(adminUser.getUserId(),null);
+            RedisManager.getRedis().del(BaseConstant.LOGIN_SUCCESS+adminUser.getUsername());
         }
         return R.ok();
     }
@@ -514,5 +515,16 @@ public class AdminUserService {
             }
         }
         return userIds;
+    }
+
+    public R onlineOfflineRate() {
+        Set<String> keys = RedisManager.getRedis().keys(BaseConstant.LOGIN_SUCCESS + "**");
+        int size = keys.size();
+        Integer integer = Db.queryInt("select count(user_id) from admin_user");
+        Record record = new Record();
+        record.set("onlineNumber",size);
+        record.set("offLineNumber",(integer-size));
+        record.set("headcount",integer);
+        return R.ok().put("data",record);
     }
 }

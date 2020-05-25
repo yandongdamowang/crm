@@ -44,7 +44,7 @@ public class AdminSysConfigController extends Controller {
     public void setSysConfig(){
         UploadFile file = getFile("file");
         Kv kv = getKv();
-        if(file!=null){
+        if(file != null){
             //上传至minio服务器, 直接返回访问路径
             R r = adminFileService.sysUpload(file);
             kv.set("logo", r.get("url").toString());

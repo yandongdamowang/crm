@@ -43,6 +43,7 @@ public class AdminFileService {
         JSONObject jsonObject = basePageRequest.getJsonObject();
         Kv kv= Kv.by("batchId", jsonObject.getString("batchId"))
                 .set("compositionName", jsonObject.getString("compositionName"))
+                .set("oldName", jsonObject.getString("oldName"))
                 .set("folderId", jsonObject.getInteger("folderId"))
                 .set("labelId", jsonObject.getInteger("labelId"))
                 .set("workId", jsonObject.getInteger("workId"))

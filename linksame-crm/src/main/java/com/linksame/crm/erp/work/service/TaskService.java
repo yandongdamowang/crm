@@ -18,12 +18,10 @@ import com.linksame.crm.erp.admin.service.AdminFileService;
 import com.linksame.crm.erp.oa.common.OaEnum;
 import com.linksame.crm.erp.oa.service.OaActionRecordService;
 import com.linksame.crm.erp.work.entity.*;
-import com.linksame.crm.erp.work.entity.*;
 import com.linksame.crm.utils.AuthUtil;
 import com.linksame.crm.utils.BaseUtil;
 import com.linksame.crm.utils.R;
 import com.linksame.crm.utils.TagUtil;
-
 import java.util.*;
 
 public class TaskService{
@@ -67,6 +65,12 @@ public class TaskService{
         Db.update("update work_task_class setUser order_id = ? where class_id = ?", targetClassOrderId, originalClassId);
     }
 
+    /**
+     * 设置任务
+     * @param task
+     * @param taskRelation
+     * @return
+     */
     @Before(Tx.class)
     public R setTask(Task task, TaskRelation taskRelation){
         AdminUser user = BaseUtil.getUser();
@@ -97,8 +101,49 @@ public class TaskService{
             workTaskLog.setTaskId(task.getTaskId());
             workTaskLog.setContent("添加了新任务 " + task.getName());
             saveWorkTaskLog(workTaskLog);
-        }else{
+        } else {
             task.setUpdateTime(new Date());
+            //当设置任务状态为完成时, 判断是否为重复任务
+            if(task.getStatus() == 5){
+                task.setCoTime(new Date());
+                //如果是, 需要根据重复任务的配置, 解析获取下一个重复节点, 生成下一个任务
+                if(task.getRepeatId() != 0){
+                    //获取任务数据
+                    Task newTask = Task.dao.findById(task.getTaskId());
+                    if(newTask == null){
+                        return R.error("原任务数据不存在");
+                    }
+                    //获取重复任务
+                    TaskRepeat taskRepeat = TaskRepeat.dao.findById(newTask.getRepeatId());
+                    if(taskRepeat != null){
+                        //按天重复类型
+                        if(taskRepeat.getRepeatType() == 1){
+                            //下一个任务的执行时间(开始/截止时间) = 原任务开始时间/截止时间 + 间隔天数
+                            Date startDate = com.linksame.crm.utils.DateUtil.getNextDay(newTask.getStartTime(), taskRepeat.getRepeatInterval() + 1);
+                            String startTime = com.linksame.crm.utils.DateUtil.dateToStrLong(startDate);
+                            Date stopDate = com.linksame.crm.utils.DateUtil.getNextDay(newTask.getStopTime(), taskRepeat.getRepeatInterval() + 1);
+                            String stopTime = com.linksame.crm.utils.DateUtil.dateToStrLong(stopDate);
+                            //设置开始时间与结束时间, 并生成新任务
+                            saveRepeatTask(newTask, startTime, stopTime);
+                        } else if(taskRepeat.getRepeatType() == 2){
+                            //通过范围筛选, 推算出下一个任务开始时间
+                            String startTime = getWeekDatetime(newTask.getStartTime(), taskRepeat);
+                            //根据原始任务的开始时间与结束时间间隔, 推算新任务的结束时间
+                            String stopTime = getStoptime(newTask, startTime);
+                            //设置开始时间与结束时间, 并生成新任务
+                            saveRepeatTask(newTask, startTime, stopTime);
+                        } else if(taskRepeat.getRepeatType() == 3){
+                            //通过范围筛选, 推算出下一个任务开始时间
+                            String startTime = getMonthDatetime(newTask.getStartTime(), taskRepeat);
+                            //根据原始任务的开始时间与结束时间间隔, 推算新任务的结束时间
+                            String stopTime = getStoptime(newTask, startTime);
+                            //设置开始时间与结束时间, 并生成新任务
+                            saveRepeatTask(newTask, startTime, stopTime);
+                        }
+                    }
+                }
+            }
+            //更新任务及任务日志信息记录
             bol = getWorkTaskLog(task, user.getUserId());
         }
         if (taskRelation != null) {
@@ -113,6 +158,114 @@ public class TaskService{
         task.getMainUserId();
         oaActionRecordService.addRecord(task.getTaskId(), OaEnum.TASK_TYPE_KEY.getTypes(), task.getUpdateTime() == null ? 1 : 2, oaActionRecordService.getJoinIds(user.getUserId(), getJoinUserIds(task)), oaActionRecordService.getJoinIds(Long.valueOf(user.getDeptId()), ""));
         return bol ? R.ok().put("data", Kv.by("task_id", task.getTaskId())) : R.error();
+    }
+
+    //根据原始任务的开始时间与结束时间间隔, 推算新任务的结束时间
+    private String getStoptime(Task newTask, String startTime) {
+        //获取原任务开始时间与截止时间的间隔天数
+        int days = com.linksame.crm.utils.DateUtil.differentDays(newTask.getStartTime(), newTask.getStopTime());
+        //在新任务的开始日期上加入间隔天数, 生成新任务的截止日期
+        String stopDate = com.linksame.crm.utils.DateUtil.checkOption(startTime, days);
+        //时分秒替换
+        return com.linksame.crm.utils.DateUtil.handleDate(com.linksame.crm.utils.DateUtil.dateToStrLong(newTask.getStopTime()), stopDate + " 00:00:00");
+    }
+
+    //周类型范围筛选, 根据已知条件推算下一个任务时间
+    private String getWeekDatetime(Date datetime, TaskRepeat taskRepeat) {
+        String startTime = null;
+        //根据日期获取是周几
+        Integer beforeStartWeek = com.linksame.crm.utils.DateUtil.getWeek(com.linksame.crm.utils.DateUtil.dateToStrLong(datetime));
+        //获取该日期所在周, 与周一之间的间隔天数(-4)
+        Integer beforeWeekMonday = com.linksame.crm.utils.DateUtil.getWeekMonday(datetime);
+        //重复设置周数值列表(例如3,0  分别对应周三,周日)
+        String[] repeatAttr = taskRepeat.getRepeatAttr().split(",");
+        //星期对应的日期列表
+        List<String> weekDateList = new ArrayList<>();
+        //获取该周的周数据对应的具体日期(开始时间)
+        String beforeStartDate = com.linksame.crm.utils.DateUtil.dateToStrLong(com.linksame.crm.utils.DateUtil.getNextDay(datetime, beforeWeekMonday));
+        String afterStartDate = com.linksame.crm.utils.DateUtil.dateToStrLong(com.linksame.crm.utils.DateUtil.getNextDay(datetime, 7 - beforeStartWeek));
+        for(String attr : repeatAttr){
+            int week = Integer.parseInt(attr);
+            //判断数值是否大于原任务开始时间对应的周几数据, 如果大于则是下一个执行的时间点对应的周几数据, 如果都小于装入list, 后续取list第一个数据, 处理间隔循环
+            if(week > beforeStartWeek && beforeStartWeek != 7){
+                //获取下一个任务开始时间具体日期
+                String startDate = com.linksame.crm.utils.DateUtil.getDayOfWeekWithinDateInterval(beforeStartDate, afterStartDate, Integer.parseInt(attr)).get(0);
+                //秒数替换, 生成下一个任务的开始时间
+                startTime = com.linksame.crm.utils.DateUtil.handleDate(com.linksame.crm.utils.DateUtil.dateToStrLong(datetime), startDate + " 00:00:00");
+                break;
+            } else {
+                weekDateList.add(com.linksame.crm.utils.DateUtil.getDayOfWeekWithinDateInterval(beforeStartDate, afterStartDate, Integer.parseInt(attr)).get(0));
+            }
+        }
+        //判断返回数值是否有数据, 如果没有数据, 说明遍历的重复值数据都不满足条件, 需进入下一个重复周期, 取出下个重复周期的第一条数据作为下一个任务的开始时间
+        if(StringUtils.isEmpty(startTime)){
+            //替换任务开始时间的时分秒
+            String startDate = com.linksame.crm.utils.DateUtil.handleDate(com.linksame.crm.utils.DateUtil.dateToStrLong(datetime), weekDateList.get(0) + " 00:00:00");
+            //获取间隔周期的第一个重复节点日期的开始时间
+            startTime = com.linksame.crm.utils.DateUtil.dateToStrLong(com.linksame.crm.utils.DateUtil.getNextDay(com.linksame.crm.utils.DateUtil.strToDateLong(startDate),taskRepeat.getRepeatInterval() * 7 + 7));
+        }
+        return startTime;
+    }
+
+    //月类型范围筛选, 根据已知条件推算下一个任务时间
+    private String getMonthDatetime(Date datetime, TaskRepeat taskRepeat) {
+        String startTime = null;
+        //分别拿到原任务开始日期的年份和月份
+        int year = com.linksame.crm.utils.DateUtil.getYear(com.linksame.crm.utils.DateUtil.dateToStr(datetime));
+        int month = com.linksame.crm.utils.DateUtil.getMonth(com.linksame.crm.utils.DateUtil.dateToStr(datetime));
+        //获取原任务月份的最后一天, 用来判断后续日期如果有31号时, 进行校验
+        String lastDate = com.linksame.crm.utils.DateUtil.getLastDayOfMonth(year, month);
+        //拿到日期, 作为遍历下一个重复节点的条件
+        int lastDay = com.linksame.crm.utils.DateUtil.getDate(lastDate);
+        //重复设置周数值列表(例如3,0  分别对应周三,周日)
+        String[] repeatAttr = taskRepeat.getRepeatAttr().split(",");
+        List<String> monthDateList = new ArrayList<>();
+        //获取当前日期的日期数(例如2020=05-22, 拿到22)
+        String dateStr = com.linksame.crm.utils.DateUtil.dateToStr(datetime);
+        Integer date = Integer.parseInt(dateStr.substring(dateStr.length()-2));
+        //遍历设置的日期, 与原任务开始日期比较, 获取到下一个任务的开始时间
+        for(String attr : repeatAttr){
+            Integer day = Integer.parseInt(attr);
+            //获取原始任务开始日期作为数据模板
+            String str = com.linksame.crm.utils.DateUtil.dateToStr(datetime);
+            if(day > date && date != lastDay){
+                //日期替换
+                String startDay = com.linksame.crm.utils.DateUtil.setDate(str, day);
+                //秒数替换, 生成下一个任务的开始时间
+                startTime = com.linksame.crm.utils.DateUtil.handleDate(com.linksame.crm.utils.DateUtil.dateToStrLong(datetime), startDay + " 00:00:00");
+                break;
+            } else {
+                //日期替换
+                String newDateTime = com.linksame.crm.utils.DateUtil.setDate(str, Integer.parseInt(attr));
+                //月份替换(需算入间隔月份)
+                String newDate = com.linksame.crm.utils.DateUtil.setMonth(newDateTime, month + taskRepeat.getRepeatInterval() + 1);
+                monthDateList.add(newDate);
+            }
+        }
+        //判断返回数值是否有数据, 如果没有数据, 说明遍历的重复值数据都不满足条件, 需进入下一个重复周期, 取出下个重复周期的第一条数据作为下一个任务的开始时间
+        if(StringUtils.isEmpty(startTime)){
+            //替换任务开始时间的时分秒
+            startTime = com.linksame.crm.utils.DateUtil.handleDate(com.linksame.crm.utils.DateUtil.dateToStrLong(datetime), monthDateList.get(0) + " 00:00:00");
+        }
+
+        return startTime;
+    }
+
+    //存储重复任务
+    private void saveRepeatTask(Task task, String startDate, String endDate){
+        task.remove("task_id");
+        task.remove("update_time");
+        task.remove("co_time");
+        task.remove("archive_time");
+        task.remove("hidden_time");
+        task.remove("sprint_id");
+        task.setStatus(0);
+        task.setIsArchive(0);
+        task.setIshidden(0);
+        task.setCreateTime(new Date());
+        task.setStartTime(com.linksame.crm.utils.DateUtil.strToDateLong(startDate));
+        task.setStopTime(com.linksame.crm.utils.DateUtil.strToDateLong(endDate));
+        task.save();
     }
 
     private String getJoinUserIds(Task task){
@@ -230,6 +383,8 @@ public class TaskService{
         List<Record> rearList = Db.find("select b.* from task_rely as a inner join task as b on a.task_id = b.task_id where a.pre_task_id = ?", taskId);
         //组装通用标签数据
         List<Record> commonLabelList = Db.find("select label_id,name as labelName,color from work_task_label where is_common = 1");
+        //组装重复任务数据
+        Record taskRepeat = Db.findFirst("select a.* from task_repeat a left join task b on a.repeat_id = b.repeat_id where b.task_id = ?", taskId);
 
         task.set("customerList", customerList)
                 .set("contactsList", contactsList)
@@ -239,7 +394,8 @@ public class TaskService{
                 .set("rearTaskList", rearList)
                 .set("commonLabelList", commonLabelList)
                 .set("labelList", labelList)
-                .set("ownerUserList", ownerUserList);
+                .set("ownerUserList", ownerUserList)
+                .set("taskRepeat", taskRepeat);
 
         return task;
     }

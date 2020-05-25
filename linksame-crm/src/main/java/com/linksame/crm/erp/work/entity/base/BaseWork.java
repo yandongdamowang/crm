@@ -33,6 +33,14 @@ public abstract class BaseWork<M extends BaseWork<M>> extends Model<M> implement
 		return getStr("code");
 	}
 
+	public void setImg(java.lang.String img) {
+		set("img", img);
+	}
+
+	public java.lang.String getImg() {
+		return getStr("img");
+	}
+
 	public void setStatus(java.lang.Integer status) {
 		set("status", status);
 	}

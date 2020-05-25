@@ -19,8 +19,6 @@
             pc.required_signing_time,
             pc.contract_purchase_end_time,
             pc.batch_id,
-            pc.check_status,
-            pc.examine_record_id,
             pc.create_user_id,
             pc.owner_user_id,
             pc.customer_id,
@@ -69,8 +67,6 @@
             pc.contract_purchase_start_time,
             pc.contract_purchase_end_time,
             pc.batch_id,
-            pc.check_status,
-            pc.examine_record_id,
             pc.create_user_id,
             pc.owner_user_id,
             pc.customer_id,
@@ -88,7 +84,4 @@
       delete from pmp_contract where contract_id = ?
     #end
 
-  #sql ("updateCheckStatusById")
-    update pmp_contract set check_status = ? where contract_id = ?
-  #end
 #end

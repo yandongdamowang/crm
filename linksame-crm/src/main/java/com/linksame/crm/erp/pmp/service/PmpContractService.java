@@ -18,6 +18,7 @@ import com.linksame.crm.erp.crm.service.CrmRecordService;
 import com.linksame.crm.erp.pmp.common.PmpInterface;
 import com.linksame.crm.erp.pmp.entity.PmpBusiness;
 import com.linksame.crm.erp.pmp.entity.PmpContract;
+import com.linksame.crm.erp.pmp.entity.PmpContractCardinalNumber;
 import com.linksame.crm.erp.pmp.entity.PmpContractPayment;
 import com.linksame.crm.erp.work.entity.Task;
 import com.linksame.crm.erp.work.service.TaskService;
@@ -49,64 +50,86 @@ public class PmpContractService {
     private AdminExamineRecordService examineRecordService;
 
     @Before(Tx.class)
-    public R add(PmpContract pmpContract,List<PmpContractPayment> pmpContractPayments,List<Task> tasks) {
-        if (!Db.tx(() -> {
+    public R add(PmpContract pmpContract, List<PmpContractPayment> pmpContractPayments, List<Task> tasks, List<PmpBusiness> businesses, List<PmpContractCardinalNumber> pmpContractCardinalNumbers) {
+        return Db.tx(()->{
+
+            //保存合同
             pmpContract.setCreationTime(new Date(System.currentTimeMillis()));
             pmpContract.setUpdateTime(new Date(System.currentTimeMillis()));
-            pmpContract.setCheckStatus(0);
             pmpContract.setCreateUserId(BaseUtil.getUserId());
-            pmpContract.setRwUserId(",");
-            pmpContract.setRoUserId(",");
             pmpContract.save();
             Long contractId = pmpContract.getLong("contract_id");
-            int i = contractId.intValue();
-            crmRecordService.addRecord(i  , CrmEnum.CRM_CONTRACT);
+            crmRecordService.addRecord(contractId.intValue()  , CrmEnum.CRM_CONTRACT);
+
             BigDecimal money = pmpContract.getMoney();
             BigDecimal money1 = new BigDecimal(0);
-            //保存 合同
-            //保存付款单
-            for (PmpContractPayment contractPayment : pmpContractPayments) {
-                if (contractPayment.getMoney() != null
-                        && contractPayment.getPaymentNode() != null
-                        && contractPayment.getPaymentName() != null
-                        && contractPayment.getCostPercentage() != null) {
-                    tasks.forEach(task -> {
-                        if (contractPayment.getPaymentClause() != null && contractPayment.getPaymentClause().equals(task.getTaskId())){
-                            task.setTaskId(null);
-                            R r = taskService.setTask(task, null);
-                            System.out.println(r);
-                            Kv data = (Kv)r.get("data");
-                            Integer taskId = data.getInt("task_id");
-                            task.setTaskId(taskId);
-                            contractPayment.setPaymentClause(taskId);
-                        }
-                    });
-                    money1 = money1.add(contractPayment.getMoney());
-                    contractPayment.setContractId(pmpContract.getLong("contract_id"));
-                    contractPayment.setProjectId(pmpContract.getInt("project_id"));
-                    contractPayment.setTradeForm(PmpInterface.contractPayment.trade.form.EXPENF);
-                    contractPayment.setTradeStatus(PmpInterface.contractPayment.trade.stats.TRADING);
-                    contractPayment.setCreationTime(new Date(System.currentTimeMillis()));
-                    contractPayment.setpracticalMoney(new BigDecimal(0));
-                    contractPayment.setPracticalCostPercentage(0);
-                    contractPayment.save();
-                    Long billId = contractPayment.getLong("bill_id");
-                    crmRecordService.addRecord(billId.intValue()  , CrmEnum.PMP_PAYMENT);
-                } else {
-                    return false;
-                }
+            Map<Long, Long> integerLongHashMap = new HashMap<>();
+            //保存基数
+            for (PmpContractCardinalNumber pmpContractCardinalNumber : pmpContractCardinalNumbers) {
+                money1 = money1.add(pmpContractCardinalNumber.getCardinalNumberMoney());
+                pmpContractCardinalNumber.save();
+                Long cardinalNumberId = pmpContractCardinalNumber.getLong("cardinal_number_id");
+                integerLongHashMap.putIfAbsent(pmpContractCardinalNumber.getCardinalNumberIndexe(), cardinalNumberId);
             }
             if (money.compareTo(money1) != 0) {
                 return false;
             }
+            BigDecimal paymentMoney1 = new BigDecimal(0);
+            Map<Integer, Integer> taskMap = new HashMap<>();
             tasks.forEach(task -> {
-                if (task.getTaskId() != null){
-                    R r = taskService.setTask(task, null);
-                }
+                task.setTaskId(null);
+                R r = taskService.setTask(task, null);
+                Kv data = (Kv)r.get("data");
+                Integer taskId = data.getInt("task_id");
+                task.setTaskId(taskId);
+                task.getTasks().forEach(task1 -> {
+                    Integer taskIdOl = null;
+                    if (task1.getTaskId() != null){
+                        taskIdOl = task1.getTaskId();
+                        task1.setTaskId(null);
+                    }
+                    R rs = taskService.setTask(task1, null);
+                    Kv datas = (Kv)rs.get("data");
+                    Integer taskIds = datas.getInt("task_id");
+                    if (taskIdOl != null){
+                        taskMap.put(taskIdOl,taskIds);
+                    }
+                });
             });
+            //保存账单
+            for (PmpContractPayment pmpContractPayment : pmpContractPayments) {
+                Long cardinalNumberId = pmpContractPayment.getCardinalNumberId();
+                Long aLong = integerLongHashMap.get(cardinalNumberId);
+                pmpContractPayment.getPaymentClause();//"+++++++++";
+                pmpContractPayment.setContractId(contractId);
+                pmpContractPayment.setProjectId(pmpContract.getProjectId());
+                paymentMoney1.add(pmpContractPayment.getMoney());
+                pmpContractPayment.setCreationTime(new Date(System.currentTimeMillis()));
+                pmpContractPayment.setUpdateTime(new Date(System.currentTimeMillis()));
+                pmpContractPayment.setTradeForm(PmpInterface.contractPayment.trade.form.EXPENF);
+                pmpContractPayment.setBatchId(StrUtil.isNotEmpty(pmpContractPayment.getBatchId()) ? pmpContractPayment.getBatchId() : IdUtil.simpleUUID());
+                pmpContractPayment.setPracticalCostPercentage(0);
+                pmpContractPayment.setPracticalMoney(new BigDecimal(0));
+                pmpContractPayment.setOwnerUserId(pmpContract.getOwnerUserId());
+                pmpContractPayment.setCardinalNumberId(aLong);
+                pmpContractPayment.setPaymentClause(taskMap.get(pmpContractPayment.getPaymentClause()));
+                pmpContractPayment.save();
+                Long billId = pmpContractPayment.getLong("bill_id");
+                crmRecordService.addRecord(billId.intValue()  , CrmEnum.PMP_PAYMENT);
+            }
+
+            if (money.compareTo(paymentMoney1) != 0) {
+                return false;
+            }
+
+            for (PmpBusiness business : businesses) {
+                // 关联业务
+                business.setObjectId(contractId);
+                business.setObjectType(CrmEnum.CRM_CONTRACT.getType());
+                boolean save = business.save();
+            }
             return true;
-        })) return R.error();
-        return R.ok();
+        }) ? R.ok():R.error();
     }
 
     public R queryById(Long contractId) {

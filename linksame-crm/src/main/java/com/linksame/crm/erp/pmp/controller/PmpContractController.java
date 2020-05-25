@@ -12,6 +12,7 @@ import com.linksame.crm.common.annotation.Permissions;
 import com.linksame.crm.common.config.paragetter.BasePageRequest;
 import com.linksame.crm.erp.pmp.entity.PmpBusiness;
 import com.linksame.crm.erp.pmp.entity.PmpContract;
+import com.linksame.crm.erp.pmp.entity.PmpContractCardinalNumber;
 import com.linksame.crm.erp.pmp.entity.PmpContractPayment;
 import com.linksame.crm.erp.pmp.service.PmpContractService;
 import com.linksame.crm.erp.work.entity.Task;
@@ -22,10 +23,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author ZhangJie
@@ -47,26 +52,54 @@ public class PmpContractController extends Controller {
         String data = getRawData();
         JSONObject jsonObject = JSON.parseObject(data);
         PmpContract pmpContract = jsonObject.getObject("pmpContract",PmpContract.class);
-        boolean notEmpty = StrUtil.isNotEmpty(pmpContract.getBatchId());
-        pmpContract.setBatchId(notEmpty ? pmpContract.getBatchId() : IdUtil.simpleUUID());
-        List<PmpContractPayment> pmpContractPayments = new ArrayList<>();
-        List<Task> tasklist = new ArrayList<>();
-        JSONArray pmpContractPayments2 = jsonObject.getJSONArray("pmpContractPayments");
+        pmpContract.setBatchId(StrUtil.isNotEmpty(pmpContract.getBatchId()) ? pmpContract.getBatchId() : IdUtil.simpleUUID());
+
+        List<Task> tasklists = new ArrayList<>();
         JSONArray tasks = jsonObject.getJSONArray("tasks");
         if (tasks != null) {
             for (Object o : tasks) {
                 Task task = JSON.parseObject(o.toString(), Task.class);
-                task.setWorkId(pmpContract.getProjectId());
                 task.setClassId(pmpContract.getMilestoneNodes());
-                tasklist.add(task);
+                task.setWorkId(pmpContract.getProjectId());
+                System.out.println(task);
+                JSONObject jsonObject1 = JSON.parseObject(o.toString());
+                if (jsonObject1.get("task") != null) {
+                    List<Task> taskss = JSON.parseObject(jsonObject1.get("task").toString(), List.class);
+                    task.setTasks(taskss);
+                }
+                tasklists.add(task);
             }
         }
+
+        List<PmpBusiness> businessList = new ArrayList<>();
+        JSONArray businesss = jsonObject.getJSONArray("businesss");
+        if (businesss != null){
+            for (Object o : businesss) {
+                PmpBusiness business = JSON.parseObject(o.toString(), PmpBusiness.class);
+                businessList.add(business);
+            }
+
+        }
+        List<PmpContractCardinalNumber> pmpContractCardinalNumbers = new ArrayList<>();
+        JSONArray contractCardinalNumbers = jsonObject.getJSONArray("contractCardinalNumbers");
+        if (contractCardinalNumbers != null){
+            for (Object o : contractCardinalNumbers) {
+                PmpContractCardinalNumber pmpContractCardinalNumber = JSON.parseObject(o.toString(), PmpContractCardinalNumber.class);
+                pmpContractCardinalNumbers.add(pmpContractCardinalNumber);
+            }
+        }
+
+        List<PmpContractPayment> pmpContractPayments = new ArrayList<>();
+        JSONArray pmpContractPayments2 = jsonObject.getJSONArray("pmpContractPayments");
         for (Object o : pmpContractPayments2) {
             PmpContractPayment pmpContractPayment = JSON.parseObject(o.toString(), PmpContractPayment.class);
+            pmpContractPayment.setOwnerUserId(pmpContract.getOwnerUserId());
+            pmpContractPayment.setRwUserId(",");
+            pmpContractPayment.setRoUserId(",");
             pmpContractPayment.setBatchId(StrUtil.isNotEmpty(pmpContract.getBatchId()) ? pmpContract.getBatchId() : IdUtil.simpleUUID());
             pmpContractPayments.add(pmpContractPayment);
         }
-        renderJson(pmpContractService.add(pmpContract,pmpContractPayments,tasklist));
+        renderJson(pmpContractService.add(pmpContract,pmpContractPayments,tasklists,businessList,pmpContractCardinalNumbers));
 
     }
     /**

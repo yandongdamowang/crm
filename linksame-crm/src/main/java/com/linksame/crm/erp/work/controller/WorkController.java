@@ -2,8 +2,10 @@ package com.linksame.crm.erp.work.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.jfinal.upload.UploadFile;
 import com.linksame.crm.common.annotation.Permissions;
 import com.linksame.crm.common.config.paragetter.BasePageRequest;
+import com.linksame.crm.erp.admin.service.AdminFileService;
 import com.linksame.crm.erp.work.entity.Work;
 import com.linksame.crm.erp.work.service.WorkService;
 import com.jfinal.aop.Inject;
@@ -26,6 +28,8 @@ public class WorkController extends Controller {
 
     @Inject
     private WorkService workService;
+    @Inject
+    private AdminFileService adminFileService;
 
     /**
      * @author hmb
@@ -38,6 +42,14 @@ public class WorkController extends Controller {
     })
     @Permissions({"project:projectManage:save"})
     public void setWork(@Para("") Work work){
+        UploadFile file = getFile("file");
+        if(file != null){
+            //上传至minio服务器, 直接返回访问路径
+            R r = adminFileService.sysUpload(file);
+            String img = r.get("url").toString();
+            work.setImg(img);
+        }
+        
         renderJson(workService.setWork(work));
     }
 
