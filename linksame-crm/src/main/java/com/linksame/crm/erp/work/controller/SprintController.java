@@ -65,15 +65,10 @@ public class SprintController extends Controller {
     }
 
     /**
-     * 根据各状态查询数量
+     * 查询各状态数量及所关联任务列表数据
      */
-    public void queryCount(){
-        List<Record> countList = Db.find("select count(*) as taskCount from task_sprint where is_del = 0 GROUP BY status ORDER BY status");
-        if(CollectionUtil.isEmpty(countList)){
-            renderJson(R.error("未查询到数据"));
-        }
-
-        renderJson(R.ok().put("data", countList));
+    public void queryCountAndTask(){
+        renderJson(sprintService.queryCountAndTask());
     }
 
     /**
