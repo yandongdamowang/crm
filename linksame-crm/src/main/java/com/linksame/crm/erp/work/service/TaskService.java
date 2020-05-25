@@ -765,4 +765,41 @@ public class TaskService{
             return R.ok().put("data", pageList);
         }
     }
+
+    /**
+     * 根据通用标签查询任务列表 ---- 周报
+     * @return
+     */
+    public R getWeekly(Integer workId, Date startTime, Date stopTime){
+        Record record = new Record();
+        List<Record> allClassList;
+        //查询里程碑节点数据列表
+        if(workId != null && workId != 0){
+            //根据项目查询关联里程碑
+            allClassList = Db.find("select * from work_task_class where status = 0 and work_id = ?", workId);
+        } else {
+            //查询全部里程碑
+            allClassList = Db.find("select * from work_task_class where status = 0");
+        }
+        //遍历里程碑节点, 组装数据
+        allClassList.forEach(ivan->{
+            Kv kv= Kv.by("classId", ivan.get("class_id"))
+                    .set("startTime", startTime)
+                    .set("stopTime", stopTime);
+            if(workId != null && workId != 0){
+                kv.set("workId", workId);
+            }
+            //查询该里程碑关联任务列表
+            List<Record> taskList = Db.find(Db.getSqlPara("work.task.queryListByWeekly", kv));
+            ivan.set("taskList", taskList);
+        });
+
+        record.set("classList", allClassList);
+        record.set("allCount", Db.queryInt("select count(*) from task where find_in_set(1, label_id) and ishidden = 0"));
+        record.set("completedCount", Db.queryInt("select count(*) from task where find_in_set(1, label_id) and ishidden = 0 and `status` = 5"));
+        record.set("undoneCount", Db.queryInt("select count(*) from task where find_in_set(1, label_id) and ishidden = 0 and `status` not in (3,5)"));
+        record.set("extensionCount", Db.queryInt("select count(*) from task where find_in_set(1, label_id) and ishidden = 0 and `status` = 2"));
+
+        return R.ok().put("data", record);
+    }
 }
