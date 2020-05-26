@@ -904,7 +904,25 @@ export default {
 
 
     createPayment() {
-      console.log(123)
+      this.$request({
+        url: 'pmpContractPayment/updates',
+        method: 'post',
+        data: this.form,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8'
+        }
+      }).then(res => {
+        console.log(res)
+        this.dialogCreateStatus = false
+
+        this.$message({
+          type: 'success',
+          message: '添加成功!'
+        })
+      })
+        .catch((e) => {
+          console.log('contactAdd', e)
+        })
     },
 
     createContact() {

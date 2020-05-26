@@ -40,11 +40,16 @@ export function workWorkDeleteAPI(data) {
  * 新建项目
  * @param {*} data
  */
-export function workWorkSaveAPI(data) {
+export function workWorkSaveAPI(header, formData) {
   return request({
-    url: 'work/setWork',
+    url: `work/setWork?name=${header.name}&description=${header.description}&color=${
+      header.color
+    }&isOpen=${header.isOpen}&ownerUserId=${header.ownerUserId}`,
     method: 'post',
-    data: data
+    data: formData,
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
   })
 }
 
@@ -203,4 +208,3 @@ export function workWorkGroupListAPI(data) {
     data: data
   })
 }
-

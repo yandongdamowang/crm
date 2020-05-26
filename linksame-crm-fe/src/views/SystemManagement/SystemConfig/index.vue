@@ -1,23 +1,12 @@
 <template>
-  <flexbox
-    style="height:100%;"
-    direction="column"
-    align="stretch">
-    <div class="header">
-      企业首页
-    </div>
-    <div
-      v-loading="loading"
-      class="body">
-      <el-button
-        v-if="systemSaveAuth"
-        class="save-button"
-        type="primary"
-        @click="save">保存</el-button>
+  <flexbox style="height:100%;" direction="column" align="stretch">
+    <div class="header">企业首页</div>
+    <div v-loading="loading" class="body">
+      <el-button v-if="systemSaveAuth" class="save-button" type="primary" @click="save">保存</el-button>
 
       <div class="section">
         <div class="name">企业名称</div>
-        <el-input v-model="systemName"/>
+        <el-input v-model="systemName" />
       </div>
       <div class="section">
         <div class="name">企业logo</div>
@@ -28,16 +17,13 @@
           drag
           class="upload"
           action="http"
-          accept="image/png, image/jpeg, image/gif, image/jpg">
-          <i class="el-icon-plus uploader-icon"/>
+          accept="image/png, image/jpeg, image/gif, image/jpg"
+        >
+          <i class="el-icon-plus uploader-icon" />
         </el-upload>
-        <div
-          v-else
-          class="upload-show">
-          <img :src="systemImage">
-          <i
-            class="el-icon-remove icon-delete"
-            @click="deleteSystemImage"/>
+        <div v-else class="upload-show">
+          <img :src="systemImage" />
+          <i class="el-icon-remove icon-delete" @click="deleteSystemImage" />
         </div>
       </div>
     </div>
@@ -53,7 +39,8 @@
       width="550px"
       save-button-title="确定"
       @save="submiteImage"
-      @close="showEditImage=false"/>
+      @close="showEditImage=false"
+    />
   </flexbox>
 </template>
 
@@ -135,6 +122,7 @@ export default {
         this.loading = true
         var param = new FormData()
         param.append('name', this.systemName)
+        console.log(777, this.editedImage)
         if (this.editedImage) {
           param.append(
             'file',

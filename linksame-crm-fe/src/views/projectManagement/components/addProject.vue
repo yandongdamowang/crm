@@ -1,28 +1,16 @@
 <template>
-  <create-view
-    v-loading="loading"
-    :body-style="{height: '100%'}">
+  <create-view v-loading="loading" :body-style="{height: '100%'}">
     <div class="add-project">
-      <div
-        slot="header"
-        class="header">
+      <div slot="header" class="header">
         <span class="text">创建项目</span>
-        <span
-          class="el-icon-close"
-          @click="close"/>
+        <span class="el-icon-close" @click="close" />
       </div>
       <div class="content">
         <div class="project-name">
           <div class="label color-label">项目名称</div>
-          <el-input
-            v-model="name"
-            placeholder="请输入内容">
-            <i
-              slot="prefix"
-              class="el-input__icon">
-              <span
-                :style="{'background': typeColor}"
-                class="bg-color"/>
+          <el-input v-model="name" placeholder="请输入内容">
+            <i slot="prefix" class="el-input__icon">
+              <span :style="{'background': typeColor}" class="bg-color" />
             </i>
           </el-input>
           <div class="color-box">
@@ -30,32 +18,26 @@
               v-for="(item, index) in typeColorList"
               :key="index"
               :style="{'background': item}"
-              @click="typeColor = item"/>
+              @click="typeColor = item"
+            />
           </div>
         </div>
         <div class="describe">
           <div class="label">项目描述</div>
-          <el-input
-            :rows="4"
-            v-model="description"
-            type="textarea"
-            placeholder="请输入内容"/>
+          <el-input :rows="4" v-model="description" type="textarea" placeholder="请输入内容" />
         </div>
         <div class="range">
           <div class="label">可见范围</div>
-          <el-select
-            v-model="openType"
-            placeholder="请选择">
+          <el-select v-model="openType" placeholder="请选择">
             <el-option
               v-for="item in openOptions"
               :key="item.value"
               :label="item.label"
-              :value="item.value"/>
+              :value="item.value"
+            />
           </el-select>
         </div>
-        <div
-          v-if="openType == 0"
-          class="member">
+        <div v-if="openType == 0" class="member">
           <div class="label">项目成员</div>
           <div>
             <div
@@ -63,23 +45,44 @@
               v-lazy:background-image="$options.filters.filterUserLazyImg(k.img)"
               v-for="(k, j) in selectUserList"
               :key="j"
-              class="div-photo k-img header-circle"/>
+              class="div-photo k-img header-circle"
+            />
             <members-dep
               :user-checked-data="selectUserList"
               :content-block="false"
               :close-dep="true"
-              @popoverSubmit="userSelectChange">
-              <img
-                slot="membersDep"
-                class="sent-img"
-                src="@/assets/img/task_add.png">
+              @popoverSubmit="userSelectChange"
+            >
+              <img slot="membersDep" class="sent-img" src="@/assets/img/task_add.png" >
             </members-dep>
           </div>
         </div>
+        <!-- :before-upload="beforeUpload"
+        :on-success="onSuccess"-->
+        <div style="margin:15px 0">
+          <div class="label">项目封面</div>
+          <!-- <el-upload
+            :headers="uploadHeaders"
+            :action="uploadAction"
+            :before-upload="beforeUpload"
+            class="avatar-uploader"
+          >-->
+          <el-upload
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess"
+            :before-upload="beforeAvatarUpload"
+            :action="uploadAction"
+            :headers="uploadHeaders"
+            class="avatar-uploader"
+            @click.native="uploadClick"
+          >
+            <img v-if="imageUrl" :src="imageUrl" class="avatar" >
+            <i v-else class="el-icon-plus avatar-uploader-icon" />
+          </el-upload>
+        </div>
+
         <div class="footer">
-          <el-button
-            type="primary"
-            @click="submitBtn">确定</el-button>
+          <el-button type="primary" @click="submitBtn">确定</el-button>
           <el-button @click="close">取消</el-button>
         </div>
       </div>
@@ -92,6 +95,8 @@ import CreateView from '@/components/CreateView'
 import { workWorkSaveAPI } from '@/api/projectManagement/project'
 import MembersDep from '@/components/selectEmployee/membersDep'
 
+import Lockr from 'lockr'
+
 export default {
   components: {
     CreateView,
@@ -102,9 +107,17 @@ export default {
 
   data() {
     return {
+      file: undefined,
+      uploadHeaders: {
+        'Admin-Token': Lockr.get('Admin-Token')
+        // 'Content-Type': 'multipart/form-data;',
+        // 'Accept': '*/*',
+        // 'Accept-Encoding': 'gzip, deflate, br'
+      },
       loading: false,
       name: '',
       description: '',
+      uploadAction: '',
       typeColor: '#53D397',
       typeColorList: [
         '#53D397',
@@ -130,7 +143,7 @@ export default {
           label: '公开：企业所有成员都可以看见此项目'
         }
       ],
-
+      imageUrl: '',
       selectUserList: []
     }
   },
@@ -155,34 +168,91 @@ export default {
   },
 
   methods: {
-    /**
-     * 保存
-     */
+
+    uploadClick() {
+      this.uploadAction = process.env.BASE_API + `work/setWork?name=${this.name}&description=${this.description}&color=${this.openType}&isOpen=${this.openType}&ownerUserId=${this.selectUserList.map(item => {
+        return item.userId
+      }).join(',')}`
+      console.log(123, this.uploadAction)
+    },
+
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw)
+      this.$emit('save-success')
+      this.$bus.$emit('add-project', this.name, res.work.workId)
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === 'image/jpeg'
+      const isLt2M = file.size / 1024 / 1024 < 2
+
+      if (!isJPG) {
+        this.$message.error('上传头像图片只能是 JPG 格式!')
+      }
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 2MB!')
+      }
+      return isJPG && isLt2M
+    },
+
+
+    // readFile() {
+    //   return new Promise((resolve, reject) => {
+    //     const self = this
+    //     const reader = new FileReader()
+    //     console.log(555, this.file)
+    //     reader.readAsBinaryString(this.file)
+    //     reader.onload = function(res) {
+    //     // console.log(123, res.target.result)
+    //     // params.append('file', res.target.result)
+    //     //   self.file = res.target.result
+    //       self.file = new Blob([res.target.result], { type: "'image/png'" })
+    //       //   self.file.type = 'image/png'
+    //       console.log(456, self.file)
+    //       //   console.log(new Blob([res.target.result]))
+    //       resolve()
+    //     }
+    //   })
+    // },
+    // beforeUpload() {
+    //   this.$message.success('上传完成')
+    // },
+
+
     submitBtn() {
-      this.loading = true
-      const params = {
-        name: this.name,
-        description: this.description,
-        color: this.typeColor,
-        isOpen: this.openType
-      }
-      if (this.openType == 0) {
-        params.ownerUserId = this.selectUserList
-          .map(item => {
-            return item.userId
-          })
-          .join(',')
-      }
-      workWorkSaveAPI(params)
-        .then(res => {
-          this.loading = false
-          this.$emit('save-success')
-          this.$bus.$emit('add-project', this.name, res.work.workId)
-          this.close()
-        })
-        .catch(() => {
-          this.loading = false
-        })
+      this.close()
+      this.$message.success('创建成功')
+    //   this.uploadAction = process.env.BASE_API + `work/setWork?name=${this.name}&description=${this.description}&color=${this.color}&isOpen=${this.isOpen}&ownerUserId=${this.ownerUserId}`
+
+    //   this.loading = true
+    //   var header = {
+    //     name: this.name,
+    //     description: this.description,
+    //     color: this.openType,
+    //     isOpen: this.openType
+    //   }
+    //   if (this.openType == 0) {
+    //     header.ownerUserId = this.selectUserList.map(item => {
+    //       return item.userId
+    //     }).join(',')
+    //   }
+
+    //   var formData = new FormData()
+    //   //   console.log(123, this.file)
+    //   //   await this.readFile()
+    //   //   console.log(789, this.file)
+    //   formData.append('file', this.file, Math.random())
+    //   workWorkSaveAPI(header, formData)
+    //     .then(res => {
+    //     //   console.log('提交', params)
+    //       this.loading = false
+    //       this.$emit('save-success')
+    //       this.$bus.$emit('add-project', this.name, res.work.workId)
+    //       this.close()
+    //       this.$message.success('创建成功')
+    //     })
+    //     .catch(() => {
+    //       this.loading = false
+    //     })
     },
 
     /**
@@ -203,6 +273,30 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
+}
+
 @mixin rt {
   float: right;
   color: #ccc;
