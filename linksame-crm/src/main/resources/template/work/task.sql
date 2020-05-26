@@ -104,7 +104,7 @@
   #sql("queryList")
     select a.*,b.realname as mainRealname from task a
 	    left join admin_user b on a.main_user_id = b.user_id
-        where 1=1
+        where a.ishidden = 0
         #if(taskName)
             and a.name like concat('%', #para(taskName),'%')
         #end
@@ -149,5 +149,19 @@
         #else
             order by a.start_time desc
         #end
+  #end
+
+  #sql("queryListByWeekly")
+    select a.* from task a where a.ishidden = 0 and find_in_set(1, a.label_id) and a.pid = 0
+        #if(classId)
+            and a.class_id = #para(classId)
+        #end
+        #if(workId)
+            and a.work_id = #para(workId)
+        #end
+        #if(startTime)
+            and a.start_time >= #para(startTime) and a.stop_time <= #para(stopTime)
+        #end
+        order by a.start_time asc
   #end
 #end
