@@ -56,6 +56,8 @@ public class PmpContractService {
             //保存合同
             pmpContract.setCreationTime(new Date(System.currentTimeMillis()));
             pmpContract.setUpdateTime(new Date(System.currentTimeMillis()));
+            pmpContract.setActualSigningTime(pmpContract.getBeginTime());
+            pmpContract.setRequiredSigningTime(new Date(System.currentTimeMillis()));
             pmpContract.setCreateUserId(BaseUtil.getUserId());
             pmpContract.save();
             Long contractId = pmpContract.getLong("contract_id");
