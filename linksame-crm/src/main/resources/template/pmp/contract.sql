@@ -1,9 +1,10 @@
 #namespace("pmp.contract")
     #sql("queryById")
-        select pc.*,cc.contractor_name,ccs.name
+        select pc.*,cc.contractor_name,ccs.name,wtc.`name` as class_name,
         from pmp_contract as pc LEFT JOIN crm_customer AS cc ON pc.customer_id = cc.customer_id
         LEFT JOIN crm_contacts AS ccs ON pc.contacts_id = ccs.contacts_id
-        where pc.contract_id = ?
+        LEFT JOIN work_task_class as wtc ON pc.milestone_nodes = wtc.class_id
+		where pc.contract_id = ?
     #end
 
     #sql("queryList")
