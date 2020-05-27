@@ -21,6 +21,8 @@
             pc.batch_id,
             pc.create_user_id,
             pc.owner_user_id,
+            pc.drp_number,
+            pc.money,
             pc.customer_id,
             pc.contacts_id,
             pc.company_user_id,
