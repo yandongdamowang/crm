@@ -154,7 +154,9 @@ public class AdminLoginController extends Controller{
         AdminUser o = (AdminUser)RedisManager.getRedis().get(token);
         String username = o.getUsername();
         String password = o.getPassword();
-        Object o1 = RedisManager.getRedis().get(BaseConstant.LOGIN_SUCCESS + username);
+        if (username != null) {
+            Object o1 = RedisManager.getRedis().get(BaseConstant.LOGIN_SUCCESS + username);
+        }
         if(! StrUtil.isEmpty(token)){
             RedisManager.getRedis().del(token);
             removeCookie("Admin-Token");
