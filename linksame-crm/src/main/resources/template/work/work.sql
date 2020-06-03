@@ -32,7 +32,7 @@
         and (
         #for(i : userIds)
         #(for.index > 0 ? "or" : "")
-        a.owner_user_id like concat('%,',#para(i),',%') or a.owner_user_id like concat(#para(i),',%')
+            find_in_set(#para(i),a.owner_user_id)
         #end
           )
       #end
@@ -40,7 +40,7 @@
         and (
         #for(i : labelIds)
         #(for.index > 0 ? "or" : "")
-        a.label_id like concat('%,',#para(i),',%') or a.label_id like concat(#para(i),',%')
+            find_in_set(#para(i),a.label_id)
         #end
         )
       #end
