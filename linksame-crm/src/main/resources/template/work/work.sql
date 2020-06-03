@@ -21,8 +21,8 @@
       (select count(*) from task where pid = a.task_id and status = 5) as childWCCount,
       (select count(*) from task where pid = a.task_id) as childAllCount,
       (select count(*) from admin_file where batch_id = a.batch_id) as fileCount
-      from task a left join work_task_class b on a.class_id = b.class_id where a.work_id = #para(workId)
-      and a.status != 3  and a.ishidden = 0 and is_archive = 0
+      from task a left join work_task_class b on a.class_id = b.class_id
+      where a.work_id = #para(workId) and a.status != 3 and a.ishidden = 0 and a.is_archive = 0
       #if(classId == -1)
          and a.class_id is null
       #else
@@ -31,16 +31,16 @@
       #if(userIds && userIds.size()>0)
         and (
         #for(i : userIds)
-        #(for.index > 0 ? " or " : "")
-        a.owner_user_id like concat('%,',#para(i),',%') or  a.main_user_id = #para(i)
+        #(for.index > 0 ? "or" : "")
+        a.owner_user_id like concat('%,',#para(i),',%') or a.owner_user_id like concat(#para(i),',%')
         #end
           )
       #end
       #if(labelIds && labelIds.size()>0)
         and (
         #for(i : labelIds)
-          #(for.index > 0 ? " or " : "")
-            a.label_id like  concat('%,',#para(i),',%')
+        #(for.index > 0 ? "or" : "")
+        a.label_id like concat('%,',#para(i),',%') or a.label_id like concat(#para(i),',%')
         #end
         )
       #end

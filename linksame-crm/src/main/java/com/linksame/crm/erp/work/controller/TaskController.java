@@ -84,7 +84,7 @@ public class TaskController extends Controller{
             @ApiImplicitParam(name="contractIds", description="合同编号(逗号分隔)")
     })
     @Permissions({"project:taskManage:save"})
-    @NotBlank({ "name", "workId" })
+    @NotBlank({ "name" })
     public void setTask(@Para("") Task task){
         boolean oaAuth = false;
         boolean workAuth = false;
