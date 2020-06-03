@@ -206,8 +206,13 @@ public class WorkService{
                     .set("userIds", jsonObject.getJSONArray("mainUserId"))
                     .set("labelIds", jsonObject.getJSONArray("labelId"))
                     .set("classId", workClass.getInt("classId"));
+
             //设置排序规则
             Integer orderType = jsonObject.getInteger("orderType");
+            if(orderType == null){
+                orderType = 0;
+            }
+
             switch (orderType) {
                 case 1:
                     //根据排序字段升序
@@ -260,6 +265,7 @@ public class WorkService{
                 default:
                     kv.set("order","order by b.order_num");
             }
+
             List<Record> recordList = Db.find(Db.getSqlPara("work.queryTaskByWorkId", kv));
             workClass.set("count", recordList.size());
             if(recordList.size() == 0){
