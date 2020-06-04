@@ -12,7 +12,7 @@
     "test": "npm run lint"
   },
   "dependencies": {
-    "axios": "0.18.0",
+    "axios": "0.19.2",
     "babel-polyfill": "^6.26.0",
     "dhtmlx-gantt": "^7.0.0",
     "echarts": "^4.2.0-rc.2",
