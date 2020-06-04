@@ -112,6 +112,26 @@
             </el-card>
           </el-col>
         </el-row>
+        <el-card shadow="hover" style="margin-top: 10px">
+          <div class="table-title">
+            <span>项目概览</span>
+            <span style="float: right; display: inline-block;">
+              <el-dropdown>
+                <span class="el-dropdown-link">
+                  下拉菜单<i class="el-icon-arrow-down el-icon--right"/>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item>黄金糕</el-dropdown-item>
+                  <el-dropdown-item>狮子头</el-dropdown-item>
+                  <el-dropdown-item>螺蛳粉</el-dropdown-item>
+                  <el-dropdown-item disabled>双皮奶</el-dropdown-item>
+                  <el-dropdown-item divided>蚵仔煎</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </span>
+          </div>
+          <el-divider />
+        </el-card>
       </div>
     </div>
   </div>
