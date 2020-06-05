@@ -83,7 +83,7 @@
               <span style="font-size:28px">人员上线率</span>
             </div>
 
-            <el-progress :percentage="onlineOfflineRate" style="margin: 30px 0 0 0" type="circle" />
+            <el-progress :percentage="onlineOfflineRate - 0" style="margin: 30px 0 0 0" type="circle" />
           </el-card>
         </el-col>
       </el-row>
@@ -118,19 +118,33 @@
             <span style="float: right; display: inline-block;">
               <el-dropdown>
                 <span class="el-dropdown-link">
-                  下拉菜单<i class="el-icon-arrow-down el-icon--right"/>
+                  <i class="el-icon-s-operation" style="font-size: 26px"/>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item>黄金糕</el-dropdown-item>
-                  <el-dropdown-item>狮子头</el-dropdown-item>
-                  <el-dropdown-item>螺蛳粉</el-dropdown-item>
-                  <el-dropdown-item disabled>双皮奶</el-dropdown-item>
-                  <el-dropdown-item divided>蚵仔煎</el-dropdown-item>
+                  <el-dropdown-item><i class="el-icon-s-operation"/> 列表视图</el-dropdown-item>
+                  <el-dropdown-item><i class="el-icon-menu"/> 卡片视图</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </span>
           </div>
           <el-divider />
+          <el-row>
+            <el-col :span="1" class="projectTitle">全部项目</el-col>
+          </el-row>
+          <el-row style="margin-top: 5px">
+            <el-col v-for="item in taskSpritList " :key="item.salt" :span="4">
+              <div class="img-box">
+                <span class="img-companyName">{{ item.img? item.companyName : "图片走丢了！" }}</span>
+                <img :src="item.img">
+              </div>
+            </el-col>
+            <el-col :span="4">
+              <div class="img-addbox" @click="isCreate = true">
+                <i class="el-icon-plus"/>
+                <span>新建项目</span>
+              </div>
+            </el-col>
+          </el-row>
         </el-card>
       </div>
     </div>
@@ -165,6 +179,7 @@ export default {
         type: []
       },
       isCreate: false,
+      taskSpritList: [],
       contractDashboardData: {},
       workbenchTableData: [{
         'a': '中核华兴工程有限公司',
@@ -198,6 +213,7 @@ export default {
     this.retrivePrepaymentReport()
     this.retrivePaymentReport()
     this.retriveOnlineOffline()
+    this.gettaskSpritList()
   },
   methods: {
 
@@ -212,7 +228,6 @@ export default {
         this.datetime = [moment().add('month', 0).format('YYYY-MM') + '-01', moment(moment().add('month', 0).format('YYYY-MM') + '-01').add('month', 1).add('days', -1).format('YYYY-MM-DD')]
       }
     },
-
     retriveOnlineOffline() {
       this.$request('/system/user/onlineOfflineRate', {
       }).then(res => {
@@ -223,7 +238,20 @@ export default {
         console.log(e)
       })
     },
-
+    gettaskSpritList() {
+      this.$request('/taskSprint/queryList?pageType=0', {
+      }).then(res => {
+        res.data.forEach(e => {
+          e.mainUserList.forEach(j => {
+            this.taskSpritList.push(j)
+          })
+        })
+        console.log(this.taskSpritList)
+      }).catch(e => {
+        console.log(e
+        )
+      })
+    },
     // 预付款
     retrivePrepaymentReport() {
       const xData = []
@@ -431,12 +459,48 @@ export default {
   font-size: 26px;
   float: left;
 }
-
+.projectTitle {
+  color: #68b774;
+  border-bottom:3px solid #68b774;
+  text-align: center;
+  padding-bottom: 5px;
+}
 .table-title {
   text-align: justify;
   font-weight: 600;
   font-size: 20px;
   // height: calc(100% - 50px);
+}
+.img-companyName {
+  position: absolute;
+  color:#fff;
+  top:18px;
+  left:10px;
+  font-size: 12px;
+  font-weight: 400;
+}
+.img-box {
+  position: relative;
+  width:212px;
+height:106px;
+opacity:1;
+cursor: pointer;
+  img {
+     width: 100%;
+     height: 100%;
+     border-radius:16px;
+  }
+}
+.img-addbox {
+  width:212px;
+height:106px;
+background:rgba(240,242,245,1);
+opacity:1;
+border-radius:4px;
+text-align: center;
+line-height: 106px;
+color:rgba(144,147,153,1);
+cursor: pointer;
 }
 .ls-box {
   background-color: rgb(245, 246, 249) !important;

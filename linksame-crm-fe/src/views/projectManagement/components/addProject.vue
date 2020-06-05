@@ -68,11 +68,14 @@
             class="avatar-uploader"
           >-->
           <el-upload
+            ref="upload"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
             :action="uploadAction"
             :headers="uploadHeaders"
+            :on-change="handleAvatarChange"
+            :auto-upload="false"
             class="avatar-uploader"
             @click.native="uploadClick"
           >
@@ -177,9 +180,17 @@ export default {
     },
 
     handleAvatarSuccess(res, file) {
+      if (res.code === '0') {
+        this.close()
+        this.$message.success('创建成功')
+        this.$emit('save-success')
+        this.$bus.$emit('add-project', this.name, res.work.workId)
+      }
+      this.$message.error('创建失败')
+    },
+    handleAvatarChange(file, filelist) {
       this.imageUrl = URL.createObjectURL(file.raw)
-      this.$emit('save-success')
-      this.$bus.$emit('add-project', this.name, res.work.workId)
+      console.log(this.imageUrl)
     },
     beforeAvatarUpload(file) {
       const isJPG = file.type === 'image/jpeg'
@@ -219,8 +230,8 @@ export default {
 
 
     submitBtn() {
+      this.$refs.upload.submit()
       this.close()
-      this.$message.success('创建成功')
     //   this.uploadAction = process.env.BASE_API + `work/setWork?name=${this.name}&description=${this.description}&color=${this.color}&isOpen=${this.isOpen}&ownerUserId=${this.ownerUserId}`
 
     //   this.loading = true
