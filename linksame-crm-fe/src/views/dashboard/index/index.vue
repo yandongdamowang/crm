@@ -132,10 +132,11 @@
             <el-col :span="1" class="projectTitle">全部项目</el-col>
           </el-row>
           <el-row style="margin-top: 5px">
-            <el-col v-for="item in taskSpritList " :key="item.salt" :span="4">
+            <el-col v-for="item in taskSpritList " :key="item.workId" :span="4">
               <div class="img-box">
-                <span class="img-companyName">{{ item.img? item.companyName : "图片走丢了！" }}</span>
-                <img :src="item.img">
+                <span class="img-companyName">{{ item.img? item.name : "图片走丢了！" }}</span>
+                <img v-if="item.img" :src="item.img">
+                <img v-else :src="staticImg">
               </div>
             </el-col>
             <el-col :span="4">
@@ -174,6 +175,7 @@ export default {
       echartPaymentItemData: [],
       onlineOfflineData: {},
       onlineOfflineRate: '',
+      staticImg: '../../../static/img/timg.jpg',
       headerGrep: {
         project: '',
         type: []
@@ -239,14 +241,9 @@ export default {
       })
     },
     gettaskSpritList() {
-      this.$request('/taskSprint/queryList?pageType=0', {
+      this.$request('/work/queryWorkNameList', {
       }).then(res => {
-        res.data.forEach(e => {
-          e.mainUserList.forEach(j => {
-            this.taskSpritList.push(j)
-          })
-        })
-        console.log(this.taskSpritList)
+        this.taskSpritList = res.data
       }).catch(e => {
         console.log(e
         )

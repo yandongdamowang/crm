@@ -180,11 +180,12 @@ export default {
     },
 
     handleAvatarSuccess(res, file) {
-      if (res.code === '0') {
+      if (res.code === 0) {
         this.close()
         this.$message.success('创建成功')
         this.$emit('save-success')
         this.$bus.$emit('add-project', this.name, res.work.workId)
+        return
       }
       this.$message.error('创建失败')
     },
